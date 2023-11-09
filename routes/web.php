@@ -19,7 +19,8 @@ use App\Http\Controllers\ReportController;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
     ->name('reports.view');
-    Route::get('/feedback/{excuseSlipId}', [FeedbackController::class, 'showFeedbackForm'])
+
+Route::get('/feedback/{excuseSlipId}', [FeedbackController::class, 'showFeedbackForm'])
     ->name('feedback.form');
 
 Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])

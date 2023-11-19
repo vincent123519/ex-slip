@@ -1,13 +1,7 @@
-<!-- manage-users.blade.php -->
+@extends('components.layout') <!-- You might need to create this layout -->
+@section('content')
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Manage Users</title>
-    <!-- Add your CSS stylesheets here -->
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+<div class="manage-users-container">
     <h1>Manage Users</h1>
 
     @if(session('success'))
@@ -41,8 +35,54 @@
             @endforeach
         </tbody>
     </table>
+</div>
+@endsection
+<style>
+.manage-users-container {
+    /* background-color: rgb(243 254 240 / 98%); */
+    padding: 20px;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 80%;
+    margin: 20px auto;
+    margin-right: 30px;
+}
 
-    <!-- Add your additional HTML content and scripts here -->
-    <script src="scripts.js"></script>
-</body>
-</html>
+
+/* CSS styles for the user table */
+.user-table {
+    width: 95%;
+    margin-top: 10px; /* Reduce the top margin */
+}
+
+.user-table th, .user-table td {
+    border: 1px solid #ccc;
+    padding: 6px; /* Reduce the cell padding */
+    text-align: center;
+    font-size: 14px; /* Reduce the font size */
+}
+
+.user-table th {
+    background-color: #f2f2f2;
+}
+
+.user-table tr:hover {
+    background-color: #e0e0e0;
+}
+
+/* CSS styles for the "Edit" and "Delete" buttons */
+.btn {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+</style>

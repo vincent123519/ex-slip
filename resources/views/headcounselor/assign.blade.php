@@ -1,12 +1,13 @@
 <!-- assign.blade.php -->
-<!DOCTYPE html>
-<html>
+
 <head>
     <title>Assign Counselor</title>
 </head>
-<body>
+@extends('components.layout') <!-- You might need to create this layout -->
+@section('content')
+    <div class="manage-users-container">
     <h2>Assign Counselor</h2>
-    
+
     <form action="{{ route('head-counselor.assign') }}" method="POST">
         @csrf
         <div>
@@ -27,5 +28,17 @@
         </div>
         <button type="submit">Assign Counselor</button>
     </form>
-</body>
+    </div>
+    @endsection
 </html>
+
+<style>.manage-users-container {
+    /* background-color: rgb(243 254 240 / 98%); */
+    padding: 20px;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 80%;
+    margin: 20px auto;
+    margin-right: 30px;
+}</style>

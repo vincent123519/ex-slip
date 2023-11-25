@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html>
+@extends('components.layout') <!-- You might need to create this layout -->
+@section('content')
+
 <head>
     <title>Create Excuse Slip</title>
 </head>
 <body>
+<div class="manage-slip-container">
     <h1>Create Excuse Slip</h1>
-
     <form action="{{ route('excuse_slips.store') }}" method="POST">
-
         @csrf
 
         <label for="student_id">Student:</label>
@@ -56,5 +56,21 @@
 
         <button type="submit">Submit</button>
     </form>
+</div>
+@endsection
+
 </body>
 </html>
+<style>.manage-slip-container {
+    /* background-color: rgb(243 254 240 / 98%); */
+    padding: 5px;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 80%;
+    margin: 20px auto;
+    margin-right: 30px;
+
+
+}
+</style>

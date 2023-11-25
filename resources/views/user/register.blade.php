@@ -1,18 +1,15 @@
 <!-- user/register.blade.php -->
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Registration</title>
-</head>
-<body>
-    <h1>User Registration</h1>
+@extends('components.signlayout') <!-- You might need to create this layout -->
+    @section('content')
 
     @if(session('success'))
         <div>
             {{ session('success') }}
         </div>
     @endif
+    <div class="register-container">
+    <h1>User Registration</h1>
 
     <form method="POST" action="{{ route('register') }}">
         @csrf
@@ -52,8 +49,10 @@
         <div>
             <button type="submit">Register</button>
         </div>
-    </form>
 
-    <p>Already have an account? <a href="{{ route('login') }}">Login</a></p>
-</body>
-</html>
+        <p>Already have an account? <a href="{{ route('login') }}">Login</a></p>
+    @endsection
+    </form>
+    </div>
+
+   

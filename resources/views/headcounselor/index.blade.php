@@ -6,7 +6,6 @@
 <head>
     <title>Head Counselor Index</title>
 </head>
-<body>
 <div class="manage-users-container">
     <h2>Head Counselor Index</h2>
     
@@ -27,13 +26,13 @@
         </tbody>
     </table>
 </div>
+@endsection
 
 </body>
 </html>
 <style>
     .manage-users-container {
     /* background-color: rgb(243 254 240 / 98%); */
-    padding: 20px;
     position: relative;
     border: 1px solid #ccc;
     border-radius: 10px;

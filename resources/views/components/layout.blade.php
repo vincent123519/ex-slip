@@ -37,7 +37,7 @@
 <div class="sidebar">
     <div class="profile-container">
         <div class="profile-image"></div>
-        <div class="profile-name">Andro O. Rat</div>
+        <div class="profile-name">Admin</div>
     </div>
     <div class="divider"></div>
     <div class="divider"></div>

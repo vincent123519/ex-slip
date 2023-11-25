@@ -64,7 +64,7 @@ Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [UserController::class, 'register']);
 
 // User Login
-Route::get('/login', [UserController::class, 'showLoginForm'])->name('login');
+Route::get('/', [UserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
 
 // User Logout

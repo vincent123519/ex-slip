@@ -1,11 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('components.stud-layout') <!-- You might need to create this layout -->
+@section('content')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Student</title>
 </head>
 <body>
+<div class="student-create">
     <h1>Create Student</h1>
 
     <form method="POST" action="{{ route('students.store') }}">
@@ -45,5 +46,20 @@
 
         <button type="submit">Create</button>
     </form>
+</div>
+@endsection
 </body>
 </html>
+<style>.student-create {
+    /* background-color: rgb(243 254 240 / 98%); */
+    padding: 5px;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 80%;
+    margin: 20px auto;
+    margin-right: 30px;
+
+
+}
+</style>

@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+@extends('components.stud-layout') <!-- You might need to create this layout -->
+@section('content')
 <head>
     <title>Student Listing</title>
     <style>

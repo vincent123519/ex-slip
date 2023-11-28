@@ -12,8 +12,8 @@ class TeacherSeeder extends Seeder
     public function run()
     {
         $teachers = [
-            ['user_id' => 1001, 'name' => 'John Doe', 'department_id' => 2001],
-            ['user_id' => 1002, 'name' => 'Jane Smith', 'department_id' => 2001],
+            ['user_id' => 1, 'name' => 'John Doe', 'department_id' => 1],
+            ['user_id' => 2, 'name' => 'Jane Smit', 'department_id' => 1],
             // Add more sample teachers
         ];
 

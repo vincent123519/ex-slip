@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Dean extends Model
 {
     protected $primaryKey = 'dean_id';
-    protected $fillable = ['user_id', 'name', 'school_code', 'department_id'];
+    protected $fillable = ['dean_id', 'user_id', 'name', 'school_code', 'department_id'];
 
     public function user()
     {

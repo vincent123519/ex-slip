@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,8 @@ class UserController extends Controller
      */
     public function showRegistrationForm()
     {
-        return view('user.register');
+        $roles = UserRole::all(); // Retrieve all available roles
+        return view('user.register', ['roles' => $roles]);
     }
 
     /**
@@ -33,6 +35,7 @@ class UserController extends Controller
             'name' => 'required',
             'username' => 'required|unique:users',
             'password' => 'required|min:6',
+            'role' => 'required|exists:user_roles,id',
         ]);
 
         $user = User::create([
@@ -40,6 +43,9 @@ class UserController extends Controller
             'username' => $validatedData['username'],
             'password_hash' => Hash::make($validatedData['password']),
         ]);
+
+        $userRole = UserRole::find($validatedData['role']); // Retrieve the selected role
+        $user->roles()->attach($userRole); // Associate the role with the user
 
         // Redirect to the login page
         return redirect()->route('login')->with('success', 'User registered successfully');
@@ -54,7 +60,6 @@ class UserController extends Controller
     {
         return view('user.login');
     }
-
     /**
      * User login.
      *

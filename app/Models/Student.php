@@ -1,5 +1,7 @@
 <?php
 
+// app/Models/Student.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,5 +28,11 @@ class Student extends Model
     public function degree()
     {
         return $this->belongsTo(DepartmentDegree::class, 'degree_id');
+    }
+
+    // Define the many-to-many relationship with courses
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
     }
 }

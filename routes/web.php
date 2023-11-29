@@ -44,6 +44,10 @@ Route::get('/students/{id}', [StudentController::class, 'show'])->name('students
 Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
 Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
 Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+//
+Route::middleware(['auth', 'student'])->group(function () {
+    Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+});
 
 
 Route::get('/head-counselor/assign', [HeadCounselorController::class, 'showAssignForm'])->name('head-counselor.assign.form');
@@ -66,6 +70,7 @@ Route::post('/register', [UserController::class, 'register']);
 // User Login
 Route::get('/', [UserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login']);
+
 
 // User Logout
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');

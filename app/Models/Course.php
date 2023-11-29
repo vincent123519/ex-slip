@@ -18,4 +18,10 @@ class Course extends Model
     {
         return $this->hasMany(CourseOffering::class, 'course_code', 'course_code');
     }
+
+    // Define the many-to-many relationship with students
+    public function students()
+    {
+        return $this->belongsToMany(Student::class);
+    }
 }

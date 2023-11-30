@@ -34,28 +34,37 @@ class UsersSeeder extends Seeder
         $users = [
             [
                 'user_id' => 1,
-                'name' => 'admin',
+                'name' => 'Admin User',
                 'username' => 'admin',
-                'password_hash' => Hash::make('admin123'),
+                'password' => 'admin123', // Password will be hashed automatically in the User model
                 'role_id' => $adminRoleId,
             ],
             [
                 'user_id' => 2,
-                'name' => 'teacher',
+                'name' => 'Teacher User',
                 'username' => 'teacher',
-                'password_hash' => Hash::make('teacher123'),
+                'password' => 'teacher123',
                 'role_id' => $teacherRoleId,
             ],
             [
                 'user_id' => 1001,
                 'name' => 'John Doe',
                 'username' => 'john.doe',
-                'password_hash' => Hash::make('password'), // Set a default password
+                'password' => 'password', // Set a default password (will be hashed automatically)
                 'role_id' => $studentRoleId,
             ],
             // Add more users here
         ];
 
-        DB::table('users')->insert($users);
+        foreach ($users as $userData) {
+            // Use the User model to create a new user
+            $user = User::updateOrCreate(['user_id' => $userData['user_id']], $userData);
+        
+            // Hash the password if it's provided
+            if (isset($userData['password'])) {
+                $user->password = Hash::make($userData['password']);
+                $user->save();
+            }
+        }
     }
 }

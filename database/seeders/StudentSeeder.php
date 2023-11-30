@@ -36,8 +36,10 @@ class StudentSeeder extends Seeder
             $user = User::create([
                 'name' => $studentData['name'],
                 'username' => $studentData['username'],
-                'password_hash' => Hash::make('password'), // You can set a default password
+                'password' => Hash::make('password'), // You can set a default password
+                'role_id' => 3, // Replace 1 with the actual role ID
             ]);
+            
 
             // Find the department degree
             $degree = DepartmentDegree::where('degree_name', $studentData['degree'])->first();

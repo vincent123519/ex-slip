@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    // ... (other methods remain unchanged)
-     /**
+    /**
      * Show the user registration form.
      *
      * @return \Illuminate\Contracts\View\View
@@ -24,6 +23,7 @@ class UserController extends Controller
         $roles = UserRole::all(); // Retrieve all available roles
         return view('user.register', ['roles' => $roles]);
     }
+
     /**
      * Register a new user.
      *
@@ -47,67 +47,14 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
-        // Associate the user with the selected role
-        $user->roles()->associate(UserRole::find($request->input('role')));
-
         // Save the user to the database
         $user->save();
 
+        // Associate the user with the selected role using attach()
+        $user->roles()->attach($request->input('role'));
+
         // Redirect to the login page
         return redirect()->route('login')->with('success', 'User registered successfully');
-    }
-    /**
-     * Show the user login form.
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function showLoginForm()
-    {
-        return view('user.login');
-    }
-
-    /**
-     * User login.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws ValidationException
-     */
-    public function login(Request $request)
-    {
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-
-        $credentials = $request->only('username', 'password');
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            // Redirect to the profile page
-            return redirect()->route('profile')->with('success', 'User logged in successfully');
-        } else {
-            throw ValidationException::withMessages([
-                'message' => 'Invalid username or password',
-            ])->status(401);
-        }
-    }
-
-    /**
-     * Log out the authenticated user.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout(Request $request)
-    {
-        $request->user()->currentAccessToken()->delete();
-
-        // Add any additional logic or actions after user logout
-
-        return response()->json(['message' => 'User logged out successfully']);
     }
 
     /**
@@ -217,6 +164,15 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User account deleted successfully']);
     }
+    // Assuming your controller method where you fetch users looks like this:
+
+    public function manageUsers()
+    {
+        $users = User::with('user_roles')->get();
+    
+        return view('your-view', compact('users'));
+    }
+
 
     /**
      * Get a validator for an incoming registration request.
@@ -230,7 +186,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'exists:user_roles,id'], // Add the role validation rule
+            'role' => ['required', 'exists:user_roles,role_id'], // Update to use 'role_id'
         ]);
     }
 }

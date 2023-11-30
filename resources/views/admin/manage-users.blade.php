@@ -1,4 +1,5 @@
-@extends('components.layout') <!-- You might need to create this layout -->
+@extends('components.layout')
+
 @section('content')
 
 <div class="manage-users-container">
@@ -15,28 +16,44 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Roles</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($users as $user)
-                <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>
-                        <a href="{{ route('edit-user', $user) }}" class="btn btn-primary">Edit</a>
-                        <form action="{{ route('delete-user', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
+        @foreach($users as $user)
+            <tr>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>
+                    @if($user->user_roles)
+                        Roles exist for user {{ $user->name }}:
+                        @foreach($user->user_roles as $role)
+                            {{ $role->role_name }}
+                            @if (!$loop->last)
+                                ,
+                            @endif
+                        @endforeach
+                    @else
+                        No roles assigned for user {{ $user->name }}
+                    @endif
+                </td>
+                <td>
+                    <a href="{{ route('edit-user', $user) }}" class="btn btn-primary">Edit</a>
+                    <form action="{{ route('delete-user', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
         </tbody>
     </table>
 </div>
+
 @endsection
+
 <style>
 .manage-users-container {
     /* background-color: rgb(243 254 240 / 98%); */

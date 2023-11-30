@@ -10,11 +10,11 @@ class UserRolesSeeder extends Seeder
     public function run()
     {
         $roles = [
-            ['role_name' => 'Head Counselor', 'role_description' => 'Head Counselor'],
-            ['role_name' => 'Teacher', 'role_description' => 'Teacher'],
-            ['role_name' => 'Student', 'role_description' => 'Student'],
-            ['role_name' => 'Counselor', 'role_description' => 'Counselor'],
-            ['role_name' => 'Dean', 'role_description' => 'Dean'],
+            ['role_id' => 1, 'role_name' => 'Head Counselor', 'role_description' => 'Head Counselor'],
+            ['role_id' => 2, 'role_name' => 'Teacher', 'role_description' => 'Teacher'],
+            ['role_id' => 3, 'role_name' => 'Student', 'role_description' => 'Student'],
+            ['role_id' => 4, 'role_name' => 'Counselor', 'role_description' => 'Counselor'],
+            ['role_id' => 5, 'role_name' => 'Dean', 'role_description' => 'Dean'],
             // Add more sample data here
         ];
 

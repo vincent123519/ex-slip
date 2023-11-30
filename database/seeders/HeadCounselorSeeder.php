@@ -22,7 +22,7 @@ class HeadCounselorSeeder extends Seeder
             $user = new User();
             $user->name = 'Head Counselor';
             $user->username = $username;
-            $user->password_hash = Hash::make('password'); // Use password_hash column
+            $user->password = Hash::make('password'); // Use password_hash column
             $user->role_id = 1; // Replace '1' with the appropriate role ID for head counselor
             $user->save(); // The database will assign a unique user_id
 

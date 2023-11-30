@@ -44,19 +44,20 @@
                     <div>{{ $message }}</div>
                 @enderror
             </div>
-
             <div>
-                <label for="role">Role</label>
-                <select name="role" required>
-                    <option value="">Select Role</option>
-                    @foreach($roles as $role)
-                        <option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
-                    @endforeach
-                </select>
-                @error('role')
-                    <div>{{ $message }}</div>
-                @enderror
-            </div>
+    <label for="role">Role</label>
+    <select name="role" required>
+        <option value="">Select Role</option>
+        @foreach($roles as $role)
+            <option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
+        @endforeach
+    </select>
+    @error('role')
+        <div>{{ $message }}</div>
+    @enderror
+</div>
+
+
 
             <div>
                 <button type="submit">Register</button>

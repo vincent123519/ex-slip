@@ -13,14 +13,14 @@ class User extends Authenticatable
     protected $primaryKey = 'user_id';
 
     protected $fillable = [
-        'user_id',
         'name',
         'username',
-        'password_hash',
+        'password', // Change 'password_hash' to 'password'
+        'role_id',
     ];
 
     protected $hidden = [
-        'password_hash',
+        'password',
     ];
 
     /**
@@ -28,10 +28,10 @@ class User extends Authenticatable
      */
     public function roles()
     {
-        return $this->belongsToMany(UserRole::class, 'user_roles', 'user_id', 'role_id');
+        return $this->belongsToMany(UserRole::class, 'user_roles', 'user_id', 'role_id')
+            ->withPivot('role_name');
     }
-
-    /**
+   /**
      * Define a one-to-one relationship with the HeadCounselor model.
      */
     public function headCounselor()

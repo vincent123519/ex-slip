@@ -27,7 +27,11 @@ class FeedbackSeeder extends Seeder
                 $feedback->feedback_remarks = $faker->sentence;
                 $feedback->feedback_date = $faker->date();
                 $feedback->sender_id = $faker->randomElement($users);
-                $feedback->feedback_type = $faker->randomElement($feedbackTypes);
+
+                // Ensure the feedback type does not exceed 20 characters
+                $feedbackType = $faker->randomElement($feedbackTypes);
+                $feedback->feedback_type = substr($feedbackType, 0, 20);
+
                 $feedback->save();
             }
         }

@@ -8,7 +8,10 @@ class HeadCounselor extends Model
 {
     protected $table = 'head_counselors';
 
+    protected $primaryKey = 'head_counselor_id';
+
     protected $fillable = [
+        'head_counselor_id',
         'user_id',
         'name',
         'department_id',

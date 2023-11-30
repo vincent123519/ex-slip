@@ -4,26 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    // ... (other methods remain unchanged)
-     /**
+    /**
      * Show the user registration form.
      *
      * @return \Illuminate\Contracts\View\View
      */
     public function showRegistrationForm()
     {
-        $roles = UserRole::all(); // Retrieve all available roles
-        return view('user.register', ['roles' => $roles]);
+        return view('user.register');
     }
+
     /**
      * Register a new user.
      *
@@ -32,30 +29,22 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
-        // Validate the incoming request data
-        $validatedData = $this->validator($request->all());
-
-        // If validation fails, return back with errors
-        if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
-        }
-
-        // Create the user without saving it to the database yet
-        $user = User::make([
-            'name' => $request->input('name'),
-            'username' => $request->input('username'),
-            'password' => Hash::make($request->input('password')),
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'username' => 'required|unique:users',
+            'password' => 'required|min:6',
         ]);
 
-        // Associate the user with the selected role
-        $user->roles()->associate(UserRole::find($request->input('role')));
-
-        // Save the user to the database
-        $user->save();
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'username' => $validatedData['username'],
+            'password_hash' => Hash::make($validatedData['password']),
+        ]);
 
         // Redirect to the login page
         return redirect()->route('login')->with('success', 'User registered successfully');
     }
+
     /**
      * Show the user login form.
      *
@@ -80,19 +69,18 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('username', 'password');
+        $user = User::where('username', $validatedData['username'])->first();
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            // Redirect to the profile page
-            return redirect()->route('profile')->with('success', 'User logged in successfully');
-        } else {
+        if (!$user || !Hash::check($validatedData['password'], $user->password_hash)) {
             throw ValidationException::withMessages([
                 'message' => 'Invalid username or password',
             ])->status(401);
         }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Redirect to the profile page
+        return redirect()->route('profile')->with('success', 'User logged in successfully');
     }
 
     /**
@@ -141,7 +129,10 @@ class UserController extends Controller
             'username' => 'required|unique:users,username,' . $user->id . ',id',
         ]);
 
-        $user->update($validatedData);
+        $user->update([
+            'name' => $validatedData['name'],
+            'username' => $validatedData['username'],
+        ]);
 
         // Add any additional logic or actions after updating the user's profile
 
@@ -170,18 +161,18 @@ class UserController extends Controller
         $user = $request->user();
 
         $validatedData = $request->validate([
-            'current_password'=> 'required',
+            'current_password' => 'required',
             'new_password' => 'required|min:6',
         ]);
 
-        if (!Hash::check($validatedData['current_password'], $user->password)) {
+        if (!Hash::check($validatedData['current_password'], $user->password_hash)) {
             throw ValidationException::withMessages([
                 'current_password' => 'Current password is incorrect',
             ])->status(422);
         }
 
         $user->update([
-            'password' => Hash::make($validatedData['new_password']),
+            'password_hash' => Hash::make($validatedData['new_password']),
         ]);
 
         // Add any additional logic or actions after changing the user's password
@@ -216,21 +207,5 @@ class UserController extends Controller
         // Add any additional logic or actions after deleting the user's account
 
         return response()->json(['message' => 'User account deleted successfully']);
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'exists:user_roles,id'], // Add the role validation rule
-        ]);
     }
 }

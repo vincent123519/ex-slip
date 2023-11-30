@@ -24,7 +24,7 @@ class CourseOfferingSeeder extends Seeder
         ];
 
         // Insert sample course data
-        Course::insertOrIgnore($sampleCourses);
+        Course::insert($sampleCourses);
 
         $courseOfferings = [];
 

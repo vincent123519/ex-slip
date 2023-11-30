@@ -65,8 +65,8 @@ Route::put('/update-user/{user}', [AdminController::class, 'updateUser'])->name(
 
 // User Registration
 Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
-// Route::post('/register', [UserController::class, 'register']);
-Route::post('/register', [UserController::class, 'register'])->name('register');
+Route::post('/register', [UserController::class, 'register']);
+
 // User Login
 Route::get('/', [UserController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login']);

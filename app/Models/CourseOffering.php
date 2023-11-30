@@ -12,7 +12,6 @@ class CourseOffering extends Model
     protected $primaryKey = 'offer_code'; // Specify the primary key
     
     protected $fillable = [
-        'offer_code',
         'course_code',
         'semester_id',
         'teacher_id',

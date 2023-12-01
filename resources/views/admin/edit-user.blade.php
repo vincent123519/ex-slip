@@ -8,7 +8,7 @@
         <h1>User Details</h1>
         <div class="user-details">
             <p><strong>Name:</strong> {{ $user->name }}</p>
-            <p><strong>Email:</strong> {{ $user->email }}</p>
+            <p><strong>Username:</strong> {{ $user->username}}</p>
         </div>
     </div>
 <div class="edit-user-container">
@@ -24,8 +24,8 @@
         </div>
 
         <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="{{ $user->email }}">
+            <label for="email">Username:</label>
+            <input type="text" id="username" name="username" value="{{ $user->username }}">
         </div>
 
         <div>

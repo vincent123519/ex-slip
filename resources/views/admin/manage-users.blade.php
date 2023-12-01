@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Username</th>
                 <th>Roles</th>
                 <th>Actions</th>
             </tr>
@@ -24,7 +24,7 @@
         @foreach($users as $user)
             <tr>
                 <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
+                <td>{{ $user->username }}</td>
                 <td>
     @if($user->role)
         {{ $user->role->role_name }}
@@ -52,7 +52,7 @@
 <style>
 .manage-users-container {
     /* background-color: rgb(243 254 240 / 98%); */
-    padding: 20px;
+   /* // padding: 20px; */
     position: relative;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -86,7 +86,7 @@
 /* CSS styles for the "Edit" and "Delete" buttons */
 .btn {
     padding: 5px 10px;
-    background-color: #007bff;
+    background-color: green;
     color: white;
     border: none;
     border-radius: 5px;
@@ -95,6 +95,6 @@
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: yellowgreen;
 }
 </style>

@@ -101,14 +101,44 @@
     justify-content: space-between;
 }
 
+// .login-container {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     /* padding: 40px; */
+//     width: 45%;
+//     background-color: rgba(13, 62, 11, 9.2); /* Adjust the alpha value (0.8) as needed */
+//     font-size: larger;
+//     font-family: "Roboto", sans-serif;
+//     position: relative;
+//     display: -ms-flexbox;
+//     display: flex;
+//     -ms-flex-direction: column;
+//     flex-direction: column;
+//     min-width: 0;
+//     word-wrap: break-word;
+//     background-clip: border-box;
+//     border: 1px solid rgba(0,0,0,.125);
+//     border-radius: 0.25rem;
+//     color: rgba(254,192,57);
+// }
+
+
+
 .login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* padding: 40px; */
-    width: 45%;
-    background-color: rgba(13, 62, 11, 9.2); /* Adjust the alpha value (0.8) as needed */
+    width: 35%;
+    /* Set the background image */
+    background-image: url('./image/IMG_20220606_085101-scaled.jpg');
+    /* Adjust background size and other properties as needed */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Add other styles as needed */
     font-size: larger;
     font-family: "Roboto", sans-serif;
     position: relative;
@@ -119,9 +149,9 @@
     min-width: 0;
     word-wrap: break-word;
     background-clip: border-box;
-    border: 1px solid rgba(0,0,0,.125);
+    border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
-    color: rgba(254,192,57);
+    color: rgba(254, 192, 57);
 }
 
 .login-container button[type="submit"] {
@@ -226,3 +256,68 @@
 }
 
 //
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.login-card {
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    margin-bottom: 15px;
+}
+
+.card-body {
+background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle lift effect */
+}

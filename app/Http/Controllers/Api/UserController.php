@@ -31,31 +31,27 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
-    {
-        // Validate the incoming request data
-        $validatedData = $this->validator($request->all());
+{
+    // Validate the incoming request data
+    $validatedData = $this->validator($request->all());
 
-        // If validation fails, return back with errors
-        if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
-        }
-
-        // Create the user without saving it to the database yet
-        $user = User::make([
-            'name' => $request->input('name'),
-            'username' => $request->input('username'),
-            'password' => Hash::make($request->input('password')),
-        ]);
-
-        // Save the user to the database
-        $user->save();
-
-        // Associate the user with the selected role using attach()
-        $user->roles()->attach($request->input('role'));
-
-        // Redirect to the login page
-        return redirect()->route('login')->with('success', 'User registered successfully');
+    // If validation fails, return back with errors
+    if ($validatedData->fails()) {
+        return redirect()->back()->withErrors($validatedData)->withInput();
     }
+
+    // Create the user and save the password
+    $user = User::create([
+        'name' => $request->input('name'),
+        'username' => $request->input('username'),
+        'password' => Hash::make($request->input('password')), // Hash the password
+        'role_id' => $request->input('role'), // Assuming role is stored in role_id field
+    ]);
+
+    // Redirect to the login page
+    return redirect()->route('login')->with('success', 'User registered successfully');
+}
+
 
     /**
      * Show the user profile.

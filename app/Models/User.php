@@ -26,11 +26,21 @@ class User extends Authenticatable
     /**
      * Define a many-to-many relationship with the UserRole model.
      */
-    public function roles()
+  
+
+    /**
+ * Define a many-to-many relationship with the UserRole model.
+ */
+   
+    public function role()
     {
-        return $this->belongsToMany(UserRole::class, 'user_roles', 'user_id', 'role_id')
-            ->withPivot('role_name');
+        return $this->belongsTo(UserRole::class, 'role_id');
     }
+ 
+    
+
+
+    
    /**
      * Define a one-to-one relationship with the HeadCounselor model.
      */

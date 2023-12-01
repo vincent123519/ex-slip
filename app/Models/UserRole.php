@@ -16,10 +16,11 @@ class UserRole extends Model
     /**
      * Define a one-to-many relationship with the Users table.
      */
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_roles', 'role_id', 'user_id')
-            ->withPivot('role_name');
-    }
+   
+     public function user()
+     {
+         return $this->hasOne(User::class, 'role_id');
+     }
+     
     // Add any other relationships or methods relevant to your project
 }

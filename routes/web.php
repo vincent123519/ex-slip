@@ -51,8 +51,9 @@ Route::post('/head-counselor/assign', [HeadCounselorController::class, 'assignCo
 
 Route::get('/head-counselor', [HeadCounselorController::class, 'index'])->name('head-counselor.index');
 
-Route::get('/manage-users', [AdminController::class, 'manageUsers'])->name('manage-users');
 
+//admin
+Route::get('/manage-users', [AdminController::class, 'manageUsers'])->name('manage-users');
 Route::get('/edit-user/{user}', [AdminController::class, 'editUser'])->name('edit-user');
 
 Route::delete('/delete-user/{user}', [AdminController::class, 'deleteUser'])->name('delete-user');

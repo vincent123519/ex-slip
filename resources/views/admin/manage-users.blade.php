@@ -26,18 +26,13 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>
-                    @if($user->user_roles)
-                        Roles exist for user {{ $user->name }}:
-                        @foreach($user->user_roles as $role)
-                            {{ $role->role_name }}
-                            @if (!$loop->last)
-                                ,
-                            @endif
-                        @endforeach
-                    @else
-                        No roles assigned for user {{ $user->name }}
-                    @endif
-                </td>
+    @if($user->role)
+        {{ $user->role->role_name }}
+    @else
+        No role assigned for user {{ $user->name }}
+    @endif
+</td>
+
                 <td>
                     <a href="{{ route('edit-user', $user) }}" class="btn btn-primary">Edit</a>
                     <form action="{{ route('delete-user', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">

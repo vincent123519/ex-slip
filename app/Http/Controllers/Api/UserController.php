@@ -189,4 +189,37 @@ class UserController extends Controller
             'role' => ['required', 'exists:user_roles,role_id'], // Update to use 'role_id'
         ]);
     }
+
+    public function showLoginForm()
+    {
+        return view('user.login');
+    }
+
+    /**
+     * User login.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
+     */
+    public function login(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        $user = User::where('username', $validatedData['username'])->first();
+
+        if (!$user || !Hash::check($validatedData['password'], $user->password_hash)) {
+            throw ValidationException::withMessages([
+                'message' => 'Invalid username or password',
+            ])->status(401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Redirect to the profile page
+        return redirect()->route('profile')->with('success', 'User logged in successfully');
+    }
 }

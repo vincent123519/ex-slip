@@ -16,26 +16,18 @@ class ExcuseSlipController extends Controller
 {
     public function index()
     {
-        // Retrieve all excuse slips from the database
         $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')->get();
-
-        // Return the excuse slips view with the retrieved data
         return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
     }
 
-    public function create()
+    public function create(Student $students, Teacher $teachers, Course $courses, ExcuseStatus $statuses, Counselor $counselors)
     {
-        // Retrieve necessary data for creating a new excuse slip, such as the list of students, teachers, courses, and counselors
-        $counselors = Counselor::all(); // Fetch all counselors
-    
-        // Return the create excuse slip form view with the retrieved data
         return view('excuseslip.create', [
-            'students' => Student::all(),
-            'teachers' => Teacher::all(),
-            'courses' => Course::all(),
-            'statuses' => ExcuseStatus::all(),
-            'counselors' => $counselors, // Pass the counselors data to the view
-            // Add other necessary data
+            'students' => $students->all(),
+            'teachers' => $teachers->all(),
+            'courses' => $courses->all(),
+            'statuses' => $statuses->all(),
+            'counselors' => $counselors->all(),
         ]);
     }
     

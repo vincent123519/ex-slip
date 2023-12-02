@@ -18,6 +18,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
+    
     public function showRegistrationForm()
     {
         $roles = UserRole::all(); // Retrieve all available roles

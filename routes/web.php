@@ -2,19 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
-
 use App\Http\Controllers\AdminController;
-
 use App\Http\Controllers\HeadCounselorController;
-
 use App\Http\Controllers\StudentController;
-
-// routes/web.php
-
 use App\Http\Controllers\ExcuseSlipController;
-
-// routes/web.php
-
 use App\Http\Controllers\ReportController;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
@@ -44,6 +35,20 @@ Route::get('/students/{id}', [StudentController::class, 'show'])->name('students
 Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
 Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
 Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+//
+// routes/web.php
+
+Route::middleware(['auth', 'student'])->group(function () {
+    Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+});
+// web.php
+// routes/web.php
+// routes/web.php
+
+Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+
+
+
 
 
 Route::get('/head-counselor/assign', [HeadCounselorController::class, 'showAssignForm'])->name('head-counselor.assign.form');
@@ -65,8 +70,10 @@ Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('
 // Route::post('/register', [UserController::class, 'register']);
 Route::post('/register', [UserController::class, 'register'])->name('register');
 // User Login
+
 Route::get('/', [UserController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [UserController::class, 'login']);
+Route::post('/', [UserController::class, 'login']);
+
 
 // User Logout
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');

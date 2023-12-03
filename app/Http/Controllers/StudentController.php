@@ -165,7 +165,7 @@ class StudentController extends Controller
             'dean_id' => 'required',
             'course_code' => 'required',
             'reason' => 'required',
-'start_date' => 'required',
+            'start_date' => 'required',
             'end_date' => 'required',
             'status_id' => 'required',
         ]);
@@ -222,5 +222,10 @@ class StudentController extends Controller
         // Redirect to the excuse slip detail page
         return redirect()->route('excuse_slips.show', $excuseSlip->id)
             ->with('success', 'Excuse slip request updated successfully.');
+    }
+
+    public function dashboard()
+    {
+        return view('student.dashboard');
     }
 }

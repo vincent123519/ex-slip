@@ -5,10 +5,15 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+
+
 
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
+    use HasRoles;
+
 
     protected $primaryKey = 'user_id';
 
@@ -32,14 +37,19 @@ class User extends Authenticatable
  * Define a many-to-many relationship with the UserRole model.
  */
    
-    public function role()
-    {
-        return $this->belongsTo(UserRole::class, 'role_id');
-    }
+    // public function role()
+    // {
+    //     return $this->belongsTo(UserRole::class, 'role_id');
+    // }
     public function hasRole($role)
     {
         return $this->roles->contains('role_name', $role);
     }
+    public function userRole()
+{
+    return $this->belongsTo(UserRole::class, 'role_id');
+}
+
  
     
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserRole;
@@ -59,16 +60,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function showProfile()
-    {
-        $user = Auth::user(); // Get the currently authenticated user
-
-        if ($user) {
-            return view('user.profile', ['user' => $user]);
-        } else {
-            return redirect()->route('login'); // Redirect to login if no user is authenticated
-        }
-    }
+    
 
     /**
      * Update the user's profile.
@@ -199,24 +191,48 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws ValidationException
      */
-    public function login(Request $request)
-    {
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
 
-        $user = User::where('username', $validatedData['username'])->first();
 
-        if (!$user || !Hash::check($validatedData['password'], $user->password_hash)) {
-            throw ValidationException::withMessages([
-                'message' => 'Invalid username or password',
-            ])->status(401);
-        }
+     public function login(Request $request)
+{
+    $validatedData = $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+    $user = User::where('username', $validatedData['username'])->first();
 
-        // Redirect to the profile page
-        return redirect()->route('profile')->with('success', 'User logged in successfully');
+    if (!$user || !Hash::check($validatedData['password'], $user->password)) {
+        throw ValidationException::withMessages([
+            'message' => 'Invalid username or password',
+        ])->status(401);
     }
+
+    Auth::login($user);
+
+    // Log user information and role
+    \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
+    \Illuminate\Support\Facades\Log::info('User Role Information: ' . json_encode($user->userRole->toArray()));
+
+    // Retrieve the user's role
+    $userRole = $user->userRole;
+
+    // Check the user's role and redirect accordingly
+    switch ($userRole->role_name) {
+        case 'student':
+            return redirect()->route('student.dashboard')->with('success', 'User logged in successfully');
+        case 'teacher':
+            return redirect()->route('teacher.dashboard')->with('success', 'User logged in successfully');
+        case 'admin':
+            return redirect()->route('admin.dashboard')->with('success', 'User logged in successfully');
+        // Add more cases for other roles
+        default:
+            return redirect()->intended('/dashboard')->with('success', 'User logged in successfully');
+    }
+        
+}
+
+     
+
+
 }

@@ -1,8 +1,11 @@
+
+
 .main-container {
     width: calc(200% - 210px);
     margin:  30px 260px;
     transition: 0.3s;
-    
+    font-family: Arial, sans-serif;
+
 }
 
 
@@ -131,6 +134,8 @@
     transition: 0.3s;
     transition-property: width;
     overflow-y: auto;
+    font-family: Arial, sans-serif;
+
         }
 
         .profile-container {
@@ -139,6 +144,7 @@
             align-items: center;
             margin-bottom: 30px;
             margin-top:50px;
+            
         }
 
         .profile-image {
@@ -147,7 +153,13 @@
             border-radius: 50%;
             background-color: #fff;
             margin-bottom: 10px;
+            background-image: url('./image/student.jpg');
+            background-size: cover;
+            background-position: center;
+
         }
+
+        
 
         .profile-name {
             font-size: 18px;

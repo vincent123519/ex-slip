@@ -80,11 +80,15 @@ class User extends Authenticatable
     /**
      * Define a one-to-one relationship with the Student model.
      */
+    public function isStudent()
+    {
+        return $this->student !== null;
+    }
+    
     public function student()
     {
-        return $this->hasOne(Student::class, 'user_id');
+        return $this->belongsTo(Student::class, 'user_id');
     }
-
     /**
      * Define a one-to-many relationship with the ExcuseSlip model.
      */

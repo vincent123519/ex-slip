@@ -10,28 +10,28 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
 
-class UserController extends Controller
+class UserController extends Controller 
 {
     /**
      * Show the user registration form.
      *
      * @return \Illuminate\Contracts\View\View
      */
-    
     public function showRegistrationForm()
     {
         $roles = UserRole::all(); // Retrieve all available roles
         return view('user.register', ['roles' => $roles]);
     }
 
-    /**
-     * Register a new user.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function register(Request $request)
+  /**
+ * Register a new user.
+ *
+ * @param  Request  $request
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function register(Request $request)
 {
     // Validate the incoming request data
     $validatedData = $this->validator($request->all());
@@ -50,9 +50,8 @@ class UserController extends Controller
     ]);
 
     // Redirect to the login page
-    return redirect()->route('login')->with('success', 'User registered successfully');
+    return redirect()->route('login')->with('success', 'User registered successfully. Please log in.');
 }
-
 
     /**
      * Show the user profile.
@@ -112,26 +111,25 @@ class UserController extends Controller
     public function changePassword(Request $request)
     {
         $user = $request->user();
-
+    
         $validatedData = $request->validate([
-            'current_password'=> 'required',
-            'new_password' => 'required|min:6',
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
         ]);
-
+    
         if (!Hash::check($validatedData['current_password'], $user->password)) {
             throw ValidationException::withMessages([
                 'current_password' => 'Current password is incorrect',
             ])->status(422);
         }
-
+    
         $user->update([
             'password' => Hash::make($validatedData['new_password']),
         ]);
-
-        // Add any additional logic or actions after changing the user's password
-
+    
         return response()->json(['message' => 'User password changed successfully']);
     }
+    
 
     /**
      * Show the delete account form.
@@ -161,7 +159,19 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User account deleted successfully']);
     }
-    // Assuming your controller method where you fetch users looks like this:
+
+/**
+ * User logout.
+ *
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function logout()
+{
+    // Use Laravel's built-in Auth to log out the user
+    Auth::logout();
+
+    return redirect()->route('login')->with('success', 'User logged out successfully');
+}
 
     public function manageUsers()
     {
@@ -192,31 +202,40 @@ class UserController extends Controller
         return view('user.login');
     }
 
-    /**
-     * User login.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws ValidationException
-     */
-    public function login(Request $request)
-    {
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+// ...
+public function login(Request $request)
+{
+    $validatedData = $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
 
-        $user = User::where('username', $validatedData['username'])->first();
+    $credentials = $request->only('username', 'password');
 
-        if (!$user || !Hash::check($validatedData['password'], $user->password_hash)) {
-            throw ValidationException::withMessages([
-                'message' => 'Invalid username or password',
-            ])->status(401);
+    if (Auth::attempt($credentials)) {
+        dd('Authenticated'); // Debugging: Check if authentication is successful
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        dd($user); // Debugging: Check if the user exists
+
+        // Check if the user is a student
+        if ($user->isStudent()) {
+            dd($user->student); // Debugging: Check if the student relationship is loaded
+            // Assuming you have a 'students.show' route defined
+            return redirect()->route('student.show', $user->student->id)->with('success', 'Student logged in successfully');
+        } else {
+            dd('Redirect to default dashboard'); // Debugging: Check if the user is redirected to the default dashboard
+            // Redirect to a default page for non-student users
+            return redirect()->route('default.dashboard')->with('success', 'User logged in successfully');
         }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        // Redirect to the profile page
-        return redirect()->route('profile')->with('success', 'User logged in successfully');
+    } else {
+        dd('Invalid username or password'); // Debugging: Check if the validation fails and the error message
+        return redirect()->route('login')->withErrors(['error' => 'Invalid username or password'])->withInput();
     }
+}
+
+
+
 }

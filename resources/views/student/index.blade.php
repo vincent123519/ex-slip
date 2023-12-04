@@ -1,56 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Student Listing</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+@extends('layouts.app')  {{-- Assuming you have a layout file --}}
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+@section('content')
+    <div class="container">
+        <h1>Student Information</h1>
 
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Student Listing</h1>
+        <div>
+            <strong>User ID:</strong> {{ $student->user_id }}
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Degree ID</th>
-                <th>Year Level</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($students as $student)
-                <tr>
-                    <td>{{ $student->id }}</td>
-                    <td>{{ $student->name }}</td>
-                    <td>{{ $student->degree_id }}</td>
-                    <td>{{ $student->year_level }}</td>
-                    <td>
-                        <a href="{{ route('students.show', $student->id) }}">View</a>
-                        <a href="{{ route('students.edit', $student->id) }}">Edit</a>
-                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display: inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this student?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</body>
-</html>
+        <div>
+            <strong>Name:</strong> {{ $student->name }}
+        </div>
+
+        <div>
+            <strong>Degree ID:</strong> {{ $student->degree_id }}
+        </div>
+
+        <div>
+            <strong>Year Level:</strong> {{ $student->year_level }}
+        </div>
+
+        {{-- Add more details as needed based on your database structure --}}
+
+        <div>
+            {{-- Add additional information based on your database structure --}}
+        </div>
+
+        <a href="{{ route('students.index') }}" class="btn btn-primary">Back to Student List</a>
+    </div>
+@endsection

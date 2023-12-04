@@ -27,4 +27,6 @@ class Student extends Model
     {
         return $this->belongsTo(DepartmentDegree::class, 'degree_id');
     }
+
+    
 }

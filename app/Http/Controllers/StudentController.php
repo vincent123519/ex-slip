@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Student;
 use App\Models\Course;
 use App\Models\Teacher;
@@ -10,6 +11,7 @@ use App\Models\Dean;
 use App\Models\ExcuseStatus;
 use App\Models\ExcuseSlip;
 use Illuminate\Http\Request;
+
 
 class StudentController extends Controller
 {
@@ -35,6 +37,7 @@ class StudentController extends Controller
         // Show the create student form
         return view('student.create');
     }
+
     /**
      * Store a newly created student in storage.
      *
@@ -55,22 +58,33 @@ class StudentController extends Controller
         $student = Student::create($validatedData);
 
         // Redirect to the student's detail page
-        return redirect()->route('students.show', $student->id)
-            ->with('success', 'Student created successfully.');
+        return redirect()->route('students.show', $student->id)->with('success', 'Student created successfully.');
     }
 
-    /**
-     * Display the specified student.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $student = Student::findOrFail($id);
+/**
+ * Display the specified student.
+ *
+ * @param  int  $id
+ * @return \Illuminate\Http\Response
+ */
+public function show($user_id)
+{
+    $user = User::where('user_id', $user_id)->first();
 
-        return view('students.show', compact('student'));
+    if (!$user) {
+        abort(404); // Or handle the case where the user is not found
     }
+
+    $student = $user->student;
+
+    if (!$student) {
+        abort(404); // Or handle the case where the student is not found
+    }
+
+    return view('student.show', ['student' => $student]);
+}
+
+
 
     /**
      * Show the form for editing the specified student.
@@ -109,8 +123,7 @@ class StudentController extends Controller
         $student->update($validatedData);
 
         // Redirect to the student's detail page
-        return redirect()->route('students.show', $student->id)
-            ->with('success', 'Student updated successfully.');
+        return redirect()->route('students.show', $student->id)->with('success', 'Student updated successfully.');
     }
 
     /**
@@ -128,8 +141,7 @@ class StudentController extends Controller
         $student->delete();
 
         // Redirect to the students' list
-        return redirect()->route('students.index')
-            ->with('success', 'Student deleted successfully.');
+        return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
     }
 
     /**
@@ -165,7 +177,7 @@ class StudentController extends Controller
             'dean_id' => 'required',
             'course_code' => 'required',
             'reason' => 'required',
-'start_date' => 'required',
+            'start_date' => 'required',
             'end_date' => 'required',
             'status_id' => 'required',
         ]);
@@ -174,8 +186,7 @@ class StudentController extends Controller
         $excuseSlip = ExcuseSlip::create($validatedData);
 
         // Redirect to the excuse slip detail page
-        return redirect()->route('excuse_slips.show', $excuseSlip->id)
-            ->with('success', 'Excuse slip request created successfully.');
+        return redirect()->route('excuse_slips.show', $excuseSlip->id)->with('success', 'Excuse slip request created successfully.');
     }
 
     /**
@@ -220,7 +231,6 @@ class StudentController extends Controller
         $excuseSlip->update($validatedData);
 
         // Redirect to the excuse slip detail page
-        return redirect()->route('excuse_slips.show', $excuseSlip->id)
-            ->with('success', 'Excuse slip request updated successfully.');
+        return redirect()->route('excuse_slips.show', $excuseSlip->id)->with('success', 'Excuse slip request updated successfully.');
     }
 }

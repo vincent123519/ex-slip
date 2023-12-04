@@ -1,42 +1,49 @@
-<!-- student/show.blade.php -->
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Student Details</title>
-</head>
-<body>
-    <h1>Student Details</h1>
+@extends('components.layout')
 
-    <div>
-        <strong>ID:</strong> {{ $student->id }}
+@section('content')
+    <div class="student-details-container">
+        <h1>{{ $student->name }}</h1>
+        <p>Degree Program: {{ $student->degree_id }}</p>
+        <p>Year Level: {{ $student->year_level }}</p>
+
+        {{-- Button to Request Excuse Slip --}}
+        <a href="{{ route('students.request_excuse_slip', $student->id) }}" class="btn btn-primary">Request Excuse Slip</a>
     </div>
+@endsection
 
-    <div>
-        <strong>User ID:</strong> {{ $student->user_id }}
-    </div>
+<style>
+    .student-details-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        width: 60%;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-    <div>
-        <strong>Name:</strong> {{ $student->name }}
-    </div>
+    h1 {
+        margin-bottom: 10px;
+    }
 
-    <div>
-        <strong>Degree ID:</strong> {{ $student->degree_id }}
-    </div>
+    p {
+        margin-bottom: 5px;
+    }
 
-    <div>
-        <strong>Year Level:</strong> {{ $student->year_level }}
-    </div>
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        font-size: 16px;
+        text-align: center;
+        text-decoration: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
 
-    <br>
-
-    <div>
-        <a href="{{ route('students.edit', $student->id) }}">Edit</a>
-        <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display: inline-block;">
-            @csrf
-            @method('DELETE')
-            <button type="submit">Delete</button>
-        </form>
-    </div>
-</body>
-</html>
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>

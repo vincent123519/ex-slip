@@ -221,9 +221,45 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws ValidationException
      */
+    public function login(Request $request)
+{
+    $validatedData = $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
+
+    $user = User::with('role')->where('username', $validatedData['username'])->first();
+
+    if (!$user || !Hash::check($validatedData['password'], $user->password)) {
+        throw ValidationException::withMessages([
+            'message' => 'Invalid username or password',
+        ])->status(401);
+    }
+
+    Auth::login($user);
+
+    // Log user information and role
+    \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
+
+    // Retrieve the user's role
+    $userRole = $user->role;
+
+    // Check the user's role and redirect accordingly
+    switch ($userRole ? $userRole->role_name : null) {
+        case 'student':
+            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
+        case 'teacher':
+            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
+        case 'admin':
+            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
+        // Add more cases for other roles
+        default:
+            return redirect()->intended('/dashboard')->with('success', 'Default log in logged in successfully');
+    }
+}
 
 
-// UserController.php
+
 
 
 

@@ -54,11 +54,15 @@ class UserController extends Controller
 
         // Check the role and perform role-specific actions
         if ($user->role_id == 1) {
-            $headCouncelor = new HeadCounselor([
+            // Create a Head Counselor record
+            $headCounselor = new HeadCounselor([
                 'name' => $user->name,
+                
+                // Other Head Counselor attributes
             ]);
 
-            $user->headCouncelor()->save($headCouncelor);
+            // Save the Head Counselor record
+            $user->headCounselor()->save($headCounselor);
         } elseif ($user->role_id == 2) {
             // Teacher role
             // Example: Teacher-specific logic
@@ -82,6 +86,7 @@ class UserController extends Controller
         // Redirect to the login page
         return redirect()->route('login')->with('success', 'User registered successfully');
     }
+
 
 
 

@@ -15,6 +15,8 @@ class HeadCounselor extends Model
         'name',
         'department_id',
     ];
+    
+
 
     // Define relationships
     public function user()

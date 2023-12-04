@@ -12,7 +12,7 @@ class CreateHeadCounselorsTable extends Migration
             $table->id('head_counselor_id'); // Use 'id' with auto-increment
             $table->unsignedBigInteger('user_id');
             $table->string('name', 100);
-            $table->unsignedBigInteger('department_id'); // Added department_id column
+            $table->unsignedBigInteger('department_id')->default(1); // Added department_id column
 
             // Add foreign key constraints with the same data type
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');

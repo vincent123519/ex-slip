@@ -1,8 +1,9 @@
-@extends('components.layout')
-
+@extends('components.stud')
 @section('content')
     <div class="student-details-container">
         <h1>{{ Auth::user()->name }}</h1>
+        @endsection
+
 <style>
     .student-details-container {
         background-color: #f8f9fa;

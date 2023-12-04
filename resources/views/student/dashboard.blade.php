@@ -3,13 +3,6 @@
 @section('content')
     <div class="student-details-container">
         <h1>{{ Auth::user()->name }}</h1>
-        <a href="{{ route('students.request_excuse_slip', $student->id) }}" class="btn btn-primary">Request Excuse Slip</a>
-
-
-        {{-- Button to Request Excuse Slip --}}
-    </div>
-@endsection
-
 <style>
     .student-details-container {
         background-color: #f8f9fa;
@@ -45,3 +38,4 @@
         background-color: #0056b3;
     }
 </style>
+

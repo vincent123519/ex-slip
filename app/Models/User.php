@@ -47,6 +47,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(HeadCounselor::class, 'user_id');
     }
+    
 
     // ... (other relationships)
 

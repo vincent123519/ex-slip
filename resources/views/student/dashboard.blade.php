@@ -3,7 +3,8 @@
 @section('content')
     <div class="student-details-container">
         <h1>{{ Auth::user()->name }}</h1>
-   
+        <a href="{{ route('students.request_excuse_slip', $student->id) }}" class="btn btn-primary">Request Excuse Slip</a>
+
 
         {{-- Button to Request Excuse Slip --}}
     </div>

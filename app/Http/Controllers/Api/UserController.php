@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\HeadCounselor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -51,9 +52,24 @@ class UserController extends Controller
             'role_id' => $request->input('role'), // Assuming role is stored in role_id field
         ]);
 
-        // Check if the user has the student role
-        if ($user->role_id == 3) { // Assuming 3 is the ID for the student role
-            // Create a student record
+        // Check the role and perform role-specific actions
+        if ($user->role_id == 1) {
+            $headCouncelor = new HeadCounselor([
+                'name' => $user->name,
+            ]);
+
+            $user->headCouncelor()->save($headCouncelor);
+        } elseif ($user->role_id == 2) {
+            // Teacher role
+            // Example: Teacher-specific logic
+        } elseif ($user->role_id == 4) {
+            // Counselor role
+            // Example: Counselor-specific logic
+        } elseif ($user->role_id == 5) {
+            // Dean role
+            // Example: Dean-specific logic
+        } elseif ($user->role_id == 3) {
+            // Student role
             $student = new Student([
                 'name' => $user->name,
                 // Other student attributes
@@ -66,6 +82,7 @@ class UserController extends Controller
         // Redirect to the login page
         return redirect()->route('login')->with('success', 'User registered successfully');
     }
+
 
 
     /**

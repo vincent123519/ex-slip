@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Student;
 use App\Models\UserRole;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -33,26 +34,38 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
-{
-    // Validate the incoming request data
-    $validatedData = $this->validator($request->all());
+    {
+        // Validate the incoming request data
+        $validatedData = $this->validator($request->all());
 
-    // If validation fails, return back with errors
-    if ($validatedData->fails()) {
-        return redirect()->back()->withErrors($validatedData)->withInput();
+        // If validation fails, return back with errors
+        if ($validatedData->fails()) {
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }
+
+        // Create the user and save the password
+        $user = User::create([
+            'name' => $request->input('name'),
+            'username' => $request->input('username'),
+            'password' => Hash::make($request->input('password')), // Hash the password
+            'role_id' => $request->input('role'), // Assuming role is stored in role_id field
+        ]);
+
+        // Check if the user has the student role
+        if ($user->role_id == 3) { // Assuming 3 is the ID for the student role
+            // Create a student record
+            $student = new Student([
+                'name' => $user->name,
+                // Other student attributes
+            ]);
+
+            // Save the student record
+            $user->student()->save($student);
+        }
+
+        // Redirect to the login page
+        return redirect()->route('login')->with('success', 'User registered successfully');
     }
-
-    // Create the user and save the password
-    $user = User::create([
-        'name' => $request->input('name'),
-        'username' => $request->input('username'),
-        'password' => Hash::make($request->input('password')), // Hash the password
-        'role_id' => $request->input('role'), // Assuming role is stored in role_id field
-    ]);
-
-    // Redirect to the login page
-    return redirect()->route('login')->with('success', 'User registered successfully');
-}
 
 
     /**
@@ -195,42 +208,6 @@ class UserController extends Controller
 
 // UserController.php
 
-public function login(Request $request)
-{
-    $validatedData = $request->validate([
-        'username' => 'required',
-        'password' => 'required',
-    ]);
-
-    $user = User::with('role')->where('username', $validatedData['username'])->first();
-
-    if (!$user || !Hash::check($validatedData['password'], $user->password)) {
-        throw ValidationException::withMessages([
-            'message' => 'Invalid username or password',
-        ])->status(401);
-    }
-
-    Auth::login($user);
-
-    // Log user information and role
-    \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
-
-    // Retrieve the user's role
-    $userRole = $user->role;
-
-    // Check the user's role and redirect accordingly
-    switch ($userRole ? $userRole->role_name : null) {
-        case 'student':
-            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
-        case 'teacher':
-            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
-        case 'admin':
-            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-        // Add more cases for other roles
-        default:
-            return redirect()->intended('/dashboard')->with('success', 'Default log in logged in successfully');
-    }
-}
 
 
 

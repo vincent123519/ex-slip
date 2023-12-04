@@ -12,10 +12,11 @@ class CreateStudentsTable extends Migration
             $table->id('student_id');
             $table->unsignedBigInteger('user_id')->unique();
             $table->string('name', 100);
-            $table->unsignedBigInteger('degree_id');
-            $table->unsignedBigInteger('year_level');
+            $table->unsignedBigInteger('degree_id')->default(1); // Set a default value
+            $table->unsignedBigInteger('year_level')->default(1);
             $table->timestamps();
 
+            // Define foreign key relationships
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('degree_id')->references('degree_id')->on('department_degrees');
         });

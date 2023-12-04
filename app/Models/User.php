@@ -35,6 +35,11 @@ class User extends Authenticatable
         return $this->belongsTo(UserRole::class, 'role_id');
     }
 
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'user_id');
+    }
+
     /**
      * Define a one-to-one relationship with the HeadCounselor model.
      */

@@ -23,10 +23,11 @@ class UserRole extends Model
      */
    
      
-     public function users()
+     public function user()
      {
-         return $this->hasMany(User::class, 'role_id');
+         return $this->hasOne(User::class, 'role_id');
      }
      
+
     // Add any other relationships or methods relevant to your project
 }

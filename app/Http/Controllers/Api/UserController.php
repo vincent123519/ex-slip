@@ -193,14 +193,16 @@ class UserController extends Controller
      */
 
 
-     public function login(Request $request)
+// UserController.php
+
+public function login(Request $request)
 {
     $validatedData = $request->validate([
         'username' => 'required',
         'password' => 'required',
     ]);
 
-    $user = User::where('username', $validatedData['username'])->first();
+    $user = User::with('role')->where('username', $validatedData['username'])->first();
 
     if (!$user || !Hash::check($validatedData['password'], $user->password)) {
         throw ValidationException::withMessages([
@@ -212,27 +214,34 @@ class UserController extends Controller
 
     // Log user information and role
     \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
-    \Illuminate\Support\Facades\Log::info('User Role Information: ' . json_encode($user->userRole->toArray()));
 
     // Retrieve the user's role
-    $userRole = $user->userRole;
+    $userRole = $user->role;
 
     // Check the user's role and redirect accordingly
-    switch ($userRole->role_name) {
+    switch ($userRole ? $userRole->role_name : null) {
         case 'student':
-            return redirect()->route('student.dashboard')->with('success', 'User logged in successfully');
+            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
         case 'teacher':
-            return redirect()->route('teacher.dashboard')->with('success', 'User logged in successfully');
+            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
         case 'admin':
-            return redirect()->route('admin.dashboard')->with('success', 'User logged in successfully');
+            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
         // Add more cases for other roles
         default:
-            return redirect()->intended('/dashboard')->with('success', 'User logged in successfully');
+            return redirect()->intended('/dashboard')->with('success', 'Default log in logged in successfully');
     }
-        
 }
+
+
+
+
+     
+}
+
+     
+        
+
 
      
 
 
-}

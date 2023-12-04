@@ -38,14 +38,19 @@ Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('st
 //
 // routes/web.php
 
-Route::middleware(['auth', 'student'])->group(function () {
+
+
+Route::group(['middleware' => ['web', 'student']], function () {
     Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 });
+
+
+
 // web.php
 // routes/web.php
 // routes/web.php
 
-Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
 
 

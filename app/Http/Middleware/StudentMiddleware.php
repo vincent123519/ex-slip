@@ -23,8 +23,8 @@ class StudentMiddleware
             return $next($request);
         }
 
-        return redirect(route('login'))->with('error', 'You do not have access to this page.');
-    }
+        return redirect(route('student.dashboard'))->with('error', 'You do not have access to this page.');
+        }
 
     /**
      * Check if the user has the 'student' role.
@@ -37,4 +37,5 @@ class StudentMiddleware
         // You can modify this logic based on your actual role implementation
         return $user->hasRole('student');
     }
+    
 }

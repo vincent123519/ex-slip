@@ -6,8 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Counselor extends Model
 {
+    protected $table = 'counselors';
+
     protected $primaryKey = 'counselor_id';
     public $timestamps = false;
+
+    protected $fillable = [
+        'name', 'department_id',
+
+    ];
 
     public function user()
     {

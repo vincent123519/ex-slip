@@ -6,9 +6,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\UserRole;
+use App\Models\Counselor;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\HeadCounselor;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -67,8 +68,14 @@ class UserController extends Controller
             // Teacher role
             // Example: Teacher-specific logic
         } elseif ($user->role_id == 4) {
-            // Counselor role
-            // Example: Counselor-specific logic
+                // Counselor role
+          $counselor = new Counselor([
+            'name' => $user->name,
+            // Add other counselor attributes here
+        ]);
+
+        // Save the Counselor record
+         $user->counselor()->save($counselor);
         } elseif ($user->role_id == 5) {
             // Dean role
             // Example: Dean-specific logic

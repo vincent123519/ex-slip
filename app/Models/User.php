@@ -66,5 +66,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Feedback::class, 'sender_id');
     }
+
+    public function counselor()
+    {
+        return $this->hasOne(Counselor::class, 'user_id');
+    }
+
 }
 

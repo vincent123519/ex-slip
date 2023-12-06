@@ -10,15 +10,9 @@ class SemesterSeeder extends Seeder
     public function run()
     {
         $semesters = [
-            [
-                'semester_name' => 'First Semester',
-            ],
-            [
-                'semester_name' => 'Fall Semester',
-            ],
-            [
-                'semester_name' => 'Summer',
-            ],
+            ['semester_name' => '1st sem'],
+            ['semester_name' => '2nd sem'],
+            ['semester_name' => 'Summer'],
             // Add more semester records here
         ];
 

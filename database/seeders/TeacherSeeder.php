@@ -11,25 +11,27 @@ class TeacherSeeder extends Seeder
 {
     public function run()
     {
-        $teachers = [
-            ['user_id' => 1001, 'name' => 'John Doe', 'department_id' => 2001],
-            ['user_id' => 1002, 'name' => 'Jane Smith', 'department_id' => 2001],
-            // Add more sample teachers
+        $teachersData = [
+            ['user_id' => 1001, 'name' => 'Mr. John Leeroy Gadiane'],
+            ['user_id' => 1002, 'name' => 'Mr. Gene Abello'],
+            // Add more teachers as needed
         ];
 
-        foreach ($teachers as $teacherData) {
+        foreach ($teachersData as $teacherData) {
             $user = User::find($teacherData['user_id']);
-            $department = Department::find($teacherData['department_id']);
 
-            if ($user && $department) {
+            if ($user) {
                 $teacher = new Teacher([
                     'name' => $teacherData['name'],
                 ]);
 
                 $teacher->user()->associate($user);
-                $teacher->department()->associate($department);
+                $teacher->department()->associate(Department::find(1)); // Assuming department_id is 1
                 $teacher->save();
             }
         }
+
+        // After creating teachers, run the CourseOfferingSeeder
+        $this->call(CourseOfferingSeeder::class);
     }
 }

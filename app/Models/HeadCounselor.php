@@ -11,8 +11,7 @@ class HeadCounselor extends Model
     protected $primaryKey = 'head_counselor_id';
 
     protected $fillable = [
-        'head_counselor_id',
-        'user_id',
+        'user_id', // Remove 'head_counselor_id' from fillable
         'name',
         'department_id',
     ];

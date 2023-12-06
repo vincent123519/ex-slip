@@ -233,4 +233,13 @@ public function show($user_id)
         // Redirect to the excuse slip detail page
         return redirect()->route('excuse_slips.show', $excuseSlip->id)->with('success', 'Excuse slip request updated successfully.');
     }
+<<<<<<< HEAD
 }
+=======
+
+    public function dashboard()
+    {
+        return view('student.dashboard');
+    }
+}
+>>>>>>> Branch-for-Login-Authentication

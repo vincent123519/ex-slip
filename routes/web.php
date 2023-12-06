@@ -131,9 +131,39 @@ Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])->
 Route::resource('/excuse_slips', ExcuseSlipController::class)->except(['show']);
 Route::get('/excuse_slips/{id}/view', [ExcuseSlipController::class, 'viewExcuseSlip'])->name('excuse_slips.view');
 
+<<<<<<< HEAD
 // Students
 Route::resource('/students', StudentController::class);
 Route::get('/students/{user_id}', [StudentController::class, 'show'])->name('students.show');
+=======
+// Student Routes
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
+Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
+Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
+Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+//
+// routes/web.php
+
+
+
+Route::group(['middleware' => ['web', 'student']], function () {
+    Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+});
+
+
+
+// web.php
+// routes/web.php
+// routes/web.php
+
+Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+
+
+
+>>>>>>> Branch-for-Login-Authentication
 
 
 // Head Counselor
@@ -149,6 +179,7 @@ Route::put('/update-user/{user}', [AdminController::class, 'updateUser'])->name(
 
 // User
 Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
+<<<<<<< HEAD
 Route::post('/register', [UserController::class, 'register']);
 
 // Login
@@ -156,6 +187,15 @@ Route::post('/register', [UserController::class, 'register']);
 Route::match(['get', 'post'], '/', [UserController::class, 'showLoginForm'])->name('login');
 // Logout  
 Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth');
+=======
+// Route::post('/register', [UserController::class, 'register']);
+Route::post('/register', [UserController::class, 'register'])->name('register');
+// User Login
+
+Route::get('/', [UserController::class, 'showLoginForm'])->name('login');
+Route::post('/', [UserController::class, 'login']);
+
+>>>>>>> Branch-for-Login-Authentication
 
 
 Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');

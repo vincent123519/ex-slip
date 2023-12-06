@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 @extends('components.signlayout')
 
+=======
+<!-- resources/views/user/login.blade.php -->
+
+@extends('components.signlayout') <!-- You might need to create this layout -->
+>>>>>>> Branch-for-Login-Authentication
 @section('content')
     <br>
     <div class="login-greetings">
@@ -9,7 +15,10 @@
         <p>Log in to your account to get started, and enjoy the benefits of streamlined excuse slip management at the University of San Jose - Recoletos.</p>
     </div>
     <div class="login-container">
+<<<<<<< HEAD
 
+=======
+>>>>>>> Branch-for-Login-Authentication
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">

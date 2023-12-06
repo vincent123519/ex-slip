@@ -1,21 +1,25 @@
 <?php
 
+// User.php
+
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
+    use HasRoles;
 
     protected $primaryKey = 'user_id';
 
     protected $fillable = [
         'name',
         'username',
-        'password', // Change 'password_hash' to 'password'
+        'password',
         'role_id',
     ];
 
@@ -24,35 +28,28 @@ class User extends Authenticatable
     ];
 
     /**
-     * Define a many-to-many relationship with the UserRole model.
+     * Define a many-to-one relationship with the UserRole model.
      */
-  
-
-    /**
- * Define a many-to-many relationship with the UserRole model.
- */
-   
     public function role()
     {
         return $this->belongsTo(UserRole::class, 'role_id');
     }
-    public function hasRole($role)
+
+    public function student()
     {
-        return $this->roles->contains('role_name', $role);
+        return $this->hasOne(Student::class, 'user_id');
     }
- 
-    
 
-
-    
-   /**
+    /**
      * Define a one-to-one relationship with the HeadCounselor model.
      */
     public function headCounselor()
     {
         return $this->hasOne(HeadCounselor::class, 'user_id');
     }
+    
 
+<<<<<<< HEAD
     /**
      * Define a one-to-one relationship with the Teacher model.
      */
@@ -89,6 +86,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Student::class, 'user_id');
     }
+=======
+    // ... (other relationships)
+
+>>>>>>> Branch-for-Login-Authentication
     /**
      * Define a one-to-many relationship with the ExcuseSlip model.
      */
@@ -105,3 +106,4 @@ class User extends Authenticatable
         return $this->hasMany(Feedback::class, 'sender_id');
     }
 }
+

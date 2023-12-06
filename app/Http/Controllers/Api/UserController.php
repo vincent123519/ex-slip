@@ -6,9 +6,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\UserRole;
+use App\Models\Counselor;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\HeadCounselor;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -70,17 +71,27 @@ public function register(Request $request)
 
         // Check the role and perform role-specific actions
         if ($user->role_id == 1) {
-            $headCouncelor = new HeadCounselor([
+            // Create a Head Counselor record
+            $headCounselor = new HeadCounselor([
                 'name' => $user->name,
+                
+                // Other Head Counselor attributes
             ]);
 
-            $user->headCouncelor()->save($headCouncelor);
+            // Save the Head Counselor record
+            $user->headCounselor()->save($headCounselor);
         } elseif ($user->role_id == 2) {
             // Teacher role
             // Example: Teacher-specific logic
         } elseif ($user->role_id == 4) {
-            // Counselor role
-            // Example: Counselor-specific logic
+                // Counselor role
+          $counselor = new Counselor([
+            'name' => $user->name,
+            // Add other counselor attributes here
+        ]);
+
+        // Save the Counselor record
+         $user->counselor()->save($counselor);
         } elseif ($user->role_id == 5) {
             // Dean role
             // Example: Dean-specific logic
@@ -113,6 +124,7 @@ public function register(Request $request)
 }
 =======
 >>>>>>> Branch-for-Login-Authentication
+
 
     /**
      * Show the user profile.
@@ -328,6 +340,14 @@ public function login(Request $request)
             return redirect()->intended('/dashboard')->with('success', 'Default log in logged in successfully');
     }
 >>>>>>> Branch-for-Login-Authentication
+}
+
+public function logout()
+{
+    Auth::logout();
+
+    // You can add any additional logic or redirection after logout if needed
+    return redirect()->route('login')->with('success', 'Logout successful');
 }
 
 

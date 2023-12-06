@@ -94,3 +94,7 @@ Route::post('/change-password', [UserController::class, 'changePassword']);
 // Delete Account
 Route::get('/delete-account', [UserController::class, 'showDeleteAccountForm'])->name('delete-account');
 Route::post('/delete-account', [UserController::class, 'deleteAccount']);
+
+//for logout function
+
+Route::post('/user/logout', [UserController::class, 'logout'])->name('user.logout');

@@ -16,14 +16,16 @@
             <span class="White">Sis</span>
             <span class="yellow">Slip</span>
             
-
             <div class="nav-right">
-                <a href="#"><i class="fas fa-home"></i></a>
-                <a href="http://127.0.0.1:8000/" onclick="event.preventDefault();">
+            <a href="#"><i class="fas fa-home"></i> Home</a>
+
+            <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
+                @csrf
+                <button type="submit" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-                
-            </div>
+                </button>
+            </form>
+</div>
             
 
                         

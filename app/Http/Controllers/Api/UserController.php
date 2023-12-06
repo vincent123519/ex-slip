@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\UserRole;
 use App\Models\Counselor;
 use Illuminate\Http\Request;
@@ -66,7 +67,13 @@ class UserController extends Controller
             $user->headCounselor()->save($headCounselor);
         } elseif ($user->role_id == 2) {
             // Teacher role
-            // Example: Teacher-specific logic
+            $teacher = new Teacher([
+                'name' => $user->name,
+                // Add other teacher attributes here
+            ]);
+    
+            // Save the Teacher record
+            $user->teacher()->save($teacher);
         } elseif ($user->role_id == 4) {
                 // Counselor role
           $counselor = new Counselor([

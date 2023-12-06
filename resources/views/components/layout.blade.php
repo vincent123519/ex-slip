@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-<YOUR-SHA-HASH>" crossorigin="anonymous" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite(['resources/css/app.css', 'resources/scss/home.scss', 'resources/js/app.js'])
@@ -17,14 +18,14 @@
             <span class="yellow">Slip</span>
             
             <div class="nav-right">
-            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-home"></i> </a>
 
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
-                @csrf
-                <button type="submit" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </form>
+            @csrf
+            <button type="submit" class="logout-btn">
+                <div class="circle-icon"></div><i>Logout</i>
+            </button>
+        </form></div>
 </div>
             
 
@@ -51,3 +52,17 @@
     @yield('content')   
 
 </body>
+<style>
+    .nav-right {
+    font-family: '', sans-serif; /* Replace 'YourFont' with the actual font you want to use */
+}
+
+/* Optionally, you can specify a font size, weight, and other styles */
+.nav-right i {
+    font-size: 16px;
+    font-weight: bold;
+    color: wheat;
+    /* Add more styles as needed */
+}
+ 
+</style>

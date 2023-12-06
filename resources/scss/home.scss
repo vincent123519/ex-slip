@@ -177,6 +177,23 @@
             padding: 0 900px;
             ;
         }
+        //
+        .logout-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .circle-icon {
+            width: 35px;
+            height: 35px;
+            background: url('../scss/image/logout.png') center/cover; /* Set your image path */
+            border-radius: 50%;
+            margin-right: 10px; /* Adjust margin as needed */
+        }
+        
 
         
         

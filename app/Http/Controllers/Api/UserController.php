@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\Dean;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -81,11 +82,14 @@ class UserController extends Controller
             // Add other counselor attributes here
         ]);
 
-        // Save the Counselor record
          $user->counselor()->save($counselor);
         } elseif ($user->role_id == 5) {
-            // Dean role
-            // Example: Dean-specific logic
+            $dean = new Dean([
+                'name' => $user->name,
+                // Add other dean attributes here
+            ]);
+    // Save the Dean record
+    $user->dean()->save($dean);
         } elseif ($user->role_id == 3) {
             // Student role
             $student = new Student([

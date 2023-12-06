@@ -22,21 +22,19 @@ class DeansSeeder extends Seeder
 
         // Create sample deans
         $deans = [];
-        $deanId = 10001; // Starting dean_id
 
         foreach ($users as $user) {
             $school = $schools->random();
             $department = $departments->random();
 
-            $deans[] = [
-                'dean_id' => $deanId,
+            $dean = new Dean([
                 'user_id' => $user->user_id,
                 'name' => $faker->name,
                 'school_code' => $school->school_code,
                 'department_id' => $department->department_id,
-            ];
+            ]);
 
-            $deanId++;
+            $deans[] = $dean->attributesToArray();
         }
 
         // Insert the deans into the database

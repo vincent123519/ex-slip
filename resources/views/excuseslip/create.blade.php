@@ -1,8 +1,8 @@
-@extends('components.layout')
+@extends('components.excuseslipstud')
 
 @section('content')
     <div class="manage-slip-container">
-        <h1>Create Excuse Slip</h1>
+        <h1>Request Excuse Slip</h1>
         <form action="{{ route('excuse_slips.store') }}" method="POST">
             @csrf
 

@@ -2,6 +2,8 @@
 @section('content')
     <div class="student-details-container">
         <h1>{{ Auth::user()->name }}</h1>
+        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Create Excuse Slip</a>
+
         @endsection
 
 <style>

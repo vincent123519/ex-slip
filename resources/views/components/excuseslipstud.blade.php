@@ -44,7 +44,7 @@
     <div class="divider"></div>
     <div class="navmenu"><ul>
         <li><span>DASHBOARD</span></li>
-        <li></li>
+        <li>You may request for excuse slip</li>
     </ul></div>    </div>
     
     @yield('content')   

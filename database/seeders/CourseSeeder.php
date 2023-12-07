@@ -12,15 +12,26 @@ class CourseSeeder extends Seeder
     {
         $courses = [
             [
-                'course_code' => 'CSE101',
-                'course_name' => 'Introduction to Computer Science',
+                'course_code' => 'IPT1',
+                'course_name' => 'Integrated Programming',
                 'department_id' => 1,
             ],
             [
-                'course_code' => 'MAT201',
-                'course_name' => 'Calculus 1',
-                'department_id' => 2,
+                'course_code' => 'IM1',
+                'course_name' => 'Information Management 1',
+                'department_id' => 1,
             ],
+            [
+                'course_code' => 'ICRPOG 1',
+                'course_name' => 'Computer PRogramming 1',
+                'department_id' => 1,
+            ],
+            [
+                'course_code' => 'IAS1',
+                'course_name' => 'Information Assurance and Security 1',
+                'department_id' => 1,
+            ],
+            
             // Add more course records here
         ];
 

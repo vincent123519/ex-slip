@@ -59,14 +59,18 @@ class CounselorController extends Controller
             'feedback_type' => 'required',
         ]);
 
-        $feedback = new Feedback();
-        $feedback->excuse_slip_id = $request->input('excuse_slip_id');
-        $feedback->feedback_remarks = $request->input('feedback_remarks');
-        $feedback->feedback_date = now();
-        $feedback->sender_id = Auth::id();
-        $feedback->feedback_type = $request->input('feedback_type');
-        $feedback->save();
+            $feedback = new Feedback();
+            $feedback->excuse_slip_id = $request->input('excuse_slip_id');
+            $feedback->feedback_remarks = $request->input('feedback_remarks');
+            $feedback->feedback_date = now();
+            $feedback->sender_id = Auth::id();
+            $feedback->feedback_type = $request->input('feedback_type');
+            $feedback->save();
 
         return response()->json(['message' => 'Feedback submitted successfully.']);
     }
-}
+    public function dashboard()
+        {
+            return view('counselor.dashboard');
+        }
+    }

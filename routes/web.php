@@ -1,12 +1,15 @@
 <?php
 
+use App\Models\Counselor;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\HeadCounselorController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\CounselorController;
+use App\Http\Controllers\DeanController;
+use App\Http\Controllers\ExcuseSlipController;
+use App\Http\Controllers\HeadCounselorController;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
     ->name('reports.view');
@@ -51,6 +54,8 @@ Route::group(['middleware' => ['web', 'student']], function () {
 // routes/web.php
 
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+Route::get('/counselor/dashboard', [CounselorController::class, 'dashboard'])->name('counselor.dashboard');
+Route::get('/dean/dashboard', [DeanController::class, 'dashboard'])->name('dean.dashboard');
 
 
 

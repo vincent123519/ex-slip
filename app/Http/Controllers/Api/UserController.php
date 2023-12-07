@@ -268,16 +268,20 @@ class UserController extends Controller
     $userRole = $user->role;
 
     // Check the user's role and redirect accordingly
-    switch ($userRole ? $userRole->role_name : null) {
-        case 'student':
+    switch ($userRole ? $userRole->role_id : null) {
+        case 3: // Assuming 'student' has role_id = 3
             return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
-        case 'teacher':
+        case 2: // Assuming 'teacher' has role_id = 2
             return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
-        case 'admin':
+        case 1: // Assuming 'admin' has role_id = 1
             return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-        // Add more cases for other roles
+        case 4: // Assuming 'counselor' has role_id = 4
+            return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
+        case 5: // Assuming 'dean' has role_id = 5
+            return redirect()->route('dean.dashboard')->with('success', 'Dean logged in successfully');
+        // Add more cases for other role_ids
         default:
-        return redirect()->intended('/student/dashboard')->with('success', 'Default log in logged in successfully');
+            return redirect()->intended('/student/dashboard')->with('success', 'Default log in logged in successfully');
     }
 }
 

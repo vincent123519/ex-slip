@@ -98,4 +98,9 @@ class DeanController extends Controller
         // Return a success response
         return response()->json(['message' => 'Feedback added successfully']);
     }
+
+    public function dashboard()
+        {
+            return view('dean.dashboard');
+        }
 }

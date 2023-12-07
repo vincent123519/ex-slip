@@ -44,6 +44,19 @@ Route::group(['middleware' => ['web', 'student']], function () {
     Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 });
 
+Route::middleware(['auth', 'role:dean'])->group(function () {
+    // Dean Dashboard
+    Route::get('/dean/dashboard', 'DeanController@index')->name('dean.dashboard');
+
+    // Approve Excuse Slip
+    Route::put('/excuseslip/approve/{id}', 'DeanController@approveExcuseSlip')->name('dean.approveExcuseSlip');
+
+    // Reject Excuse Slip
+    Route::put('/excuseslip/reject/{id}', 'DeanController@rejectExcuseSlip')->name('dean.rejectExcuseSlip');
+
+    // Add Feedback
+    Route::post('/excuseslip/feedback/{id}', 'DeanController@addFeedback')->name('dean.addFeedback');
+});
 
 
 // web.php
@@ -98,3 +111,9 @@ Route::post('/delete-account', [UserController::class, 'deleteAccount']);
 //for logout function
 
 Route::post('/user/logout', [UserController::class, 'logout'])->name('user.logout');
+
+//Counselor
+
+Route::get('/counselor/dashboard', function () {
+    return view('counselor.dashboard');
+});

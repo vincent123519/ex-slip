@@ -2,9 +2,23 @@
 @section('content')
     <div class="student-details-container">
         <h1>Absence Request</h1>
-        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button"> Excuse Slip</a>
+        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
+        <div class="manage-slip-container">
 
-        @endsection
+    <table class="excuse-slip-table">
+        <thead>
+            <tr>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Counselor's Feedback</th>
+                <th>Dean's Feedback</th>
+                <th>Teacher's Feedback</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+</div>
+@endsection
 
 <style>
     .student-details-container {
@@ -25,20 +39,32 @@
         margin-bottom: 5px;
     }
 
-    .btn {
+    .create-slip-button {
         display: inline-block;
         padding: 10px 15px;
         font-size: 16px;
         text-align: center;
         text-decoration: none;
-        background-color: #007bff;
+        background-color: #28a745; /* Green color */
         color: #fff;
         border-radius: 4px;
         transition: background-color 0.3s;
+        border: 1px solid #218838; /* Darker green color */
     }
 
-    .btn:hover {
-        background-color: #0056b3;
+    .create-slip-button:hover {
+        background-color: #218838;
+    }
+
+    .excuse-slip-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .excuse-slip-table th, .excuse-slip-table td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
     }
 </style>
-

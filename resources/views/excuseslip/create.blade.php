@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="manage-slip-container">
-        <h1>Create Excuse Slip</h1>
+        <h2 class="excuse-slip-header">Excuse Slip</h2>
         <form action="{{ route('excuse_slips.store') }}" method="POST">
             @csrf
 
@@ -102,6 +102,10 @@
         width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-center {
+        text-align: center;
     }
 
     .form-group {

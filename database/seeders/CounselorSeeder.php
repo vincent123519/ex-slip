@@ -17,8 +17,8 @@ class CounselorSeeder extends Seeder
 
         // Create counselors with existing user and department IDs
         $counselors = [
-            ['user_id' => 10001, 'name' => 'Counselor 1', 'department_id' => 20001],
-            ['user_id' => 10002, 'name' => 'Counselor 2', 'department_id' => 20002],
+            ['user_id' => 10001, 'name' => 'Joy Martinez', 'department_id' => 20001],
+            ['user_id' => 10002, 'name' => 'Sadness Martinez', 'department_id' => 20002],
             // Add more sample counselors
         ];
 

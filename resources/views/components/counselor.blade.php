@@ -39,14 +39,14 @@
 <div class="sidebar">
     <div class="profile-container">
         <div class="profile-image"></div>
-        <div class="profile-name">Student:{{ Auth::user()->name }}</div>
+        <div class="profile-name">Counselor:{{ Auth::user()->name }}</div>
 
     </div>
     <div class="divider"></div>
     <div class="divider"></div>
     <div class="navmenu"><ul>
-        <li><span>DASHBOARD</span></li>
-
+        <li><span>menu</span></li>
+        <li>AttendanceSlip</li>
     </ul></div>    </div>
     
     @yield('content')   

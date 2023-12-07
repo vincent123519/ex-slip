@@ -1,12 +1,15 @@
 <?php
 
+use App\Models\Counselor;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\HeadCounselorController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\CounselorController;
+use App\Http\Controllers\DeanController;
+use App\Http\Controllers\ExcuseSlipController;
+use App\Http\Controllers\HeadCounselorController;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
     ->name('reports.view');
@@ -44,19 +47,6 @@ Route::group(['middleware' => ['web', 'student']], function () {
     Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 });
 
-Route::middleware(['auth', 'role:dean'])->group(function () {
-    // Dean Dashboard
-    Route::get('/dean/dashboard', 'DeanController@index')->name('dean.dashboard');
-
-    // Approve Excuse Slip
-    Route::put('/excuseslip/approve/{id}', 'DeanController@approveExcuseSlip')->name('dean.approveExcuseSlip');
-
-    // Reject Excuse Slip
-    Route::put('/excuseslip/reject/{id}', 'DeanController@rejectExcuseSlip')->name('dean.rejectExcuseSlip');
-
-    // Add Feedback
-    Route::post('/excuseslip/feedback/{id}', 'DeanController@addFeedback')->name('dean.addFeedback');
-});
 
 
 // web.php
@@ -64,6 +54,8 @@ Route::middleware(['auth', 'role:dean'])->group(function () {
 // routes/web.php
 
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+Route::get('/counselor/dashboard', [CounselorController::class, 'dashboard'])->name('counselor.dashboard');
+Route::get('/dean/dashboard', [DeanController::class, 'dashboard'])->name('dean.dashboard');
 
 
 
@@ -111,9 +103,3 @@ Route::post('/delete-account', [UserController::class, 'deleteAccount']);
 //for logout function
 
 Route::post('/user/logout', [UserController::class, 'logout'])->name('user.logout');
-
-//Counselor
-
-Route::get('/counselor/dashboard', function () {
-    return view('counselor.dashboard');
-});

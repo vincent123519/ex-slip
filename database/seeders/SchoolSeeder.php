@@ -11,7 +11,6 @@ class SchoolSeeder extends Seeder
     {
         $schools = [
             ['school_code' => 1001, 'school_name' => 'School of Computer Studies'],
-            ['school_code' => 1002, 'school_name' => 'School of Education'],
             // Add more sample data here
         ];
 

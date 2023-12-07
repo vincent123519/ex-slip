@@ -1,7 +1,9 @@
 @extends('components.stud')
 @section('content')
     <div class="student-details-container">
-        <h1>{{ Auth::user()->name }}</h1>
+        <h1>Absence Request</h1>
+        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button"> Excuse Slip</a>
+
         @endsection
 
 <style>

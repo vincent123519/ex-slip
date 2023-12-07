@@ -277,7 +277,7 @@ class UserController extends Controller
             return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
         // Add more cases for other roles
         default:
-            return redirect()->intended('/dashboard')->with('success', 'Default log in logged in successfully');
+        return redirect()->intended('/student/dashboard')->with('success', 'Default log in logged in successfully');
     }
 }
 

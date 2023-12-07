@@ -1,4 +1,4 @@
-@extends('components.layout')
+@extends('components.excuseslipstud')
 
 @section('content')
     <div class="manage-slip-container">
@@ -8,23 +8,46 @@
 
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
+                <ul class="list-unstyled">
+                    <li><strong>{{ Auth::user()->name }}</strong></li>
+                </ul>
             </div>
 
             <div class="form-group">
-                <label for="degree_program">Degree Program:</label>
-                <input type="text" name="degree_program" id="degree_program" class="form-control" value="{{ old('degree_program') }}" required>
+                <label for="degree_id">Degree Program:</label>
+                <select name="degree_id" id="degree_id" class="form-control" required disabled>
+                    @foreach($degrees as $degree)
+                        <option value="{{ $degree->id }}" @if(optional($excuseSlip)->degree_id == $degree->id) selected @endif>
+                            {{ $degree->degree_name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="form-group">
                 <label for="year_level">Year Level:</label>
-                <input type="text" name="year_level" id="year_level" class="form-control" value="{{ old('year_level') }}" required>
+                <input type="text" name="year_level" id="year_level" class="form-control" value="{{ old('year_level', $yearLevel) }}" required readonly>
             </div>
 
             <div class="form-group">
-                <label for="course_absent">Course/Subject/s Absent:</label>
-                <input type="text" name="course_absent" id="course_absent" class="form-control" value="{{ old('course_absent') }}" required>
-            </div>
+    <label for="course_absent">Course/Subject/s Absent:</label>
+    <div class="dropdown">
+        <div class="dropdown-menu" aria-labelledby="courseDropdown">
+            @foreach($courses as $course)
+                <div class="form-check">
+                    <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
+                           @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
+                    <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
             <div class="form-group">
                 <label for="reason">Reason:</label>
@@ -46,42 +69,69 @@
     </div>
 @endsection
 
+<script>
+    $(document).ready(function () {
+        $('#course_id').change(function () {
+            var selectedCourseId = $(this).val();
+
+            // Fetch the course_name based on the selected course_id (you may use an AJAX request).
+            // For simplicity, let's assume you have a function named fetchCourseNameById.
+
+            // Fetch the course_name using an imaginary fetchCourseNameById function
+            var courseName = fetchCourseNameById(selectedCourseId);
+
+            // Update the displayed course_name in the form
+            $('#course_absent').val(courseName);
+        });
+
+        // Function to fetch course_name by course_id (replace it with your actual implementation)
+        function fetchCourseNameById(courseId) {
+            // You may use an AJAX request here to fetch the course_name from the server.
+            // For simplicity, return a static value here.
+            return "Course Name"; // Replace this with your actual implementation
+        }
+    });
+</script>
+
 <style>
     .manage-slip-container {
         background-color: #f8f9fa;
         padding: 20px;
         border: 1px solid #dee2e6;
         border-radius: 10px;
-        width: 60%; /* Adjust the width as needed */
+        width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
     label {
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         display: block;
     }
 
     .form-control {
         width: 100%;
-        padding: 8px;
+        padding: 10px;
         border: 1px solid #ced4da;
         border-radius: 4px;
         box-sizing: border-box;
+    }
+
+    .form-check-input {
+        margin-top: 3px;
     }
 
     button {
         background-color: #007bff;
         color: #fff;
         border: none;
-        padding: 10px 15px;
+        padding: 12px 20px;
         border-radius: 4px;
         cursor: pointer;
     }
 </style>
-

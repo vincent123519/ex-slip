@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Course;
+use App\Models\Dean;
+use App\Models\DepartmentDegree;
 use App\Models\ExcuseStatus;
 use App\Models\Counselor; // Corrected import statement
 use App\Models\User; // Assuming it is needed, please import the User model
@@ -20,15 +22,23 @@ class ExcuseSlipController extends Controller
         return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
     }
 
-    public function create(Student $students, Teacher $teachers, Course $courses, ExcuseStatus $statuses, Counselor $counselors)
+    public function createExcuseSlip()
     {
-        return view('excuseslip.create', [
-            'students' => $students->all(),
-            'teachers' => $teachers->all(),
-            'courses' => $courses->all(),
-            'statuses' => $statuses->all(),
-            'counselors' => $counselors->all(),
-        ]);
+        // Retrieve the necessary data for the form, including degree names
+        $courses = Course::all();
+        $teachers = Teacher::all();
+        $counselors = Counselor::all();
+        $deans = Dean::all();
+        $excuseStatuses = ExcuseStatus::all();
+        $yearLevel = auth()->user()->student->year_level;
+
+        // Fetch degree data to populate the dropdown
+        $degrees = DepartmentDegree::all(); // Assuming you have a model for DepartmentDegree
+    
+        // Create a new ExcuseSlip instance (assuming it's needed for the form)
+        $excuseSlip = new ExcuseSlip();
+    
+        return view('excuseslip.create', compact('courses', 'teachers', 'counselors', 'deans', 'excuseStatuses', 'degrees', 'excuseSlip', 'yearLevel'));
     }
     
 
@@ -69,20 +79,28 @@ class ExcuseSlipController extends Controller
     {
         // Retrieve the excuse slip with the given ID from the database
         $excuseSlip = ExcuseSlip::find($id);
-
-        // Retrieve necessary data for editing the excuse slip, such as the list of students, teachers, courses, etc.
-
+    
+        // Check if $excuseSlip is not null before proceeding
+        if (!$excuseSlip) {
+            // Handle the case where $excuseSlip is not found
+            // For example, redirect to an error page or return an error response
+        }
+    
+        // Retrieve other necessary data for editing the excuse slip
+    
         // Return the edit excuse slip form view with the retrieved data
         return view('excuseslip.edit', [
             'excuseSlip' => $excuseSlip,
             'students' => Student::all(),
             'teachers' => Teacher::all(),
             'courses' => Course::all(),
-            'counselors' => Counselor::all(), // Corrected class name
+            'counselors' => Counselor::all(),
             // Add other necessary data
         ]);
     }
-
+    
+    
+    
     public function update(Request $request, $id)
     {
         // Validate the request data

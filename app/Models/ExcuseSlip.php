@@ -9,6 +9,13 @@ class ExcuseSlip extends Model
     protected $primaryKey = 'excuse_slip_id';
     
     // Define the relationships
+    // Inside ExcuseSlip model
+   public function degree()
+{
+    
+    return $this->belongsTo(DepartmentDegree::class, 'degree_id');
+}
+
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');

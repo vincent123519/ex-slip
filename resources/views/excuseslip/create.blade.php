@@ -14,11 +14,11 @@
             </div>
 
             <div class="form-group">
-    <label for="name">Student ID:</label>
-    <ul class="list-unstyled">
-        <li>{{ Auth::user()->student->student_id }}</li>
-    </ul>
-</div>
+                <label for="student_id">Student ID:</label>
+                <ul class="list-unstyled">
+                    <li>{{ Auth::user()->student->student_id }}</li>
+                </ul>
+            </div>
 
             <div class="form-group">
                 <label for="degree_id">Degree Program:</label>
@@ -37,24 +37,23 @@
             </div>
 
             <div class="form-group">
-    <label for="course_absent">Course/Subject/s Absent:</label>
-    <div class="dropdown">
-        <div class="dropdown-menu" aria-labelledby="courseDropdown">
-            @foreach($courses as $course)
-                <div class="form-check">
-                    <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
-                           @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
-                    <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
-                </div>
-            @endforeach
+                <label for="course_ids">Course/Subject/s Absent:</label>
+<div class="dropdown">
+    <div class="dropdown-menu" aria-labelledby="courseDropdown">
+    @foreach($studyLoad as $study)
+    @if($study->course)
+        @php
+            $course = $study->course;
+        @endphp
+        <div class="form-check">
+            <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
+                   @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
+            <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
         </div>
+    @endif
+@endforeach
     </div>
-</div>
-
-
-
-
-
+</div>  
 
             <div class="form-group">
                 <label for="reason">Reason:</label>
@@ -118,31 +117,4 @@
     .form-group {
         margin-bottom: 20px;
     }
-
-    label {
-        font-weight: bold;
-        margin-bottom: 8px;
-        display: block;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-
-    .form-check-input {
-        margin-top: 3px;
-    }
-
-    button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-</style>
+    </style>

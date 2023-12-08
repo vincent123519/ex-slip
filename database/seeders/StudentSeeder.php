@@ -17,16 +17,23 @@ class StudentSeeder extends Seeder
 
         $students = [
             [
-                'name' => 'John Doe',
+                'name' => 'Dan Lock',
                 'degree' => 'Bachelor of Science in Computer Science',
-                'username' => 'john.doe',
+                'username' => '2019012',
                 'year_level' => 2,
             ],
             [
-                'name' => 'Jane Smith',
+                'name' => 'Arkei Tech',
                 'degree' => 'Bachelor of Science in Information Technology',
-                'username' => 'jane.smith',
+                'username' => '2020012',
                 'year_level' => 3,
+            ],
+            [
+                'name' => 'Rhey Peter',
+                'degree' => 'Bachelor of Science in Information Technology',
+                'username' => '2018012',
+                'year_level' => 1,
+
             ],
             // Add more student records here with their respective year levels and degrees
         ];
@@ -36,7 +43,7 @@ class StudentSeeder extends Seeder
             $user = User::create([
                 'name' => $studentData['name'],
                 'username' => $studentData['username'],
-                'password' => Hash::make('password'), // You can set a default password
+                'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 3, // Replace 1 with the actual role ID
             ]);
             

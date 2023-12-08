@@ -16,16 +16,7 @@ class StudyLoadSeeder extends Seeder
         // Sample data for StudyLoad table
         $studyLoads = [
             [
-                'student_id' => 2,
-                'semester_id' => 1,
-                'course_code' => 'CSE101',
-                'offer_code' => 1001,
-            ],
-            [
-                'student_id' => 2,
-                'semester_id' => 1,
-                'course_code' => 'MAT201',
-                'offer_code' => 1002,
+                
             ],
             // Add more sample data here
         ];

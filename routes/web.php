@@ -8,6 +8,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\CounselorController;
 use App\Http\Controllers\DeanController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\HeadCounselorController;
 
@@ -103,3 +104,7 @@ Route::post('/delete-account', [UserController::class, 'deleteAccount']);
 //for logout function
 
 Route::post('/user/logout', [UserController::class, 'logout'])->name('user.logout');
+
+//teacher
+
+Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard'])->name('teacher.dashboard');

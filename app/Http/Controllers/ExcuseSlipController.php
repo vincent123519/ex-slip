@@ -45,26 +45,42 @@ class ExcuseSlipController extends Controller
     public function store(Request $request)
     {
         // Validate the request data
-
-        // Create a new excuse slip instance and fill it with the request data
-        $excuseSlip = new ExcuseSlip();
-        $excuseSlip->student_id = $request->input('student_id');
-        $excuseSlip->teacher_id = $request->input('teacher_id');
-        $excuseSlip->counselor_id = $request->input('counselor_id');
-        $excuseSlip->dean_id = $request->input('dean_id');
-        $excuseSlip->course_code = $request->input('course_code');
-        $excuseSlip->reason = $request->input('reason');
-        $excuseSlip->start_date = $request->input('start_date');
-        $excuseSlip->end_date = $request->input('end_date');
-        $excuseSlip->status_id = $request->input('status_id');
-
-        // Save the excuse slip to the database
-        $excuseSlip->save();
-
-        // Redirect the user to the excuse slip details page
-        return redirect()->route('excuse_slips.show', ['id' => $excuseSlip->id]);
+        
+        // Get the authenticated user
+        $user = auth()->user();
+    
+        // Check if the user has the 'teacher' role and is associated with a teacher record
+        if ($user->hasRole('teacher') && $user->teacher) {
+            // Create a new excuse slip instance and fill it with the request data
+            $excuseSlip = new ExcuseSlip();
+    
+            // Set the student_id based on the authenticated user
+            $excuseSlip->student_id = optional($user->student)->student_id; // Assuming this is the correct relationship structure
+    
+            // Set the teacher_id based on the authenticated user
+            $excuseSlip->teacher_id = $user->teacher->teacher_id; // Adjust based on your actual relationship structure
+    
+            // Continue setting other fields
+            $excuseSlip->counselor_id = $request->input('counselor_id');
+            $excuseSlip->dean_id = $request->input('dean_id');
+            $excuseSlip->course_code = $request->input('course_code');
+            $excuseSlip->reason = $request->input('reason');
+            $excuseSlip->start_date = $request->input('start_date');
+            $excuseSlip->end_date = $request->input('end_date');
+            $excuseSlip->status_id = $request->input('status_id');
+    
+            // Save the excuse slip to the database
+            $excuseSlip->save();
+    
+            // Redirect the user to the student dashboard
+            return redirect()->route('student.dashboard')->with('success', 'Excuse slip submitted successfully.');
+        } else {
+            // Handle the case where the user doesn't have the 'teacher' role or is not associated with a teacher
+            return redirect()->back()->with('error', 'You do not have permission to submit an excuse slip.');
+        }
     }
-
+    
+    
     public function show($id)
     {
         // Retrieve the excuse slip with the given ID from the database

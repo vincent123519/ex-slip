@@ -45,8 +45,8 @@
     <div class="divider"></div>
     <div class="divider"></div>
     <div class="navmenu"><ul>
-        <li><span>menu</span></li>
-        <li>AttendanceSlip</li>
+        <li><span>DASHBOARD</span></li>
+        
     </ul></div>    </div>
     
     @yield('content')   

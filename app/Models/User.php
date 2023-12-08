@@ -54,10 +54,10 @@ class User extends Authenticatable
     /**
      * Define a one-to-many relationship with the ExcuseSlip model.
      */
-    public function excuseSlips()
-    {
-        return $this->hasMany(ExcuseSlip::class, 'user_id');
-    }
+public function excuseSlips()
+{
+    return $this->hasMany(ExcuseSlip::class, 'student_id'); // Assuming 'student_id' is the foreign key
+}
 
     /**
      * Define a one-to-many relationship with the Feedback model.
@@ -80,6 +80,9 @@ class User extends Authenticatable
 {
     return $this->hasOne(Dean::class, 'user_id');
 }
+
+protected $guard_name = 'web'; // Adjust this based on your guard configuration
+
 
 }
 

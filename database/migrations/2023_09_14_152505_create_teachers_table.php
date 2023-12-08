@@ -12,7 +12,7 @@ class CreateTeachersTable extends Migration
             $table->id('teacher_id'); // Use 'id' as the primary key
             $table->unsignedBigInteger('user_id')->unique();
             $table->string('name', 100);
-            $table->unsignedBigInteger('department_id')->default(mt_rand(1, 4));
+            $table->unsignedBigInteger('department_id')->default(mt_rand(1, 2));
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users');

@@ -14,6 +14,13 @@
             </div>
 
             <div class="form-group">
+    <label for="name">Student ID:</label>
+    <ul class="list-unstyled">
+        <li>{{ Auth::user()->student->student_id }}</li>
+    </ul>
+</div>
+
+            <div class="form-group">
                 <label for="degree_id">Degree Program:</label>
                 <select name="degree_id" id="degree_id" class="form-control" required disabled>
                     @foreach($degrees as $degree)

@@ -5,19 +5,24 @@
         <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
         <div class="manage-slip-container">
 
-    <table class="excuse-slip-table">
-        <thead>
-            <tr>
-                <th>Duration</th>
-                <th>Status</th>
-                <th>Counselor's Feedback</th>
-                <th>Dean's Feedback</th>
-                <th>Teacher's Feedback</th>
-            </tr>
-        </thead>
-    </table>
-</div>
-</div>
+            <h2>Excuse Slips</h2>
+            @if($excuseSlips->count() > 0)
+                @foreach($excuseSlips as $excuseSlip)
+                    <div class="excuse-slip">
+                        <p><strong>Duration:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
+                        <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
+                        <p><strong>Counselor's Feedback:</strong> {{ $excuseSlip->counselor_feedback }}</p>
+                        <p><strong>Dean's Feedback:</strong> {{ $excuseSlip->dean_feedback }}</p>
+                        <p><strong>Teacher's Feedback:</strong> {{ $excuseSlip->teacher_feedback }}</p>
+                        <!-- Add other information as needed -->
+                    </div>
+                @endforeach
+            @else
+                <p>No excuse slips found.</p>
+            @endif
+
+        </div>
+    </div>
 @endsection
 
 <style>
@@ -56,15 +61,14 @@
         background-color: #218838;
     }
 
-    .excuse-slip-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
+    .excuse-slip {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
     }
 
-    .excuse-slip-table th, .excuse-slip-table td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: center;
+    .excuse-slip p {
+        margin-bottom: 5px;
     }
 </style>

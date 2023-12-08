@@ -223,9 +223,12 @@ class StudentController extends Controller
         return redirect()->route('excuse_slips.show', $excuseSlip->id)
             ->with('success', 'Excuse slip request updated successfully.');
     }
+// Example in StudentController
+public function dashboard()
+{
+    $excuseSlips = auth()->user()->excuseSlips()->with('status')->get();
 
-    public function dashboard()
-    {
-        return view('student.dashboard');
-    }
+    return view('student.dashboard', ['excuseSlips' => $excuseSlips]);
+}
+
 }

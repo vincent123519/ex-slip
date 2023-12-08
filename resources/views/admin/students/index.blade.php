@@ -15,17 +15,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($students as $student)
-                        <tr>
-                            <td>{{ $student->student_id }}</td>
-                            <td>{{ $student->name }}</td>
-                            <td>{{ $student->degree_id }}</td>
-                            <td>{{ $student->year_level }}</td>
-                            <td>
-                                <a href="{{ route('admin.studyload.create', ['studentId' => $student->id ?? 0]) }}" class="btn btn-primary">Add Studyload</a>
-                            </td>
-                        </tr>
-                    @endforeach
+                @foreach ($students as $student)
+    <tr>
+        <td>{{ $student->student_id }}</td>
+        <td>{{ $student->name }}</td>
+        <td>{{ $student->degree_id }}</td>
+        <td>{{ $student->year_level }}</td>
+        <td>
+            <a href="{{ route('admin.studyload.create', ['studentId' => $student->id ?? 0]) }}" class="btn btn-primary">Add Studyload</a>
+        </td>
+    </tr>
+    dd($student->id); // Debug statement
+@endforeach
                 </tbody>
             </table>
         </div>

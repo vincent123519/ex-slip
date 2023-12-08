@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Dean;
 use App\Models\User;
+use App\Models\Course;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Semester;
 use App\Models\UserRole;
 use App\Models\Counselor;
 use App\Models\StudyLoad;
 use Illuminate\Http\Request;
 use App\Models\HeadCounselor;
+use App\Models\CourseOffering;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -300,34 +304,48 @@ public function showStudents()
 }
 
 public function createStudyLoad($studentId)
-{   
-    // Logic to fetch student details based on $studentId if needed
-    return view('admin.studyload.create', compact('studentId'));
-}
+    {   
+        // Retrieve the semesters from the database
+        $semesters = Semester::all();
 
-public function storeStudyLoad(Request $request)
+        return view('admin.studyload.create', compact('studentId', 'semesters'));
+    }
+
+    public function storeStudyLoad(Request $request)
 {
-    // Validate the request data here if needed
+    // Validate the request data
+    $validatedData = $request->validate([
+        'student_id' => 'required|exists:students,id',
+        'semester_id' => 'required',
+        'course_code' => 'required',
+        'offer_code' => 'required',
+    ]);
+
+    // Retrieve the value of semester_id from the request
+    $semesterId = $request->input('semester_id');
+
+    // Retrieve the semesters from the database
+    $semesters = Semester::all();
+
+    // Retrieve the course codes from the database
+    $courseCodes = Course::all();
+
+    // Retrieve the offer codes from the database
+    $offerCodes = CourseOffering::all();
 
     // Create a new studyload record
     $studyload = new StudyLoad();
-    $studyload->student_id = $request->input('student_id');
-    $studyload->semester_id = $request->input('semester_id');
+    $studyload->student_id = $validatedData['student_id'];
+    $studyload->semester_id = $semesterId;
     $studyload->course_code = $request->input('course_code');
     $studyload->offer_code = $request->input('offer_code');
     $studyload->save();
 
-    // Redirect to a success page or the student details page
-    return redirect()->route('admin.students.show', ['studentId' => $request->input('student_id')])->with('success', 'Studyload added successfully');
+    // Pass the variables to the view
+    return view('admin.studyload.create', compact('semesters', 'courseCodes', 'offerCodes'))
+        ->with('success', 'Studyload added successfully');
 }
 
-
-
-
-
-
-
-     
 }
 
      

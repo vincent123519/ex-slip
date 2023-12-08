@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\UserRole;
 use App\Models\Counselor;
+use App\Models\StudyLoad;
 use Illuminate\Http\Request;
 use App\Models\HeadCounselor;
 use App\Http\Controllers\Controller;
@@ -292,7 +293,33 @@ public function logout()
     // You can add any additional logic or redirection after logout if needed
     return redirect()->route('login')->with('success', 'Logout successful');
 }
+public function showStudents()
+{
+    $students = Student::all();
+    return view('admin.students.index', compact('students'));
+}
 
+public function createStudyLoad($studentId)
+{   
+    // Logic to fetch student details based on $studentId if needed
+    return view('admin.studyload.create', compact('studentId'));
+}
+
+public function storeStudyLoad(Request $request)
+{
+    // Validate the request data here if needed
+
+    // Create a new studyload record
+    $studyload = new StudyLoad();
+    $studyload->student_id = $request->input('student_id');
+    $studyload->semester_id = $request->input('semester_id');
+    $studyload->course_code = $request->input('course_code');
+    $studyload->offer_code = $request->input('offer_code');
+    $studyload->save();
+
+    // Redirect to a success page or the student details page
+    return redirect()->route('admin.students.show', ['studentId' => $request->input('student_id')])->with('success', 'Studyload added successfully');
+}
 
 
 

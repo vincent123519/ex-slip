@@ -2,7 +2,6 @@
 
 use App\Models\Counselor;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Api\UserController;
@@ -108,3 +107,8 @@ Route::post('/user/logout', [UserController::class, 'logout'])->name('user.logou
 //teacher
 
 Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard'])->name('teacher.dashboard');
+
+//
+Route::get('admin/students', [UserController::class, 'showStudents'])->name('admin.students.index');
+Route::get('admin/students/{studentId}/studyload/create', [UserController::class, 'createStudyLoad'])->name('admin.studyload.create');
+Route::post('admin/studyload', [UserController::class, 'storeStudyLoad'])->name('admin.studyload.store');

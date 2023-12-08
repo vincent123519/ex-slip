@@ -14,14 +14,19 @@ class StudyLoadSeeder extends Seeder
     public function run()
     {
         // Sample data for StudyLoad table
-        $studyLoads = [
+        $studyLoad = [
             [
-                
+                'student_id' => 3,
+                'semester_id' => 1,
+                'course_code' => 'IPT1',
+                'offer_code' => 1,
             ],
+            
+            
             // Add more sample data here
         ];
 
-        foreach ($studyLoads as $studyLoadData) {
+        foreach ($studyLoad as $studyLoadData) {
             $student = Student::find($studyLoadData['student_id']);
             $semester = Semester::find($studyLoadData['semester_id']);
             $course = Course::where('course_code', $studyLoadData['course_code'])->first();

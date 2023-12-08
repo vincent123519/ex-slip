@@ -27,4 +27,10 @@ class Student extends Model
     {
         return $this->belongsTo(DepartmentDegree::class, 'degree_id');
     }
+    public function studyLoad()
+        {
+            return $this->hasOne(StudyLoad::class, 'student_id');
+        }
+    
+
 }

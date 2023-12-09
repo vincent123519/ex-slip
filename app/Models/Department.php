@@ -40,22 +40,16 @@ class Department extends Model
         return $this->hasMany(Teacher::class, 'department_id');
     }
 
-    /**
-     * Define a one-to-many relationship with the Counselor model.
-     */
-    public function counselors()
+    public function dean()
     {
-        return $this->hasMany(Counselor::class, 'department_id');
+        return $this->hasOne(Dean::class, 'department_id');
     }
-
-    /**
-     * Define a one-to-many relationship with the Dean model.
-     */
-    public function deans()
+    
+    public function counselor()
     {
-        return $this->hasMany(Dean::class, 'department_id');
+        return $this->hasOne(Counselor::class, 'department_id');
     }
-
+    
     /**
      * Define a one-to-many relationship with the DepartmentDegree model.
      */

@@ -19,8 +19,10 @@ class Dean extends Model
         return $this->belongsTo(School::class, 'school_code');
     }
 
+
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
+
 }

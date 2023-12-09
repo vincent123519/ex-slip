@@ -1,20 +1,20 @@
-<?php
+    <?php
 
-namespace App\Models;
+    namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Model;
 
-class DepartmentDegree extends Model
-{
-    protected $primaryKey = 'degree_id';
-    
-    protected $fillable = [
-        'department_id',
-        'degree_name',
-    ];
-
-    public function department()
+    class DepartmentDegree extends Model
     {
-        return $this->belongsTo(Department::class, 'department_id');
+        protected $primaryKey = 'degree_id';
+        
+        protected $fillable = [
+            'department_id',
+            'degree_name',
+        ];
+
+        public function department()
+        {
+            return $this->belongsTo(Department::class, 'department_id');
+        }
     }
-}

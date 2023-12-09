@@ -3,7 +3,24 @@
     <div class="counselor-details-container">
         <h1>Absence Request</h1>
         <a href="" class="create-slip-button"> Number of Excuse slip</a>
+        <h2>Excuse Slips</h2>
+            @if($excuseSlips->count() > 0)
+                @foreach($excuseSlips as $excuseSlip)
+                    <div class="excuse-slip">
+                        <p><strong>Duration:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
+                        <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
+                        <p><strong>Counselor's Feedback:</strong> {{ $excuseSlip->counselor_feedback }}</p>
+                        <p><strong>Dean's Feedback:</strong> {{ $excuseSlip->dean_feedback }}</p>
+                        <p><strong>Teacher's Feedback:</strong> {{ $excuseSlip->teacher_feedback }}</p>
+                        <!-- Add other information as needed -->
+                    </div>
+                @endforeach
+            @else
+                <p>No excuse slips found.</p>
+            @endif
 
+        </div>
+    </div>
         @endsection
 
 <style>

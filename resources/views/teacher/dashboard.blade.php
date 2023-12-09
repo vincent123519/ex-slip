@@ -1,32 +1,60 @@
-@extends('layouts.app')
-
+@extends('components.teacher')
 @section('content')
-    <div class="container">
-        <h1>Teacher Dashboard</h1>
+    <div class="teacher-details-container">
+        <h1>Absence Request</h1>
+        <a href="" class="create-slip-button"> Number of Excuse slip</a>
+        <h2>Excuse Slips</h2>
+            @if($excuseSlips->count() > 0)
+                @foreach($excuseSlips as $excuseSlip)
+                    <div class="excuse-slip">
+                        <p><strong>Duration:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
+                        <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
+                        <p><strong>Counselor's Feedback:</strong> {{ $excuseSlip->counselor_feedback }}</p>
+                        <p><strong>Dean's Feedback:</strong> {{ $excuseSlip->dean_feedback }}</p>
+                        <p><strong>Teacher's Feedback:</strong> {{ $excuseSlip->teacher_feedback }}</p>
+                        <!-- Add other information as needed -->
+                    </div>
+                @endforeach
+            @else
+                <p>No excuse slips found.</p>
+            @endif
 
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Excuse Slips</h3>
-                @if (isset($excuseSlips) && count($excuseSlips) > 0)
-                    <ul>
-                        @foreach ($excuseSlips as $excuseSlip)
-                            <li>
-                                <h4>Excuse Slip ID: {{ $excuseSlip->excuse_slip_id }}</h4>
-                                <p>Student: {{ $excuseSlip->student->name }}</p>
-                                <p>Course: {{ $excuseSlip->course->name }}</p>
-                                <!-- Display other details of each excuse slip -->
-                                <form action="{{ route('teacher.signExcuseSlip', $excuseSlip->excuse_slip_id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-primary">Sign Excuse Slip</button>
-                                </form>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p>No excuse slips found.</p>
-                @endif
-            </div>
         </div>
     </div>
-@endsection
+        @endsection
+
+<style>
+    .teacher-details-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        width: 60%;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    p {
+        margin-bottom: 5px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 15px;
+        font-size: 16px;
+        text-align: center;
+        text-decoration: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+</style>

@@ -37,13 +37,13 @@
 <div class="sidebar">
     <div class="profile-container">
         <div class="profile-image"></div>
-        <div class="profile-name">teahcer:{{ Auth::user()->name }}</div>
+        <div class="profile-name">{{ Auth::user()->name }}</div>
 
     </div>
     <div class="divider"></div>
     <div class="divider"></div>
     <div class="navmenu"><ul>
-        <li><span>menu</span></li>
+        <li><span>DASHBOARD</span></li>
         <li>AttendanceSlip</li>
     </ul></div>    </div>
     

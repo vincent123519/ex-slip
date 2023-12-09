@@ -100,7 +100,8 @@ class DeanController extends Controller
     }
     
     public function dashboard()
-        {
-            return view('dean.dashboard');
-        }
+    {
+        $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
+        return view('dean.dashboard', ['excuseSlips' => $excuseSlips]);
+    }
 }

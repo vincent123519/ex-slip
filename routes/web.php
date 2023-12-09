@@ -45,7 +45,7 @@ Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('st
 
 
 Route::group(['middleware' => ['web', 'student']], function () {
-    Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+    Route::get('/student/dashboard', 'StudentController@dashboard')->name('student.dashboard');
 });
 
 

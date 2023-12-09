@@ -1,10 +1,10 @@
 @extends('components.stud')
+
 @section('content')
     <div class="student-details-container">
         <h1>Absence Request</h1>
         <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
         <div class="manage-slip-container">
-
             <h2>Excuse Slips</h2>
             @if($excuseSlips->count() > 0)
                 @foreach($excuseSlips as $excuseSlip)
@@ -21,9 +21,20 @@
                 <p>No excuse slips found.</p>
             @endif
 
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                    @if(session('start_date') && session('end_date'))
+                        <br>
+                        <strong>Excuse Slip Dates:</strong> {{ session('start_date') }} to {{ session('end_date') }}
+                    @endif
+                </div>
+            @endif
         </div>
     </div>
 @endsection
+
+
 
 <style>
     .student-details-container {

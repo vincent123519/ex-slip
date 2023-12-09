@@ -226,6 +226,7 @@ class StudentController extends Controller
 // Example in StudentController
 public function dashboard()
 {
+    // Retrieve excuse slips with status for the current user
     $excuseSlips = auth()->user()->excuseSlips()->with('status')->get();
 
     return view('student.dashboard', ['excuseSlips' => $excuseSlips]);

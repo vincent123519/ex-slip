@@ -28,6 +28,7 @@ class TeacherController extends Controller
     }
     public function dashboard()
     {
-        return view('teacher.dashboard');
+        $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
+        return view('teacher.dashboard', ['excuseSlips' => $excuseSlips]);
     }
 }

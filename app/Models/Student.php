@@ -22,6 +22,10 @@ class Student extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function excuseSlips()
+    {
+        return $this->hasMany(ExcuseSlip::class);
+    }
 
     public function degree()
     {

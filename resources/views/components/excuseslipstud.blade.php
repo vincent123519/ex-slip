@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite(['resources/css/app.css', 'resources/scss/home.scss', 'resources/js/app.js'])
     @yield('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 </head>
 <body class="bg-image">
+<script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
 <header>
     <nav class="inline-navbar">
         <ul>

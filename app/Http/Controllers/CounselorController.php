@@ -70,7 +70,9 @@ class CounselorController extends Controller
         return response()->json(['message' => 'Feedback submitted successfully.']);
     }
     public function dashboard()
-        {
-            return view('counselor.dashboard');
-        }
+    {
+        $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
+        return view('counselor.dashboard', ['excuseSlips' => $excuseSlips]);
+    }
+    
     }

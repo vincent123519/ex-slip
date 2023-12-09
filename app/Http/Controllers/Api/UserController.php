@@ -304,14 +304,21 @@ public function showStudents()
 }
 
 public function createStudyLoad($studentId)
-    {   
-        // Retrieve the semesters from the database
-        $semesters = Semester::all();
+{   
+    // Retrieve the semesters from the database
+    $semesters = Semester::all();
 
-        return view('admin.studyload.create', compact('studentId', 'semesters'));
-    }
+    // Retrieve the course codes from the database
+    $courseCodes = Course::all();
 
-    public function storeStudyLoad(Request $request)
+    // Retrieve the offer codes from the database based on the selected course code
+    $selectedCourseCode = ''; // Replace with the selected course code from the request if available
+    $offerCodes = CourseOffering::where('course_code', $selectedCourseCode)->get();
+
+    return view('admin.studyload.create', compact('studentId', 'semesters', 'courseCodes', 'offerCodes'));
+}
+
+public function storeStudyLoad(Request $request)
 {
     // Validate the request data
     $validatedData = $request->validate([
@@ -327,22 +334,20 @@ public function createStudyLoad($studentId)
     // Retrieve the semesters from the database
     $semesters = Semester::all();
 
-    // Retrieve the course codes from the database
-    $courseCodes = Course::all();
-
-    // Retrieve the offer codes from the database
-    $offerCodes = CourseOffering::all();
+    // Retrieve the course offerings based on the course code
+    $courseCode = $request->input('course_code');
+    $offerCodes = CourseOffering::where('course_code', $courseCode)->get();
 
     // Create a new studyload record
     $studyload = new StudyLoad();
     $studyload->student_id = $validatedData['student_id'];
     $studyload->semester_id = $semesterId;
-    $studyload->course_code = $request->input('course_code');
+    $studyload->course_code = $courseCode;
     $studyload->offer_code = $request->input('offer_code');
     $studyload->save();
 
     // Pass the variables to the view
-    return view('admin.studyload.create', compact('semesters', 'courseCodes', 'offerCodes'))
+    return view('admin.studyload.create', compact('semesters', 'courseCode', 'offerCodes'))
         ->with('success', 'Studyload added successfully');
 }
 

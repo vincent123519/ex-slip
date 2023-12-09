@@ -49,8 +49,8 @@ class DatabaseSeeder extends Seeder
             CourseOfferingSeeder::class,
             ExcuseStatusSeeder::class,
             ExcuseSlipSeeder::class,
-            FeedbackSeeder::class,
-            SupportingDocumentSeeder::class,
+            //FeedbackSeeder::class,
+            //SupportingDocumentSeeder::class,
             StudyLoadSeeder::class
 
 

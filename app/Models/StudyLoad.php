@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class StudyLoad extends Model
 {
     protected $primaryKey = 'studyload_id';
-    protected $table = 'study_load';
+    protected $table = 'study_loads';
 
 
     public function student()

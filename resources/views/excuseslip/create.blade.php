@@ -48,7 +48,7 @@
         <div class="form-check">
             <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
                    @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
-            <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
+            <label class="form-check-label" for="course_{{ $course->id }}">hotdog{{ $course->course_name }}</label>
         </div>
     @endif
 @endforeach

@@ -2,12 +2,13 @@
 
 use App\Models\Counselor;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DeanController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\CounselorController;
-use App\Http\Controllers\DeanController;
-use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\HeadCounselorController;
 

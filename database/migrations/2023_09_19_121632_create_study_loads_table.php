@@ -7,26 +7,30 @@ use Illuminate\Support\Facades\Schema;
 class CreateStudyLoadsTable extends Migration
 {
     public function up()
-{
-    Schema::create('study_loads', function (Blueprint $table) {
-        $table->id('studyload_id');
-        $table->unsignedBigInteger('student_id');
-        $table->unsignedBigInteger('semester_id');
-        $table->unsignedBigInteger('offer_code');
+    {
+        Schema::create('study_loads', function (Blueprint $table) {
+            $table->id('studyload_id');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('semester_id');
+            
+            // Add any other columns you need for the StudyLoad table
+            $table->timestamps();
+        });
         
-        // Add foreign key constraints with the same data type
-        $table->foreign('student_id')->references('student_id')->on('students');
-        $table->foreign('semester_id')->references('semester_id')->on('semesters');
-        $table->foreign('offer_code')->references('offer_code')->on('course_offerings');
+        Schema::create('study_load_course_offerings', function (Blueprint $table) {
+            $table->unsignedBigInteger('study_load_id');
+            $table->unsignedBigInteger('offer_code');
+            
+            $table->foreign('study_load_id')->references('studyload_id')->on('study_loads')->onDelete('cascade');
+            $table->foreign('offer_code')->references('offer_code')->on('course_offerings')->onDelete('cascade');
+            
+            $table->primary(['study_load_id', 'offer_code']);
+        });
+    }
 
-        // Add any other columns you need for the StudyLoad table
-        $table->timestamps();
-    });
-}
-
-public function down()
-{
-    Schema::dropIfExists('study_loads');
-}
-
+    public function down()
+    {
+        Schema::dropIfExists('study_load_course_offerings');
+        Schema::dropIfExists('study_loads');
+    }
 }

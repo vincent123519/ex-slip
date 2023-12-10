@@ -10,6 +10,8 @@ class CourseOffering extends Model
     use HasFactory;
 
     protected $primaryKey = 'offer_code'; // Specify the primary key
+    protected $table = 'course_offerings';
+
     
     protected $fillable = [
         'offer_code',
@@ -40,5 +42,9 @@ class CourseOffering extends Model
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id', 'department_id');
+    }
+    public function studyLoads()
+    {
+        return $this->belongsToMany(StudyLoad::class, 'study_load_course_offerings', 'offer_code', 'study_load_id');
     }
 }

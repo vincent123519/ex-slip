@@ -300,56 +300,49 @@ public function logout()
 public function showStudents()
 {
     $students = Student::all();
+
     return view('admin.students.index', compact('students'));
 }
 
 public function createStudyLoad($studentId)
-{   
-    // Retrieve the semesters from the database
-    $semesters = Semester::all();
+    {
+        // Retrieve the student from the database
+        $student = Student::findOrFail($studentId);
 
-    // Retrieve the course codes from the database
-    $courseCodes = Course::all();
+        // Retrieve the semesters from the database
+        $semesters = Semester::all();
 
-    // Retrieve the offer codes from the database based on the selected course code
-    $selectedCourseCode = ''; // Replace with the selected course code from the request if available
-    $offerCodes = CourseOffering::where('course_code', $selectedCourseCode)->get();
+        // Retrieve the course codes from the database
+        $courseCodes = Course::all();
 
-    return view('admin.studyload.create', compact('studentId', 'semesters', 'courseCodes', 'offerCodes'));
-}
+        // Retrieve the offer codes from the database
+        $offerCodes = CourseOffering::all();
 
-public function storeStudyLoad(Request $request)
-{
-    // Validate the request data
-    $validatedData = $request->validate([
-        'student_id' => 'required|exists:students,id',
-        'semester_id' => 'required',
-        'course_code' => 'required',
-        'offer_code' => 'required',
-    ]);
+        return view('admin.studyload.create', ['studentId' => $studentId, 'semesters' => $semesters, 'courseCodes' => $courseCodes, 'offerCodes' => $offerCodes]);
 
-    // Retrieve the value of semester_id from the request
-    $semesterId = $request->input('semester_id');
+    }
 
-    // Retrieve the semesters from the database
-    $semesters = Semester::all();
+    public function storeStudyLoad(Request $request, $studentId)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'student_id' => 'required|exists:students,student_id',
+            'semester_id' => 'required',
+            'course_code' => 'required',
+            'offer_code' => 'required',
+        ]);
 
-    // Retrieve the course offerings based on the course code
-    $courseCode = $request->input('course_code');
-    $offerCodes = CourseOffering::where('course_code', $courseCode)->get();
+        // Create a new study load instance
+        $studyLoad = new StudyLoad();
+        $studyLoad->student_id = $validatedData['student_id'];
+        $studyLoad->semester_id = $request->input('semester_id');
+        $studyLoad->course_code = $request->input('course_code');
+        $studyLoad->offer_code = $request->input('offer_code');
+        $studyLoad->save();
 
-    // Create a new studyload record
-    $studyload = new StudyLoad();
-    $studyload->student_id = $validatedData['student_id'];
-    $studyload->semester_id = $semesterId;
-    $studyload->course_code = $courseCode;
-    $studyload->offer_code = $request->input('offer_code');
-    $studyload->save();
-
-    // Pass the variables to the view
-    return view('admin.studyload.create', compact('semesters', 'courseCode', 'offerCodes'))
-        ->with('success', 'Studyload added successfully');
-}
+        // Redirect or return a response as needed
+        return redirect()->back()->with('success', 'Study load added successfully');
+    }
 
 }
 

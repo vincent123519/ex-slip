@@ -15,31 +15,62 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach ($students as $student)
-    <tr>
-        <td>{{ $student->student_id }}</td>
-        <td>{{ $student->name }}</td>
-        <td>{{ $student->degree_id }}</td>
-        <td>{{ $student->year_level }}</td>
-        <td>
-            <a href="{{ route('admin.studyload.create', ['studentId' => $student->id ?? 0]) }}" class="btn btn-primary">Add Studyload</a>
-        </td>
-    </tr>
-    dd($student->id); // Debug statement
-@endforeach
+                    @foreach ($students as $student)
+                        <tr>
+                            <td>{{ $student->student_id }}</td>
+                            <td>{{ $student->name }}</td>
+                            <td>{{ $student->degree_id }}</td>
+                            <td>{{ $student->year_level }}</td>
+                            <td>
+                            <a href="{{ route('admin.studyload.create', ['studentId' => $student->student_id]) }}" class="btn btn-primary">Add Studyload</a>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-
-        <style>.manage-users-container {
-        /* background-color: rgb(243 254 240 / 98%); */
-    /* // padding: 20px; */
-        position: relative;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        /* width: 80%; */
-        margin: 20px auto;
-    }</style>
-
 @endsection
+
+<style>
+.manage-users-container {
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 80%;
+    padding: 20px;
+}
+
+.manage-users-container h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.manage-users-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.manage-users-container select {
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.manage-users-container button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.manage-users-container button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+</style>

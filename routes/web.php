@@ -49,6 +49,7 @@ Route::group(['middleware' => ['web', 'student']], function () {
 
 
 
+
 // web.php
 // routes/web.php
 // routes/web.php
@@ -110,5 +111,6 @@ Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard'])->name(
 
 //
 Route::get('admin/students', [UserController::class, 'showStudents'])->name('admin.students.index');
-Route::get('admin/students/{studentId}/studyload/create', [UserController::class, 'createStudyLoad'])->name('admin.studyload.create');
-Route::post('admin/studyload', [UserController::class, 'storeStudyLoad'])->name('admin.studyload.store');
+Route::post('/studyload/{studentId}', [UserController::class, 'storeStudyLoad'])->name('studyload.store');
+Route::get('/studyload/create/{studentId}', [UserController::class, 'createStudyLoad'])->name('admin.studyload.create');
+Route::post('/admin/studyload/store', [UserController::class, 'storeStudyLoad'])->name('admin.studyload.store');

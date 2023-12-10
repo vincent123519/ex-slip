@@ -38,21 +38,22 @@
 
             <div class="form-group">
                 <label for="course_ids">Course/Subject/s Absent:</label>
-<div class="dropdown">
-    <div class="dropdown-menu" aria-labelledby="courseDropdown">
-    @foreach($studyLoad as $study)
-    @if($study->course)
-        @php
-            $course = $study->course;
-        @endphp
-        <div class="form-check">
-            <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
-                   @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
-            <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
-        </div>
-    @endif
-@endforeach
-    </div>
+                <div class="dropdown">
+                    <div class="dropdown-menu" aria-labelledby="courseDropdown">
+                        @foreach($studyLoad as $study)
+                            @php
+                                $course = $study->courseOffering->course;
+                            @endphp
+                            @if($course)
+                                <div class="form-check">
+                                    <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
+                                           @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
+                                    <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
 </div>  
 
             <div class="form-group">

@@ -34,12 +34,14 @@ class ExcuseSlipController extends Controller
     $excuseStatuses = ExcuseStatus::all();
     $yearLevel = auth()->user()->student->year_level;
 
+    $user = auth()->user();
+
     // Fetch degree data to populate the dropdown
     $degrees = DepartmentDegree::all();
+    $studentId=$user->student->student_id;
 
     // Retrieve the study load of the student with eager loading
-    $studentId = 3; 
-    $studyLoad = StudyLoad::where('student_id', $studentId)->with('course')->get();
+    $studyLoad = StudyLoad::where('student_id', $studentId)->with('courseOffering.course')->get();
 
     // Create a new ExcuseSlip instance (assuming it's needed for the form)
     $excuseSlip = new ExcuseSlip();

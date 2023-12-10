@@ -18,4 +18,8 @@ class Course extends Model
     {
         return $this->hasMany(CourseOffering::class, 'course_code', 'course_code');
     }
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }

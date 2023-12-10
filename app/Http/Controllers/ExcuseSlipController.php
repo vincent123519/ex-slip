@@ -26,86 +26,80 @@ class ExcuseSlipController extends Controller
 
     public function createExcuseSlip()
 {
-    // Retrieve the necessary data for the form, including degree names
-    $courses = Course::all();
-    $teachers = Teacher::all();
-    $counselors = Counselor::all();
-    $deans = Dean::all();
-    $excuseStatuses = ExcuseStatus::all();
-    $yearLevel = auth()->user()->student->year_level;
-
     $user = auth()->user();
+    $studentId = $user->student->student_id;
+    $student = Student::find($studentId);
+    $department = $student->degree->department;
 
-    // Fetch degree data to populate the dropdown
+    // Get the counselor and dean associated with the department
+    $counselor = $department->counselor;
+    $dean = $department->dean;
+
+    // Retrieve the necessary data for the form, including degree names
+    $excuseStatuses = ExcuseStatus::all();
+    $yearLevel = $user->student->year_level;
     $degrees = DepartmentDegree::all();
-    $studentId=$user->student->student_id;
 
     // Retrieve the study load of the student with eager loading
-    $studyLoad = StudyLoad::where('student_id', $studentId)->with('courseOffering.course')->get();
+    $studyLoad = StudyLoad::where('student_id', $studentId)
+        ->with('courseOffering.course.teacher')
+        ->get();
+    $teachers = $studyLoad->pluck('courseOffering.course.teacher')->unique();
 
-    // Create a new ExcuseSlip instance (assuming it's needed for the form)
+    // Create a new ExcuseSlip instance
     $excuseSlip = new ExcuseSlip();
 
-    return view('excuseslip.create', compact('courses', 'teachers', 'counselors', 'deans', 'excuseStatuses', 'degrees', 'excuseSlip', 'yearLevel', 'studyLoad'));
-}
+    return view('excuseslip.create', compact(
+        'counselor',
+        'dean',
+        'teachers',
+        'excuseStatuses',
+        'degrees',
+        'excuseSlip',
+        'yearLevel',
+        'studyLoad'
+    ));
+}   
 
 public function store(Request $request)
 {
-    // Add some debugging statements
+            // Add some debugging statements
     dd($request->all()); // This will dump the form data for debugging
 
-    // Validate the request data
+    // Validate the form data
+    $validatedData = $request->validate([
+        'student_id' => 'required',
+        'teacher_id' => 'required',
+        'counselor_id' => 'required',
+        'dean_id' => 'required',
+        'offer_code' => 'required',
+        'reason' => 'required',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date',
+        'status_id' => 'required',
+        // Add validation rules for any additional form fields
+    ]);
 
-    // Get the authenticated user
-    $user = auth()->user();
-
-    // Create a new excuse slip instance and fill it with the request data
+    // Create a new ExcuseSlip instance
     $excuseSlip = new ExcuseSlip();
 
-    // Set the student_id based on the authenticated user
-    $excuseSlip->student_id = $user->student->student_id; // Assuming this is the correct relationship structure
+    // Set the values for the ExcuseSlip instance
+    $excuseSlip->student_id = $validatedData['student_id'];
+    $excuseSlip->teacher_id = $validatedData['teacher_id'];
+    $excuseSlip->counselor_id = $validatedData['counselor_id'];
+    $excuseSlip->dean_id = $validatedData['dean_id'];
+    $excuseSlip->offer_code = $validatedData['offer_code'];
+    $excuseSlip->reason = $validatedData['reason'];
+    $excuseSlip->start_date = $validatedData['start_date'];
+    $excuseSlip->end_date = $validatedData['end_date'];
+    $excuseSlip->status_id = $validatedData['status_id'];
+    // Set values for any additional fields
 
-    // Set other fields based on the request data
-    $excuseSlip->reason = $request->input('reason');
-    $excuseSlip->start_date = $request->input('start_date');
-    $excuseSlip->end_date = $request->input('end_date');
-    $excuseSlip->status_id = $request->input('status_id');
+    // Save the ExcuseSlip instance
+    $excuseSlip->save();
 
-    // Fetch the associated course offering based on the offer code
-    $courseOffering = CourseOffering::where('offer_code', $request->input('offer_code'))->first();
-
-    // Check if the course offering exists
-    if ($courseOffering) {
-        // Fetch the associated course
-        $course = $courseOffering->course;
-
-        // Check if the course exists
-        if ($course) {
-            // Fetch the associated teacher
-            $teacher = $course->teacher;
-
-            // Check if the teacher exists
-            if ($teacher) {
-                // Assign the teacher ID to the excuse slip
-                $excuseSlip->teacher_id = $teacher->teacher_id;
-
-                // Save the excuse slip to the database
-                $excuseSlip->save();
-
-                // Redirect the user to the student dashboard
-                return redirect()->route('student.dashboard')->with('success', 'Excuse slip submitted successfully.');
-            } else {
-                // Handle the case when the teacher is not found
-                return redirect()->back()->with('error', 'Teacher not found.');
-            }
-        } else {
-            // Handle the case when the course is not found
-            return redirect()->back()->with('error', 'Course not found.');
-        }
-    } else {
-        // Handle the case when the CourseOffering is not found
-        return redirect()->back()->with('error', 'Course offering not found.');
-    }
+    // Redirect to the appropriate location after saving the excuse slip
+    return redirect()->route('excuseslip.show', $excuseSlip->id)->with('success', 'Excuse slip created successfully!');
 }
 
     

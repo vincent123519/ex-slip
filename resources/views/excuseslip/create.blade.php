@@ -13,6 +13,7 @@
                 </ul>
             </div>
 
+
             <div class="form-group">
                 <label for="student_id">Student ID:</label>
                 <ul class="list-unstyled">
@@ -37,21 +38,19 @@
             </div>
 
             <div class="form-group">
-                <label for="course_ids">Course/Subject/s Absent:</label>
+                <label for="offer_code">Course/Subject/s Absent:</label>
                 <div class="dropdown">
                     <div class="dropdown-menu" aria-labelledby="courseDropdown">
-                        @foreach($studyLoad as $study)
-                            @php
-                                $course = $study->courseOffering->course;
-                            @endphp
-                            @if($course)
-                                <div class="form-check">
-                                    <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
-                                           @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
-                                    <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
-                                </div>
-                            @endif
-                        @endforeach
+                    @foreach ($studyLoad as $load)
+                    <div>
+                        
+                        <input type="checkbox" id="offer_code-{{ $load->id }}" name="offer_code[]" value="{{ $load->id }}">
+                        <label for="offer_code-{{ $load->id }}">Course Code: {{ $load->courseOffering->course_code }}</label>
+                        <label>Offer Code: {{ $load->courseOffering->offer_code }}</label>
+                        <label>Offer Code: {{ $load->courseOffering->Course->course_name }}</label>
+                        
+                    </div>
+                @endforeach
                     </div>
                 </div>
 </div>  
@@ -76,29 +75,7 @@
     </div>
 @endsection
 
-<script>
-    $(document).ready(function () {
-        $('#course_id').change(function () {
-            var selectedCourseId = $(this).val();
 
-            // Fetch the course_name based on the selected course_id (you may use an AJAX request).
-            // For simplicity, let's assume you have a function named fetchCourseNameById.
-
-            // Fetch the course_name using an imaginary fetchCourseNameById function
-            var courseName = fetchCourseNameById(selectedCourseId);
-
-            // Update the displayed course_name in the form
-            $('#course_absent').val(courseName);
-        });
-
-        // Function to fetch course_name by course_id (replace it with your actual implementation)
-        function fetchCourseNameById(courseId) {
-            // You may use an AJAX request here to fetch the course_name from the server.
-            // For simplicity, return a static value here.
-            return "Course Name"; // Replace this with your actual implementation
-        }
-    });
-</script>
 
 <style>
     .manage-slip-container {

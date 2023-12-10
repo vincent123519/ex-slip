@@ -8,15 +8,7 @@
         @csrf
         <input type="hidden" name="student_id" value="{{ $studentId }}">
        
-        <div class="form-group">
-            <label for="course_code">Course Code:</label>
-            <select name="course_code" id="course_code" class="form-control" required>
-                <option value="">Select a course code</option>
-                @foreach($courseCodes as $courseCode)
-                    <option value="{{ $courseCode->course_code }}">{{ $courseCode->course_code }}</option>
-                @endforeach
-            </select>
-        </div>
+        
         <div class="form-group">
             <label for="offer_code">Offer Code:</label>
             <select name="offer_code" id="offer_code" class="form-control" required>

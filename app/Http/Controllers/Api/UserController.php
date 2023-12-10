@@ -323,13 +323,12 @@ public function createStudyLoad($studentId)
 
     }
 
-    public function storeStudyLoad(Request $request, $studentId)
+    public function storeStudyLoad(Request $request)
     {
         // Validate the request data
         $validatedData = $request->validate([
             'student_id' => 'required|exists:students,student_id',
             'semester_id' => 'required',
-            'course_code' => 'required',
             'offer_code' => 'required',
         ]);
 
@@ -337,7 +336,6 @@ public function createStudyLoad($studentId)
         $studyLoad = new StudyLoad();
         $studyLoad->student_id = $validatedData['student_id'];
         $studyLoad->semester_id = $request->input('semester_id');
-        $studyLoad->course_code = $request->input('course_code');
         $studyLoad->offer_code = $request->input('offer_code');
         $studyLoad->save();
 

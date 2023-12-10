@@ -25,41 +25,47 @@ class ExcuseSlipController extends Controller
     }
 
     public function createExcuseSlip()
-{
-    $user = auth()->user();
-    $studentId = $user->student->student_id;
-    $student = Student::find($studentId);
-    $department = $student->degree->department;
+    {
+        $user = auth()->user();
+        $studentId = $user->student->student_id;
+        $student = Student::with('degree.department.counselor', 'degree.department.dean')->find($studentId);
+        $department = $student->degree_id->department;
+    
+        // Get the counselor and dean associated with the department
+        $counselor = $department->counselor;
+        $dean = $department->dean;
 
-    // Get the counselor and dean associated with the department
-    $counselor = $department->counselor;
-    $dean = $department->dean;
-
-    // Retrieve the necessary data for the form, including degree names
-    $excuseStatuses = ExcuseStatus::all();
-    $yearLevel = $user->student->year_level;
-    $degrees = DepartmentDegree::all();
-
-    // Retrieve the study load of the student with eager loading
-    $studyLoad = StudyLoad::where('student_id', $studentId)
-        ->with('courseOffering.course.teacher')
-        ->get();
-    $teachers = $studyLoad->pluck('courseOffering.course.teacher')->unique();
-
-    // Create a new ExcuseSlip instance
-    $excuseSlip = new ExcuseSlip();
-
-    return view('excuseslip.create', compact(
-        'counselor',
-        'dean',
-        'teachers',
-        'excuseStatuses',
-        'degrees',
-        'excuseSlip',
-        'yearLevel',
-        'studyLoad'
-    ));
-}   
+        
+    
+        // Retrieve the necessary data for the form, including degree names
+        $excuseStatuses = ExcuseStatus::all();
+        $yearLevel = $user->student->year_level;
+        $degrees = DepartmentDegree::all();
+    
+        // Retrieve the study load of the student with eager loading
+        $studyLoad = StudyLoad::where('student_id', $studentId)
+            ->with('courseOffering.course.teacher')
+            ->get();
+        $teachers = $studyLoad->pluck('courseOffering.course.teacher')->unique();
+    
+        // Create a new ExcuseSlip instance
+        $excuseSlip = new ExcuseSlip();
+    
+        return view('excuseslip.create', compact(
+            'counselor',
+            'dean',
+            'teachers',
+            'excuseStatuses',
+            'degrees',
+            'excuseSlip',
+            'yearLevel',
+            'studyLoad',
+            'studentId'
+        ))->with([
+            'counselorId' => $counselor ? $counselor->id : null,
+            'deanId' => $dean ? $dean->id : null,
+        ]);
+    }
 
 public function store(Request $request)
 {

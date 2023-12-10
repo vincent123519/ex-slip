@@ -12,6 +12,9 @@
                     <li><strong>{{ Auth::user()->name }}</strong></li>
                 </ul>
             </div>
+            <input type="hidden" name="student_id" value="{{ $studentId }}">
+            <input type="hidden" name="counselor_id" value="{{ $counselorId }}">
+            <input type="hidden" name="dean_id" value="{{ $deanId }}">
 
 
             <div class="form-group">

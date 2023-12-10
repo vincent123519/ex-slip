@@ -3,25 +3,15 @@
 @extends('components.excuseslipstud')
 
 @section('content')
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
+    
     <div class="manage-slip-container">
         <h2 class="excuse-slip-header">Excuse Slip</h2>
         <form action="{{ route('excuse_slips.store') }}" method="POST">
             @csrf
 
-            <div class="form-group">
+            <!-- <div class="form-group">
             <input type="hidden" name="course_id" id="course_id" value="">
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="name">Name:</label>
                 <ul class="list-unstyled">
@@ -89,6 +79,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+
 @endsection
 
 @section('scripts')

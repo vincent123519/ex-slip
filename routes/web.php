@@ -7,6 +7,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\CounselorController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DeanController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExcuseSlipController;
@@ -23,7 +24,7 @@ Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])
 
 Route::get('/excuse_slips', [ExcuseSlipController::class, 'index'])->name('excuse_slips.index');
 Route::get('/excuse_slips/create', [ExcuseSlipController::class, 'createExcuseSlip'])->name('excuse_slips.create');
-Route::post('/excuse_slips', [ExcuseSlipController::class, 'store'])->name('excuse_slips.store');
+Route::post('/excuse_slips/store', [ExcuseSlipController::class, 'store'])->name('excuse_slips.store');
 Route::get('/excuse_slips/{id}', [ExcuseSlipController::class, 'show'])->name('excuse_slips.show');
 Route::get('/excuse_slips/{id}/edit', [ExcuseSlipController::class, 'edit'])->name('excuse_slips.edit');
 Route::put('/excuse_slips/{id}', [ExcuseSlipController::class, 'update'])->name('excuse_slips.update');
@@ -46,6 +47,7 @@ Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('st
 
 Route::group(['middleware' => ['web', 'student']], function () {
     Route::get('/student/dashboard', 'StudentController@dashboard')->name('student.dashboard');
+
 });
 
 
@@ -108,3 +110,8 @@ Route::post('/user/logout', [UserController::class, 'logout'])->name('user.logou
 //teacher
 
 Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard'])->name('teacher.dashboard');
+
+
+//POST test
+
+Route::post('/add-course', [CourseController::class, 'store']);

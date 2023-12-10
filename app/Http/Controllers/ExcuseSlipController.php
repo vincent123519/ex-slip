@@ -40,75 +40,39 @@ class ExcuseSlipController extends Controller
         return view('excuseslip.create', compact('courses', 'teachers', 'counselors', 'deans', 'excuseStatuses', 'degrees', 'excuseSlip', 'yearLevel'));
     }
     
-//     public function store(Request $request)
-//     {
-//         // Validate the input
-//         $validatedData = $request->validate([
-//             'student_id' => 'required',
-//             'teacher_id' => 'required',
-//             'counselor_id' => 'required',
-//             'dean_id' => 'required',
-//             'course_code' => 'required',
-//             'reason' => 'required',
-//             'start_date' => 'required|date',
-//             'end_date' => 'required|date|after:start_date',
-//             'status_id' => 'required',
-//         ]);
-    
-//      // Create the excuse slip request
-//      $excuseSlip = ExcuseSlip::create($validatedData);
-
-//      session([
-//         'success' => 'Excuse slip request created successfully.',
-//         'start_date' => $excuseSlip->start_date,
-//         'end_date' => $excuseSlip->end_date,
-//     ]);
-
-//     // Debugging
-//     dd('Redirecting...');
-
-//     // Redirect to the student dashboard
-//     return redirect()->route('student.dashboard');
-// }
-    
-public function store(Request $request)
-{
-    // Validate the input
-    $validatedData = $request->validate([
-        'student_id' => 'required',
-        'teacher_id' => 'required',
-        'counselor_id' => 'required',
-        'dean_id' => 'required',
-        'course_code' => 'required',
-        'reason' => 'required',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date|after:start_date',
-        'status_id' => 'required',
-    ]);
-
-    try {
-        // Create the excuse slip request
-        $excuseSlip = ExcuseSlip::create($validatedData);
-
-        session([
-            'success' => 'Excuse slip request created successfully.',
-            'start_date' => $excuseSlip->start_date,
-            'end_date' => $excuseSlip->end_date,
+    public function store(Request $request)
+    {
+        // Validate the input
+        $validatedData = $request->validate([
+            'student_id' => 'required',
+            'teacher_id'=> 'required',
+            'counselor_id'=> 'required',
+            'dean_id' => 'required',
+            'course_code' => 'required',
+            'reason' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'status_id' => 'required',
         ]);
 
-        // Debugging
-        console.log('Success: Excuse slip request created successfully.');
+     // Create the excuse slip request
+     $excuseSlip = ExcuseSlip::create($validatedData);
 
-        // Redirect to the student dashboard
-        return redirect()->route('student.dashboard');
-    } catch (\Exception $e) {
-        // Debugging
-        console.error('Error: Failed to create excuse slip request. Error message: ' . $e->getMessage());
+    
+     session([
+        'success' => 'Excuse slip request created successfully.',
+        'start_date' => $excuseSlip->start_date,
+        'end_date' => $excuseSlip->end_date,
+    ]);
 
-        // Redirect back with error message
-        return redirect()->back()->with('error', 'Failed to create excuse slip request. Please try again.');
-    }
+    // Debugging
+    dd('Redirecting...');
+
+    // Redirect to the student dashboard
+    return redirect()->route('student.dashboard')->with(['validatedData' => $validatedData]);
 }
+    
+
 
     public function edit($id)
     {

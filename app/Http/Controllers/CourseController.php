@@ -54,6 +54,7 @@ class CourseController extends Controller
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
+
     public function update(Request $request, Course $course)
     {
         $request->validate([
@@ -78,4 +79,7 @@ class CourseController extends Controller
 
         return response()->json(['message' => 'Course deleted successfully'], 200);
     }
+
+
 }
+

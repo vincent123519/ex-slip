@@ -340,8 +340,7 @@ public function createStudyLoad($studentId)
         $studyLoad->save();
 
         // Redirect or return a response as needed
-        return redirect()->back()->with('success', 'Study load added successfully');
-    }
+        return redirect()->route('admin.students.index')->with('success', 'Study load added successfully');    }
 
 }
 

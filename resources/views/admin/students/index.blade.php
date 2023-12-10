@@ -4,7 +4,7 @@
     <div class="manage-users-container">
         <h1 class="text-center">All Students</h1>
         <div class="table-container">
-            <table class="table">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th>Student ID</th>
@@ -22,7 +22,7 @@
                             <td>{{ $student->degree_id }}</td>
                             <td>{{ $student->year_level }}</td>
                             <td>
-                            <a href="{{ route('admin.studyload.create', ['studentId' => $student->student_id]) }}" class="btn btn-primary">Add Studyload</a>
+                                <a href="{{ route('admin.studyload.create', ['studentId' => $student->student_id]) }}" class="btn btn-primary btn-sm">Add Studyload</a>
                             </td>
                         </tr>
                     @endforeach
@@ -61,8 +61,7 @@
     margin-bottom: 10px;
 }
 
-.manage-users-container button[type="submit"] {
-    padding: 10px 20px;
+.manage-users-container .btn-primary {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -70,7 +69,12 @@
     cursor: pointer;
 }
 
-.manage-users-container button[type="submit"]:hover {
+.manage-users-container .btn-primary:hover {
     background-color: #0056b3;
+}
+
+.table-sm th,
+.table-sm td {
+    padding: 0.3rem;
 }
 </style>

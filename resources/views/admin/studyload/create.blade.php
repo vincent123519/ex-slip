@@ -14,7 +14,7 @@
             <select name="offer_code" id="offer_code" class="form-control" required>
                 <option value="">Select an offer code</option>
                 @foreach($offerCodes as $offerCode)
-                    <option value="{{ $offerCode->offer_code }}">{{ $offerCode->offer_code }}</option>
+                    <option value="{{ $offerCode->offer_code }}">{{ $offerCode->offer_code }} - {{ $offerCode->course_code }}</option>
                 @endforeach
             </select>
         </div>

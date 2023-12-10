@@ -7,15 +7,7 @@
     <form method="POST" action="{{ route('admin.studyload.store') }}">
         @csrf
         <input type="hidden" name="student_id" value="{{ $studentId }}">
-        <div class="form-group">
-            <label for="semester_id">Semester:</label>
-            <select name="semester_id" id="semester_id" class="form-control" required>
-                <option value="">Select a semester</option>
-                @foreach($semesters as $semester)
-                    <option value="{{ $semester->id }}">{{ $semester->name }}</option>
-                @endforeach
-            </select>
-        </div>
+       
         <div class="form-group">
             <label for="course_code">Course Code:</label>
             <select name="course_code" id="course_code" class="form-control" required>
@@ -34,6 +26,15 @@
                 @endforeach
             </select>
         </div>
+        <<div class="form-group">
+    <label for="semester_id">Semester:</label>
+    <select name="semester_id" id="semester_id" class="form-control" required>
+        <option value="">Select a semester</option>
+        @foreach($semesters as $semester)
+            <option value="{{ $semester->semester_id }}">{{ $semester->semester_name }}</option>
+        @endforeach
+    </select>
+</div>
         <button type="submit" class="btn btn-primary">Add Studyload</button>
     </form>
 </div>

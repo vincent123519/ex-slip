@@ -318,6 +318,7 @@ public function createStudyLoad($studentId)
         // Retrieve the offer codes from the database
         $offerCodes = CourseOffering::all();
 
+
         return view('admin.studyload.create', ['studentId' => $studentId, 'semesters' => $semesters, 'courseCodes' => $courseCodes, 'offerCodes' => $offerCodes]);
 
     }

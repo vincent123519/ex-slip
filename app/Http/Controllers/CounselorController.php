@@ -6,6 +6,8 @@ use App\Models\Counselor;
 use App\Models\ExcuseSlip;
 use App\Models\ExcuseStatus;
 use App\Models\Feedback;
+use App\Models\Student;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,7 +73,10 @@ class CounselorController extends Controller
     }
     public function dashboard()
     {
+        $user = auth()->user()->counselor->counselor_id;
+
         $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
+        $student = Student::all();
         return view('counselor.dashboard', ['excuseSlips' => $excuseSlips]);
     }
     

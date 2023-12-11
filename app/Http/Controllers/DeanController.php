@@ -101,6 +101,8 @@ class DeanController extends Controller
     
     public function dashboard()
     {
+        $user = auth()->user()->dean->dean_id;
+
         $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
         return view('dean.dashboard', ['excuseSlips' => $excuseSlips]);
     }

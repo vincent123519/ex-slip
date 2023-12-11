@@ -13,12 +13,35 @@ use App\Models\ExcuseStatus;
 use App\Models\Counselor; 
 use App\Models\User; 
 use App\Models\Department; 
+use Illuminate\Support\Facades\Auth;
 class ExcuseSlipController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')->get();
+    //     return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
+    // }
+
+    // public function index()
+    // {
+    //     // $studentId = auth()->user()->student->student_id;
+
+    //     // Retrieve only the excuse slips for the logged-in student
+    //     $excuseSlips = ExcuseSlip::select('start_date', 'end_date', 'status_id')->get();
+
+    //     return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
+    // }
+
+    public function studentExcuseSlipList()
     {
-        $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')->get();
-        return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
+        // $studentId = auth()->user()->student->student_id;
+
+        // Retrieve only the excuse slips for the logged-in student
+        $excuseSlips = ExcuseSlip::select('start_date', 'end_date', 'status_id')->get();
+  
+
+
+        return view ('student.dashboard', ['excuseSlips' => $excuseSlips]);
     }
 
     public function createExcuseSlip()
@@ -39,6 +62,7 @@ class ExcuseSlipController extends Controller
         $teacherData = Teacher::select('teacher_id', 'name')->get();
         $deanData = Dean::select('dean_id', 'name')->get();
         $counselorData = Counselor::select('counselor_id', 'name')->get();
+
 
         // Create a new ExcuseSlip instance (assuming it's needed for the form)
         $excuseSlip = new ExcuseSlip();

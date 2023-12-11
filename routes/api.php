@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/excuse_slips/store', [ExcuseSlipController::class, 'store'])->name('excuse_slips.store');
+Route::get('/excuse_slips/list', [ExcuseSlipController::class, 'studentExcuseSlipList'])->name('excuse_slips.index');
 

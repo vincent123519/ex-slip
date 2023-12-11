@@ -34,16 +34,17 @@
                 </ul>
             </div> -->
 
+
             <div class="form-group">
-                <label for="degree_id">Degree Program:</label>
-                <select name="degree_id" id="degree_id" class="form-control" required disabled>
-                    @foreach($degrees as $degree)
-                        <option value="{{ $degree->id }}" @if(optional($excuseSlip)->degree_id == $degree->id) selected @endif>
-                            {{ $degree->degree_name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+    <label for="degree_id">Degree Program:</label>
+    <select name="degree_id" id="degree_id" class="form-control" required disabled>
+        @foreach($degrees as $degree)
+            <option value="{{ $degree->id }}" @if(optional($excuseSlip)->degree_id == $degree->id) selected @endif>
+                {{ $degree->degree_name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
             <div class="form-group">
                 <label for="year_level">Year Level:</label>

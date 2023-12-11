@@ -11,7 +11,7 @@
                         <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
                         <p><strong>Counselor's Feedback:</strong> {{ $excuseSlip->counselor_feedback }}</p>
                         <p><strong>Dean's Feedback:</strong> {{ $excuseSlip->dean_feedback }}</p>
-                        <p><strong>Teacher's Feedback:</strong> {{ $excuseSlip->teacher_feedback }}</p>
+                        <p><strong>Reason:</strong> {{ $excuseSlip->reason}}</p>  
                         <!-- Add other information as needed -->
                     </div>
                 @endforeach

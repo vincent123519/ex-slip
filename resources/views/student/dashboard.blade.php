@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 @extends('components.stud')
 
 @section('content')
@@ -6,21 +7,15 @@
         <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
         <div class="manage-slip-container">
             <h2>Excuse Slips</h2>
-            @if($excuseSlips->count() > 0)
-                @foreach($excuseSlips as $excuseSlip)
-                    <div class="excuse-slip">
-                        <p><strong>Duration:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
-                        <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
-                        <p><strong>Counselor's Feedback:</strong> {{ $excuseSlip->counselor_feedback }}</p>
-                        <p><strong>Dean's Feedback:</strong> {{ $excuseSlip->dean_feedback }}</p>
-                        <p><strong>Teacher's Feedback:</strong> {{ $excuseSlip->teacher_feedback }}</p>
-                        <!-- Add other information as needed -->
-                    </div>
-                @endforeach
-            @else
-                <p>No excuse slips found.</p>
-            @endif
 
+            @foreach($excuseSlips as $excuseSlip)
+                <tr>
+                    <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
+                    <td>{{ $excuseSlip->status_id }}</td>
+                    <!-- Add other table cells as needed -->
+                </tr>
+            @endforeach
+                <p>++++++++++++++++++++++++++++++++++</p>
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}

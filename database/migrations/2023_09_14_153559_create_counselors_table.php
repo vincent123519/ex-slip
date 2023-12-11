@@ -12,7 +12,7 @@ class CreateCounselorsTable extends Migration
             $table->bigIncrements('counselor_id');
             $table->unsignedBigInteger('user_id')->unique(); // Change 'unsignedInteger' to 'unsignedBigInteger'
             $table->string('name', 100);
-            $table->unsignedBigInteger('department_id')->default(mt_rand(1, 4)); // Change the data type to match departments
+            $table->unsignedBigInteger('department_id')->default(1); // Change the data type to match departments
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users');

@@ -57,6 +57,15 @@
                     </div>
                 </div>
 </div>  
+            <div class="form-group">
+                <label for="counselor_id">Counselor:</label>
+                <input type="text" name="counselor_id" id="counselor_id" class="form-control" required readonly value="{{ $counselor->name }}">
+            </div>
+
+            <div class="form-group">
+                <label for="dean_id">Dean:</label>
+                <input type="text" name="dean_id" id="dean_id" class="form-control" required readonly value="{{ $dean->name }}">
+            </div>
 
             <div class="form-group">
                 <label for="reason">Reason:</label>

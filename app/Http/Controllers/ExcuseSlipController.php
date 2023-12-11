@@ -28,13 +28,20 @@ class ExcuseSlipController extends Controller
     {
         $user = auth()->user();
         $studentId = $user->student->student_id;
-        $student = Student::with('degree.department.counselor', 'degree.department.dean')->find($studentId);
-        $department = $student->degree_id->department;
+        $student = Student::find($studentId);
+        $degreeId = $student->degree_id; 
     
-        // Get the counselor and dean associated with the department
-        $counselor = $department->counselor;
-        $dean = $department->dean;
-
+        // // Get the counselor and dean associated with the department
+        // $counselor = $department->counselor;
+        // $dean = $department->dean;
+        $counselor = Department::whereHas('departmentDegrees', function ($query) use ($degreeId) {
+            $query->where('degree_id', $degreeId);
+        })->first()->counselor;
+    
+        // Fetch the    dean associated with the student's degree
+        $dean = Department::whereHas('departmentDegrees', function ($query) use ($degreeId) {
+            $query->where('degree_id', $degreeId);
+        })->first()->dean;
         
     
         // Retrieve the necessary data for the form, including degree names

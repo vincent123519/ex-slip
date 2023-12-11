@@ -6,25 +6,33 @@
     
     <div class="manage-slip-container">
         <h2 class="excuse-slip-header">Excuse Slip</h2>
-        <form action="{{ route('excuse_slips.store') }}" method="POST">
-            @csrf
 
+        <!-- Display errors if there are any -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
             <!-- <div class="form-group">
             <input type="hidden" name="course_id" id="course_id" value="">
             </div> -->
             <div class="form-group">
-                <label for="name">Name:</label>
+                <label for="name" id="student_name">Name:</label>
                 <ul class="list-unstyled">
                     <li><strong>{{ Auth::user()->name }}</strong></li>
                 </ul>
             </div>
 
-            <div class="form-group">
-    <label for="name">Student ID:</label>
-    <ul class="list-unstyled">
-        <li>{{ Auth::user()->student->student_id }}</li>
-    </ul>
-</div>
+            <!-- <div class="form-group">
+                <label for="name" id="student_id">Student ID:</label>
+                <ul class="list-unstyled">
+                    <li>{{ Auth::user()->student->student_id }}</li>
+                </ul>
+            </div> -->
 
             <div class="form-group">
                 <label for="degree_id">Degree Program:</label>
@@ -42,24 +50,55 @@
                 <input type="text" name="year_level" id="year_level" class="form-control" value="{{ old('year_level', $yearLevel) }}" required readonly>
             </div>
 
+        <form action="{{ route('excuse_slips.store') }}" method="POST">
+            @csrf
 
             <div class="form-group">
-    <label for="course_absent">Course/Subject/s Absent:</label>
-    <div class="dropdown">
-        <div class="dropdown-menu" aria-labelledby="courseDropdown">
-            @foreach($courses as $course)
-                <div class="form-check">
-                    <input type="checkbox" name="course_ids[]" id="course_{{ $course->id }}" value="{{ $course->id }}"
-                           @if(is_array(old('course_ids')) && in_array($course->id, old('course_ids'))) checked @endif>
-                    <label class="form-check-label" for="course_{{ $course->id }}">{{ $course->course_name }}</label>
+                <label for="student_id">Student ID:</label>
+                <input type="text" name="student_id" id="student_id" class="form-control" value="{{ Auth::user()->student->student_id }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="teacher_id">Teacher:</label>
+                <select name="teacher_id" id="teacher_id" class="form-control" required>
+                    @foreach($teacherData as $teacher)
+                        <option value="{{ $teacher->teacher_id }}">{{ $teacher->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dean_id">Dean:</label>
+                <select name="dean_id" id="dean_id" class="form-control" required>
+                    @foreach($deanData as $dean)
+                        <option value="{{ $dean->dean_id }}">{{ $dean->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="counselor_id">Counselor:</label>
+                <select name="counselor_id" id="counselor_id" class="form-control" required>
+                    @foreach($counselorData as $counselor)
+                        <option value="{{ $counselor->counselor_id }}">{{ $counselor->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="course_code">Course/Subject/s Absent:</label>
+                <div class="dropdown">
+                    <div class="dropdown-menu" aria-labelledby="courseDropdown">
+                        @foreach($coursesData as $course)
+                            <div class="form-check">
+                                <input type="checkbox" name="course_code" id="course_code" value="{{ $course->course_code }}"
+                                    @if(is_array(old('course_codes')) && in_array($course->course_code, old('course_codes'))) checked @endif>
+                                <label class="form-check-label" for="course_{{ $course->course_code }}">{{ $course->course_code }}</label> 
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-            @endforeach
-        </div>
-    </div>
-</div>
-
-
-
+            </div>
 
             <div class="form-group">
                 <label for="reason">Reason:</label>
@@ -67,14 +106,19 @@
             </div>
 
             <div class="form-group">
-    <label for="start_date">Start Date:</label>
-    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ old('start_date') }}" required>
-</div>
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ old('start_date') }}" required>
+            </div>
 
-<div class="form-group">
-    <label for="end_date">End Date:</label>
-    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ old('end_date') }}" required>
-</div>
+            <div class="form-group">
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ old('end_date') }}" required>
+            </div>
+
+            <!-- <div class="form-group">
+                <label for="end_date">Status:</label>
+                <input type="text" name="status_id" id="status_id" class="form-control" value="{{ old('status_id') }}" required readonly>
+            </div> -->
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

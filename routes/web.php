@@ -24,7 +24,7 @@ Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])
 
 Route::get('/excuse_slips', [ExcuseSlipController::class, 'index'])->name('excuse_slips.index');
 Route::get('/excuse_slips/create', [ExcuseSlipController::class, 'createExcuseSlip'])->name('excuse_slips.create');
-Route::post('/excuse_slips/store', [ExcuseSlipController::class, 'store'])->name('excuse_slips.store');
+Route::post('/excuse_slips', [ExcuseSlipController::class, 'store'])->name('excuse_slips.store');
 Route::get('/excuse_slips/{id}', [ExcuseSlipController::class, 'show'])->name('excuse_slips.show');
 Route::get('/excuse_slips/{id}/edit', [ExcuseSlipController::class, 'edit'])->name('excuse_slips.edit');
 Route::put('/excuse_slips/{id}', [ExcuseSlipController::class, 'update'])->name('excuse_slips.update');

@@ -7,6 +7,8 @@
             @if($excuseSlips->count() > 0)
                 @foreach($excuseSlips as $excuseSlip)
                     <div class="excuse-slip">
+                        <p><strong>Student ID:</strong> {{ $excuseSlip->student_id}} year_level: {{ $excuseSlip->year_level_id}}</p>  
+                        <p><strong>Reason:</strong> {{ $excuseSlip->reason}}</p>  
                         <p><strong>Duration:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
                         <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
                         <p><strong>Counselor's Feedback:</strong> {{ $excuseSlip->counselor_feedback }}</p>

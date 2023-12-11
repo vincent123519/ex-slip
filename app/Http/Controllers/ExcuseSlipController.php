@@ -34,10 +34,16 @@ class ExcuseSlipController extends Controller
         // Fetch degree data to populate the dropdown
         $degrees = DepartmentDegree::all(); // Assuming you have a model for DepartmentDegree
     
+        // Fetch teacher, dean, and counselor data
+        $coursesData = Course::select('course_code', 'course_name')->get();
+        $teacherData = Teacher::select('teacher_id', 'name')->get();
+        $deanData = Dean::select('dean_id', 'name')->get();
+        $counselorData = Counselor::select('counselor_id', 'name')->get();
+
         // Create a new ExcuseSlip instance (assuming it's needed for the form)
         $excuseSlip = new ExcuseSlip();
     
-        return view('excuseslip.create', compact('courses', 'teachers', 'counselors', 'deans', 'excuseStatuses', 'degrees', 'excuseSlip', 'yearLevel'));
+        return view('excuseslip.create', compact('courses', 'teachers', 'counselors', 'deans', 'excuseStatuses', 'degrees', 'excuseSlip', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData'));
     }
     
     public function store(Request $request)
@@ -52,8 +58,10 @@ class ExcuseSlipController extends Controller
             'reason' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
-            'status_id' => 'required',
+            // 'status_id' => 'required',
         ]);
+
+        $validatedData['status_id'] = 1;
 
      // Create the excuse slip request
      $excuseSlip = ExcuseSlip::create($validatedData);
@@ -65,11 +73,11 @@ class ExcuseSlipController extends Controller
         'end_date' => $excuseSlip->end_date,
     ]);
 
-    // Debugging
-    dd('Redirecting...');
+    // // Debugging
+    // dd('Redirecting...');
 
     // Redirect to the student dashboard
-    return redirect()->route('student.dashboard')->with(['validatedData' => $validatedData]);
+    return redirect()->route('student.dashboard')->withInput()->withErrors($validatedData);
 }
     
 
@@ -136,4 +144,5 @@ class ExcuseSlipController extends Controller
         // Redirect the user to the excuse slips list page
         return redirect()->route('excuse_slips.index');
     }
+
 }

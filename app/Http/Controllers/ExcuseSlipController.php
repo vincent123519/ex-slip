@@ -169,4 +169,4 @@ class ExcuseSlipController extends Controller
         return redirect()->route('excuse_slips.index');
     }
 
-}
+}   

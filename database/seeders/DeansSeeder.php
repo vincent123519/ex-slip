@@ -2,42 +2,51 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Dean;
 use App\Models\User;
-use App\Models\School;
+use App\Models\Dean;
 use App\Models\Department;
-use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DeansSeeder extends Seeder
 {
     public function run()
     {
-        $faker = Faker::create();
+        // Retrieve existing users and departments
+        $this->call(DepartmentSeeder::class);
 
-        // Retrieve existing users, schools, and departments
-        $users = User::all();
-        $schools = School::all();
-        $departments = Department::all();
+        // Create counselors with existing user and department IDs
+        $deansData = [
+            [
+                'name' => 'Ms. juvelyn Cuizon',
+                'department' => 'Information Techonology Department',
+                'username' => 'juvelyn.Cuizon',
+            ],
+            // Add more sample counselors
+        ];
 
-        // Create sample deans
-        $deans = [];
-
-        foreach ($users as $user) {
-            $school = $schools->random();
-            $department = $departments->random();
-
-            $dean = new Dean([
-                'user_id' => $user->user_id,
-                'name' => $faker->name,
-                'school_code' => $school->school_code,
-                'department_id' => $department->department_id,
+        foreach ($deansData as $deansData) {
+            // Find the user and department based on the provided IDs
+            $user = User::create([
+                'name' => $deansData['name'],
+                'username' => $deansData['username'],
+                'password' => Hash::make('12345'), // You can set a default password
+                'role_id' => 5,
             ]);
 
-            $deans[] = $dean->attributesToArray();
-        }
+            // Find the department
+            $department = Department::where('department_name', $deansData['department'])->first();
 
-        // Insert the deans into the database
-        Dean::insert($deans);
+            
+
+            // Create and save the counselor
+            $dean = new Dean([
+                'name' => $deansData['name'],
+            ]);
+
+            $dean->user()->associate($user);
+            $dean->department()->associate($department);
+            $dean->save();
+        }
     }
 }

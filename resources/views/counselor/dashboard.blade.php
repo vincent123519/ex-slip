@@ -3,14 +3,17 @@
     <div class="counselor-details-container">
         <h1>Absence Request</h1>
         <a href="" class="create-slip-button"> Number of Excuse slip</a>
+    </div>
+
+    <div class="excuse-container">
         <h2>Excuse Slips</h2>
             @if($excuseSlips->count() > 0)
                 @foreach($excuseSlips as $excuseSlip)
                     <div class="excuse-slip">
-                        <p><strong>Student ID:</strong> {{ $excuseSlip->student_id}}</p>  
+                        <p><strong>Student Name:</strong> {{ $excuseSlip->student->name}}</p>  
                         <p><strong>Reason:</strong> {{ $excuseSlip->reason}}</p>  
                         <p><strong>Duration:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
-                        <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
+                        <p><strong>Status:<button class="btn-approved">Approve</button></p>
                         <!-- Add other information as needed -->
                     </div>
                 @endforeach
@@ -19,11 +22,19 @@
             @endif
 
         </div>
-    </div>
         @endsection
 
 <style>
     .counselor-details-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        width: 60%;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .excuse-container {
         background-color: #f8f9fa;
         padding: 20px;
         border: 1px solid #dee2e6;
@@ -56,4 +67,45 @@
     .btn:hover {
         background-color: #0056b3;
     }
+
+    .excuse-slips-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .excuse-slip {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 15px;
+        width: 95%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .excuse-slip p {
+        margin: 0 0 10px;
+    }
+
+    .excuse-slip strong {
+        font-weight: bold;
+    }
+
+    .btn-approved {
+        background-color: #28a745;
+        height: 20px; /* Set the height you desire */
+        width: 40%; /* Full width of the container */
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .btn-approved:hover {
+        background-color: darkgreen;
+        height: 20px; /* Set the height you desire */
+        width: 45%; /* Full width of the container */
+        
+    }
+    
+</style>
 </style>

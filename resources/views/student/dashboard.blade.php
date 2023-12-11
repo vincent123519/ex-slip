@@ -3,19 +3,23 @@
 
 @section('content')
     <div class="student-details-container">
-        <h1>Absence Request</h1>
-        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
+        <h1>Absence Request</h1>        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
+
+        <hr>
+
         <div class="manage-slip-container">
             <h2>Excuse Slips</h2>
 
-            @foreach($excuseSlips as $excuseSlip)
-                <tr>
-                    <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
-                    <td>{{ $excuseSlip->status_id }}</td>
-                    <!-- Add other table cells as needed -->
-                </tr>
-            @endforeach
-                <p>++++++++++++++++++++++++++++++++++</p>
+            @forelse($excuseSlips as $excuseSlip)
+                <div class="excuse-slip">
+                    <p>Date: {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
+                    <p>Status: {{ $excuseSlip->status_id }}</p>
+                    <!-- Add other details as needed -->
+                </div>
+            @empty
+                <p>No Excuse Slips found.</p>
+            @endforelse
+
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -28,8 +32,6 @@
         </div>
     </div>
 @endsection
-
-
 
 <style>
     .student-details-container {
@@ -52,19 +54,23 @@
 
     .create-slip-button {
         display: inline-block;
-        padding: 10px 15px;
-        font-size: 16px;
+        padding: 12px 400px;
+        font-size: 20px;
         text-align: center;
         text-decoration: none;
-        background-color: #28a745; /* Green color */
+        background-color: #28a745;
         color: #fff;
         border-radius: 4px;
         transition: background-color 0.3s;
-        border: 1px solid #218838; /* Darker green color */
+        border: 5px solid #218838;
     }
 
     .create-slip-button:hover {
         background-color: #218838;
+    }
+
+    .manage-slip-container {
+        margin-top: 20px;
     }
 
     .excuse-slip {
@@ -76,5 +82,15 @@
 
     .excuse-slip p {
         margin-bottom: 5px;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
     }
 </style>

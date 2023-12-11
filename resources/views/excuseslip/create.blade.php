@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-@extends('components.excuseslipstud')
+@extends('components.stud')
 
 @section('content')
     
@@ -21,10 +21,7 @@
             <input type="hidden" name="course_id" id="course_id" value="">
             </div> -->
             <div class="form-group">
-                <label for="name" id="student_name">Name:</label>
-                <ul class="list-unstyled">
-                    <li><strong>{{ Auth::user()->name }}</strong></li>
-                </ul>
+                <label for="name" id="student_name">Name: {{ Auth::user()->name }}</label>
             </div>
 
             <!-- <div class="form-group">
@@ -64,7 +61,7 @@
                 <select name="teacher_id" id="teacher_id" class="form-control" required>
                     @foreach($teacherData as $teacher)
                         <option value="{{ $teacher->teacher_id }}">{{ $teacher->name }}</option>
-                    @endforeach
+                    @endforeach 
                 </select>
             </div>
 
@@ -120,7 +117,7 @@
                 <label for="end_date">Status:</label>
                 <input type="text" name="status_id" id="status_id" class="form-control" value="{{ old('status_id') }}" required readonly>
             </div> -->
-
+            <div class="button color">
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
@@ -193,11 +190,13 @@
     }
 
     button {
-        background-color: #007bff;
+        background-color: darkgreen;
         color: #fff;
         border: none;
         padding: 12px 20px;
         border-radius: 4px;
         cursor: pointer;
     }
+
+    
 </style>

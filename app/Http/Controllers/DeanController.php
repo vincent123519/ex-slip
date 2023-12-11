@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Dean;
-use App\Models\ExcuseSlip;
 use App\Models\Feedback;
+use App\Models\ExcuseSlip;
 use Illuminate\Http\Request;
 
 class DeanController extends Controller
@@ -104,6 +105,10 @@ class DeanController extends Controller
         $user = auth()->user()->dean->dean_id;
 
         $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
+        foreach ($excuseSlips as $excuseSlip) {
+            $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
+            $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
+        }
         return view('dean.dashboard', ['excuseSlips' => $excuseSlips]);
     }
 }

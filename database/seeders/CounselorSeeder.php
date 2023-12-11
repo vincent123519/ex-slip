@@ -2,45 +2,51 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Counselor;
 use App\Models\User;
+use App\Models\Counselor;
 use App\Models\Department;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class CounselorSeeder extends Seeder
 {
     public function run()
     {
         // Retrieve existing users and departments
-        $users = User::all();
-        $departments = Department::all();
+        $this->call(DepartmentSeeder::class);
 
         // Create counselors with existing user and department IDs
-        $counselors = [
-            ['user_id' => 10001, 'name' => 'Joy Martinez', 'department_id' => 20001],
-            ['user_id' => 10002, 'name' => 'Sadness Martinez', 'department_id' => 20002],
+        $counselorsData = [
+            [
+                'name' => 'Ms. Jocelyn Martinez',
+                'department' => 'Information Techonology Department',
+                'username' => 'jocelyn.martinez',
+            ],
             // Add more sample counselors
         ];
 
-        // Create the counselors
-        foreach ($counselors as $counselorData) {
+        foreach ($counselorsData as $counselorData) {
             // Find the user and department based on the provided IDs
-            $user = $users->firstWhere('user_id', $counselorData['user_id']);
-            $department = $departments->firstWhere('department_id', $counselorData['department_id']);
+            $user = User::create([
+                'name' => $counselorData['name'],
+                'username' => $counselorData['username'],
+                'password' => Hash::make('12345'), // You can set a default password
+                'role_id' => 4,
+            ]);
 
-            // Check if user and department are found
-            if ($user && $department) {
-                $counselor = new Counselor([
-                    'name' => $counselorData['name'],
-                ]);
+            // Find the department
+            $department = Department::where('department_name', $counselorData['department'])->first();
 
-                $counselor->user()->associate($user);
-                $counselor->department()->associate($department);
-                $counselor->save();
-            } else {
-                // Handle the case where user or department is not found
-                // You can log an error or take other appropriate action
-            }
+            
+
+            // Create and save the counselor
+            $counselor = new Counselor([
+                'name' => $counselorData['name'],
+            ]);
+
+            $counselor->user()->associate($user);
+            $counselor->department()->associate($department);
+            $counselor->save();
         }
     }
 }

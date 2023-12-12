@@ -15,6 +15,8 @@ class UserRolesSeeder extends Seeder
             ['role_id' => 3, 'role_name' => 'Student', 'role_description' => 'Student'],
             ['role_id' => 4, 'role_name' => 'Counselor', 'role_description' => 'Counselor'],
             ['role_id' => 5, 'role_name' => 'Dean', 'role_description' => 'Dean'],
+            ['role_id' => 6, 'role_name' => 'Admin', 'role_description' => 'Admin'],
+
             // Add more sample data here
         ];
 

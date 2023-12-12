@@ -261,25 +261,23 @@ class UserController extends Controller
 
     Auth::login($user);
 
-    // Log user information and role
     \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
 
-    // Retrieve the user's role
     $userRole = $user->role;
 
-    // Check the user's role and redirect accordingly
     switch ($userRole ? $userRole->role_id : null) {
-        case 3: // Assuming 'student' has role_id = 3
+        case 3: 
             return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
-        case 2: // Assuming 'teacher' has role_id = 2
+        case 2: 
             return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
-        case 1: // Assuming 'admin' has role_id = 1
+        case 1: 
             return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-        case 4: // Assuming 'counselor' has role_id = 4
+        case 4: 
             return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
-        case 5: // Assuming 'dean' has role_id = 5
+        case 5: 
             return redirect()->route('dean.dashboard')->with('success', 'Dean logged in successfully');
-        // Add more cases for other role_ids
+        case 6: 
+                return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
         default:
             return redirect()->intended('/student/dashboard')->with('success', 'Default log in logged in successfully');
     }

@@ -126,3 +126,14 @@ Route::delete('/excuse/{id}', [TeacherController::class, 'delete'])->name('excus
 //POST test
 
 Route::post('/add-course', [CourseController::class, 'store']);
+
+Route::get('admin/students', [AdminController::class, 'showStudents'])->name('admin.students.index');
+Route::post('/studyload/{studentId}', [AdminController::class, 'storeStudyLoad'])->name('studyload.store');
+Route::get('/studyload/create/{studentId}', [AdminController::class, 'createStudyLoad'])->name('admin.studyload.create');
+Route::post('/admin/studyload/store', [AdminController::class, 'storeStudyLoad'])->name('admin.studyload.store');
+
+// routes/web.php
+
+
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+

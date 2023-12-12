@@ -8,11 +8,10 @@ class CreateStudyLoadsTable extends Migration
 {
     public function up()
     {
-        Schema::create('study_load', function (Blueprint $table) {
+        Schema::create('study_loads', function (Blueprint $table) {
             $table->id('studyload_id');
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('semester_id');
-            $table->string('course_codes'); // Change to a string to store multiple course codes
             $table->unsignedBigInteger('offer_code');
     
             // Add foreign key constraints with the same data type

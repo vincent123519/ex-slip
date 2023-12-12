@@ -73,3 +73,6 @@
         </div>
     </div>
 @endsection
+<style>
+    
+</style>

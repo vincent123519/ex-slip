@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 @extends('components.stud')
 
 @section('content')
@@ -8,17 +7,37 @@
         <hr>
 
         <div class="manage-slip-container">
-            <h2>Excuse Slips</h2>
 
-            @forelse($excuseSlips as $excuseSlip)
-                <div class="excuse-slip">
-                    <p>Date: {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
-                    <p>Status: {{ $excuseSlip->status_id }}</p>
-                    <!-- Add other details as needed -->
-                </div>
-            @empty
+            <h1>Excuse Slips Dashboard</h1>
+
+            @if($excuseSlips->isEmpty())
                 <p>No Excuse Slips found.</p>
-            @endforelse
+            @else
+                <table class="excuse-slip-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Teacher</th>
+                            <th>Course</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($excuseSlips as $excuseSlip)
+                            <tr>
+                                <td>{{ $excuseSlip->student->name }}</td>
+                                <td>{{ $excuseSlip->teacher->name }}</td>
+                                <td>{{ $excuseSlip->course->course_code }}</td>
+                                <td>{{ $excuseSlip->start_date }}</td>
+                                <td>{{ $excuseSlip->end_date }}</td>
+                                <td>{{ $excuseSlip->status->status_name }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
 
             @if(session('success'))
                 <div class="alert alert-success">
@@ -93,4 +112,28 @@
         border-color: #c3e6cb;
         color: #155724;
     }
+    .excuse-slip-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .excuse-slip-table th, .excuse-slip-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .excuse-slip-table th {
+        background-color: #f2f2f2;
+    }
+
+    .excuse-slip-table td {
+        vertical-align: top;
+    }
+
+    .excuse-slip-table tbody td {
+        white-space: nowrap; /* Prevent line breaks in table cells */
+    }
+
 </style>

@@ -24,13 +24,14 @@ Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])
 
 // Route::get('/excuse_slips', [ExcuseSlipController::class, 'index'])->name('excuse_slips.index');
 
-Route::get('/excuse_slips/list', [ExcuseSlipController::class, 'studentExcuseSlipList'])->name('student.dashboard');
+// Route::get('/excuse_slips/list', [ExcuseSlipController::class, 'studentExcuseSlipList'])->name('student.dashboard');
 Route::get('/excuse_slips/create', [ExcuseSlipController::class, 'createExcuseSlip'])->name('excuse_slips.create');
 Route::post('/excuse_slips', [ExcuseSlipController::class, 'store'])->name('excuse_slips.store');
 Route::get('/excuse_slips/{id}', [ExcuseSlipController::class, 'show'])->name('excuse_slips.show');
 Route::get('/excuse_slips/{id}/edit', [ExcuseSlipController::class, 'edit'])->name('excuse_slips.edit');
 Route::put('/excuse_slips/{id}', [ExcuseSlipController::class, 'update'])->name('excuse_slips.update');
 Route::delete('/excuse_slips/{id}', [ExcuseSlipController::class, 'destroy'])->name('excuse_slips.destroy');
+
 
 Route::get('/excuse_slips/{id}/view', [ExcuseSlipController::class, 'viewExcuseSlip'])->name('excuse_slips.view');
 
@@ -48,7 +49,7 @@ Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('st
 
 
 Route::group(['middleware' => ['web', 'student']], function () {
-    Route::get('/student/dashboard', 'StudentController@dashboard')->name('student.dashboard');
+    Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
 });
 
@@ -59,8 +60,15 @@ Route::group(['middleware' => ['web', 'student']], function () {
 // routes/web.php
 
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+
 Route::get('/counselor/dashboard', [CounselorController::class, 'dashboard'])->name('counselor.dashboard');
+Route::put('/excuse_slips/approve/{id}', [CounselorController::class, 'approve'])->name('excuse.approve');
+Route::put('/excuse_slips/reject/{id}', [CounselorController::class, 'reject'])->name('excuse.reject');
+
+
 Route::get('/dean/dashboard', [DeanController::class, 'dashboard'])->name('dean.dashboard');
+Route::post('/{excuseSlipId}/send-to-teacher/{teacherId}', [DeanController::class, 'sendToTeacher'])
+    ->name('excuse-slips.send-to-teacher');
 
 
 
@@ -112,6 +120,7 @@ Route::post('/user/logout', [UserController::class, 'logout'])->name('user.logou
 //teacher
 
 Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard'])->name('teacher.dashboard');
+Route::delete('/excuse/{id}', [TeacherController::class, 'delete'])->name('excuse.delete');
 
 
 //POST test

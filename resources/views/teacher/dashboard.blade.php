@@ -5,16 +5,45 @@
         <a href="" class="create-slip-button"> Number of Excuse slip</a>
         <h2>Excuse Slips</h2>
             @if($excuseSlips->count() > 0)
-                @foreach($excuseSlips as $excuseSlip)
-                    <div class="excuse-slip">
-                        <p><strong>Duration:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
-                        <p><strong>Status:</strong> {{ $excuseSlip->status->name }}</p>
-                        <p><strong>Counselor's Feedback:</strong> {{ $excuseSlip->counselor_feedback }}</p>
-                        <p><strong>Dean's Feedback:</strong> {{ $excuseSlip->dean_feedback }}</p>
-                        <p><strong>Reason:</strong> {{ $excuseSlip->reason}}</p>  
-                        <!-- Add other information as needed -->
-                    </div>
-                @endforeach
+            <table class="excuse-slip-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Duration day</th>
+                            <th>Counselor Feedback</th>
+                            <th>Dean Feedback</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($excuseSlips as $excuseSlip)
+                            <tr>
+                                <td>{{ $excuseSlip->student->name}}</td>
+                                <td>{{ $excuseSlip->status->status_name }}</td>
+                                <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
+                                <td> {{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
+                                ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
+                                <td>{{ $excuseSlip->counselors_feedback }}</td>
+                                <td>{{ $excuseSlip->deans_feedback }}</td>
+                                <td width="300">
+                                    <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn-approved">Approve</button>
+                                    </form>
+                                    <form action="{{ route('excuse.delete', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-reject">Delete</button>
+                                    </form>
+                                </td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             @else
                 <p>No excuse slips found.</p>
             @endif
@@ -56,5 +85,52 @@
 
     .btn:hover {
         background-color: #0056b3;
+    }
+    .excuse-slip-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .excuse-slip-table th,
+    .excuse-slip-table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .excuse-slip-table th {
+        background-color: #f8f9fa;
+    }
+
+    .btn-approved {
+        background-color: #28a745;
+        height: 30px; /* Set the height you desire */
+        width: 40%; /* Full width of the container */
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .btn-approved:hover {
+        background-color: darkgreen;
+        height: 30px; /* Set the height you desire */
+        width: 45%; /* Full width of the container */
+        
+    }
+    .btn-reject {
+        background-color: red;
+        height: 30px; /* Set the height you desire */
+        width: 40%; /* Full width of the container */
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background-color: darkred;
+        height: 30px; /* Set the height you desire */
+        width: 45%; /* Full width of the container */
+        
     }
 </style>

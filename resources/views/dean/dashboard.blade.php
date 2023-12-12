@@ -9,26 +9,41 @@
                 <table class="excuse-slip-table">
                     <thead>
                         <tr>
-                            <th>Student ID</th>
                             <th>Student Name</th>
                             <th>Status</th>
                             <th>Date</th>
                             <th>Duration day</th>
                             <th>Counselor Feedback</th>
-
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($excuseSlips as $excuseSlip)
                             <tr>
-                                <td>{{ $excuseSlip->student_id}}</td>
                                 <td>{{ $excuseSlip->student->name}}</td>
-                                <td>{{ $excuseSlip->status_id }}</td>
+                                <td>{{ $excuseSlip->status->status_name }}</td>
                                 <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
                                 <td> {{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
                                 ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
                                 <td>{{ $excuseSlip->counselors_feedback }}</td>
-                                <!-- Add other table cells as needed -->
+                                <td width="400">
+                                    <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn-approved">Approve</button>
+                                    </form>
+                                    <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn-reject">Reject</button>
+                                    </form>
+                                    <form action="{{ route('excuse-slips.send-to-teacher', ['excuseSlipId' => $excuseSlip->excuse_slip_id, 'teacherId' => $excuseSlip->teacher_id]) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('POST')
+                                        <button type="submit" class="btn-send">Send to Teacher</button>
+                                    </form>
+                                </td>
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -121,5 +136,49 @@
         background-color: #f8f9fa;
     }
 
+    .btn-approved {
+        background-color: #28a745;
+        height: 30px; /* Set the height you desire */
+        width: 30%; /* Full width of the container */
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
 
+    .btn-approved:hover {
+        background-color: darkgreen;
+        height: 30px; /* Set the height you desire */
+        width: 35%; /* Full width of the container */
+        
+    }
+    .btn-reject {
+        background-color: red;
+        height: 30px; /* Set the height you desire */
+        width: 30%; /* Full width of the container */
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .btn-reject:hover {
+        background-color: darkred;
+        height: 30px; /* Set the height you desire */
+        width: 35%; /* Full width of the container */
+        
+    }
+    .btn-send {
+        background-color: orange;
+        height: 30px; /* Set the height you desire */
+        width: 30%; /* Full width of the container */
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .btn-send:hover {
+        background-color: darkblue;
+        height: 30px; /* Set the height you desire */
+        width: 35%; /* Full width of the container */
+        
+    }
 </style>

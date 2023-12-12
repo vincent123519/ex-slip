@@ -102,13 +102,46 @@ class DeanController extends Controller
     
     public function dashboard()
     {
-        $user = auth()->user()->dean->dean_id;
+        $deanId = auth()->user()->dean->dean_id;
 
-        $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
+        $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
+        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')
+        ->where('dean_id', $deanId)
+        ->whereHas('status', function ($query) {
+            $query->where('status_name', 'approved');
+        })
+        ->get();
+
         foreach ($excuseSlips as $excuseSlip) {
             $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
             $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
         }
         return view('dean.dashboard', ['excuseSlips' => $excuseSlips]);
+    }
+
+    public function sendToTeacher($excuseSlipId, $teacherId)
+    {
+        // Find the excuse slip
+        $excuseSlip = ExcuseSlip::find($excuseSlipId);
+        $teacherId = $excuseSlip->teacher_id;
+
+        // Check if the excuse slip exists
+        if (!$excuseSlip) {
+            // Handle not found case, maybe redirect back with an error message
+            return redirect()->back()->with('error', 'Excuse slip not found.');
+        }
+
+        // Check if the teacher is assigned to the dean
+        if ($excuseSlip->dean_id != auth()->user()->dean->dean_id || $excuseSlip->status->status_name != 'approved') {
+            // Handle unauthorized or invalid state, maybe redirect back with an error message
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+
+        // Update the teacher_id
+        $excuseSlip->teacher_id = $teacherId;
+        $excuseSlip->save();
+
+        // Redirect or perform other actions as needed
+        return redirect()->back()->with('success', 'Excuse slip sent to the teacher.');
     }
 }

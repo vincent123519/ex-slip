@@ -227,9 +227,13 @@ class StudentController extends Controller
 public function dashboard()
 {
     // Retrieve excuse slips with status for the current user
-    $excuseSlips = auth()->user()->excuseSlips()->with('status')->get();
+    // $studentId = auth()->user()->student->student_id;
 
-    return view('student.dashboard', ['excuseSlips' => $excuseSlips]);
+    $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
+    ->select('counselor_id', 'student_id' ,'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')->get();
+
+    return view ('student.dashboard', ['excuseSlips' => $excuseSlips]);
 }
+
 
 }

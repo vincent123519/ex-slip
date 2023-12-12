@@ -71,13 +71,38 @@ class CounselorController extends Controller
 
         return response()->json(['message' => 'Feedback submitted successfully.']);
     }
-    public function dashboard()
-    {
-        $user = auth()->user()->counselor->counselor_id;
+  // counselorcontroller
+    
+public function dashboard()
+{
+    $user = auth()->user()->counselor->counselor_id;
 
-        $excuseSlips = ExcuseSlip::all(); // You might need to adjust this based on your requirements
-        $student = Student::all();
-        return view('counselor.dashboard', ['excuseSlips' => $excuseSlips]);
-    }
+    $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
+    ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')->get();
+
+    $student = Student::all();
+    return view('counselor.dashboard', ['excuseSlips' => $excuseSlips]);
+}
+
+public function approve($id)
+{
+    $excuseSlip = ExcuseSlip::findOrFail($id);
+
+    // Update the status to 'approved' or use the appropriate logic
+    $excuseSlip->update(['status_id' => '2']);
+
+    return redirect()->back()->with('success', 'Excuse slip approved successfully.');
+}
+
+public function reject($id)
+{
+    $excuseSlip = ExcuseSlip::findOrFail($id);
+
+    // Update the status to 'rejected' or use the appropriate logic
+    $excuseSlip->update(['status_id' => '3']);
+
+    return redirect()->back()->with('success', 'Excuse slip rejected successfully.');
+}
+
     
     }

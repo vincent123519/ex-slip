@@ -17,42 +17,47 @@ class StudentSeeder extends Seeder
 
         $students = [
             [
-                'name' => 'Dan Lock',
+                'first_name' => 'Dan',
+                'last_name' => 'Lock',
                 'degree' => 'Bachelor of Science in Computer Science',
                 'username' => '2019012',
                 'year_level' => 2,
             ],
             [
-                'name' => 'Arkei Tech',
+                'first_name' => 'Arkei',
+                'last_name' => 'Tech',
                 'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2020012',
                 'year_level' => 3,
             ],
             [
-                'name' => 'Rhey Peter',
+                'first_name' => 'Rhey',
+                'last_name' => 'Peter',
                 'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2018012',
                 'year_level' => 1,
-
             ],
-            // Add more student records here with their respective year levels and degrees
+            // Add more student records here with their respective first names, last names, year levels, and degrees
         ];
 
         foreach ($students as $studentData) {
             // Create a user with a username and set a default password
             $user = User::create([
-                'name' => $studentData['name'],
+                'first_name' => $studentData['first_name'],
+                'last_name' => $studentData['last_name'],
+                'middle_name' => $studentData['middle_name'] ?? null, // Check if the key exists
+                'title' => $studentData['title'] ?? null, // Check if the key exists
                 'username' => $studentData['username'],
                 'password' => Hash::make('12345'), // You can set a default password
-                'role_id' => 3, // Replace 1 with the actual role ID
+                'role_id' => 3, // Replace 3 with the actual role ID for students
             ]);
-            
 
             // Find the department degree
             $degree = DepartmentDegree::where('degree_name', $studentData['degree'])->first();
 
             $student = new Student([
-                'name' => $studentData['name'],
+                'first_name' => $studentData['first_name'],
+                'last_name' => $studentData['last_name'],
                 'year_level' => $studentData['year_level'],
             ]);
 
@@ -62,3 +67,4 @@ class StudentSeeder extends Seeder
         }
     }
 }
+    

@@ -20,7 +20,8 @@ class HeadCounselorSeeder extends Seeder
 
             // Create a new User record without specifying user_id
             $user = new User();
-            $user->name = 'Head Counselor';
+            $user->first_name = 'Head Counselor';
+            $user->last_name = 'Head Counselor';
             $user->username = $username;
             $user->password = Hash::make('password'); // Use password_hash column
             $user->role_id = 1; // Replace '1' with the appropriate role ID for head counselor
@@ -28,7 +29,9 @@ class HeadCounselorSeeder extends Seeder
 
             // Now, create a new HeadCounselor record and associate it with the user
             $headCounselor = new HeadCounselor();
-            $headCounselor->name = 'Head Counselor';
+            $headCounselor->first_name = 'Head Counselor';
+            $headCounselor->last_name = 'lastname';
+
             $headCounselor->department_id = $department->department_id;
 
             // Associate the user with the head counselor

@@ -61,7 +61,7 @@ class ExcuseSlipController extends Controller
         $coursesData = Course::select('course_code', 'course_name')->get();
         $teacherData = Teacher::select('teacher_id', 'name')->get();
         $deanData = Dean::select('dean_id', 'name')->get();
-        $counselorData = Counselor::select('counselor_id', 'name')->get();
+        $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
 
 
         // Create a new ExcuseSlip instance (assuming it's needed for the form)

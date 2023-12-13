@@ -11,7 +11,9 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id('student_id');
             $table->unsignedBigInteger('user_id')->unique();
-            $table->string('name', 100);
+            $table->string('first_name', 100)->default('');
+            $table->string('last_name', 100)->default('');
+            $table->string('middle_name', 50)->nullable();
             $table->unsignedBigInteger('degree_id')->default(1); // Set a default value
             $table->unsignedBigInteger('year_level')->default(1);
             $table->timestamps();

@@ -15,33 +15,34 @@ class TeacherSeeder extends Seeder
         $this->call(DepartmentSeeder::class);
 
         $teachers = [
-            ['user_id' => 1001, 'name' => 'Mr. John Leeroy Gadiane', 'username' => 'John.Leeroy','department' => 'Information Techonology Department'],
-            ['user_id' => 1002, 'name' => 'Mr. Gene Abello','username' => 'John.Leeroy','department' => 'Information Techonology Department'],
+            ['first_name' => 'John Leeroy', 'last_name' => 'Gadiane', 'username' => 'John.Leeroy', 'department' => 'Information Technology Department'],
+            ['first_name' => 'Gene', 'last_name' => 'Abello', 'username' => 'Gene.Abello', 'department' => 'Information Technology Department'],
             // Add more teachers as needed
         ];
 
         foreach ($teachers as $teacherData) {
-
+            // Create a user with a username and set a default password
             $user = User::create([
-                'name' => $teacherData['name'],
+                'first_name' => $teacherData['first_name'],
+                'last_name' => $teacherData['last_name'],
                 'username' => $teacherData['username'],
                 'password' => Hash::make('12345'), // You can set a default password
-                'role_id' => 2,
+                'role_id' => 2, // Replace 2 with the actual role ID for teachers
             ]);
 
             $department = Department::where('department_name', $teacherData['department'])->first();
 
+            $teacher = new Teacher([
+                // Adjust the attributes as needed
+                'user_id' => $user->id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                // Add other teacher attributes if needed
+            ]);
 
-
-                $teacher = new Teacher([
-                    'name' => $teacherData['name'],
-                ]);
-
-                $teacher->user()->associate($user);
-                $teacher->department()->associate($department);
-                $teacher->save();
-            
+            $teacher->user()->associate($user);
+            $teacher->department()->associate($department);
+            $teacher->save();
         }
-
     }
 }

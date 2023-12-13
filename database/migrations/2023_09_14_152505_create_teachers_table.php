@@ -11,7 +11,8 @@ class CreateTeachersTable extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id('teacher_id'); // Use 'id' as the primary key
             $table->unsignedBigInteger('user_id')->unique();
-            $table->string('name', 100);
+            $table->string('first_name', 100);
+            $table->string('last_name', 100);
             $table->unsignedBigInteger('department_id')->default(mt_rand(1, 2));
             $table->timestamps();
 

@@ -78,7 +78,7 @@
                 <label for="counselor_id">Counselor:</label>
                 <select name="counselor_id" id="counselor_id" class="form-control" required>
                     @foreach($counselorData as $counselor)
-                        <option value="{{ $counselor->counselor_id }}">{{ $counselor->name }}</option>
+                        <option value="{{ $counselor->counselor_id }}">{{ $counselor->first_name  }} {{ $counselor->last_name}} </option>
                     @endforeach
                 </select>
             </div>

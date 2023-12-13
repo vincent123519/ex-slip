@@ -18,9 +18,11 @@ class CounselorSeeder extends Seeder
         // Create counselors with existing user and department IDs
         $counselorsData = [
             [
-                'name' => 'Ms. Jocelyn Martinez',
-                'department' => 'Information Techonology Department',
+                'first_name' => 'Jocelyn',
+                'last_name' => 'Martinez',
                 'username' => 'jocelyn.martinez',
+                'department' => 'Information Technology Department',
+
             ],
             // Add more sample counselors
         ];
@@ -28,7 +30,8 @@ class CounselorSeeder extends Seeder
         foreach ($counselorsData as $counselorData) {
             // Find the user and department based on the provided IDs
             $user = User::create([
-                'name' => $counselorData['name'],
+                'first_name' => $counselorData['first_name'],
+                'last_name' => $counselorData['last_name'],
                 'username' => $counselorData['username'],
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 4,
@@ -37,11 +40,10 @@ class CounselorSeeder extends Seeder
             // Find the department
             $department = Department::where('department_name', $counselorData['department'])->first();
 
-            
-
             // Create and save the counselor
             $counselor = new Counselor([
-                'name' => $counselorData['name'],
+                'first_name' => $counselorData['first_name'],
+                'last_name' => $counselorData['last_name'],
             ]);
 
             $counselor->user()->associate($user);

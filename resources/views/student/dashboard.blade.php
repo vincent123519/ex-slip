@@ -27,7 +27,7 @@
                     <tbody>
                         @foreach($excuseSlips as $excuseSlip)
                             <tr>
-                                <td>{{ $excuseSlip->student->name }}</td>
+                                <td>{{ $excuseSlip->student->first_name }}{{ $excuseSlip->student->last_name }}</td>
                                 <td>{{ $excuseSlip->teacher->name }}</td>
                                 <td>{{ $excuseSlip->course->course_code }}</td>
                                 <td>{{ $excuseSlip->start_date }}</td>

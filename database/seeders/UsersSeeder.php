@@ -12,9 +12,11 @@ class UsersSeeder extends Seeder
     {
         // Seed users
         $adminUser = [
-            'name' => 'Admin User',
+            'first_name' => 'Admin User',
+            'last_name' =>'user Admin',
             'username' => 'admin',
             'password' => Hash::make('12345'), // You can set a default password
+            'role_id' => 6,
         ];
 
         User::updateOrCreate(['username' => $adminUser['username']], $adminUser);

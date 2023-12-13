@@ -11,10 +11,10 @@ class CreateCounselorsTable extends Migration
         Schema::create('counselors', function (Blueprint $table) {
             $table->bigIncrements('counselor_id');
             $table->unsignedBigInteger('user_id')->unique(); // Change 'unsignedInteger' to 'unsignedBigInteger'
-            $table->string('name', 100);
+            $table->string('first_name', 100)->default('');
+            $table->string('last_name', 100)->default('');
             $table->unsignedBigInteger('department_id')->default(1); // Change the data type to match departments
             $table->timestamps();
-
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('department_id')->references('department_id')->on('departments');
         });

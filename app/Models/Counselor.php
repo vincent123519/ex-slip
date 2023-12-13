@@ -12,7 +12,8 @@ class Counselor extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name', 'department_id',
+        'first_name',
+        'last_name', 'department_id',
 
     ];
 

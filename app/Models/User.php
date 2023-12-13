@@ -17,11 +17,15 @@ class User extends Authenticatable
     protected $primaryKey = 'user_id';
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'title',
         'username',
         'password',
         'role_id',
     ];
+    
 
     protected $hidden = [
         'password',

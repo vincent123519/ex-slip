@@ -10,7 +10,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
-            $table->string('name', 100)->default('');
+            $table->string('first_name', 50)->default('');
+            $table->string('last_name', 50)->default('');
+            $table->string('middle_name', 50)->nullable();
+            $table->string('title', 10)->nullable();
             $table->string('username', 50)->default('');
             $table->string('password', 255); // Keep this as 'password'
             $table->unsignedBigInteger('role_id');

@@ -18,8 +18,9 @@ class DeansSeeder extends Seeder
         // Create counselors with existing user and department IDs
         $deansData = [
             [
-                'name' => 'Ms. juvelyn Cuizon',
-                'department' => 'Information Techonology Department',
+                'first_name' => 'Juvylyn',
+                'last_name' => 'Cuizon',
+                'department' => 'Information Technology Department',
                 'username' => 'juvelyn.Cuizon',
             ],
             // Add more sample counselors
@@ -28,7 +29,8 @@ class DeansSeeder extends Seeder
         foreach ($deansData as $deansData) {
             // Find the user and department based on the provided IDs
             $user = User::create([
-                'name' => $deansData['name'],
+                'first_name' => $deansData['first_name'],
+                'last_name' => $deansData['last_name'],
                 'username' => $deansData['username'],
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 5,
@@ -41,7 +43,9 @@ class DeansSeeder extends Seeder
 
             // Create and save the counselor
             $dean = new Dean([
-                'name' => $deansData['name'],
+                'first_name' => $deansData['first_name'],
+                'last_name' => $deansData['last_name'],
+
             ]);
 
             $dean->user()->associate($user);

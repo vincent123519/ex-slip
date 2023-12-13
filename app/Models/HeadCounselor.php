@@ -12,8 +12,9 @@ class HeadCounselor extends Model
 
     protected $fillable = [
         'user_id', // Remove 'head_counselor_id' from fillable
-        'name',
         'department_id',
+        'first_name',
+        'last_name',
     ];
     
 

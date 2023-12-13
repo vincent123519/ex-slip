@@ -14,9 +14,15 @@
     @csrf
 
     <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+        <label for="first_name">First Name</label>
+        <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" required>
     </div>
+
+    <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" required>
+    </div>
+
 
     <div class="form-group">
         <label for="username">Username</label>

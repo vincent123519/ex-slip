@@ -11,6 +11,8 @@ use App\Models\UserRole;
 use App\Models\Counselor;
 use Illuminate\Http\Request;
 use App\Models\HeadCounselor;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +40,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
-    {
+{
+    try {
         // Validate the incoming request data
         $validatedData = $this->validator($request->all());
 
@@ -47,63 +50,54 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
+        DB::beginTransaction();
+
         // Create the user and save the password
         $user = User::create([
-            'name' => $request->input('name'),
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
             'username' => $request->input('username'),
-            'password' => Hash::make($request->input('password')), // Hash the password
-            'role_id' => $request->input('role'), // Assuming role is stored in role_id field
+            'password' => Hash::make($request->input('password')),
+            'role_id' => $request->input('role'),
         ]);
 
         // Check the role and perform role-specific actions
-        if ($user->role_id == 1) {
-            // Create a Head Counselor record
-            $headCounselor = new HeadCounselor([
-                'name' => $user->name,
-                
-                // Other Head Counselor attributes
-            ]);
-
-            // Save the Head Counselor record
-            $user->headCounselor()->save($headCounselor);
-        } elseif ($user->role_id == 2) {
-            // Teacher role
-            $teacher = new Teacher([
-                'name' => $user->name,
-                // Add other teacher attributes here
-            ]);
-    
-            // Save the Teacher record
-            $user->teacher()->save($teacher);
-        } elseif ($user->role_id == 4) {
-                // Counselor role
-          $counselor = new Counselor([
-            'name' => $user->name,
-            // Add other counselor attributes here
-        ]);
-
-         $user->counselor()->save($counselor);
-        } elseif ($user->role_id == 5) {
-            $dean = new Dean([
-                'name' => $user->name,
-                // Add other dean attributes here
-            ]);
-    // Save the Dean record
-    $user->dean()->save($dean);
-        } elseif ($user->role_id == 3) {
+        if ($user->role_id == 3) {
             // Student role
             $student = new Student([
-                'name' => $user->name,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'user_id' => $user->user_id, // Associate the user with the student
                 // Other student attributes
             ]);
 
-            // Save the student record
-            $user->student()->save($student);
+            $student->save();
+        } elseif ($user->role_id == 1) {
+            // Head Counselor role
+            // Create a Head Counselor record
+            $headCounselor = new HeadCounselor([
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'user_id' => $user->user_id, // Associate the user with the head counselor
+                // Other Head Counselor attributes
+            ]);
+
+            $headCounselor->save();
         }
+        
+        // ... other role-specific actions
+
+        DB::commit();
 
         // Redirect to the login page
         return redirect()->route('login')->with('success', 'User registered successfully');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Registration error: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'An error occurred during registration.');
     }
+}
+
 
 
 

@@ -11,7 +11,8 @@ class CreateDeansTable extends Migration
         Schema::create('deans', function (Blueprint $table) {
             $table->id('dean_id'); // This will automatically create an auto-incrementing primary key 'dean_id'
             $table->unsignedBigInteger('user_id')->unique();
-            $table->string('name', 100);
+            $table->string('first_name', 100);
+            $table->string('last_name', 100);
             $table->unsignedBigInteger('school_code')->nullable()->default(1001);
             $table->unsignedBigInteger('department_id')->default(1);
 

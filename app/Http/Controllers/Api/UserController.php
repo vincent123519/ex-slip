@@ -11,6 +11,7 @@ use App\Models\UserRole;
 use App\Models\Counselor;
 use Illuminate\Http\Request;
 use App\Models\HeadCounselor;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+
 
 class UserController extends Controller
 {
@@ -27,76 +29,111 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     
-    public function showRegistrationForm()
-    {
-        $roles = UserRole::all(); // Retrieve all available roles
-        return view('user.register', ['roles' => $roles]);
-    }
-
     /**
      * Register a new user.
      *
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function register(Request $request)
-{
-    try {
-        // Validate the incoming request data
-        $validatedData = $this->validator($request->all());
+   
 
-        // If validation fails, return back with errors
-        if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
-        }
+    public function showRegistrationForm()
+    {
+        // You can include any logic needed for the registration form view
+        $roles = UserRole::all();
+        return view('user.registration_form', compact('roles'));
 
-        DB::beginTransaction();
-
-        // Create the user and save the password
-        $user = User::create([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'username' => $request->input('username'),
-            'password' => Hash::make($request->input('password')),
-            'role_id' => $request->input('role'),
-        ]);
-
-        // Check the role and perform role-specific actions
-        if ($user->role_id == 3) {
-            // Student role
-            $student = new Student([
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'user_id' => $user->user_id, // Associate the user with the student
-                // Other student attributes
-            ]);
-
-            $student->save();
-        } elseif ($user->role_id == 1) {
-            // Head Counselor role
-            // Create a Head Counselor record
-            $headCounselor = new HeadCounselor([
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'user_id' => $user->user_id, // Associate the user with the head counselor
-                // Other Head Counselor attributes
-            ]);
-
-            $headCounselor->save();
-        }
-        
-        // ... other role-specific actions
-
-        DB::commit();
-
-        // Redirect to the login page
-        return redirect()->route('login')->with('success', 'User registered successfully');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        Log::error('Registration error: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'An error occurred during registration.');
     }
-}
+
+    public function register(Request $request)
+    {
+        try {
+            // Validate the incoming request data
+            $validatedData = $this->validator($request->all());
+
+            // If validation fails, return back with errors
+            if ($validatedData->fails()) {
+                return redirect()->back()->withErrors($validatedData)->withInput();
+            }
+
+            DB::beginTransaction();
+
+            // Create the user and save the password
+            $user = User::create([
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'username' => $request->input('username'),
+                'password' => Hash::make($request->input('password')),
+                'role_id' => $request->input('role'),
+            ]);
+
+            // Check the role and perform role-specific actions
+            switch ($user->role_id) {
+                case 1:
+                    $headCounselor = new HeadCounselor([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                    ]);
+                    $user->headCounselor()->save($headCounselor);
+                    break;
+                case 2:
+                    $teacher = new Teacher([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                    ]);
+                    $user->teacher()->save($teacher);
+                    break;
+                case 4:
+                    $counselor = new Counselor([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                    ]);
+                    $user->counselor()->save($counselor);
+                    break;
+                case 5:
+                    $dean = new Dean([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                    ]);
+                    $user->dean()->save($dean);
+                    break;
+                case 3:
+                    $student = new Student([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                    ]);
+                    $user->student()->save($student);
+                    break;
+                default:
+                    // Handle other roles if needed
+                    break;
+            }
+
+            DB::commit();
+
+            // Redirect to the login page
+            return redirect()->route('login')->with('success', 'User registered successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Registration error: ' . $e->getMessage());
+            Log::error('Exception Stack Trace: ' . $e->getTraceAsString());
+            dd($e); // Add this line for debugging
+            return redirect()->back()->with('error', 'An error occurred during registration.');
+        }
+    }
+
+    protected function validator(array $data)
+    {
+        return validator($data, [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required', 'integer', Rule::in(UserRole::pluck('role_id'))],
+        ]);
+    }
+
+    // ... (other methods)
 
 
 
@@ -209,23 +246,7 @@ class UserController extends Controller
         return view('your-view', compact('users'));
     }
 
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'exists:user_roles,role_id'], // Update to use 'role_id'
-        ]);
-    }
-
+    
     public function showLoginForm()
     {
         return view('user.login');

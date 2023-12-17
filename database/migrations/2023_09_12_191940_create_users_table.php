@@ -16,11 +16,11 @@ class CreateUsersTable extends Migration
             $table->string('title', 10)->nullable();
             $table->string('username', 50)->default('');
             $table->string('password', 255); // Keep this as 'password'
-            $table->unsignedBigInteger('role_id');
+            $table->unsignedBigInteger('role_id')->default(1); // Set a default value
             $table->timestamps();
 
             // Define foreign key relationship
-            $table->foreign('role_id')->references('role_id')->on('user_roles')->default(1);
+            $table->foreign('role_id')->references('role_id')->on('user_roles')->onDelete('SET DEFAULT');
         });
     }
 

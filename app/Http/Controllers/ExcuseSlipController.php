@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ExcuseSlip;
-use Illuminate\Http\Request;
+use App\Models\Dean;
+use App\Models\User; 
+use App\Models\Course;
 use App\Models\Student;
 use App\Models\Teacher;
-use App\Models\Course;
-use App\Models\Dean;
-use App\Models\DepartmentDegree;
-use App\Models\ExcuseStatus;
 use App\Models\Counselor; 
-use App\Models\User; 
+use App\Models\ExcuseSlip;
 use App\Models\Department; 
+use App\Models\ExcuseStatus;
+use Illuminate\Http\Request;
+use App\Models\DepartmentDegree;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
 class ExcuseSlipController extends Controller
 {
     // public function index()
@@ -59,8 +61,8 @@ class ExcuseSlipController extends Controller
     
         // Fetch teacher, dean, and counselor data
         $coursesData = Course::select('course_code', 'course_name')->get();
-        $teacherData = Teacher::select('teacher_id', 'name')->get();
-        $deanData = Dean::select('dean_id', 'name')->get();
+        $teacherData = Teacher::select('teacher_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
+        $deanData = Dean::select('dean_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
         $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
 
 

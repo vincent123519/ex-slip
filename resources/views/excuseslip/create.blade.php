@@ -1,10 +1,11 @@
-<!DOCTYPE html>
 
 @extends('components.stud')
 
 @section('content')
+
     
     <div class="manage-slip-container">
+        
         <h2 class="excuse-slip-header">Excuse Slip</h2>
 
         <!-- Display errors if there are any -->
@@ -21,7 +22,7 @@
             <input type="hidden" name="course_id" id="course_id" value="">
             </div> -->
             <div class="form-group">
-                <label for="name" id="student_name">Name: {{ Auth::user()->name }}</label>
+                <label for="name" id="student_name">Name: {{ Auth::user()->last_name }}, {{ Auth::user()->first_name }}</label>
             </div>
 
             <!-- <div class="form-group">
@@ -48,7 +49,7 @@
                 <input type="text" name="year_level" id="year_level" class="form-control" value="{{ old('year_level', $yearLevel) }}" required readonly>
             </div>
 
-        <form action="{{ route('excuse_slips.store') }}" method="POST">
+        <form action="{{ route('excuse_slips.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -91,12 +92,20 @@
                             <div class="form-check">
                                 <input type="checkbox" name="course_code" id="course_code" value="{{ $course->course_code }}"
                                     @if(is_array(old('course_codes')) && in_array($course->course_code, old('course_codes'))) checked @endif>
-                                <label class="form-check-label" for="course_{{ $course->course_code }}">{{ $course->course_code }}</label> 
+                                <label class="form-check-label" for="course_{{ $course->course_code }}">{{ $course->course_name }}</label> 
                             </div>
                         @endforeach
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+        <label for="supporting_document">Supporting Document</label>
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="supporting_document" name="supporting_document" accept=".pdf" required>
+            <label class="custom-file-label" for="supporting_document">Choose file...</label>
+        </div>
+    </div>
+
 
             <div class="form-group">
                 <label for="reason">Reason:</label>
@@ -197,6 +206,12 @@
         border-radius: 4px;
         cursor: pointer;
     }
+    
+    .form-check {
+        display: inline-block;
+        margin-right: 10px; /* Adjust the margin as needed */
+    }
+
 
     
 </style>

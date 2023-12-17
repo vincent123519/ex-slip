@@ -13,6 +13,7 @@ use App\Models\Department;
 use App\Models\ExcuseStatus;
 use Illuminate\Http\Request;
 use App\Models\DepartmentDegree;
+use App\Models\SupportingDocument;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,38 +74,49 @@ class ExcuseSlipController extends Controller
     }
     
     public function store(Request $request)
-    {
-        // Validate the input
-        $validatedData = $request->validate([
-            'student_id' => 'required',
-            'teacher_id'=> 'required',
-            'counselor_id'=> 'required',
-            'dean_id' => 'required',
-            'course_code' => 'required',
-            'reason' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            // 'status_id' => 'required',
+{
+    // Validate the input
+    $validatedData = $request->validate([
+        'student_id' => 'required',
+        'teacher_id' => 'required',
+        'counselor_id' => 'required',
+        'dean_id' => 'required',
+        'course_code' => 'required',
+        'reason' => 'required',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'supporting_document' => 'required|mimetypes:application/pdf,application/pdfx', // Adjust the validation rule for supporting_document
+    ]);
+
+    $validatedData['status_id'] = 1;
+
+    // Create the excuse slip request
+    $excuseSlip = ExcuseSlip::create($validatedData);
+
+    // Check if a supporting document is provided
+    if ($request->hasFile('supporting_document')) {
+        $file = $request->file('supporting_document');
+        $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); // Adjust the storage path as needed
+
+        // Create a new SupportingDocument instance and associate it with the ExcuseSlip
+        $document = new SupportingDocument([
+            'document_path' => $path,
+            'upload_date' => now(),
         ]);
 
-        $validatedData['status_id'] = 1;
+        $excuseSlip->supportingDocuments()->save($document);
+    }
 
-     // Create the excuse slip request
-     $excuseSlip = ExcuseSlip::create($validatedData);
-
-    
-     session([
+    session([
         'success' => 'Excuse slip request created successfully.',
         'start_date' => $excuseSlip->start_date,
         'end_date' => $excuseSlip->end_date,
     ]);
 
-    // // Debugging
-    // dd('Redirecting...');
-
     // Redirect to the student dashboard
     return redirect()->route('student.dashboard')->withInput()->withErrors($validatedData);
 }
+
     
 
 

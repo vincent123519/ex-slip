@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             // Define foreign key relationship
-            $table->foreign('role_id')->references('role_id')->on('user_roles')->onDelete('SET DEFAULT');
+            $table->foreign('role_id')->references('role_id')->on('user_roles')->default(1);
         });
     }
 

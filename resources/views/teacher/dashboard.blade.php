@@ -20,7 +20,7 @@
                     <tbody>
                         @foreach($excuseSlips as $excuseSlip)
                             <tr>
-                                <td>{{ $excuseSlip->student->name}}</td>
+                                <td>{{ $excuseSlip->student->first_name}} {{ $excuseSlip->student->last_name}}</td>
                                 <td>{{ $excuseSlip->status->status_name }}</td>
                                 <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
                                 <td> {{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
@@ -61,6 +61,8 @@
         width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Montserrat', sans-serif;
+
     }
 
     h1 {

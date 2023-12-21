@@ -35,13 +35,14 @@
 <style>
         .user-container {
         /* background-color: #f8f9fa; */
-        background-color: #f8f9fa;
-        padding: 20px;
+        padding: 20px 10px 30px;
         border: 1px solid #dee2e6;
         border-radius: 10px;
         width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: center;
+        font-family: 'Montserrat', sans-serif;
         
 
     }

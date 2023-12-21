@@ -61,6 +61,8 @@
         width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Montserrat', sans-serif;
+
     }
 
     h1 {

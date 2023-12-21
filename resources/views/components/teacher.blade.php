@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite(['resources/css/app.css', 'resources/scss/home.scss', 'resources/js/app.js'])
     @yield('styles')
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
 </head>
 <body class="bg-image">
 <header>
@@ -19,9 +21,12 @@
 
             <div class="nav-right">
                 <a href="#"><i class="fas fa-home"></i></a>
-                <a href="http://127.0.0.1:8000/" onclick="event.preventDefault();">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+                <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
+            @csrf
+            <button type="submit" class="logout-btn">
+                <div class="circle-icon"></div><i>Logout</i>
+            </button>
+        </form>
                 
             </div>
             
@@ -37,7 +42,7 @@
 <div class="sidebar">
     <div class="profile-container">
         <div class="profile-image"></div>
-        <div class="profile-name">{{ Auth::user()->name }}</div>
+        <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
 
     </div>
     <div class="divider"></div>

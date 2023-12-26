@@ -31,9 +31,11 @@ Route::get('/excuse_slips/{id}', [ExcuseSlipController::class, 'show'])->name('e
 Route::get('/excuse_slips/{id}/edit', [ExcuseSlipController::class, 'edit'])->name('excuse_slips.edit');
 Route::put('/excuse_slips/{id}', [ExcuseSlipController::class, 'update'])->name('excuse_slips.update');
 Route::delete('/excuse_slips/{id}', [ExcuseSlipController::class, 'destroy'])->name('excuse_slips.destroy');
+Route::get('/excuse_slips/{id}', [ExcuseSlipController::class, 'show'])->name('excuse_slips.show');
 
 
-Route::get('/excuse_slips/{id}/view', [ExcuseSlipController::class, 'viewExcuseSlip'])->name('excuse_slips.view');
+
+
 
 // Student Routes
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');

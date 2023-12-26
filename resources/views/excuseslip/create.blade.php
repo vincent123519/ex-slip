@@ -54,7 +54,7 @@
 
             <div class="form-group">
                 <label for="student_id">Student ID:</label>
-                <input type="text" name="student_id" id="student_id" class="form-control" value="{{ Auth::user()->student->student_id }}" required>
+                <input type="text" name="student_id" id="student_id" class="form-control" value="{{ Auth::user()->student->student_id }}" required readonly>
             </div>
 
             <div class="form-group">

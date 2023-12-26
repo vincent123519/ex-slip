@@ -22,6 +22,8 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Status</th>
+                            <th>Actions</th> <!-- Added a new column for actions -->
+
                         </tr>
                     </thead>
                     <tbody>
@@ -33,6 +35,10 @@
                                 <td>{{ $excuseSlip->start_date }}</td>
                                 <td>{{ $excuseSlip->end_date }}</td>
                                 <td>{{ $excuseSlip->status->status_name }}</td>
+                                <td><a href="{{ route('excuse_slips.show', ['id' => $excuseSlip->id]) }}" class="view-button">View</a></td>
+
+
+
                             </tr>
                         @endforeach
                     </tbody>

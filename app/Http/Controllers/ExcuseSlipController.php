@@ -34,6 +34,14 @@ class ExcuseSlipController extends Controller
 
     //     return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
     // }
+    public function show($id)
+    {
+        $excuseSlip = ExcuseSlip::findOrFail($id);
+    
+        return view('excuseslip.show', compact('excuseSlip'));
+    }
+    
+
 
     public function studentExcuseSlipList()
     {
@@ -182,5 +190,8 @@ class ExcuseSlipController extends Controller
         // Redirect the user to the excuse slips list page
         return redirect()->route('excuse_slips.index');
     }
+
+
+
 
 }   

@@ -34,12 +34,13 @@ class ExcuseSlipController extends Controller
 
     //     return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
     // }
-    public function show($id)
-    {
-        $excuseSlip = ExcuseSlip::findOrFail($id);
-    
-        return view('excuseslip.show', compact('excuseSlip'));
-    }
+    public function show($excuse_slip_id)
+{
+    $excuseSlip = ExcuseSlip::with('supportingDocuments')->findOrFail($excuse_slip_id);
+
+    return view('excuseslip.show', compact('excuseSlip'));
+}
+
     
 
 

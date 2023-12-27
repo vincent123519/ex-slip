@@ -128,10 +128,25 @@
                 <p><strong>Subject:</strong> {{ $excuseSlip->course->course_name}} </p>
 
                 </div>
-                <p><strong>Course:</strong> {{ $excuseSlip->course->course_name }}</p>
                 <p><strong>Start Date:</strong> {{ $excuseSlip->start_date }}</p>
                 <p><strong>End Date:</strong> {{ $excuseSlip->end_date }}</p>
+                <h2>File Attachment</h2>
+                @if ($excuseSlip->supportingDocuments->isEmpty())
+                    <p>No supporting documents available.</p>
+                @else
+                    <ul>
+                        @foreach ($excuseSlip->supportingDocuments as $document)
+                            <li>
+                        <a href="{{ asset('storage/' . $document->document_path) }}" target="_blank">
+                            {{ $document->document_path }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+                
                 <p><strong>Status:</strong> {{ $excuseSlip->status->status_name }}</p>
+
                 {{-- Add other details as needed --}}
             </div>
         </div>

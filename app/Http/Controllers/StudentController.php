@@ -234,7 +234,7 @@ public function dashboard()
 
     $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
         ->where('student_id', $studentId)
-        ->select('counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id')
+        ->select('excuse_slip_id','counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id')
         ->get();
 
     return view('student.dashboard', ['excuseSlips' => $excuseSlips]);

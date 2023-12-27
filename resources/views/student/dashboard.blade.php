@@ -35,7 +35,8 @@
                                 <td>{{ $excuseSlip->start_date }}</td>
                                 <td>{{ $excuseSlip->end_date }}</td>
                                 <td>{{ $excuseSlip->status->status_name }}</td>
-                                <td><a href="{{ route('excuse_slips.show', ['id' => $excuseSlip->id]) }}" class="view-button">View</a></td>
+                                <td><a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
+    </td>
 
 
 

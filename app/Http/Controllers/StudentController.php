@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;
+use DateTime;
+use App\Models\Dean;
 use App\Models\Course;
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Counselor;
-use App\Models\Dean;
-use App\Models\ExcuseStatus;
 use App\Models\ExcuseSlip;
+use App\Models\ExcuseStatus;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -224,21 +225,26 @@ class StudentController extends Controller
             ->with('success', 'Excuse slip request updated successfully.');
     }
 // Example in StudentController
+
 public function dashboard()
 {
     // Retrieve excuse slips with status for the current user
-    // $studentId = auth()->user()->student->student_id;
-
-
     $studentId = auth()->user()->student->student_id;
 
     $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
         ->where('student_id', $studentId)
-        ->select('excuse_slip_id','counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id', 'created_at')
         ->get();
+
+    // Format the created_at field in each ExcuseSlip to exclude hours, minutes, and seconds
+    foreach ($excuseSlips as $excuseSlip) {
+        $dateTime = new DateTime($excuseSlip->created_at);
+        $excuseSlip->formatted_created_at = $dateTime->format('Y-m-d'); // Exclude hours, minutes, and seconds
+    }
 
     return view('student.dashboard', ['excuseSlips' => $excuseSlips]);
 }
+
 
 
 }

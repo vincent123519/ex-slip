@@ -17,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 60vh;
+            height: auto;
         }
 
         .slip-view-card {
@@ -147,7 +147,14 @@
                 
                 <p><strong>Status:</strong> {{ $excuseSlip->status->status_name }}</p>
 
-                {{-- Add other details as needed --}}
+
+                @if(auth()->user()->role_id == 4)
+                    <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="approve button">Approve</button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>
@@ -155,3 +162,17 @@
 
 </body>
 @endsection
+<style>
+    .slip-view-container button[type="submit"] {
+        background-color: #28a745;
+        height: 50px; /* Set the height you desire */
+        width: 10%; /* Full width of the container */
+        border: none;
+        border-radius: 5px;
+        color: white;
+    }
+    .slip-view-container button[type="submit"]:hover {
+    background-color: #218838; /* Change the background color on hover */
+    cursor: pointer; /* Add a pointer cursor on hover */
+}
+</style>

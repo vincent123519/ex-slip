@@ -16,6 +16,7 @@
                 <table class="excuse-slip-table">
                     <thead>
                         <tr>
+                            <th>Date Created</th>
                             <th>Student</th>
                             <th>Teacher</th>
                             <th>Course</th>
@@ -29,17 +30,14 @@
                     <tbody>
                         @foreach($excuseSlips as $excuseSlip)
                             <tr>
+                                <td>{{ $excuseSlip->formatted_created_at }}</td>
                                 <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
                                 <td>{{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</td>
                                 <td>{{ $excuseSlip->course->course_name }}</td>
                                 <td>{{ $excuseSlip->start_date }}</td>
                                 <td>{{ $excuseSlip->end_date }}</td>
                                 <td>{{ $excuseSlip->status->status_name }}</td>
-                                <td><a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
-    </td>
-
-
-
+                                <td><a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -65,7 +63,7 @@
         padding: 20px;
         border: 1px solid #dee2e6;
         border-radius: 10px;
-        width: 60%;
+        width: 62%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         font-family: 'Montserrat', sans-serif;
@@ -129,7 +127,6 @@
 
     .excuse-slip-table th, .excuse-slip-table td {
         border: 1px solid #ddd;
-        padding: 8px;
         text-align: left;
     }
 

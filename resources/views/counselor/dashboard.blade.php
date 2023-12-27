@@ -1,59 +1,64 @@
 @extends('components.counselor')
+
 @section('content')
     <div class="counselor-details-container">
         <h1>Absence Request</h1>
-        <a href="" class="create-slip-button"> Number of Excuse slip</a>
+        <a href="" class="create-slip-button">Number of Excuse slip</a>
     </div>
 
     <div class="excuse-container">
         <h2>List of Student Excuse Slips</h2>
-            @if($excuseSlips->count() > 0)
-                @foreach($excuseSlips as $index => $excuseSlip)
-                    <div class="excuse-slip">
-                        <h3>Excuse Slip No. {{ $index + 1 }}</h3>
-                        <table class="excuse-slip-table">
-                            <thead>
-                                <tr>
-                                <th>Student Name</th>
-                                <th>Reason</th>
-                                <th>Duration</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                <td>{{ $excuseSlip->student->first_name}} {{ $excuseSlip->student->last_name}}</td>
-                                <td>{{ $excuseSlip->reason}}</td>
-                                <td> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
-                                <td>{{ $excuseSlip->status->status_name }}</td>
-                                <!-- <td><button class="btn-approved">Approve</button> <button class="btn-reject">Reject</button></td> -->
-                                <td>
-                                    <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn-approved">Approve</button>
-                                    </form>
-                                    
-                                    <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn-reject">Reject</button>
-                                    </form>
-                                </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                @endforeach
-            @else
-                <p>No excuse slips found.</p>
-            @endif
 
-        </div>
-        @endsection
+        @if($excuseSlips->count() > 0)
+            <table class="excuse-slip-table">
+                <thead>
+                    <tr>
+                        <th>Excuse Slip No.</th>
+                        <th>Student Name</th>
+                        <th>Reason</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($excuseSlips as $index => $excuseSlip)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
+                            <td>{{ $excuseSlip->reason }}</td>
+                            <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
+                            <td>{{ $excuseSlip->status->status_name }}</td>
+                            <td>
+                                <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn-approved">Approve</button>
+                                </form>
+
+                                <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn-reject">Reject</button>
+                                </form>
+                                <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
+
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No excuse slips found.</p>
+        @endif
+    </div>
+@endsection
+
 
 <style>
+    body{
+        font-family: 'Montserrat', sans-serif;
+    }
     .counselor-details-container {
         background-color: #f8f9fa;
         padding: 20px;
@@ -62,6 +67,7 @@
         width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
     }
     .excuse-container {
         background-color: #f8f9fa;
@@ -159,7 +165,7 @@
 
     .excuse-slip-table th, .excuse-slip-table td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: px;
         text-align: center;
     }
 
@@ -172,7 +178,6 @@
     }
 
     .excuse-slip-table tbody td {
-        white-space: nowrap; /* Prevent line breaks in table cells */
     }
     
 </style>

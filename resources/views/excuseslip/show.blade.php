@@ -145,7 +145,32 @@
             </ul>
         @endif
                 
-                <p><strong>Status:</strong> {{ $excuseSlip->status->status_name }}</p>
+
+            @if ($excuseSlip->status->status_id == 2)
+            <ul>
+                <li>Approved by Counselor</li>
+                <li>To be approved by Dean</li>
+                <li>To be approved by Teacher</li>
+            </ul>
+        @elseif ($excuseSlip->status->status_id == 4)
+            <ul>
+                <li>Approved by Counselor</li>
+                <li>Approved by Dean</li>
+                <li>To be approved by Teacher</li>
+            </ul>
+        @elseif ($excuseSlip->status->status_id == 5)
+            <ul>
+                <li>Approved by Teacher</li>
+                <li>Approved by Dean</li>
+                <li>Approved by Counselor</li>
+            </ul>
+        @elseif ($excuseSlip->status->status_id == 1)
+            <ul>
+                <li>Pending for Approval</li>
+                <li>Sent to Counselor</li>
+
+            </ul>
+@endif
 
 
                 @if(auth()->user()->role_id == 4)

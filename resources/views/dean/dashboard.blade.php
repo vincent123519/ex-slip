@@ -26,22 +26,23 @@
                                 <td> {{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
                                 ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
                                 <td>{{ $excuseSlip->counselors_feedback }}</td>
-                                <td width="400">
+                                <td width="500">
                                 <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-approved">Approve</button>
                                 </form>
-                                    <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="btn-reject">Reject</button>
-                                    </form>
+                                </form>
                                     <form action="{{ route('excuse-slips.send-to-teacher', ['excuseSlipId' => $excuseSlip->excuse_slip_id, 'teacherId' => $excuseSlip->teacher_id]) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('POST')
                                         <button type="submit" class="btn-send">Send to Teacher</button>
                                     </form>
+                                    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
                                 </td>
 
                             </tr>
@@ -105,17 +106,7 @@
         margin-bottom: 5px;
     }
 
-    .btn {
-        display: inline-block;
-        padding: 10px 15px;
-        font-size: 16px;
-        text-align: center;
-        text-decoration: none;
-        background-color: #007bff;
-        color: #fff;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
+   
 
     .btn:hover {
         background-color: #0056b3;

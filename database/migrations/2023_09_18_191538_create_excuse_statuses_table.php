@@ -10,7 +10,7 @@ class CreateExcuseStatusesTable extends Migration
     {
         Schema::create('excuse_statuses', function (Blueprint $table) {
             $table->id('status_id'); // Use 'id' as the primary key
-            $table->string('status_name', 20)->unique();
+            $table->string('status_name', 99)->unique();
             $table->timestamps();
         });
     }

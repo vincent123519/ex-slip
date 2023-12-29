@@ -40,11 +40,15 @@ class DeanController extends Controller
             ->findOrFail($id);
 
         // Update the excuse slip status to approved
-        $excuseSlip->update(['status_id' => 'approved']);
+        $excuseSlip->update(['status_id' => '4']);
+        
 
         // Return a success response
-        return response()->json(['message' => 'Excuse slip approved successfully']);
+        return redirect()->back()->with('success', 'Excuse slip approved successfully.');
+
     }
+
+    
 
     /**
      * Reject an excuse slip request.
@@ -108,7 +112,7 @@ class DeanController extends Controller
         ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')
         ->where('dean_id', $deanId)
         ->whereHas('status', function ($query) {
-            $query->where('status_name', 'approved');
+            $query->whereIN('status_id', [1,2,4]);
         })
         ->get();
 

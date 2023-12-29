@@ -27,11 +27,11 @@
                                 ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
                                 <td>{{ $excuseSlip->counselors_feedback }}</td>
                                 <td width="400">
-                                    <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn-approved">Approve</button>
-                                    </form>
+                                <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-approved">Approve</button>
+                                </form>
                                     <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('PUT')

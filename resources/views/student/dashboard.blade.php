@@ -127,6 +127,7 @@
 
     .excuse-slip-table th, .excuse-slip-table td {
         border: 1px solid #ddd;
+        padding: 8px;
         text-align: left;
     }
 
@@ -138,8 +139,6 @@
         vertical-align: top;
     }
 
-    .excuse-slip-table tbody td {
-        white-space: nowrap; /* Prevent line breaks in table cells */
-    }
+    
 
 </style>

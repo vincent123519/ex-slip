@@ -60,17 +60,22 @@ Route::group(['middleware' => ['web', 'student']], function () {
 // routes/web.php
 // routes/web.php
 
+
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
 Route::get('/counselor/dashboard', [CounselorController::class, 'dashboard'])->name('counselor.dashboard');
-Route::put('/excuse_slips/approve/{id}', [CounselorController::class, 'approve'])->name('excuse.approve');
 Route::put('/excuse_slips/reject/{id}', [CounselorController::class, 'reject'])->name('excuse.reject');
 
 
-Route::get('/dean/dashboard', [DeanController::class, 'dashboard'])->name('dean.dashboard');
 Route::post('/{excuseSlipId}/send-to-teacher/{teacherId}', [DeanController::class, 'sendToTeacher'])
     ->name('excuse-slips.send-to-teacher');
+    Route::get('/dean/dashboard', [DeanController::class, 'dashboard'])->name('dean.dashboard');
 
+
+
+// approval reques slip
+Route::put('/excuse_slips/approvedean/{id}', [DeanController::class, 'approveExcuseSlip'])->name('excuse.approvedean');
+Route::put('/excuse_slips/approve/{id}', [CounselorController::class, 'approve'])->name('excuse.approve');
 
 
 

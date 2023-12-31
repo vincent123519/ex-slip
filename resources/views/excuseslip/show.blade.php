@@ -101,7 +101,6 @@
                     margin-right: 100px; /* Adjust the margin to control the space between Teacher and Subject */
                 }
 
-        
     </style>
 </head>
 
@@ -126,6 +125,7 @@
                 <div class="teacher-container">
                 <p><strong>Teacher:</strong> {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</p>
                 <p><strong>Subject:</strong> {{ $excuseSlip->course->course_name}} </p>
+
 
                 </div>
                 <p><strong>Start Date:</strong> {{ $excuseSlip->start_date }}</p>
@@ -179,9 +179,24 @@
                         @method('PUT')
                         <button type="submit" class="approve button">Approve</button>
                     </form>
+                <!-- Add this to your view where counselors can provide feedback -->
+                <form action="{{ route('counselor.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
+                    @csrf
+                    <label for="feedback_remarks">Feedback Remarks:</label>
+                    <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+
                 @endif
             </div>
         </div>
+
+@if ($counselorFeedback)
+    <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+@else
+    <p>No counselor feedback available.</p>
+@endif
+
     </div>
 </div>
 

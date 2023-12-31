@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
+use App\Models\Feedback;
 use App\Models\Counselor;
 use App\Models\ExcuseSlip;
 use App\Models\ExcuseStatus;
-use App\Models\Feedback;
-use App\Models\Student;
 
 use Illuminate\Http\Request;
+use App\Models\CounselorFeedback;
 use Illuminate\Support\Facades\Auth;
 
 class CounselorController extends Controller
@@ -101,6 +102,44 @@ class CounselorController extends Controller
 
         return redirect()->back()->with('success', 'Excuse slip rejected successfully.');
     }
+    public function storeCounselorFeedback(Request $request)
+{
+    // Validate the request
+
+    CounselorFeedback::create([
+        'excuse_slip_id' => $request->excuse_slip_id,
+        'counselor_id' => auth()->user()->id, // Assuming counselor is the authenticated user
+        'remarks' => $request->remarks,
+        // Add other fields as needed
+    ]);
+}
+
+public function storeFeedback(Request $request, $id)
+{
+    // Validate the request
+    $request->validate([
+        'feedback_remarks' => 'required|string|max:255',
+    ]);
+
+    // Find the excuse slip by ID
+    $excuseSlip = ExcuseSlip::findOrFail($id);
+
+    // Check if the authenticated user is a counselor and associated with the excuse slip
+    if (auth()->user()->role_id == 4 && auth()->user()->counselor->counselor_id === $excuseSlip->counselor_id) {
+        // Store the feedback in the database
+        $excuseSlip->counselorFeedbacks()->create([
+            'remarks' => $request->input('feedback_remarks'),
+        ]);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Feedback submitted successfully.');
+    } else {
+        // Unauthorized action, redirect with an error message
+        abort(403, 'Unauthorized action.');
+    }
+}
+
+}
 
     
-    }
+    

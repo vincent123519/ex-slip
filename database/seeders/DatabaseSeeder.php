@@ -51,7 +51,8 @@ class DatabaseSeeder extends Seeder
             ExcuseSlipSeeder::class,
             FeedbackSeeder::class,
             SupportingDocumentSeeder::class,
-            StudyLoadSeeder::class
+            StudyLoadSeeder::class,
+            CounselorFeedbackSeeder::class
 
 
 

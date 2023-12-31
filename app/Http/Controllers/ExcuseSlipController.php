@@ -34,12 +34,17 @@ class ExcuseSlipController extends Controller
 
     //     return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
     // }
-    public function show($excuse_slip_id)
-{
-    $excuseSlip = ExcuseSlip::with('supportingDocuments')->findOrFail($excuse_slip_id);
 
-    return view('excuseslip.show', compact('excuseSlip'));
-}
+    public function show($excuse_slip_id)
+    {
+        $excuseSlip = ExcuseSlip::with(['supportingDocuments', 'counselorFeedbacks'])->findOrFail($excuse_slip_id);
+    
+        // Fetch counselor feedback for the excuse slip
+        $counselorFeedback = $excuseSlip->counselorFeedbacks->first();
+    
+        return view('excuseslip.show', compact('excuseSlip', 'counselorFeedback'));
+    }
+    
 
     
 

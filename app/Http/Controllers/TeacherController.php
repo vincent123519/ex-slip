@@ -27,6 +27,9 @@ class TeacherController extends Controller
 
         return redirect()->route('excuse_slips.index')->with('success', 'Excuse slip signed successfully.');
     }
+
+
+    
     public function dashboard()
     {
         $teacherId = auth()->user()->teacher->teacher_id;

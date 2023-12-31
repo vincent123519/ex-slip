@@ -65,6 +65,8 @@ Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name(
 
 Route::get('/counselor/dashboard', [CounselorController::class, 'dashboard'])->name('counselor.dashboard');
 Route::put('/excuse_slips/reject/{id}', [CounselorController::class, 'reject'])->name('excuse.reject');
+Route::post('/excuse_slips/{id}/counselor_feedback', [CounselorController::class, 'storeFeedback'])
+    ->name('counselor.feedback.store');
 
 
 Route::post('/{excuseSlipId}/send-to-teacher/{teacherId}', [DeanController::class, 'sendToTeacher'])

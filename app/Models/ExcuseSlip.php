@@ -11,16 +11,20 @@ class ExcuseSlip extends Model
     // Define the relationships
     // Inside ExcuseSlip model
     // ExcuseSlip.php (ExcuseSlip model)
-public function user()
-{
-    return $this->belongsTo(User::class, 'student_id'); // Assuming 'student_id' is the foreign key
-}
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'student_id'); // Assuming 'student_id' is the foreign key
+    }
 
-   public function degree()
-{
+    public function degree()
+    {
 
-    return $this->belongsTo(DepartmentDegree::class, 'degree_id');
-}
+        return $this->belongsTo(DepartmentDegree::class, 'degree_id');
+    }
+    public function counselorFeedbacks()
+    {
+        return $this->hasMany(CounselorFeedback::class, 'excuse_slip_id');
+    }
 
     public function student()
     {

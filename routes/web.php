@@ -12,6 +12,7 @@ use App\Http\Controllers\DeanController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\HeadCounselorController;
+use App\Http\Controllers\FeedbackController;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
     ->name('reports.view');
@@ -143,3 +144,12 @@ Route::post('/admin/studyload/store', [AdminController::class, 'storeStudyLoad']
 
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
+
+// Define routes for FeedbackController
+Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+Route::get('/feedback/create', [FeedbackController::class, 'create'])->name('feedback.create');
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+Route::get('/feedback/{id}', [FeedbackController::class, 'show'])->name('feedback.show');
+Route::get('/feedback/{id}/edit', [FeedbackController::class, 'edit'])->name('feedback.edit');
+Route::put('/feedback/{id}', [FeedbackController::class, 'update'])->name('feedback.update');
+Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');

@@ -17,7 +17,7 @@
                         <th>Student Name</th>
                         <th>Reason</th>
                         <th>Duration</th>
-                        <th>Status</th>
+                        <!-- <th>Status</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -28,19 +28,19 @@
                             <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
                             <td>{{ $excuseSlip->reason }}</td>
                             <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
-                            <td>{{ $excuseSlip->status->status_name }}</td>
+                            <!-- <td>{{ $excuseSlip->status->status_name }}</td> -->
                             <td>
                                 <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn-approved">Approve</button>
+                                    <button type="submit" class="btn-approved">Note</button>
                                 </form>
 
-                                <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                <!-- <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn-reject">Reject</button>
-                                </form>
+                                </form> -->
                                 <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
 
                             </td>

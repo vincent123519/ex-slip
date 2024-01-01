@@ -73,15 +73,18 @@ class CounselorController extends Controller
         return response()->json(['message' => 'Feedback submitted successfully.']);
     }
     public function dashboard()
-    {
-        $user = auth()->user()->counselor->counselor_id;
+{
+    $counselorId = auth()->user()->counselor->counselor_id;
 
-        $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
-        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')->get();
-    
-        $student = Student::all();
-        return view('counselor.dashboard', ['excuseSlips' => $excuseSlips]);
-    }
+    $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id')
+        ->where('counselor_id', $counselorId)
+        ->get();
+
+    $student = Student::all();
+    return view('counselor.dashboard', ['excuseSlips' => $excuseSlips]);
+}
+
 
     public function approve($id)
     {

@@ -22,12 +22,13 @@ class TeacherController extends Controller
         $teacherId = $request->user()->teacher->teacher_id;
 
         $excuseSlip = ExcuseSlip::where('teacher_id', $teacherId)->findOrFail($excuseSlipId);
-        $excuseSlip->status_id = 4; // Assuming status_id 2 represents the "signed" status
+        $excuseSlip->status_id = 5; // Assuming status_id 2 represents the "signed" status
         $excuseSlip->save();
 
-        return redirect()->route('excuse_slips.index')->with('success', 'Excuse slip signed successfully.');
+        return redirect()->back()->with('success', 'Excuse slip approved successfully.');
     }
 
+   
 
     
     public function dashboard()

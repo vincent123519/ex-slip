@@ -28,7 +28,7 @@
                                 <td>{{ $excuseSlip->counselors_feedback }}</td>
                                 <td>{{ $excuseSlip->deans_feedback }}</td>
                                 <td width="300">
-                                    <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                    <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="btn-approved">Approve</button>

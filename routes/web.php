@@ -78,6 +78,8 @@ Route::post('/{excuseSlipId}/send-to-teacher/{teacherId}', [DeanController::clas
 // approval reques slip
 Route::put('/excuse_slips/approvedean/{id}', [DeanController::class, 'approveExcuseSlip'])->name('excuse.approvedean');
 Route::put('/excuse_slips/approve/{id}', [CounselorController::class, 'approve'])->name('excuse.approve');
+Route::put('/excuse_slips/approveteacher/{id}', [TeacherController::class, 'signExcuseSlip'])->name('excuse.approveteacher');
+
 
 
 

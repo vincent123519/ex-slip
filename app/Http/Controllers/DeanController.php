@@ -112,7 +112,7 @@ class DeanController extends Controller
         ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')
         ->where('dean_id', $deanId)
         ->whereHas('status', function ($query) {
-            $query->whereIN('status_id', [1,2,4]);
+            $query->whereIN('status_id', [2,4]);
         })
         ->get();
 
@@ -148,4 +148,30 @@ class DeanController extends Controller
         // Redirect or perform other actions as needed
         return redirect()->back()->with('success', 'Excuse slip sent to the teacher.');
     }
+
+
+    public function deanStoreFeedback(Request $request, $id)
+{
+    // Validate the request
+    $request->validate([
+        'feedback_remarks' => 'required|string|max:255',
+    ]);
+
+    // Find the excuse slip by ID
+    $excuseSlip = ExcuseSlip::findOrFail($id);
+
+    // Check if the authenticated user is a dean and associated with the excuse slip
+    if (auth()->user()->role_id == 5 && auth()->user()->dean->dean_id === $excuseSlip->dean_id) {
+        // Store the feedback in the database
+        $excuseSlip->deanFeedbacks()->create([
+            'remarks' => $request->input('feedback_remarks'),
+        ]);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Dean Feedback submitted successfully.');
+    } else {
+        // Unauthorized action, redirect with an error message
+        abort(403, 'Unauthorized action.');
+    }
+}
 }

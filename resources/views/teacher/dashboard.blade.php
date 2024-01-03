@@ -38,6 +38,8 @@
                                         @method('DELETE')
                                         <button type="submit" class="btn-reject">Delete</button>
                                     </form>
+                                    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
+
                                 </td>
 
                             </tr>

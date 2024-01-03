@@ -174,7 +174,7 @@
 
 
                 @if(auth()->user()->role_id == 4)
-                    <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
+                <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
                         @csrf
                         @method('PUT')
                         <button type="submit" class="approve button">Approve</button>
@@ -188,14 +188,47 @@
                 </form>
 
                 @endif
+
+                @if(auth()->user()->role_id == 5)
+    <!-- Form for Dean Feedback -->
+                <form action="{{ route('dean.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
+                    @csrf
+                    <label for="feedback_remarks">Feedback Remarks:</label>
+                    <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
+                    <button type="submit">Submit Dean Feedback</button>
+                </form>
+            @endif
+
+            @if(auth()->user()->role_id == 2)
+                <!-- Form for Teacher Feedback -->
+                <form action="{{ route('teacher.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
+                    @csrf
+                    <label for="feedback_remarks">Feedback Remarks:</label>
+                    <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
+                    <button type="submit">Submit Teacher Feedback</button>
+                </form>
+            @endif
+
+                
             </div>
         </div>
 
-@if ($counselorFeedback)
-    <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
-@else
-    <p>No counselor feedback available.</p>
-@endif
+        @if ($counselorFeedback)
+            <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+        @else
+            <p>No counselor feedback available.</p>
+        @endif
+        @if ($deanFeedback)
+            <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+        @else
+            <p>No Dean feedback available.</p>
+        @endif
+
+        @if ($teacherFeedback)
+            <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+        @else
+            <p>No teacher feedback available.</p>
+        @endif
 
     </div>
 </div>

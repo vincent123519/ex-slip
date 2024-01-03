@@ -65,4 +65,29 @@ class TeacherController extends Controller
         // Redirect or perform other actions as needed
         return redirect()->back()->with('success', 'Excuse slip deleted successfully.');
     }   
+
+    public function teacherStoreFeedback(Request $request, $id)
+{
+    // Validate the request
+    $request->validate([
+        'feedback_remarks' => 'required|string|max:255',
+    ]);
+
+    // Find the excuse slip by ID
+    $excuseSlip = ExcuseSlip::findOrFail($id);
+
+    // Check if the authenticated user is a teacher and associated with the excuse slip
+    if (auth()->user()->role_id == 2 && auth()->user()->teacher->teacher_id === $excuseSlip->teacher_id) {
+        // Store the feedback in the database
+        $excuseSlip->teacherFeedbacks()->create([
+            'remarks' => $request->input('feedback_remarks'),
+        ]);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Teacher Feedback submitted successfully.');
+    } else {
+        // Unauthorized action, redirect with an error message
+        abort(403, 'Unauthorized action.');
+    }
+}
 }

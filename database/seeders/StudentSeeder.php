@@ -37,6 +37,14 @@ class StudentSeeder extends Seeder
                 'username' => '2018012',
                 'year_level' => 1,
             ],
+
+            [
+                'first_name' => 'Jimmy',
+                'last_name' => 'neutron',
+                'degree' => 'Bachelor of civil engineering',
+                'username' => '2023012',
+                'year_level' => 1,
+            ],
             // Add more student records here with their respective first names, last names, year levels, and degrees
         ];
 

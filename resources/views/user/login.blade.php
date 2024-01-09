@@ -1,6 +1,7 @@
 <!-- resources/views/user/login.blade.php -->
 
 @extends('components.signlayout') <!-- You might need to create this layout -->
+@section('title', 'ExsisSlip Login')
 @section('content')
     <br>
     <div class="login-greetings">
@@ -73,6 +74,7 @@
         </div>
     </div>
 @endsection
-<style>
-    
-</style>
+
+@section('head')
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+@endsection

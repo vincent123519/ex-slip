@@ -31,6 +31,11 @@ class CourseSeeder extends Seeder
                 'course_name' => 'Information Assurance and Security 1',
                 'department_id' => 1,
             ],
+            [
+                'course_code' => 'CivE 01',
+                'course_name' => 'Civil Engineering 1',
+                'department_id' => 2,
+            ],
             
             // Add more course records here
         ];

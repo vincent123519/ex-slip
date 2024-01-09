@@ -21,7 +21,14 @@ class CounselorSeeder extends Seeder
                 'first_name' => 'Jocelyn',
                 'last_name' => 'Martinez',
                 'username' => 'jocelyn.martinez',
-                'department' => 'Information Technology Department',
+                'department' => 'School of Computer Studies',
+
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Enginering',
+                'username' => 'counselor.enginering',
+                'department' => 'School of engineering',
 
             ],
             // Add more sample counselors

@@ -74,3 +74,7 @@
     margin-right: 5px;
 }
     </style>
+
+@section('head')
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+@endsection

@@ -18,10 +18,16 @@ class DeansSeeder extends Seeder
         // Create counselors with existing user and department IDs
         $deansData = [
             [
-                'first_name' => 'Juvylyn',
+                'first_name' => 'Dr. Juvelyn',
                 'last_name' => 'Cuizon',
-                'department' => 'Information Technology Department',
+                'department' => 'School of Computer Studies',
                 'username' => 'juvelyn.Cuizon',
+            ],
+            [
+                'first_name' => 'Dr. Anthony',
+                'last_name' => 'Kilong',
+                'department' => 'School of engineering',
+                'username' => 'anthony.kilong',
             ],
             // Add more sample counselors
         ];

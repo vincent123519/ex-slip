@@ -24,13 +24,33 @@ class DepartmentSeeder extends Seeder
         foreach ($schools as $school) {
             Department::create([
                 'department_id' => $departmentId++, // Increment the department_id
-                'department_name' => 'Information Technology Department',
+                'department_name' => 'School of Computer Studies',
                 'school_code' => $school->school_code,
             ]);
 
             Department::create([
                 'department_id' => $departmentId++, // Increment the department_id
-                'department_name' => 'Computer Science Department',
+                'department_name' => 'School of Engineering',
+                'school_code' => $school->school_code,
+            ]);
+            Department::create([
+                'department_id' => $departmentId++, // Increment the department_id
+                'department_name' => 'School of Allied Medical Science',
+                'school_code' => $school->school_code,
+            ]);
+            Department::create([
+                'department_id' => $departmentId++, // Increment the department_id
+                'department_name' => 'School of Education',
+                'school_code' => $school->school_code,
+            ]);
+            Department::create([
+                'department_id' => $departmentId++, // Increment the department_id
+                'department_name' => 'School of Law',
+                'school_code' => $school->school_code,
+            ]);
+            Department::create([
+                'department_id' => $departmentId++, // Increment the department_id
+                'department_name' => 'School of Arts and Science',
                 'school_code' => $school->school_code,
             ]);
 

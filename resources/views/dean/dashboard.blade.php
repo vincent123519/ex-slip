@@ -37,11 +37,7 @@
                                         @method('PUT')
                                         <button type="submit" class="btn-reject">Reject</button>
                                 </form>
-                                    <form action="{{ route('excuse-slips.send-to-teacher', ['excuseSlipId' => $excuseSlip->excuse_slip_id, 'teacherId' => $excuseSlip->teacher_id]) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('POST')
-                                        <button type="submit" class="btn-send">Send to Teacher</button>
-                                    </form>
+
                                     <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
                                 </td>
 

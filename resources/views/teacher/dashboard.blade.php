@@ -12,8 +12,7 @@
                             <th>Status</th>
                             <th>Date</th>
                             <th>Duration day</th>
-                            <th>Counselor Feedback</th>
-                            <th>Dean Feedback</th>
+                           
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -25,19 +24,8 @@
                                 <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
                                 <td> {{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
                                 ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
-                                <td>{{ $excuseSlip->counselors_feedback }}</td>
-                                <td>{{ $excuseSlip->deans_feedback }}</td>
                                 <td width="300">
-                                    <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn-approved">Approve</button>
-                                    </form>
-                                    <form action="{{ route('excuse.delete', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-reject">Delete</button>
-                                    </form>
+                                    
                                     <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
 
                                 </td>

@@ -38,7 +38,8 @@ class TeacherController extends Controller
         ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')
         ->where('teacher_id', $teacherId)
         ->whereHas('status', function ($query) {
-            $query->where('status_name', 'Approved by Dean');
+            $query->where('status_name', 'Approved by Dean')
+            ->orWhere('status_name', 'Rejected');
         })
         ->get();
 

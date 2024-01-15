@@ -155,7 +155,7 @@
         @elseif ($excuseSlip->status->status_id == 4)
             <ul>
             <li>Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
-                <li>Approved by Dean</li>
+                <li>Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
                 <li>To be approved by Teacher</li>
             </ul>
         @elseif ($excuseSlip->status->status_id == 5)
@@ -188,6 +188,22 @@
  @endif
  @endif
 
+ @if(auth()->user()->role_id == 5)
+
+<!-- dean -->
+ @if ($counselorFeedback)
+     <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+ @else
+     <p>No Counselor feedback available.</p>
+ @endif
+
+ @if ($teacherFeedback)
+     <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+ @else
+     <p>No teacher feedback available.</p>
+ @endif
+ @endif
+
 
                 @if(auth()->user()->role_id == 4)
                 <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
@@ -206,12 +222,18 @@
                 @endif
 
                 @if(auth()->user()->role_id == 5)
+                
+                <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-approved">Approve</button>
+                                </form>
     <!-- Form for Dean Feedback -->
                 <form action="{{ route('dean.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                     @csrf
                     <label for="feedback_remarks">Feedback Remarks:</label>
                     <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
-                    <button type="submit">Submit Dean Feedback</button>
+                    <button type="submit">Submit Feedback</button>
                 </form>
             @endif
 
@@ -237,26 +259,7 @@
                 
             </div>
         </div>
-        @if(auth()->user()->role_id == 2)
-
-        @if ($counselorFeedback)
-            <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
-        @else
-            <p>No counselor feedback available.</p>
-        @endif
-        @if ($deanFeedback)
-            <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
-        @else
-            <p>No Dean feedback available.</p>
-        @endif
-
-        @if ($teacherFeedback)
-            <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
-        @else
-            <p>No teacher feedback available.</p>
-        @endif
-
-        @endif
+     
 
         @if(auth()->user()->role_id == 3)
 
@@ -286,6 +289,25 @@
             <p>No feedback available.</p>
         @endif
         @endif
+
+          @if(auth()->user()->role_id == 5)
+
+        @if ($deanFeedback)
+            <p><strong>Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+        @else
+            <p>No feedback available.</p>
+        @endif
+        @endif
+        
+        @if(auth()->user()->role_id == 2)
+        @if ($teacherFeedback)
+            <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+        @else
+            <p>No teacher feedback available.</p>
+        @endif
+
+        @endif
+
       
 
         

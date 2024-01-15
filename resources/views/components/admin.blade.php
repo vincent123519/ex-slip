@@ -47,17 +47,92 @@
     </div>
     <div class="divider"></div>
     <div class="divider"></div>
-    <div class="navmenu"><ul>
-        <li><span>DASHBOARD</span></li>
-        
-    </ul></div>    </div>
+    <div class="navmenu">
+            <ul>
+                <li><span>DASHBOARD</span></li>
+                <li class="dropdown-li">
+                    <span id="schoolYearButton"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
+                    <ul class="dropdown" id="schoolYearDropdown">
+                        <!-- Add your school year options here -->
+                        <li><a href="#">SY 2021-2022</a></li>
+                        <li><a href="#">SY 2022-2023</a></li>
+                        <li><a href="#">SY 2023-2024</a></li>
+                        <!-- Add more options as needed -->
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     
-    @yield('content')   
+
+
+@yield('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var schoolYearButton = document.getElementById('schoolYearButton');
+        var schoolYearDropdown = document.getElementById('schoolYearDropdown');
+
+        schoolYearButton.addEventListener('click', function () {
+            schoolYearDropdown.style.display = (schoolYearDropdown.style.display === 'block') ? 'none' : 'block';
+        });
+    });
+</script>
+    
+@yield('content')   
 
 </body>
+
+
 <style>
-    
+    /* Your existing styles */
+
+    .dropdown-li {
+        position: relative;
+        
+    }
+
+    #schoolYearButton {
+        cursor: pointer;
+        color: rgba(13, 62, 32, 0.98);
+
+    }
+
+    .dropdown {
+        display: none;
+        position: absolute;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dropdown li {
+        display: block;
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        color: rgba(13, 62, 32, 0.98);
+        
+
+    }
+
+    .dropdown li:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown a {
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown a:hover {
+        background-color: #f5f5f5; /* Hover background color for options */
+    }
 </style>
 @section('head')
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 @endsection
+
+

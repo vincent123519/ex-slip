@@ -46,10 +46,21 @@
     </div>
     <div class="divider"></div>
     <div class="divider"></div>
-    <div class="navmenu"><ul>
-        <li><span>DASHBOARD</span></li>
-        
-    </ul></div>    </div>
+    <div class="navmenu">
+            <ul>
+                <li><span>DASHBOARD</span></li>
+                <li class="dropdown-li">
+                    <span id="schoolYearButton"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
+                    <ul class="dropdown" id="schoolYearDropdown">
+                        <!-- Add your school year options here -->
+                        <li><a href="#">SY 2021-2022</a></li>
+                        <li><a href="#">SY 2022-2023</a></li>
+                        <li><a href="#">SY 2023-2024</a></li>
+                        <!-- Add more options as needed -->
+                    </ul>
+                </li>
+            </ul>
+        </div>    </div>
     
     @yield('content')   
 
@@ -57,3 +68,16 @@
 @section('head')
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 @endsection
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var schoolYearButton = document.getElementById('schoolYearButton');
+        var schoolYearDropdown = document.getElementById('schoolYearDropdown');
+
+        schoolYearButton.addEventListener('click', function () {
+            schoolYearDropdown.style.display = (schoolYearDropdown.style.display === 'block') ? 'none' : 'block';
+        });
+    });
+</script>
+    

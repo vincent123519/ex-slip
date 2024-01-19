@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Dean;
-use App\Models\Department;
+use App\Models\School; // Import the School model
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,50 +12,47 @@ class DeansSeeder extends Seeder
 {
     public function run()
     {
-        // Retrieve existing users and departments
-        $this->call(DepartmentSeeder::class);
+        // Retrieve existing users and schools
+        $this->call(SchoolSeeder::class); // Assuming you have a SchoolSeeder
 
-        // Create counselors with existing user and department IDs
+        // Create deans with existing user and school IDs
         $deansData = [
             [
                 'first_name' => 'Dr. Juvelyn',
                 'last_name' => 'Cuizon',
-                'department' => 'School of Computer Studies',
+                'school' => 'School of Computer Studies',
                 'username' => 'juvelyn.Cuizon',
             ],
             [
                 'first_name' => 'Dr. Anthony',
                 'last_name' => 'Kilong',
-                'department' => 'School of engineering',
+                'school' => 'School of Engineering', // Update the school name
                 'username' => 'anthony.kilong',
             ],
-            // Add more sample counselors
+            // Add more sample deans
         ];
 
-        foreach ($deansData as $deansData) {
-            // Find the user and department based on the provided IDs
+        foreach ($deansData as $deanData) {
+            // Find the user and school based on the provided IDs
             $user = User::create([
-                'first_name' => $deansData['first_name'],
-                'last_name' => $deansData['last_name'],
-                'username' => $deansData['username'],
+                'first_name' => $deanData['first_name'],
+                'last_name' => $deanData['last_name'],
+                'username' => $deanData['username'],
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 5,
             ]);
 
-            // Find the department
-            $department = Department::where('department_name', $deansData['department'])->first();
+            // Find the school
+            $school = School::where('school_name', $deanData['school'])->first();
 
-            
-
-            // Create and save the counselor
+            // Create and save the dean
             $dean = new Dean([
-                'first_name' => $deansData['first_name'],
-                'last_name' => $deansData['last_name'],
-
+                'first_name' => $deanData['first_name'],
+                'last_name' => $deanData['last_name'],
             ]);
 
             $dean->user()->associate($user);
-            $dean->department()->associate($department);
+            $dean->school()->associate($school); // Change from department() to school()
             $dean->save();
         }
     }

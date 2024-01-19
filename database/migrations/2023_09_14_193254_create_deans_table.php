@@ -14,12 +14,10 @@ class CreateDeansTable extends Migration
             $table->string('first_name', 100);
             $table->string('last_name', 100);
             $table->unsignedBigInteger('school_code')->nullable()->default(1001);
-            $table->unsignedBigInteger('department_id')->default(1);
 
             // Add foreign key constraints with the same data type
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('school_code')->references('school_code')->on('schools');
-            $table->foreign('department_id')->references('department_id')->on('departments');
 
             $table->timestamps();
         });

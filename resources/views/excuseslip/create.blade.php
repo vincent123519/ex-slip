@@ -32,32 +32,56 @@
                 </ul>
             </div> -->
 
-
             <div class="form-group">
-    <label for="degree_id">Degree Program:</label>
-    <select name="degree_id" id="degree_id" class="form-control" required disabled>
-        @foreach($degrees as $degree)
-            <option value="{{ $degree->id }}" @if(optional($excuseSlip)->degree_id == $degree->id) selected @endif>
-                {{ $degree->degree_name }}
-            </option>
-        @endforeach
-    </select>
-</div>
+            <label for="degree">Degree: </label>
+            @if($degree)
+                <input type="text" class="form-control" id="degree" name="degree" value="{{$yearLevel}} - {{ $degree->degree_name }}" readonly>
+                <input type="hidden" name="degree_id" value="{{ $degree->degree_id }}">
+            @else
+                <input type="text" class="form-control" id="degree" name="degree" value="No Degree found" readonly>
+                <input type="hidden" name="degree_id" value="">
+            @endif
+        </div>
 
-            <div class="form-group">
-                <label for="year_level">Year Level:</label>
-                <input type="text" name="year_level" id="year_level" class="form-control" value="{{ old('year_level', $yearLevel) }}" required readonly>
-            </div>
+
+
+
+
 
         <form action="{{ route('excuse_slips.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <div class="form-group">
-                <label for="student_id">Student ID:</label>
-                <input type="text" name="student_id" id="student_id" class="form-control" value="{{ Auth::user()->student->student_id }}" required readonly>
-            </div>
+            <div class="form-group" style="display: none;">
+            <label for="student_id">Student ID:</label>
+            <input type="text" name="student_id" id="student_id" class="form-control" value="{{ Auth::user()->student->student_id }}" required readonly>
+        </div>
 
-            <div class="form-group">
+        <div class="form-group">
+        <label for="dean">Dean:</label>
+        @if($dean)
+            <input type="text" class="form-control" id="dean" name="dean" value="{{ $dean->first_name }} {{ $dean->last_name }}" readonly>
+            <input type="hidden" name="dean_id" value="{{ $dean->dean_id }}">
+        @else
+            <input type="text" class="form-control" id="dean" name="dean" value="No Dean found" readonly>
+            <input type="hidden" name="dean_id" value="">
+        @endif
+    </div>
+
+
+        
+    <div class="form-group">
+        <label for="counselor">Counselor:</label>
+        @if($counselor)
+            <input type="text" class="form-control" id="counselor" name="counselor" value="{{ $counselor->first_name }} {{ $counselor->last_name }}" readonly>
+            <input type="hidden" name="counselor_id" value="{{ $counselor->counselor_id }}">
+        @else
+            <input type="text" class="form-control" id="counselor" name="counselor" value="No Counselor found" readonly>
+            <input type="hidden" name="counselor_id" value="">
+        @endif
+    </div>
+
+
+        <div class="form-group">
                 <label for="teacher_id">Teacher:</label>
                 <select name="teacher_id" id="teacher_id" class="form-control" required>
                     @foreach($teacherData as $teacher)
@@ -66,23 +90,6 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="dean_id">Dean:</label>
-                <select name="dean_id" id="dean_id" class="form-control" required>
-                    @foreach($deanData as $dean)
-                        <option value="{{ $dean->dean_id }}">{{ $dean->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="counselor_id">Counselor:</label>
-                <select name="counselor_id" id="counselor_id" class="form-control" required>
-                    @foreach($counselorData as $counselor)
-                        <option value="{{ $counselor->counselor_id }}">{{ $counselor->first_name  }} {{ $counselor->last_name}} </option>
-                    @endforeach
-                </select>
-            </div>
 
             <div class="form-group">
                 <label for="course_code">Course/Subject/s Absent:</label>
@@ -263,7 +270,7 @@
     
         }
     
-        .dropdown {
+        /* .dropdown {
             display: none;
             position: absolute;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -271,7 +278,7 @@
             list-style-type: none;
             padding: 0;
             margin: 0;
-        }
+        } */
     
         .dropdown li {
             display: block;

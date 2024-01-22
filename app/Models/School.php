@@ -30,4 +30,9 @@ class School extends Model
     {
         return 'School of ' . $this->school_name;
     }
+
+    public function dean()
+    {
+        return $this->hasOne(Dean::class, 'school_code', 'school_code');
+    }
 }

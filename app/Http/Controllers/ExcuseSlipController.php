@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dean;
 use App\Models\User; 
 use App\Models\Course;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Counselor; 
@@ -70,16 +71,29 @@ class ExcuseSlipController extends Controller
 
     public function createExcuseSlip()
     {
+        $student = auth()->user()->student;
+        $degree = $student->degree;
+        $department = $degree->department;
+
+            // Debugging statements
+
+        $school = School::where('school_code', $department->school_code)->first();
+
+            // Fetch the dean associated with the school
+        $dean = $school->dean;
+        $counselor = $department->counselor;
        
         $courses = Course::all();
         $teachers = Teacher::all();
         $counselors = Counselor::all();
-        $deans = Dean::all();
         $excuseStatuses = ExcuseStatus::all();
         $yearLevel = auth()->user()->student->year_level;
 
+
+       
+
+
         // Fetch degree data to populate the dropdown
-        $degrees = DepartmentDegree::all(); // Assuming you have a model for DepartmentDegree
     
         // Fetch teacher, dean, and counselor data
         $coursesData = Course::select('course_code', 'course_name')->get();
@@ -91,7 +105,7 @@ class ExcuseSlipController extends Controller
         // Create a new ExcuseSlip instance (assuming it's needed for the form)
         $excuseSlip = new ExcuseSlip();
     
-        return view('excuseslip.create', compact('courses', 'teachers', 'counselors', 'deans', 'excuseStatuses', 'degrees', 'excuseSlip', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData'));
+        return view('excuseslip.create', compact('courses', 'teachers', 'counselor', 'dean', 'excuseStatuses', 'degree', 'excuseSlip', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData'));
     }
     
     public function store(Request $request)

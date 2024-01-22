@@ -43,9 +43,9 @@ class Department extends Model
     /**
      * Define a one-to-many relationship with the Counselor model.
      */
-    public function counselors()
+    public function counselor()
     {
-        return $this->hasMany(Counselor::class, 'department_id');
+        return $this->hasOne(Counselor::class, 'department_id');
     }
 
     /**

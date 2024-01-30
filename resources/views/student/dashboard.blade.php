@@ -6,6 +6,36 @@
 
         <hr>
 
+        <form action="{{ route('student.dashboard') }}" method="GET">
+            <label for="sort_by">Sort By:</label>
+            <select name="sort_by" id="sort_by">
+                <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>Day</option>
+                <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
+                <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
+                <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
+            </select>
+
+            <!-- Display month dropdown if "month" is selected -->
+            @if (request()->input('sort_by') == 'month')
+                <select name="month">
+                    @foreach (range(1, 12) as $month)
+                        <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
+                    @endforeach
+                </select>
+            @endif
+
+            <!-- Display year dropdown if "year" is selected -->
+            @if (request()->input('sort_by') == 'year')
+                <select name="year">
+                    @for ($year = date('Y'); $year >= 2000; $year--)
+                        <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @endfor
+                </select>
+            @endif
+
+            <button type="submit">Sort</button>
+        </form>
+
         <div class="manage-slip-container">
 
             <h1>Excuse Slips Dashboard</h1>

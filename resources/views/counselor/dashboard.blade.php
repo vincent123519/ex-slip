@@ -4,7 +4,36 @@
     <div class="counselor-details-container">
         <h1>Absence Request</h1>
         <a href="" class="create-slip-button">Number of Excuse slip</a>
+        <form action="{{ route('counselor.dashboard') }}" method="GET">
+            <label for="sort_by">Sort By:</label>
+            <select name="sort_by" id="sort_by">
+                <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>Day</option>
+                <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
+                <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
+            </select>
+
+            <!-- Display month dropdown if "month" is selected -->
+            @if (request()->input('sort_by') == 'month')
+                <select name="month">
+                    @foreach (range(1, 12) as $month)
+                        <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
+                    @endforeach
+                </select>
+            @endif
+
+            <!-- Display year dropdown if "year" is selected -->
+            @if (request()->input('sort_by') == 'year')
+                <select name="year">
+                    @for ($year = date('Y'); $year >= 2000; $year--)
+                        <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @endfor
+                </select>
+            @endif
+
+            <button type="submit">Sort</button>
+        </form>
     </div>
+
 
     <div class="excuse-container">
         <h2>List of Student Excuse Slips</h2>
@@ -13,7 +42,7 @@
             <table class="excuse-slip-table">
                 <thead>
                     <tr>
-                        <th>Excuse Slip No.</th>
+                        <th>Date</th>
                         <th>Student Name</th>
                         <th>Reason</th>
                         <th>Duration</th>
@@ -24,7 +53,7 @@
                 <tbody>
                     @foreach($excuseSlips as $index => $excuseSlip)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                        <td>{{ $excuseSlip->formatted_created_at }}</td>
                             <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
                             <td>{{ $excuseSlip->reason }}</td>
                             <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>

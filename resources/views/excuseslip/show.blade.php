@@ -80,9 +80,9 @@
             margin-bottom: 5px;
         }
 
-        .name-container {
-            display: flex;
-            justify-content: space-between;
+        .name-container p{
+            display: inline-block;
+            margin-right: 10px;
         }
         /* Add custom styles for alignment */
         .teacher-container p {
@@ -115,11 +115,12 @@
         <div class="slip-view-header">
             <h1>View Slip</h1>
         </div>
+        <p><strong>Excuse slip ID:</strong> {{ $excuseSlip->excuse_slip_id }}</p>
+
         <div class="slip-view-body">
             <div class="excuse-slip">
                 <div class="name-container">
                     <p><strong>Student:</strong> {{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</p>
-                    <p><strong>Student ID:</strong> {{ $excuseSlip->student->student_id}} </p>
                     <p><strong>Degree Yr Level:</strong>{{ $excuseSlip->student->year_level}} - {{ $excuseSlip->student->degree->degree_name}} </p>
                 </div>
                 <div class="teacher-container">
@@ -128,8 +129,10 @@
 
 
                 </div>
-                <p><strong>Start Date:</strong> {{ $excuseSlip->start_date }}</p>
-                <p><strong>End Date:</strong> {{ $excuseSlip->end_date }}</p>
+                <p><strong>Date:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
+                <p><strong>Reason:</strong> {{ $excuseSlip->reason }}</p>
+
+
                 <h2>File Attachment</h2>
                 @if ($excuseSlip->supportingDocuments->isEmpty())
                     <p>No supporting documents available.</p>

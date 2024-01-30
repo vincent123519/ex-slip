@@ -226,25 +226,46 @@ class StudentController extends Controller
     }
 // Example in StudentController
 
-public function dashboard()
+public function dashboard(Request $request)
 {
     // Retrieve excuse slips with status for the current user
     $studentId = auth()->user()->student->student_id;
 
-    $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+    // Query for fetching excuse slips
+    $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
         ->where('student_id', $studentId)
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id', 'created_at')
-        ->get();
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id', 'created_at');
+
+    // Sorting logic based on the request parameter
+    $sort_by = $request->input('sort_by', 'day');
+
+    switch ($sort_by) {
+        case 'today':
+            $query->whereDate('created_at', today());
+            break;
+        case 'month':
+            // Filter by the selected month
+            $month = $request->input('month', date('m')); // Default to current month
+            $query->whereMonth('created_at', $month);
+            break;
+        case 'year':
+            // Filter by the selected year
+            $year = $request->input('year', date('Y')); // Default to current year
+            $query->whereYear('created_at', $year);
+            break;
+        default:
+            // For 'day' or invalid inputs, no additional filtering needed
+            break;
+    }
+
+    $excuseSlips = $query->get();
 
     // Format the created_at field in each ExcuseSlip to exclude hours, minutes, and seconds
     foreach ($excuseSlips as $excuseSlip) {
-        $dateTime = new DateTime($excuseSlip->created_at);
-        $excuseSlip->formatted_created_at = $dateTime->format('Y-m-d'); // Exclude hours, minutes, and seconds
+        $excuseSlip->formatted_created_at = $excuseSlip->created_at->format('Y-m-d'); // Exclude hours, minutes, and seconds
     }
 
-    return view('student.dashboard', ['excuseSlips' => $excuseSlips]);
+    return view('student.dashboard', compact('excuseSlips'));
 }
-
-
 
 }

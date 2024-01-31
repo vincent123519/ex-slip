@@ -9,7 +9,7 @@
         <form action="{{ route('student.dashboard') }}" method="GET">
             <label for="sort_by">Sort By:</label>
             <select name="sort_by" id="sort_by">
-                <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>Day</option>
+                <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>All</option>
                 <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
                 <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
                 <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
@@ -17,12 +17,20 @@
 
             <!-- Display month dropdown if "month" is selected -->
             @if (request()->input('sort_by') == 'month')
-                <select name="month">
-                    @foreach (range(1, 12) as $month)
-                        <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
-                    @endforeach
-                </select>
-            @endif
+            <label for="month">Select Month:</label>
+            <select name="month" id="month">
+                @foreach (range(1, 12) as $month)
+                    <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
+                @endforeach
+            </select>
+            <!-- Pre-select the current year in the year dropdown -->
+            <label for="year">Select Year:</label>
+            <select name="year" id="year">
+                @for ($year = date('Y'); $year >= 2000; $year--)
+                    <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                @endfor
+            </select>
+        @endif
 
             <!-- Display year dropdown if "year" is selected -->
             @if (request()->input('sort_by') == 'year')

@@ -244,10 +244,11 @@ public function dashboard(Request $request)
             $query->whereDate('created_at', today());
             break;
         case 'month':
-            // Filter by the selected month
-            $month = $request->input('month', date('m')); // Default to current month
-            $query->whereMonth('created_at', $month);
-            break;
+                // Filter by the selected year and month
+                $year = $request->input('year', date('Y'));
+                $month = $request->input('month', date('m'));
+                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+                break;
         case 'year':
             // Filter by the selected year
             $year = $request->input('year', date('Y')); // Default to current year

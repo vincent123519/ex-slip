@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
 use App\Models\Student;
 use App\Models\Feedback;
 use App\Models\Counselor;
 use App\Models\ExcuseSlip;
 use App\Models\ExcuseStatus;
+use DateTime;
 
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use App\Models\CounselorFeedback;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class CounselorController extends Controller
 {

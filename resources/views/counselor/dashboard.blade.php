@@ -4,6 +4,8 @@
     <div class="counselor-details-container">
         <h1>Absence Request</h1>
         <a href="" class="create-slip-button">Number of Excuse slip</a>
+        <p>Total Excuse Slips: {{ $excuseSlips->count() }}</p> <!-- Display the count of excuse slips -->
+
         <form action="{{ route('counselor.dashboard') }}" method="GET">
             <label for="sort_by">Sort By:</label>
             <select name="sort_by" id="sort_by">

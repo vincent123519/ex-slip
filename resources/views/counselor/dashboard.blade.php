@@ -9,7 +9,8 @@
         <form action="{{ route('counselor.dashboard') }}" method="GET">
             <label for="sort_by">Sort By:</label>
             <select name="sort_by" id="sort_by">
-                <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>Day</option>
+                <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
+                <option value="weekly" {{ request()->input('sort_by') == 'weekly' ? 'selected' : '' }}>Last 7 Days</option>
                 <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
                 <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
             </select>
@@ -53,30 +54,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($excuseSlips as $index => $excuseSlip)
-                        <tr>
-                        <td>{{ $excuseSlip->formatted_created_at }}</td>
-                            <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
-                            <td>{{ $excuseSlip->reason }}</td>
-                            <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
-                            <td>{{ $excuseSlip->status->status_name }}</td>
-                            <td>
-                                <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn-approved">Approve</button>
-                                </form>
+                @foreach($excuseSlips as $index => $excuseSlip)
+                <tr>
+                  <td>{{ $excuseSlip->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
+                    <td>{{ $excuseSlip->reason }}</td>
+                    <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
+                    <td>{{ $excuseSlip->status->status_name }}</td>
+                    <td>
+                        <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn-approved">Approve</button>
+                        </form>
 
-                                <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn-reject">Reject</button>
-                                </form>
-                                <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
-
-                            </td>
-                        </tr>
-                    @endforeach
+                        <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn-reject">Reject</button>
+                        </form>
+                        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">View</a>
+                    </td>
+                </tr>
+            @endforeach
                 </tbody>
             </table>
         @else

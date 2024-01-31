@@ -147,8 +147,9 @@
         }
     
         .dropdown a:hover {
-            background-color: #f5f5f5; /* Hover background color for options */
+            background-color: #f5f5f5; 
         }</style>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

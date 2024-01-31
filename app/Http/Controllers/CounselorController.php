@@ -75,43 +75,48 @@ class CounselorController extends Controller
 
         return response()->json(['message' => 'Feedback submitted successfully.']);
     }
-    public function dashboard(Request $request)
-    {
-        $counselorId = auth()->user()->counselor->counselor_id;
-    
-        // Query for fetching excuse slips
-        $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
-            ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id')
-            ->where('counselor_id', $counselorId);
-    
-        // Sorting logic based on the request parameter
-        $sort_by = $request->input('sort_by', 'day');
-    
-        switch ($sort_by) {
-            case 'month':
-                // Filter by the selected month
-                $month = $request->input('month', date('m')); // Default to current month
-                $query->whereMonth('created_at', $month);
-                break;
-            case 'year':
-                // Filter by the selected year
-                $year = $request->input('year', date('Y')); // Default to current year
-                $query->whereYear('created_at', $year);
-                break;
-            default:
-                // For 'day' or other cases, no additional filtering needed
-                break;
-        }
-    
-        $excuseSlips = $query->get();
-    
-        // Format the created_at field in each ExcuseSlip to exclude hours, minutes, and seconds
-        foreach ($excuseSlips as $excuseSlip) {
-            $excuseSlip->formatted_created_at = Carbon::parse($excuseSlip->created_at)->format('Y-m-d'); // Format the date
-        }
-    
-        return view('counselor.dashboard', compact('excuseSlips'));
+// Controller
+// Controller
+public function dashboard(Request $request)
+{
+    $counselorId = auth()->user()->counselor->counselor_id;
+
+    // Query for fetching excuse slips
+    $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id', 'created_at')
+        ->where('counselor_id', $counselorId);
+
+    // Sorting logic based on the request parameter
+    $sort_by = $request->input('sort_by', 'today');
+
+    switch ($sort_by) {
+        case 'today':
+            $query->whereDate('created_at', today());
+            break;
+        case 'month':
+            $month = $request->input('month', date('m'));
+            $year = $request->input('year', date('Y'));
+            $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            break;
+        case 'year':
+            $year = $request->input('year', date('Y'));
+            $query->whereYear('created_at', $year);
+            break;
+        case 'weekly':
+            // Filter by the last 7 days
+            $query->whereDate('created_at', '>=', now()->subDays(7));
+            break;
+        default:
+            // For invalid inputs, no additional filtering needed
+            break;
     }
+
+    $excuseSlips = $query->get();
+
+    return view('counselor.dashboard', compact('excuseSlips'));
+}
+
+
 
 
     public function approve($id)

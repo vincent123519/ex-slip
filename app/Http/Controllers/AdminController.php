@@ -21,11 +21,28 @@ class AdminController extends Controller
         // Upload and import student data
     }
 
-    public function manageUsers()
+
+    public function manageUsers(Request $request)
     {
-        $users = User::all();
+        // Get all users
+        $query = User::query();
+    
+        // Filter users by role if a role filter is provided
+        if ($request->has('role_filter')) {
+            $roleFilter = $request->input('role_filter');
+    
+            if ($roleFilter !== 'reset' && $roleFilter !== 'All') {
+                $query->whereHas('role', function ($q) use ($roleFilter) {
+                    $q->where('role_name', $roleFilter);
+                });
+            }
+        }
+    
+        $users = $query->get();
+    
         return view('admin.manage-users', compact('users'));
     }
+    
 
     public function editUser(User $user)
     {
@@ -108,7 +125,13 @@ public function createStudyLoad($studentId)
 }
 
             
+// for the teacher ni
+public function showTeacher()
+{
+    $teachers = Teacher::all();
 
+    return view('admin.teachers.index', compact('teachers'));
+}
 
 
 }

@@ -18,7 +18,7 @@ use Database\Seeders\StudyLoadSeeder;
 use Database\Seeders\UserRolesSeeder;
 use Database\Seeders\ExcuseSlipSeeder;
 use Database\Seeders\ExcuseStatusSeeder;
-use Database\Seeders\HeadCounselorSeeder;
+// use Database\Seeders\HeadCounselorSeeder;
 use Database\Seeders\CourseOfferingSeeder;
 use Database\Seeders\DepartmentDegreeSeeder;
 use Database\Seeders\SupportingDocumentSeeder;
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             UserRolesSeeder::class,
             UsersSeeder::class,
             DepartmentSeeder::class,
-            HeadCounselorSeeder::class,
+            // HeadCounselorSeeder::class,
             DepartmentDegreeSeeder::class,
             SemesterSeeder::class,
             TeacherSeeder::class,

@@ -12,6 +12,7 @@
         <p>{{ $total_students }}</p>
       </div>
     </a>
+    <a href="{{ route('admin.teachers.index') }}" class="stat">
       <div>
         <h3>Total Teachers</h3>
         <p>{{ $total_teachers }}</p>

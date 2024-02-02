@@ -147,6 +147,7 @@ Route::get('admin/students', [AdminController::class, 'showStudents'])->name('ad
 Route::post('/studyload/{studentId}', [AdminController::class, 'storeStudyLoad'])->name('studyload.store');
 Route::get('/studyload/create/{studentId}', [AdminController::class, 'createStudyLoad'])->name('admin.studyload.create');
 Route::post('/admin/studyload/store', [AdminController::class, 'storeStudyLoad'])->name('admin.studyload.store');
+Route::get('admin/teachers', [AdminController::class, 'showTeacher'])->name('admin.teachers.index');
 
 // routes/web.php
 

@@ -1,9 +1,8 @@
 @extends('components.layout')
 
 @section('content')
-
 <div class="manage-users-container">
-    <h1>Manage Users</h1>
+    <h1>Manage Users Password</h1>
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -11,11 +10,29 @@
         </div>
     @endif
 
+    <form action="{{ route('manage-users') }}" method="GET">
+        <div class="form-group">
+            <label for="role_filter">Filter by Role:</label>
+            <select name="role_filter" id="role_filter" class="form-control" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="Head Counselor">Head Counselor</option>
+                <option value="Teacher">Teacher</option>
+                <option value="Student">Student</option>
+                <option value="Counselor">Counselor</option>
+                <option value="Dean">Dean</option>
+                <option value="Admin">Admin</option>
+                 <!-- Add reset option -->
+                <!-- Add other roles as needed -->
+            </select>
+        </div>
+        <a href="{{ route('manage-users') }}" class="btn btn-secondary">Reset</a> 
+    </form>
+
     <table class="user-table">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Username</th>
+                <th>Useraccount</th>
                 <th>Roles</th>
                 <th>Actions</th>
             </tr>
@@ -26,13 +43,12 @@
                 <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                 <td>{{ $user->username }}</td>
                 <td>
-    @if($user->role)
-        {{ $user->role->role_name }}
-    @else
-        No role assigned for user {{ $user->name }}
-    @endif
-</td>
-
+                    @if($user->role)
+                        {{ $user->role->role_name }}
+                    @else
+                        No role assigned for user {{ $user->name }}
+                    @endif
+                </td>
                 <td>
                     <a href="{{ route('edit-user', $user) }}" class="btn btn-primary">Edit</a>
                     <form action="{{ route('delete-user', $user) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?')">
@@ -47,12 +63,12 @@
     </table>
 </div>
 
-@endsection
-
 <style>
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
 .manage-users-container {
-    /* background-color: rgb(243 254 240 / 98%); */
-   /* // padding: 20px; */
     position: relative;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -61,40 +77,23 @@
     margin-right: 30px;
 }
 
-
 /* CSS styles for the user table */
 .user-table {
     width: 95%;
-    margin-top: 10px; /* Reduce the top margin */
+    margin-top: 10px;
 }
 
 .user-table th, .user-table td {
     border: 1px solid #ccc;
-    padding: 6px; /* Reduce the cell padding */
-    text-align: center;
-    font-size: 14px; /* Reduce the font size */
+    padding: 6px;
+    text-align: left;
+    font-size: 14px;
 }
 
 .user-table th {
-    background-color: #f2f2f2;
-}
-
-.user-table tr:hover {
-    background-color: #e0e0e0;
-}
-
-/* CSS styles for the "Edit" and "Delete" buttons */
-.btn {
-    padding: 5px 10px;
-    background-color: green;
+    background-color: #4CAF50;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn:hover {
-    background-color: yellowgreen;
 }
 </style>
+
+@endsection

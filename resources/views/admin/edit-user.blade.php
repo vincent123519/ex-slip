@@ -1,116 +1,70 @@
-@extends('components.layout') <!-- You might need to create this layout -->
+@extends('components.layout')
 @section('content')
-<head><title>EDIT USER</title></head>
+<head>
+    <title>Edit User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .main-containerss {
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 80%;
+            margin: 20px auto;
+            margin-right: auto;
+            font-family: 'Montserrat', sans-serif;
+            margin-right: 30px;
 
-<!-- // -->
-<div class="main-container">
-<div class="user-details-container">
-        <h1>User Details</h1>
+
+        }
+
+        .user-details-container {
+            background-color: #f8f9fa; /* Light background color */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-right: 20px; /* Add margin to separate columns */
+
+
+        }
+
+        .user-details-container h1 {
+            font-size: 24px;
+            
+        }
+
+        .user-details-container .user-details p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<div class="main-containerss">
+    <div class="user-details-container">
+        <h1>User Account Details</h1>
         <div class="user-details">
-            <p><strong>Name:</strong> {{ $user->name }}</p>
-            <p><strong>Username:</strong> {{ $user->username}}</p>
+            <p><strong>Name:</strong> {{ $user->first_name }} {{ $user->last_name }} <strong>Username:</strong> {{ $user->username }}</p>
         </div>
+        
+        <h1>Edit Username/Password</h1>
+
+        <form action="{{ route('update-user', $user) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" value="{{ $user->username }}">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update User</button>
+        </form>
+
+        <a href="{{ route('manage-users') }}" class="btn btn-secondary">Back to Manage Users</a>
     </div>
-<div class="edit-user-container">
-    <h1>Edit User</h1>
-
-    <form action="{{ route('update-user', $user) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="{{ $user->name }}">
-        </div>
-
-        <div>
-            <label for="email">Username:</label>
-            <input type="text" id="username" name="username" value="{{ $user->username }}">
-        </div>
-
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password">
-        </div>
-
-        <button type="submit">Update User</button>
-    </form>
-
-    <a href="{{ route('manage-users') }}">Back to Manage Users</a>
-</div>
 </div>
 @endsection
-
-<style>
-    .main-container {
-    max-width: 750px;
-    margin: 20px;
-    /* padding: 40px; */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: rgba(13,62,32,0.98);
-    display: block;
-    
-}
-   .edit-user-container {
-    background-color: #f2f2f2;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 10px; /* Add margin for spacing from the right side */
-    width: 300px; /* Adjust the width as needed */
-    float: right; /* Align it to the right */
-}
-
-/* Rest of the styling (same as the previous answer) */
-
-
-.edit-user-container h1 {
-    font-size: 24px;
-}
-
-.edit-user-container form {
-    margin-top: 10px;
-}
-
-.edit-user-container form div {
-    margin: 10px 0;
-}
-
-.edit-user-container form label {
-    display: block;
-    font-weight: bold;
-}
-
-.edit-user-container form input {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.edit-user-container button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-}
-
-.edit-user-container a {
-    display: block;
-    margin-top: 10px;
-    text-decoration: none;
-    color: #007bff;
-}
-
-.user-details-container {
-    flex: 1; /* Expand to fill available space */
-    padding: 20px;
-    background-color: #f2f2f2;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 20px; /* Add margin to separate columns */
-}
-</style>

@@ -17,30 +17,30 @@ class StudentSeeder extends Seeder
 
         $students = [
             [
-                'first_name' => 'Dan',
-                'last_name' => 'Lock',
+                'first_name' => 'Christian',
+                'last_name' => 'Morales',
                 'degree' => 'Bachelor of Science in Computer Science',
                 'username' => '2019012',
                 'year_level' => 2,
             ],
             [
-                'first_name' => 'Arkei',
-                'last_name' => 'Tech',
+                'first_name' => 'Vincent John',
+                'last_name' => 'Orat',
                 'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2020012',
                 'year_level' => 3,
             ],
             [
-                'first_name' => 'Rhey',
-                'last_name' => 'Peter',
+                'first_name' => 'Sweet Jam',
+                'last_name' => 'Yu',
                 'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2018012',
                 'year_level' => 1,
             ],
 
             [
-                'first_name' => 'Jimmy',
-                'last_name' => 'neutron',
+                'first_name' => 'Jeriel',
+                'last_name' => 'Orias',
                 'degree' => 'Bachelor of civil engineering',
                 'username' => '2023012',
                 'year_level' => 1,

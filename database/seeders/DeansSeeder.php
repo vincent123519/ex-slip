@@ -18,10 +18,10 @@ class DeansSeeder extends Seeder
         // Create deans with existing user and school IDs
         $deansData = [
             [
-                'first_name' => 'Dr. Juvelyn',
+                'first_name' => 'Dr. Jovelyn',
                 'last_name' => 'Cuizon',
                 'school' => 'School of Computer Studies',
-                'username' => 'juvelyn.Cuizon',
+                'username' => 'jovelyn.Cuizon',
             ],
             [
                 'first_name' => 'Dr. Anthony',

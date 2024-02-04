@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Counselor;
 use App\Models\HeadCounselor;
 use App\Models\Department;
 use App\Models\User;
@@ -10,36 +11,48 @@ use Illuminate\Http\Request;
 class HeadCounselorController extends Controller
 {
     public function assignCounselor(Request $request)
-    {
-        // Retrieve the form inputs
-        $headCounselorId = $request->input('head_counselor_id');
-        $departmentId = $request->input('department_id');
+{
+    // Retrieve the form inputs
+    $counselorId = $request->input('counselor_id');
+    $departmentId = $request->input('department_id');
 
-        // Find the head counselor and department models
-        $headCounselor = HeadCounselor::find($headCounselorId);
-        $department = Department::find($departmentId);
+    // Find the counselor and department models
+    $counselor = Counselor::find($counselorId);
+    $department = Department::find($departmentId);
 
-        // Assign the head counselor to the department
-        $headCounselor->department()->associate($department);
-        $headCounselor->save();
-
-        // Redirect or return a response
-        // ...
+    // Check if both models were found
+    if (!$counselor) {
+        // Handle the case where the counselor was not found
+        return back()->with('error', 'Counselor not found');
     }
+
+    if (!$department) {
+        // Handle the case where the department was not found
+        return back()->with('error', 'Department not found');
+    }
+
+    // Update the counselor's department
+    $counselor->department_id = $departmentId;
+    $counselor->save();
+
+    // Redirect with success message
+    return redirect()->route('assign-counselor')->with('success', 'Counselor assigned successfully');
+}
+
 
     public function showAssignForm()
     {
-        $headCounselors = HeadCounselor::all();
+        $Counselors = Counselor::all();
         $departments = Department::all();
     
-        return view('headcounselor.assign', compact('headCounselors', 'departments'));
+        return view('headcounselor.assign', compact('Counselors', 'departments'));
     }
 
     public function index()
     {
-        $headCounselors = HeadCounselor::with('user', 'department')->get();
+        $Counselors = Counselor::with('user', 'department')->get();
     
-        return view('headcounselor.index', compact('headCounselors'));
+        return view('counselor.index', compact('Counselors'));
     }
 
     // Other methods for managing head counselors

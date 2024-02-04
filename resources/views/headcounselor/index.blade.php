@@ -17,10 +17,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($headCounselors as $headCounselor)
+            @foreach($Counselors as $headCounselor)
                 <tr>
-                    <td>{{ $headCounselor->user->name }}</td>
-                    <td>{{ $headCounselor->department->name }}</td>
+                    <td>{{ $Counselor->user->name }}</td>
+                    <td>{{ $Counselor->department->name }}</td>
                 </tr>
             @endforeach
         </tbody>

@@ -3,19 +3,19 @@
 <head>
     <title>Assign Counselor</title>
 </head>
-@extends('components.layout') <!-- You might need to create this layout -->
+@extends('components.admin') <!-- You might need to create this layout -->
 @section('content')
     <div class="manage-users-container">
         <h2>Assign Counselor</h2>
 
-        <form action="{{ route('head-counselor.assign') }}" method="POST">
+            <form action="{{ route('head-counselor.assign') }}" method="POST">
             @csrf
             <div>
-    <label for="head_counselor_id">Counselor:</label>
-    <select name="head_counselor_id" id="head_counselor_id">
-        @foreach($headCounselors as $headCounselor)
-            <option value="{{ $headCounselor->id }}">
-                {{ $headCounselor->user->name }} (ID: {{ $headCounselor->counselor_id }})
+    <label for="counselor_id">Counselor:</label>
+    <select name="counselor_id" id="counselor_id">
+        @foreach($Counselors as $Counselor)
+            <option value="{{ $Counselor->id }}">
+                 (ID: {{ $Counselor->first_name }}{{ $Counselor->last_name }})
             </option>
         @endforeach
     </select>
@@ -44,5 +44,7 @@
         width: 80%;
         margin: 20px auto;
         margin-right: 30px;
+        font-family: 'Montserrat', sans-serif;            
+
     }
 </style>

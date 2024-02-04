@@ -32,6 +32,7 @@ Route::put('/excuse_slips/{id}', [ExcuseSlipController::class, 'update'])->name(
 Route::delete('/excuse_slips/{id}', [ExcuseSlipController::class, 'destroy'])->name('excuse_slips.destroy');
 Route::get('/excuse_slips/{excuse_slip_id}', [ExcuseSlipController::class, 'show'])->name('excuse_slips.show');
 
+Route::put('/excuse_slips/{id}', [ExcuseSlipController::class, 'update'])->name('excuse_slips.update');
 
 
 

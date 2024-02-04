@@ -60,7 +60,13 @@
                     <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
                     <td>{{ $excuseSlip->reason }}</td>
                     <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
-                    <td>{{ $excuseSlip->status->status_name }}</td>
+                    <td>
+                    @if($excuseSlip->status->status_name == 'Approved by Counselor')
+                        Approved
+                    @else
+                        {{ $excuseSlip->status->status_name }}
+                    @endif
+                </td>
                     <td>
                         <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                             @csrf

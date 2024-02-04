@@ -1,7 +1,7 @@
 @extends('components.admin')
 
 @section('content')
-    <div class="manage-users-container">
+    <div class="manage-student-container">
         <h1 class="text-center">All Students</h1>
         <div class="table-container">
             <table class="table table-sm">
@@ -31,34 +31,32 @@
 @endsection
 
 <style>
-.manage-users-container {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border: 1px solid #dee2e6;
+.manage-student-container {
+    position: relative;
+    border: 1px solid #ccc;
     border-radius: 10px;
-    width: 60%;
+    width: 80%;
     margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    
-
-
-
+    margin-right: 30px;
+    font-family: 'Montserrat', sans-serif;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.5);
 
 }
 
-.manage-users-container h1 {
+.manage-student-container h1 {
     margin-top: 20px;
     text-align: left;
 
 }
 
-.manage-users-container label {
+.manage-student-container label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-.manage-users-container select {
+.manage-student-container select {
     width: 100%;
     padding: 5px 10px;
     border-radius: 5px;
@@ -66,7 +64,7 @@
     margin-bottom: 10px;
 }
 
-.manage-users-container .btn-primary {
+.manage-student-container .btn-primary {
     background-color: darkgreen;
     color: #fff;
     border: none;
@@ -74,13 +72,16 @@
     cursor: pointer;
 }
 
-.manage-users-container .btn-primary:hover {
+.manage-student-container .btn-primary:hover {
     background-color: teal;
 }
 
-.table-sm th,
+.table-sm th{
+    border: 1px solid #000;
+}
 .table-sm td {
     padding: 0.3rem;
+    
 }
 
 

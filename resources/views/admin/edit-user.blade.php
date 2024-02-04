@@ -1,4 +1,4 @@
-@extends('components.layout')
+@extends('components.admin')
 @section('content')
 <head>
     <title>Edit User</title>

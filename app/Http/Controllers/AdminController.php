@@ -128,7 +128,7 @@ public function createStudyLoad($studentId)
 // for the teacher ni
 public function showTeacher()
 {
-    $teachers = Teacher::all();
+    $teachers = Teacher::with('department')->get();
 
     return view('admin.teachers.index', compact('teachers'));
 }

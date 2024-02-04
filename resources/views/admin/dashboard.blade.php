@@ -32,30 +32,27 @@
 </nav>
 
 
+
+
+
 @endsection
 <style>
       .user-container {
         /* background-color: #f8f9fa; */
-        background-color: #f8f9fa;
-    padding: 20px;
-    border: 1px solid #dee2e6;
+        position: relative;
+    border: 1px solid #ccc;
     border-radius: 10px;
-    width: 60%;
+    width: 80%;
     margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 30px;
     font-family: 'Montserrat', sans-serif;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.5);
         
 
     }
 
-    nav {
-      background-color: #f8f9fa; /* Light gray background color */
-      padding: 10px;
-      display: absolute;
-      justify-content: space-around;
-      align-items: center;
-    }
-
+  
     .dashboard-stats {
       display: flex;
       justify-content: space-around;

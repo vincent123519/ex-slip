@@ -15,7 +15,6 @@
                 <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
             </select>
 
-            <!-- Display month dropdown if "month" is selected -->
             @if (request()->input('sort_by') == 'month')
             <label for="month">Select Month:</label>
             <select name="month" id="month">
@@ -23,7 +22,6 @@
                     <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
                 @endforeach
             </select>
-            <!-- Pre-select the current year in the year dropdown -->
             <label for="year">Select Year:</label>
             <select name="year" id="year">
                 @for ($year = date('Y'); $year >= 2000; $year--)
@@ -32,7 +30,6 @@
             </select>
         @endif
 
-            <!-- Display year dropdown if "year" is selected -->
             @if (request()->input('sort_by') == 'year')
                 <select name="year">
                     @for ($year = date('Y'); $year >= 2000; $year--)
@@ -61,7 +58,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Status</th>
-                            <th>Actions</th> <!-- Added a new column for actions -->
+                            <th>Actions</th> 
 
                         </tr>
                     </thead>
@@ -118,7 +115,7 @@
 
     .create-slip-button {
         display: inline-block;
-        padding: 12px 400px;
+        /* padding: 12px 400px; */
         font-size: 20px;
         text-align: center;
         text-decoration: none;

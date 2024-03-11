@@ -154,4 +154,8 @@ Route::get('admin/teachers', [AdminController::class, 'showTeacher'])->name('adm
 
 
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+// import csv
 
+Route::post('/admin/import-students', [AdminController::class, 'importStudents'])->name('admin.import.students');
+
+Route::get('/admin/import', [AdminController::class, 'showImportForm'])->name('admin.import.index');

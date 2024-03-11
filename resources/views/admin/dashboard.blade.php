@@ -31,6 +31,13 @@
   </div>
 </nav>
 
+<form action="{{ route('admin.import.students') }}" method="post" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file" accept=".csv">
+    <button type="submit">Import Students</button>
+</form>
+
+
 
 
 

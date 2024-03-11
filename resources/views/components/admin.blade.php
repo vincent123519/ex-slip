@@ -63,6 +63,8 @@
     <!-- Add Changeuser password below -->
     <li><a href="{{ route('manage-users') }}">Manage UserAccount</a></li>
     <li><a href="{{ route('head-counselor.assign.form') }}">Assign Counselor</a></li>
+    <li><a href="{{ route('admin.import.index') }}">Import Data</a></li>
+
 
 </ul>
         </div>

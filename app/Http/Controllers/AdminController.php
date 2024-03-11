@@ -133,5 +133,34 @@ public function showTeacher()
     return view('admin.teachers.index', compact('teachers'));
 }
 
+public function importStudents(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
+        ]);
+
+        // Process the uploaded file
+        $file = $request->file('file');
+
+        // Read the CSV file and insert records into the database
+        $data = array_map('str_getcsv', file($file));
+        foreach ($data as $row) {
+            Student::create([
+                'name' => $row[0], // Assuming the first column is the student's name
+                'email' => $row[1], // Assuming the second column is the student's email
+                // Add other fields as needed
+            ]);
+        }
+
+        // Optionally, you can redirect back with a success message
+        return redirect()->back()->with('success', 'Students imported successfully.');
+    }
+
+    public function showImportForm()
+    {
+        return view('admin.import.import_students');
+    }
+
 
 }

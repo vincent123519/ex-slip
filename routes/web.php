@@ -16,11 +16,7 @@ use App\Http\Controllers\HeadCounselorController;
 Route::get('/reports', [ReportController::class, 'viewReports'])
     ->name('reports.view');
 
-Route::get('/feedback/{excuseSlipId}', [FeedbackController::class, 'showFeedbackForm'])
-    ->name('feedback.form');
 
-Route::post('/feedback/submit', [FeedbackController::class, 'submitFeedback'])
-    ->name('feedback.submit');
 
 // Route::get('/excuse_slips', [ExcuseSlipController::class, 'index'])->name('excuse_slips.index');
 
@@ -159,3 +155,5 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 Route::post('/admin/import-students', [AdminController::class, 'importStudents'])->name('admin.import.students');
 
 Route::get('/admin/import', [AdminController::class, 'showImportForm'])->name('admin.import.index');
+Route::post('/admin/import-teachers', [AdminController::class, 'importTeachers'])->name('admin.import.teachers');
+Route::post('/admin/import-courses', [AdminController::class, 'importCourses'])->name('admin.import.courses');

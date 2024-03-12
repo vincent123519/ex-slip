@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Counselor;
+use Exception;
+use App\Models\Dean;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\Semester;
+use App\Models\Counselor;
 use App\Models\StudyLoad;
 use Illuminate\Http\Request;
 use App\Models\CourseOffering;
-use App\Models\Dean;
-use App\Models\Teacher;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -135,25 +136,20 @@ public function showTeacher()
 
 public function importStudents(Request $request)
     {
-        // Validate the uploaded file
         $request->validate([
-            'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
+            'file' => 'required|mimes:csv,txt|max:2048' 
         ]);
 
-        // Process the uploaded file
         $file = $request->file('file');
 
-        // Read the CSV file and insert records into the database
         $data = array_map('str_getcsv', file($file));
         foreach ($data as $row) {
             Student::create([
-                'name' => $row[0], // Assuming the first column is the student's name
-                'email' => $row[1], // Assuming the second column is the student's email
-                // Add other fields as needed
+                'name' => $row[0], 
+                'email' => $row[1],
             ]);
         }
 
-        // Optionally, you can redirect back with a success message
         return redirect()->back()->with('success', 'Students imported successfully.');
     }
 
@@ -162,5 +158,52 @@ public function importStudents(Request $request)
         return view('admin.import.import_students');
     }
 
+    public function importTeachers(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048' 
+        ]);
+
+        $file = $request->file('file');
+        
+        try {
+            $data = array_map('str_getcsv', file($file));
+            
+            foreach ($data as $row) {
+                Teacher::create([
+                    'name' => $row[0], 
+                    'email' => $row[1], 
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Teachers imported successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error occurred while importing teachers.');
+        }
+    }
+
+    public function importCourses(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048' 
+        ]);
+
+        $file = $request->file('file');
+        
+        try {
+            $data = array_map('str_getcsv', file($file));
+            
+            foreach ($data as $row) {
+                Course::create([
+                    'name' => $row[0], 
+                    'description' => $row[1], 
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Courses imported successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error occurred while importing courses.');
+        }
+    }
 
 }

@@ -112,7 +112,7 @@ class DeanController extends Controller
         ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')
         ->where('dean_id', $deanId)
         ->whereHas('status', function ($query) {
-            $query->whereIN('status_id', [2,4]);
+            $query->whereIN('status_id', [2,4,3]);
         })
         ->get();
 

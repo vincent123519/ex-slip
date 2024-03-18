@@ -109,7 +109,7 @@
         <label for="supporting_document">Supporting Document</label>
         <div class="custom-file">
             <input type="file" class="custom-file-input" id="supporting_document" name="supporting_document" accept=".pdf" required>
-            <label class="custom-file-label" for="supporting_document">Choose file...</label>
+            <label class="custom-file-label" for="supporting_document"></label>
         </div>
     </div>
 

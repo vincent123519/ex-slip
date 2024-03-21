@@ -30,7 +30,17 @@
 
 </html>
 <style>
-    
+    .reg{
+        color: black;
+    /* padding: 2px 4px; */
+    /* background: yellow; */
+    text-decoration: none;
+    }
+    .createbtn{
+        background: yellow;
+    border-radius: 6px;
+    margin: 9px;
+    }
 
 </style>
 

@@ -53,6 +53,7 @@
 
 </body>
 <style>
+
     .nav-right {
     font-family: '', sans-serif; /* Replace 'YourFont' with the actual font you want to use */
 }

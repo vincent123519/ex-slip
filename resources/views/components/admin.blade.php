@@ -26,7 +26,10 @@
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">
-                <div class="circle-icon"></div><i>Logout</i>
+                <div class="circle-icon"></div><i style="
+    color: beige;
+    font-weight: bold;
+">Logout</i>
             </button>
         </form></div>
             
@@ -51,19 +54,21 @@
     <ul>
     <li><span>DASHBOARD</span></li>
     <li class="dropdown-li">
-        <span id="schoolYearButton"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
+    <span id="schoolYearButton" style="
+    font-weight: bold;
+"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
         <ul class="dropdown" id="schoolYearDropdown">
             <!-- Add your school year options here -->
-            <li><a href="#">SY 2021-2022</a></li>
-            <li><a href="#">SY 2022-2023</a></li>
-            <li><a href="#">SY 2023-2024</a></li>
+            <li><a class="years" href="#">SY 2021-2022</a></li>
+            <li><a class="years" href="#">SY 2022-2023</a></li>
+            <li><a class="years" href="#">SY 2023-2024</a></li>
             <!-- Add more options as needed -->
         </ul>
     </li>
     <!-- Add Changeuser password below -->
-    <li><a href="{{ route('manage-users') }}">Manage UserAccount</a></li>
-    <li><a href="{{ route('head-counselor.assign.form') }}">Assign Counselor</a></li>
-    <li><a href="{{ route('admin.import.index') }}">Import Data</a></li>
+    <li><a class="links" href="{{ route('manage-users') }}">MANAGE USER ACCOUNTS</a></li>
+    <li><a class="links" href="{{ route('head-counselor.assign.form') }}">ASSIGN COUNSELORS</a></li>
+    <li><a class="links" href="{{ route('admin.import.index') }}">IMPORT DATA</a></li>
 
 
 </ul>
@@ -92,6 +97,58 @@
 
 <style>
     /* Your existing styles */
+    .years{
+        font-weight: bold;
+        text-decoration: none;
+
+    }
+    .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-top: 66px;
+}
+    .sis {
+    display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 155px;
+}
+.sis .White {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: xx-large;
+}
+    .logo{
+    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 1px;
+    margin-left: 10px;
+    position: absolute;
+    height: 105px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+    }
+    .sis{
+        display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 174px;
+    }
+    .links
+    {
+        text-decoration: none;
+    color: rgba(13, 62, 32, 0.98);
+    font-weight: bold;
+    padding: 0px 10px;
+    }
     .navmenu{
         font-family: 'Montserrat', sans-serif;            
 

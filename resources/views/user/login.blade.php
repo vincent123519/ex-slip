@@ -60,10 +60,11 @@
                                         <button type="submit" class="btn btn-primary">
                                             {{ __('Login') }}
                                         </button>
-
-                                        <a href="{{ route('register') }}">
+                                        <button class="createbtn">
+                                        <a class="reg" href="{{ route('register') }}">
                                             Create Account
                                         </a>
+                                        </button>
                                     </div>
                                 </div>
                             </form>

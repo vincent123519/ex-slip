@@ -13,6 +13,7 @@ use App\Models\Counselor;
 use App\Models\StudyLoad;
 use Illuminate\Http\Request;
 use App\Models\CourseOffering;
+use App\Models\DepartmentDegree;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -137,20 +138,46 @@ public function showTeacher()
 public function importStudents(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:csv,txt|max:2048' 
+            'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
         ]);
 
         $file = $request->file('file');
 
-        $data = array_map('str_getcsv', file($file));
-        foreach ($data as $row) {
-            Student::create([
-                'name' => $row[0], 
-                'email' => $row[1],
-            ]);
-        }
+        try {
+            $data = array_map('str_getcsv', file($file));
 
-        return redirect()->back()->with('success', 'Students imported successfully.');
+            foreach ($data as $row) {
+                // Create a user with a username and set a default password
+                $user = User::create([
+                    'first_name' => $row[0], // Assuming the first column is the first name
+                    'last_name' => $row[1], // Assuming the second column is the last name
+                    'username' => $row[3], // Assuming the fourth column is the username
+                    'password' => Hash::make('12345'), // You can set a default password
+                    'role_id' => 3, // Replace 3 with the actual role ID for students
+                ]);
+
+                // Find the department degree
+                $degree = DepartmentDegree::where('degree_name', $row[2])->first(); // Assuming the third column is the degree name
+
+                if ($degree) {
+                    $student = new Student([
+                        'first_name' => $row[0],
+                        'last_name' => $row[1],
+                        'year_level' => $row[4], // Assuming the fifth column is the year level
+                    ]);
+
+                    $student->user()->associate($user);
+                    $student->degree()->associate($degree);
+                    $student->save();
+                } else {
+                    return redirect()->back()->with('error', 'Department degree not found for student: ' . $row[0]);
+                }
+            }
+
+            return redirect()->back()->with('success', 'Students imported successfully.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error occurred while importing students.');
+        }
     }
 
     public function showImportForm()

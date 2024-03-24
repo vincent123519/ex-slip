@@ -11,6 +11,7 @@ use App\Models\Teacher;
 use App\Models\Semester;
 use App\Models\Counselor;
 use App\Models\StudyLoad;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Models\CourseOffering;
 use App\Models\DepartmentDegree;
@@ -188,19 +189,41 @@ public function importStudents(Request $request)
     public function importTeachers(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:csv,txt|max:2048' 
+            'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
         ]);
 
         $file = $request->file('file');
-        
+
         try {
             $data = array_map('str_getcsv', file($file));
-            
+
             foreach ($data as $row) {
-                Teacher::create([
-                    'name' => $row[0], 
-                    'email' => $row[1], 
+                // Create a user with a username and set a default password
+                $user = User::create([
+                    'first_name' => $row[0], // First Name
+                    'last_name' => $row[1], // Last Name
+                    'username' => $row[2], // Username
+                    'password' => Hash::make('12345'), // Default Password
+                    'role_id' => 2, // Teacher Role ID
                 ]);
+
+                // Find the department
+                $department = Department::where('department_name', $row[3])->first(); // Department Name
+
+                if ($department) {
+                    $teacher = new Teacher([
+                        'user_id' => $user->id,
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                        // Add other teacher attributes if needed
+                    ]);
+
+                    $teacher->user()->associate($user);
+                    $teacher->department()->associate($department);
+                    $teacher->save();
+                } else {
+                    return redirect()->back()->with('error', 'Department not found for teacher: ' . $row[0]);
+                }
             }
 
             return redirect()->back()->with('success', 'Teachers imported successfully.');

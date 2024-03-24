@@ -155,19 +155,13 @@
 }
 
 .login-container button[type="submit"] {
-    height: 20px;
-    padding: 0px 5px;
-    width: 30%;
-    cursor: pointer;
-    border: 2px solid #a2a194;
-    color: #000;
-    float: center;
-    background-color: green;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    color: rgb(0, 172, 26);
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgb(0, 172, 26);
 }
 
 .login-container button[type="submit"]:hover {
-    background-color: greenyellow;
+    background-color: rgb(0, 231, 23);
 }
 .signup-link {
     text-decoration: none;
@@ -229,6 +223,13 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.reg {
+    color: white;
+    background-color: rgb(0, 231, 23);
+  }
+
+
+  
 .register-container button[type="submit"]:hover {
     background-color: #0056b3;
 }

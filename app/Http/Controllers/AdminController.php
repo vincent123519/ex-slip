@@ -15,6 +15,8 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Models\CourseOffering;
 use App\Models\DepartmentDegree;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -231,46 +233,45 @@ public function importStudents(Request $request)
             return redirect()->back()->with('error', 'Error occurred while importing teachers.');
         }
     }
-
+    
     public function importCourses(Request $request)
 {
-    // Validate the uploaded CSV file
     $request->validate([
-        'file' => 'required|mimes:csv,txt|max:2048', // Adjust the file size limit as needed
+        'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
     ]);
 
-    // Get the file from the request
-    $file = $request->file('file');
+    try {
+        $file = $request->file('file');
+        $data = array_map('str_getcsv', file($file));
 
-    // Read the CSV file and process each course
-    $csvData = array_map('str_getcsv', file($file));
-    $headers = array_shift($csvData); // Remove headers from CSV data
+        foreach ($data as $row) {
+            // Ensure that the row has the correct number of columns
+            if (count($row) < 3) {
+                Log::error('Invalid row format: ' . implode(',', $row));
+                continue; // Skip invalid rows
+            }
 
-    foreach ($csvData as $row) {
-        $courseData = [
-            'course_code' => $row[0],
-            'course_name' => $row[1],
-            'department_id' => $row[2],
-        ];
+            // Extract data from the row
+            $courseCode = $row[0];
+            $courseName = $row[1];
+            $departmentId = (int) $row[2]; // Ensure department ID is an integer
 
-        // Check if the course already exists
-        $existingCourse = Course::where('course_code', $courseData['course_code'])->first();
+            // Create the course
+            $course = new Course();
+            $course->course_code = $courseCode;
+            $course->course_name = $courseName;
+            $course->department_id = $departmentId;
 
-        if (!$existingCourse) {
-            $course = Course::create($courseData);
-
-            // Retrieve the department for the course
-            $department = Department::find($courseData['department_id']);
-
-            // Associate the course with the department
-            $course->department()->associate($department);
+            // Save the course
             $course->save();
         }
-    }
 
-    return redirect()->route('courses.index')->with('success', 'Courses imported successfully.');
+        return redirect()->back()->with('success', 'Courses imported successfully.');
+    } catch (Exception $e) {
+        Log::error('Error occurred while importing courses: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Error occurred while importing courses.');
+    }
 }
 
-    
 
 }

@@ -233,27 +233,44 @@ public function importStudents(Request $request)
     }
 
     public function importCourses(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:csv,txt|max:2048' 
-        ]);
+{
+    // Validate the uploaded CSV file
+    $request->validate([
+        'file' => 'required|mimes:csv,txt|max:2048', // Adjust the file size limit as needed
+    ]);
 
-        $file = $request->file('file');
-        
-        try {
-            $data = array_map('str_getcsv', file($file));
-            
-            foreach ($data as $row) {
-                Course::create([
-                    'name' => $row[0], 
-                    'description' => $row[1], 
-                ]);
-            }
+    // Get the file from the request
+    $file = $request->file('file');
 
-            return redirect()->back()->with('success', 'Courses imported successfully.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error occurred while importing courses.');
+    // Read the CSV file and process each course
+    $csvData = array_map('str_getcsv', file($file));
+    $headers = array_shift($csvData); // Remove headers from CSV data
+
+    foreach ($csvData as $row) {
+        $courseData = [
+            'course_code' => $row[0],
+            'course_name' => $row[1],
+            'department_id' => $row[2],
+        ];
+
+        // Check if the course already exists
+        $existingCourse = Course::where('course_code', $courseData['course_code'])->first();
+
+        if (!$existingCourse) {
+            $course = Course::create($courseData);
+
+            // Retrieve the department for the course
+            $department = Department::find($courseData['department_id']);
+
+            // Associate the course with the department
+            $course->department()->associate($department);
+            $course->save();
         }
     }
+
+    return redirect()->route('courses.index')->with('success', 'Courses imported successfully.');
+}
+
+    
 
 }

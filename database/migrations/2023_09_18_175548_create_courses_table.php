@@ -10,7 +10,7 @@ class CreateCoursesTable extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->string('course_code', 10)->primary();
             $table->string('course_name', 100);
-            $table->unsignedBigInteger('department_id')->default(1); // Set a default department ID (e.g., 1)
+            $table->unsignedBigInteger('department_id'); 
             
             // Change the foreign key constraint to match the data type
             $table->foreign('department_id')->references('department_id')->on('departments');

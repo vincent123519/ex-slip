@@ -14,6 +14,7 @@ class CreateStudentsTable extends Migration
             $table->string('first_name', 100)->default('');
             $table->string('last_name', 100)->default('');
             $table->string('middle_name', 50)->nullable();
+            $table->string('email', 100)->nullable(); // Add the email column
             $table->unsignedBigInteger('degree_id')->default(1); // Set a default value
             $table->unsignedBigInteger('year_level')->default(1);
             $table->timestamps();

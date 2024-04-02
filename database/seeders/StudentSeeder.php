@@ -19,6 +19,7 @@ class StudentSeeder extends Seeder
             [
                 'first_name' => 'Christian',
                 'last_name' => 'Morales',
+                'email' => 'christian@gmail.com',
                 'degree' => 'Bachelor of Science in Computer Science',
                 'username' => '2019012',
                 'year_level' => 2,
@@ -26,6 +27,7 @@ class StudentSeeder extends Seeder
             [
                 'first_name' => 'Vincent John',
                 'last_name' => 'Orat',
+                'email' => 'Orat@gmail.com',
                 'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2020012',
                 'year_level' => 3,
@@ -33,6 +35,7 @@ class StudentSeeder extends Seeder
             [
                 'first_name' => 'Sweet Jam',
                 'last_name' => 'Yu',
+                'email' => 'Sweetyu@gmail.com',
                 'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2018012',
                 'year_level' => 1,
@@ -41,6 +44,7 @@ class StudentSeeder extends Seeder
             [
                 'first_name' => 'Jeriel',
                 'last_name' => 'Orias',
+                'email' => 'jerjer@gmail.com',
                 'degree' => 'Bachelor of civil engineering',
                 'username' => '2023012',
                 'year_level' => 1,
@@ -51,11 +55,13 @@ class StudentSeeder extends Seeder
         foreach ($students as $studentData) {
             // Create a user with a username and set a default password
             $user = User::create([
+                
                 'first_name' => $studentData['first_name'],
                 'last_name' => $studentData['last_name'],
                 'middle_name' => $studentData['middle_name'] ?? null, // Check if the key exists
                 'title' => $studentData['title'] ?? null, // Check if the key exists
                 'username' => $studentData['username'],
+                'email' => $studentData['email'],
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 3, // Replace 3 with the actual role ID for students
             ]);
@@ -67,6 +73,8 @@ class StudentSeeder extends Seeder
                 'first_name' => $studentData['first_name'],
                 'last_name' => $studentData['last_name'],
                 'year_level' => $studentData['year_level'],
+                'email' => $studentData['email'],
+                
             ]);
 
             $student->user()->associate($user);

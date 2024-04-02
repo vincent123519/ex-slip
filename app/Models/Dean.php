@@ -8,7 +8,8 @@ class Dean extends Model
 {
     protected $primaryKey = 'dean_id';
     protected $fillable = ['dean_id', 'user_id','first_name',
-    'last_name', 'school_code', 'department_id'];
+    'last_name', 'school_code', 'department_id','email',
+    ];
 
     public function user()
     {

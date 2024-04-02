@@ -21,6 +21,7 @@ class CounselorSeeder extends Seeder
                 'first_name' => 'Jocelyn',
                 'last_name' => 'Martinez',
                 'username' => 'jocelyn.martinez',
+                'email' => 'jocelyn@gmail.com',
                 'department' => 'School of Computer Studies',
 
             ],
@@ -28,8 +29,9 @@ class CounselorSeeder extends Seeder
                 'first_name' => 'Counselor',
                 'last_name' => 'Enginering',
                 'username' => 'counselor.enginering',
+                'email' => 'eng@gmail.com',
                 'department' => 'Civil Engineering Department',
-
+                
             ],
             // Add more sample counselors
         ];
@@ -40,6 +42,7 @@ class CounselorSeeder extends Seeder
                 'first_name' => $counselorData['first_name'],
                 'last_name' => $counselorData['last_name'],
                 'username' => $counselorData['username'],
+                'email' => $counselorData['email'],
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 4,
             ]);
@@ -51,6 +54,7 @@ class CounselorSeeder extends Seeder
             $counselor = new Counselor([
                 'first_name' => $counselorData['first_name'],
                 'last_name' => $counselorData['last_name'],
+                'email' => $counselorData['email'],
             ]);
 
             $counselor->user()->associate($user);

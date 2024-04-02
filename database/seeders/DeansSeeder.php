@@ -22,12 +22,15 @@ class DeansSeeder extends Seeder
                 'last_name' => 'Cuizon',
                 'school' => 'School of Computer Studies',
                 'username' => 'jovelyn.Cuizon',
+                'email' => 'Jovelyn@gmail.com',
             ],
             [
                 'first_name' => 'Dr. Anthony',
                 'last_name' => 'Kilong',
                 'school' => 'School of Engineering', // Update the school name
                 'username' => 'anthony.kilong',
+                'email' => 'Anthony@gmail.com',
+
             ],
             // Add more sample deans
         ];
@@ -38,6 +41,7 @@ class DeansSeeder extends Seeder
                 'first_name' => $deanData['first_name'],
                 'last_name' => $deanData['last_name'],
                 'username' => $deanData['username'],
+                'email' => $deansData['email'],
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 5,
             ]);
@@ -49,6 +53,8 @@ class DeansSeeder extends Seeder
             $dean = new Dean([
                 'first_name' => $deanData['first_name'],
                 'last_name' => $deanData['last_name'],
+                'email' => $deansData['email'],
+
             ]);
 
             $dean->user()->associate($user);

@@ -15,17 +15,18 @@ class TeacherSeeder extends Seeder
         $this->call(DepartmentSeeder::class);
 
         $teachers = [
-            ['first_name' => 'John Leeroy', 'last_name' => 'Gadiane', 'username' => 'John.Leeroy', 'department' => 'School of Computer Studies'],
-            ['first_name' => 'Gene', 'last_name' => 'Abello', 'username' => 'Gene.Abello', 'department' => 'School of Computer Studies'],
+            ['first_name' => 'John Leeroy', 'last_name' => 'Gadiane', 'username' => 'John.Leeroy', 'email' => 'john.leeroy@example.com', 'department' => 'School of Computer Studies'],
+            ['first_name' => 'Gene', 'last_name' => 'Abello', 'username' => 'Gene.Abello', 'email' => 'gene.abello@example.com', 'department' => 'School of Computer Studies'],
             // Add more teachers as needed
         ];
 
         foreach ($teachers as $teacherData) {
-            // Create a user with a username and set a default password
+            // Create a user with a username, email, and set a default password
             $user = User::create([
                 'first_name' => $teacherData['first_name'],
                 'last_name' => $teacherData['last_name'],
                 'username' => $teacherData['username'],
+                'email' => $teacherData['email'], // Include the email field
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 2, // Replace 2 with the actual role ID for teachers
             ]);
@@ -37,6 +38,7 @@ class TeacherSeeder extends Seeder
                 'user_id' => $user->id,
                 'first_name' => $user->first_name,
                 'last_name' => $user->last_name,
+                'email' => $user->email,
                 // Add other teacher attributes if needed
             ]);
 
@@ -45,4 +47,5 @@ class TeacherSeeder extends Seeder
             $teacher->save();
         }
     }
+
 }

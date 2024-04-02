@@ -211,6 +211,8 @@ public function importStudents(Request $request)
                     'username' => $row[2], // Username
                     'password' => Hash::make('12345'), // Default Password
                     'role_id' => 2, // Teacher Role ID
+                    'email' => $row[4],
+
                 ]);
 
                 // Find the department
@@ -222,6 +224,8 @@ public function importStudents(Request $request)
                         'first_name' => $user->first_name,
                         'last_name' => $user->last_name,
                         // Add other teacher attributes if needed
+                        'email' => $user->email,
+
                     ]);
 
                     $teacher->user()->associate($user);

@@ -13,7 +13,7 @@ class CreateDeansTable extends Migration
             $table->unsignedBigInteger('user_id')->unique();
             $table->string('first_name', 100);
             $table->string('last_name', 100);
-            $table->string('email', 100)->unique(); // Add the email column
+            $table->string('email', 100)->nullable(); // Add the email column
             $table->unsignedBigInteger('school_code')->nullable()->default(1001);
             // Add foreign key constraints with the same data type
             $table->foreign('user_id')->references('user_id')->on('users');

@@ -1,70 +1,71 @@
-<!-- views/change_password.blade.php -->
+@extends('components.stud')
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Change Password</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
-<body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Change Password') }}</div>
+@section('content')
 
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('changePassword') }}">
-                            @csrf
+<div class ="change-pass-user">
+    <h2>Change Password</h2>
 
-                            <div class="form-group row">
-                                <label for="current_password" class="col-md-4 col-form-label text-md-right">{{ __('Current Password') }}</label>
+    <form action="{{ route('change-password') }}" method="POST">
+        @csrf
+        
+        <label for="current_password">Current Password</label>
+        <input type="password" id="current_password" name="current_password" required>
 
-                                <div class="col-md-6">
-                                    <input id="current_password" type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" required>
+        <label for="new_password">New Password</label>
+        <input type="password" id="new_password" name="new_password" required>
 
-                                    @error('current_password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
+        <label for="confirm_password">Confirm New Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
 
-                            <div class="form-group row">
-                                <label for="new_password" class="col-md-4 col-form-label text-md-right">{{ __('New Password') }}</label>
+        <input type="submit" value="Change Password">
+    </form>
+</div>
 
-                                <div class="col-md-6">
-                                    <input id="new_password" type="password" class="form-control @error('new_password') is-invalid @enderror" name="new_password" required>
 
-                                    @error('new_password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
+@endsection
+<style>
+        input[type=text], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-                            <div class="form-group row">
-                                <label for="new_password_confirmation" class="col-md-4 col-form-label text-md-right">{{ __('Confirm New Password') }}</label>
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-                                <div class="col-md-6">
-                                    <input id="new_password_confirmation" type="password" class="form-control" name="new_password_confirmation" required>
-                                </div>
-                            </div>
+        input[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-                            <div class="form-group row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Change Password') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        .change-pass-user {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+            width: 50%;
+            margin: auto;
+            margin-top: 50px;
+            font-family: 'Montserrat', sans-serif;            
+        }
+    </style>

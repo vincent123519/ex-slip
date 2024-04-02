@@ -206,7 +206,8 @@ class UserController extends Controller
 
         // Add any additional logic or actions after changing the user's password
 
-        return response()->json(['message' => 'User password changed successfully']);
+        return redirect()->route('change-password')->with('success', 'User updated successfully');
+
     }
 
     /**

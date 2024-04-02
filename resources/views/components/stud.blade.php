@@ -47,7 +47,12 @@
     <div class="divider"></div>
     <div class="divider"></div>
     <div class="navmenu"><ul>
+
         <li><span>DASHBOARD</span></li>
+        <li class="stud-navmenu">
+        <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
+
+        
 
     </ul></div>    </div>
     
@@ -59,3 +64,6 @@
 @section('head')
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 @endsection
+
+
+

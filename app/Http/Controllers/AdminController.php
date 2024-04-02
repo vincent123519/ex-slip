@@ -155,8 +155,11 @@ public function importStudents(Request $request)
                     'first_name' => $row[0], // Assuming the first column is the first name
                     'last_name' => $row[1], // Assuming the second column is the last name
                     'username' => $row[3], // Assuming the fourth column is the username
+                    'email' => $row[5],
                     'password' => Hash::make('12345'), // You can set a default password
                     'role_id' => 3, // Replace 3 with the actual role ID for students
+
+                    
                 ]);
 
                 // Find the department degree
@@ -167,6 +170,7 @@ public function importStudents(Request $request)
                         'first_name' => $row[0],
                         'last_name' => $row[1],
                         'year_level' => $row[4], // Assuming the fifth column is the year level
+                        'email' => $row[5],
                     ]);
 
                     $student->user()->associate($user);

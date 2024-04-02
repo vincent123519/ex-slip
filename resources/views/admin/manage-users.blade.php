@@ -2,8 +2,7 @@
 
 @section('content')
 <div class="manage-users-container">
-    <h1>Manage Users Password</h1>
-
+<h1 style=" padding: 0 51vh; ">Manage Users Password</h1>
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -12,15 +11,36 @@
 
     <form action="{{ route('manage-users') }}" method="GET">
         <div class="form-group">
-            <label for="role_filter">Filter by Role:</label>
-            <select name="role_filter" id="role_filter" class="form-control" onchange="this.form.submit()">
-                <option value="">All</option>
-                <option value="Head Counselor">Head Counselor</option>
-                <option value="Teacher">Teacher</option>
-                <option value="Student">Student</option>
-                <option value="Counselor">Counselor</option>
-                <option value="Dean">Dean</option>
-                <option value="Admin">Admin</option>
+        <label for="role_filter" style="
+    padding: 1px 0px;
+    margin: 6px;
+    margin-top: 0px;
+">Filter by Role:</label>
+            <select name="role_filter" id="role_filter" class="form-control" onchange="this.form.submit()" style="
+    padding: 6px;
+    margin: -1px -2px;
+    border-radius: 31px;
+    background: yellow;
+    font-weight: bold;
+">                <option value="">All</option>
+                <option value="Head Counselor" style="
+    font-weight: bold;
+">Head Counselor</option>
+                <option value="Teacher" style="
+    font-weight: bold;
+">Teacher</option>
+                <option value="Student" style="
+    font-weight: bold;
+">Student</option>
+                <option value="Counselor" style="
+    font-weight: bold;
+">Counselor</option>
+                <option value="Dean" style="
+    font-weight: bold;
+">Dean</option>
+                <option value="Admin" style="
+    font-weight: bold;
+">Admin</option>
                 <!-- Add reset option -->
                 <!-- Add other roles as needed -->
             </select>
@@ -38,9 +58,11 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Useraccount</th>
+                <th>Username</th>
                 <th>Roles</th>
-                <th>Actions</th>
+                <th style="
+    width: 3px;
+">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -83,19 +105,26 @@
     body {
         font-family: 'Montserrat', sans-serif;
     }
-
+    .td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 39px;
+}
     .manage-users-container {
-        position: relative;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        width: 80%;
-        margin: 20px auto;
-        margin-right: 30px;
-    }
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 80%;
+    margin: 20px auto;
+    margin-right: 30px;
+    font-weight: bold;
+}
 
     /* CSS styles for the user table */
     .user-table {
-        width: 95%;
+        width: 100%;
         margin-top: 10px;
     }
 
@@ -103,13 +132,14 @@
     .user-table td {
         border: 1px solid #ccc;
         padding: 6px;
-        text-align: left;
+        text-align: center;
         font-size: 14px;
     }
 
     .user-table th {
         background-color: #4CAF50;
         color: white;
+        border-radius: 72px;
     }
 
     /* Change delete button color to yellow */

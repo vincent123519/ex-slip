@@ -16,8 +16,11 @@
         <div class="logo"></div>
         <div class="sis">
             <span class="yellow">Ex</span>
-            <span class="White">Sis</span>
+            <span class="yellow">Sis</span>
             <span class="yellow">Slip</span>
+            <span class="White">Excuse</span>
+            <span class="Whites">Slip</span>
+            <span class="Whitess">System</span>
             
 
             <div class="nav-right">
@@ -26,13 +29,11 @@
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">
-                <div class="circle-icon"></div><i style="
-    color: beige;
-    font-weight: bold;
-">Logout</i>
+                <div class="circle-icon"></div><i style=" color: beige;
+                 font-weight: bold; ">Logout</i>
             </button>
-        </form></div>
-            
+                   </form>
+                </div>
 
                         
                     </div>
@@ -120,14 +121,29 @@
     color: whitesmoke;
     font-weight: bold;
     padding: 0px;
-    font-size: xx-large;
+    font-size: large;
+    margin-left: -164px;
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
 }
     .logo{
     background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    margin-top: 1px;
+    margin-top: -14px;
     margin-left: 10px;
     position: absolute;
     height: 105px;

@@ -28,9 +28,8 @@
                                 @csrf
 
                                 <div class="form-group row">
-                                    <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
-
-                                    <div class="col-md-6">
+                                <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
+                                <div class="col-md-6 __web-inspector-hide-shortcut__" style="margin: 12px;">
                                         <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autofocus>
 
                                         @error('username')
@@ -44,7 +43,7 @@
                                 <div class="form-group row">
                                     <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" style=" margin: 12px;">
                                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required>
 
                                         @error('password')
@@ -60,11 +59,6 @@
                                         <button type="submit" class="btn btn-primary">
                                             {{ __('Login') }}
                                         </button>
-                                        <button class="createbtn">
-                                        <a class="reg" href="{{ route('register') }}">
-                                            Create Account
-                                        </a>
-                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -73,6 +67,11 @@
                 </div>
             </div>
         </div>
+        <!-- <button class="createbtn"> -->
+                                        <a class="reg" href="{{ route('register') }}">
+                                            Create Account
+                                        </a>
+                                        <!-- </button> -->
     </div>
 @endsection
 

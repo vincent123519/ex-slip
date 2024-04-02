@@ -17,9 +17,12 @@
         <ul>
             <div class="logo"></div>
             <div class="sis">
-                <span class="yellow">Ex</span>
-                <span class="White">Sis</span>
-                <span class="yellow">Slip</span>
+            <span class="yellow">Ex</span>
+            <span class="yellow">Sis</span>
+            <span class="yellow">Slip</span>
+            <span class="White">Excuse</span>
+            <span class="Whites">Slip</span>
+            <span class="Whitess">System</span>
                 
                 <div class="nav-right">
                     <a href="http://127.0.0.1:8000/student/dashboard"><i class="fas fa-arrow-left"></i> Back</a>
@@ -72,6 +75,27 @@
 
 .nav-right i {
     margin-right: 5px;
+}
+.sis .White {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: -164px;
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
 }
     </style>
 

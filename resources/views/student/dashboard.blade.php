@@ -48,6 +48,7 @@
             @if($excuseSlips->isEmpty())
                 <p>No Excuse Slips found.</p>
             @else
+         
                 <table class="excuse-slip-table">
                     <thead>
                         <tr>
@@ -98,7 +99,57 @@
     </div>
 @endsection
 
+    
 <style>
+.logo{
+    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -14px;
+    margin-left: 10px;
+    position: absolute;
+    height: 105px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+    }
+    .sis .White {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: -156px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .yellow {
+        color: #FFD700;
+        font-weight: bold;
+        padding: 1px;
+        font-size: xx-large;
+        margin-top: -59px;
+        font-family: "Montserrat", sans-serif;
+        margin-left: -4px;
+    }
     .student-details-container {
         background-color: #f8f9fa;
         padding: 20px;
@@ -169,12 +220,18 @@
     .excuse-slip-table th, .excuse-slip-table td {
         border: 1px solid #ddd;
         padding: 8px;
-        text-align: left;
+        text-align: center;
     }
 
-    .excuse-slip-table th {
-        background-color: #f2f2f2;
-    }
+    .excuse-slip-table th, .excuse-slip-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
 
     .excuse-slip-table td {
         vertical-align: top;
@@ -183,3 +240,4 @@
     
 
 </style>
+

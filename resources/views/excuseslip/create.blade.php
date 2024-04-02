@@ -96,11 +96,11 @@
                 <div class="dropdown">
                     <div class="dropdown-menu" aria-labelledby="courseDropdown">
                         @foreach($coursesData as $course)
-                            <div class="form-check">
-                                <input type="checkbox" name="course_code" id="course_code" value="{{ $course->course_code }}"
-                                    @if(is_array(old('course_codes')) && in_array($course->course_code, old('course_codes'))) checked @endif>
-                                <label class="form-check-label" for="course_{{ $course->course_code }}">{{ $course->course_name }}</label> 
-                            </div>
+                        <div style="display: flex; align-items: center;">
+                      <input type="checkbox" name="course_code" id="course_code" value="{{ $course->course_code }}"
+               @if(is_array(old('course_codes')) && in_array($course->course_code, old('course_codes'))) checked @endif>
+               <label class="form-check-label" for="course_{{ $course->course_code }}">{{ $course->course_name }}</label>
+               </div>
                         @endforeach
                     </div>
                 </div>

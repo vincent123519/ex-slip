@@ -14,10 +14,12 @@
  <ul> 
         <div class="logo"></div>
         <div class="sis">
-            <span class="yellow">Ex</span>
-            <span class="White">Sis</span>
+        <span class="yellow">Ex</span>
+            <span class="yellow">Sis</span>
             <span class="yellow">Slip</span>
-            
+            <span class="White">Excuse</span>
+            <span class="Whites">Slip</span>
+            <span class="Whitess">System</span>
 
             <div class="nav-right">
             <a href="#"><i class="fas fa-home"></i> </a>
@@ -83,6 +85,19 @@
     
 
 <style>
+        .logo{
+    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -14px;
+    margin-left: 10px;
+    position: absolute;
+    height: 105px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+    }
       .navmenu ul {
             list-style-type: none;
             padding: 0;
@@ -164,4 +179,26 @@
         .dropdown a:hover {
             background-color: #f5f5f5; /* Hover background color for options */
         }
+        .sis .White {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: -164px;
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+}
+        
 </style>

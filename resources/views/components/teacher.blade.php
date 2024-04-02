@@ -14,10 +14,12 @@
  <ul> 
         <div class="logo"></div>
         <div class="sis">
-            <span class="yellow">Ex</span>
-            <span class="White">Sis</span>
+        <span class="yellow">Ex</span>
+            <span class="yellow">Sis</span>
             <span class="yellow">Slip</span>
-            
+            <span class="White">Excuse</span>
+            <span class="Whites">Slip</span>
+            <span class="Whitess">System</span>
 
             <div class="nav-right">
                 <a href="#"><i class="fas fa-home"></i></a>
@@ -59,3 +61,42 @@
 @section('head')
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 @endsection
+
+<style>
+        .sis .White {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: -156px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .yellow {
+        color: #FFD700;
+        font-weight: bold;
+        padding: 1px;
+        font-size: xx-large;
+        margin-top: -59px;
+        font-family: "Montserrat", sans-serif;
+        margin-left: -4px;
+    }
+</style>

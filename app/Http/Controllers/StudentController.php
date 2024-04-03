@@ -164,7 +164,7 @@ class StudentController extends Controller
             'teacher_id' => 'required',
             'counselor_id' => 'required',
             'dean_id' => 'required',
-            'course_code' => 'required',
+            'offer_code' => 'required',
             'reason' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -207,7 +207,7 @@ class StudentController extends Controller
             'teacher_id' => 'required',
             'counselor_id' => 'required',
             'dean_id' => 'required',
-            'course_code' => 'required',
+            'offer_code' => 'required',
             'reason' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -234,7 +234,7 @@ public function dashboard(Request $request)
     // Query for fetching excuse slips
     $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
         ->where('student_id', $studentId)
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id', 'created_at');
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at');
 
     // Sorting logic based on the request parameter
     $sort_by = $request->input('sort_by', 'day');

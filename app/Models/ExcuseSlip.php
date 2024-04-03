@@ -56,9 +56,8 @@ class ExcuseSlip extends Model
     
     public function course()
     {
-        return $this->belongsTo(Course::class, 'course_code', 'course_code');
+        return $this->belongsTo(CourseOffering::class, 'offer_code', 'offer_code');
     }
-    
     public function status()
     {
         return $this->belongsTo(ExcuseStatus::class, 'status_id');

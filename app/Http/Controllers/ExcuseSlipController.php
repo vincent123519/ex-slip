@@ -70,43 +70,50 @@ class ExcuseSlipController extends Controller
     }
 
     public function createExcuseSlip()
-    {
-        $student = auth()->user()->student;
-        $degree = $student->degree;
-        $department = $degree->department;
+{
+    $student = auth()->user()->student;
+    $degree = $student->degree;
+    $department = $degree->department;
 
-            // Debugging statements
+    // Debugging statements
+    $school = School::where('school_code', $department->school_code)->first();
 
-        $school = School::where('school_code', $department->school_code)->first();
+    // Fetch the dean associated with the school
+    $dean = $school->dean;
+    $counselor = $department->counselor;
 
-            // Fetch the dean associated with the school
-        $dean = $school->dean;
-        $counselor = $department->counselor;
-       
-        $courses = Course::all();
-        $teachers = Teacher::all();
-        $counselors = Counselor::all();
-        $excuseStatuses = ExcuseStatus::all();
-        $yearLevel = auth()->user()->student->year_level;
+    // Fetch the student's study load (course offerings), if available
+    $studyLoad = $student->studyLoad;
+    if ($studyLoad) {
+        $courseOfferings = $studyLoad->courseOfferings;
+        $offerCodes = $courseOfferings->pluck('offer_code')->toArray();
 
-
-       
-
-
-        // Fetch degree data to populate the dropdown
-    
-        // Fetch teacher, dean, and counselor data
-        $coursesData = Course::select('course_code', 'course_name')->get();
-        $teacherData = Teacher::select('teacher_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
-        $deanData = Dean::select('dean_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
-        $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
-
-
-        // Create a new ExcuseSlip instance (assuming it's needed for the form)
-        $excuseSlip = new ExcuseSlip();
-    
-        return view('excuseslip.create', compact('courses', 'teachers', 'counselor', 'dean', 'excuseStatuses', 'degree', 'excuseSlip', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData'));
+        // Fetch courses based on offer codes
+        $courses = Course::whereIn('offer_code', $offerCodes)->get();
+    } else {
+        // If no study load is available, set courses to an empty collection or handle it as needed
+        $courses = collect();
     }
+
+    $teachers = Teacher::all();
+    $counselors = Counselor::all();
+    $excuseStatuses = ExcuseStatus::all();
+    $yearLevel = $student->year_level;
+
+    // Fetch degree data to populate the dropdown
+
+    // Fetch teacher, dean, and counselor data
+    $coursesData = Course::select('course_code', 'course_name')->get();
+    $teacherData = Teacher::select('teacher_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
+    $deanData = Dean::select('dean_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
+    $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
+
+    // Create a new ExcuseSlip instance (assuming it's needed for the form)
+    $excuseSlip = new ExcuseSlip();
+
+    return view('excuseslip.create', compact('courses', 'teachers', 'counselor', 'dean', 'excuseStatuses', 'degree', 'excuseSlip', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData'));
+}
+
     
     public function store(Request $request)
 {
@@ -116,7 +123,7 @@ class ExcuseSlipController extends Controller
         'teacher_id' => 'required',
         'counselor_id' => 'required',
         'dean_id' => 'required',
-        'course_code' => 'required',
+        'offer_code' => 'required',
         'reason' => 'required',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',

@@ -81,30 +81,27 @@
     </div>
 
 
-        <div class="form-group">
-                <label for="teacher_id">Teacher:</label>
-                <select name="teacher_id" id="teacher_id" class="form-control" required>
-                    @foreach($teacherData as $teacher)
-                        <option value="{{ $teacher->teacher_id }}">{{ $teacher->name }}</option>
-                    @endforeach 
-                </select>
-            </div>
+        
 
 
-            <div class="form-group">
-                <label for="course_code">Course/Subject/s Absent:</label>
-                <div class="dropdown">
-                    <div class="dropdown-menu" aria-labelledby="courseDropdown">
-                        @foreach($coursesData as $course)
-                            <div class="form-check">
-                                <input type="checkbox" name="course_code" id="course_code" value="{{ $course->course_code }}"
-                                    @if(is_array(old('course_codes')) && in_array($course->course_code, old('course_codes'))) checked @endif>
-                                <label class="form-check-label" for="course_{{ $course->course_code }}">{{ $course->course_name }}</label> 
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+    <div class="form-group">
+    
+</div>
+
+<div class="form-group">
+    <label for="offer_code">Course Offerings:</label>
+    <select class="form-control" name="offer_code" id="offer_code_select">
+        @foreach($courseOfferings as $courseOffering)
+            <option value="{{ $courseOffering->offer_code }}" data-teacher-id="{{ $courseOffering->teacher->id }}">
+                {{ $courseOffering->course->course_name }} - {{ $courseOffering->teacher->first_name }} (ID: {{ $courseOffering->teacher->teacher_id }})
+            </option>
+        @endforeach
+    </select>
+    <input type="hidden" name="teacher_id" id="teacher_id">
+</div>
+
+
+
             <div class="form-group">
         <label for="supporting_document">Supporting Document</label>
         <div class="custom-file">
@@ -140,33 +137,7 @@
 
 @endsection
 
-@section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#course_id').change(function () {
-                var selectedCourseId = $(this).val();
 
-                // Fetch the course_name based on the selected course_id (you may use an AJAX request).
-                // For simplicity, let's assume you have a function named fetchCourseNameById.
-
-                // Fetch the course_name using an imaginary fetchCourseNameById function
-                var courseName = fetchCourseNameById(selectedCourseId);
-
-                // Update the displayed course_name in the form
-                $('#course_absent').val(courseName);
-            });
-
-
-            // Function to fetch course_name by course_id (replace it with your actual implementation)
-            function fetchCourseNameById(courseId) {
-                // You may use an AJAX request here to fetch the course_name from the server.
-                // For simplicity, return a static value here.
-                return "Course Name"; // Replace this with your actual implementation
-            }
-        });
-    </script>
-@endsection
 
 <style>
     .manage-slip-container {
@@ -304,3 +275,20 @@
         }
     
 </style>
+
+<script>
+    // Get the select element
+    const selectElement = document.getElementById('offer_code_select');
+
+    // Add event listener to handle change event
+    selectElement.addEventListener('change', function(event) {
+        // Get the selected option
+        const selectedOption = event.target.options[event.target.selectedIndex];
+
+        // Get the teacher ID from the data attribute
+        const teacherId = selectedOption.getAttribute('data-teacher-id');
+
+        // Update the value of the hidden input field
+        document.getElementById('teacher_id').value = teacherId;
+    });
+</script>

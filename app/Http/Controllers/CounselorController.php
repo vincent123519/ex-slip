@@ -83,7 +83,7 @@ public function dashboard(Request $request)
 
     // Query for fetching excuse slips
     $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'course_code', 'end_date', 'status_id', 'created_at')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at')
         ->where('counselor_id', $counselorId);
 
     // Sorting logic based on the request parameter

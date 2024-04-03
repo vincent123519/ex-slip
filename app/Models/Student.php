@@ -33,4 +33,9 @@ class Student extends Model
     {
         return $this->belongsTo(DepartmentDegree::class, 'degree_id');
     }
+
+    public function studyLoads()
+    {
+        return $this->hasMany(StudyLoad::class, 'student_id'); // Ensure that the foreign key is specified
+    }
 }

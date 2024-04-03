@@ -80,7 +80,7 @@ class ExcuseSlip extends Model
         'teacher_id',
         'counselor_id',
         'dean_id',
-        'course_code',
+        'offer_code',
         'reason',
         'start_date',
         'end_date',

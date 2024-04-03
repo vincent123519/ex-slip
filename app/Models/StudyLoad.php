@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class StudyLoad extends Model
 {
@@ -14,9 +13,10 @@ class StudyLoad extends Model
 
 
     public function student()
-    {
-        return $this->belongsTo(Student::class, 'student_id');
-    }
+{
+    return $this->belongsTo(Student::class, 'student_id');
+}
+
 
     public function semester()
     {
@@ -28,14 +28,10 @@ class StudyLoad extends Model
         return $this->belongsTo(Course::class, 'course_code', 'course_code');
     }
 
-   
-    public function studyLoad()
-        {
-            return $this->hasOne(StudyLoad::class, 'student_id');
-        }
    public function courseOfferings()
    {
        return $this->belongsToMany(CourseOffering::class, 'study_load_course_offerings', 'study_load_id', 'offer_code');
    }
+   
 
 }

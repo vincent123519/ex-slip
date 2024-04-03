@@ -109,7 +109,7 @@ class DeanController extends Controller
         $deanId = auth()->user()->dean->dean_id;
 
         $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
-        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')
+        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'offer_code' ,'end_date', 'status_id')
         ->where('dean_id', $deanId)
         ->whereHas('status', function ($query) {
             $query->whereIN('status_id', [2,4,3]);

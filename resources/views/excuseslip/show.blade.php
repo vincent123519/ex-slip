@@ -125,7 +125,7 @@
                 </div>
                 <div class="teacher-container">
                 <p><strong>Teacher:</strong> {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</p>
-                <p><strong>Subject:</strong> {{ $excuseSlip->course->course_name}} </p>
+                <p><strong>Subject:</strong> {{ $excuseSlip->course->course_code}} - {{ $excuseSlip->course->offer_code}}</p>
 
 
                 </div>
@@ -233,7 +233,7 @@
 
                 @if(auth()->user()->role_id == 5)
                 
-                <!-- <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
                                     <button type="submit" class="btn btn-approved">Approve</button>
@@ -243,8 +243,8 @@
                                         @csrf
                                         @method('PUT')
                                         <button type="submit" class="btn-reject">Reject</button>
-                                </form> -->
-    <!-- Form for Dean Feedback -->
+                                </form>
+
                 <form action="{{ route('dean.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                     @csrf
                     <label for="feedback_remarks">Feedback Remarks:</label>

@@ -7,32 +7,32 @@
             
         </div>
         <div class="studyload-body">
-            <form method="POST" action="{{ route('admin.studyload.store') }}">
-                @csrf
-                <input type="hidden" name="student_id" value="{{ $studentId }}">
-                
-                <div class="form-group">
-                    <label for="offer_code">Offer Code:</label>
-                    <select name="offer_code" id="offer_code" class="custom-select" required>
-                        <option value="">Select an offer code</option>
-                        @foreach($offerCodes as $offerCode)
-                            <option value="{{ $offerCode->offer_code }}">{{ $offerCode->offer_code }} - {{ $offerCode->course_code }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="semester_id">Semester:</label>
-                    <select name="semester_id" id="semester_id" class="custom-select" required>
-                        <option value="">Select a semester</option>
-                        @foreach($semesters as $semester)
-                            <option value="{{ $semester->semester_id }}">{{ $semester->semester_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-block">Add Studyload</button>
-            </form>
+        <form method="POST" action="{{ route('admin.studyload.store') }}">
+        @csrf
+        <input type="hidden" name="student_id" value="{{ $studentId }}">
+        
+        <div class="form-group">
+            <label for="offer_codes">Offer Codes:</label>
+            <select name="offer_codes[]" id="offer_codes" class="form-control" multiple required>
+                <option value="">Select offer codes</option>
+                @foreach($offerCodes as $offerCode)
+                    <option value="{{ $offerCode->offer_code }}">{{ $offerCode->offer_code }} - {{ $offerCode->course_code }}</option>
+                @endforeach
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="semester_id">Semester:</label>
+            <select name="semester_id" id="semester_id" class="form-control" required>
+                <option value="">Select a semester</option>
+                @foreach($semesters as $semester)
+                    <option value="{{ $semester->semester_id }}">{{ $semester->semester_name }}</option>
+                @endforeach
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Add Studyload</button>
+    </form>
         </div>
     </div>
 </div>
@@ -83,3 +83,25 @@
     background-color: #0056b3;
 }
 </style>
+
+@section('scripts')
+<script>
+    // Update semester based on selected offer code
+    document.getElementById('offer_codes').addEventListener('change', function() {
+        var selectedOfferCode = this.value;
+        var semesterSelect = document.getElementById('semester_id');
+        var semesterOptions = semesterSelect.options;
+        
+        // Find the corresponding semester for the selected offer code
+        for (var i = 0; i < semesterOptions.length; i++) {
+            var semesterOption = semesterOptions[i];
+            var semesterOfferCode = semesterOption.getAttribute('data-offer-code');
+            
+            if (semesterOfferCode === selectedOfferCode) {
+                semesterSelect.value = semesterOption.value;
+                break;
+            }
+        }
+    });
+</script>
+@endsection

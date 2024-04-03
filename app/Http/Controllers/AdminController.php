@@ -79,44 +79,56 @@ class AdminController extends Controller
 }
 
 public function createStudyLoad($studentId)
-    {
-        // Retrieve the student from the database
-        $student = Student::findOrFail($studentId);
+{
+    // Retrieve the student from the database
+    $student = Student::findOrFail($studentId);
 
-        // Retrieve the semesters from the database
-        $semesters = Semester::all();
+    // Retrieve the semesters from the database
+    $semesters = Semester::all();
 
-        // Retrieve the course codes from the database
-        $courseCodes = Course::all();
+    // Retrieve the course codes from the database
+    $courseCodes = Course::all();
 
-        // Retrieve the offer codes from the database
-        $offerCodes = CourseOffering::all();
+    // Retrieve the offer codes from the database
+    $offerCodes = CourseOffering::all();
 
+    return view('admin.studyload.create', [
+        'studentId' => $studentId,
+        'semesters' => $semesters,
+        'courseCodes' => $courseCodes,
+        'offerCodes' => $offerCodes,
+    ]);
+}
 
-        return view('admin.studyload.create', ['studentId' => $studentId, 'semesters' => $semesters, 'courseCodes' => $courseCodes, 'offerCodes' => $offerCodes]);
+public function storeStudyLoad(Request $request)
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'student_id' => 'required|exists:students,student_id',
+        'semester_id' => 'required|exists:semesters,semester_id',
+        'offer_codes' => 'required|array',
+        'offer_codes.*' => 'required|exists:course_offerings,offer_code',
+    ]);
 
+    // Retrieve the study load for the student and semester, or create a new one if it doesn't exist
+    $studyLoad = StudyLoad::firstOrNew([
+        'student_id' => $validatedData['student_id'],
+        'semester_id' => $validatedData['semester_id'],
+    ]);
+
+    if (!$studyLoad->exists) {
+        $studyLoad->save();
     }
 
-    public function storeStudyLoad(Request $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'student_id' => 'required|exists:students,student_id',
-            'semester_id' => 'required',
-            'offer_code' => 'required',
-        ]);
+    // Attach the offer codes to the study load
+    $studyLoad->courseOfferings()->attach($validatedData['offer_codes']);
 
-        // Create a new study load instance
-        $studyLoad = new StudyLoad();
-        $studyLoad->student_id = $validatedData['student_id'];
-        $studyLoad->semester_id = $request->input('semester_id');
-        $studyLoad->offer_code = $request->input('offer_code');
-        $studyLoad->save();
+    // Redirect or return a response as needed
+    return redirect()->route('admin.students.index')->with('success', 'Study load added successfully');
+}
+    
 
-        // Redirect or return a response as needed
-        return redirect()->route('admin.students.index')->with('success', 'Study load added successfully');    }
-
-        public function dashboard()
+    public function dashboard()
             {
          $data = [
         'total_students' => Student::count(),

@@ -12,7 +12,7 @@ class CreateCounselorsTable extends Migration
             $table->bigIncrements('counselor_id');
             $table->unsignedBigInteger('user_id')->unique(); // Change 'unsignedInteger' to 'unsignedBigInteger'
             $table->string('first_name', 100)->default('');
-            $table->string('email', 100)->unique(); // Add the email column
+            $table->string('email', 100)->nullable(); // Add the email column
             $table->string('last_name', 100)->default('');
             $table->unsignedBigInteger('department_id')->default(1); // Change the data type to match departments
             $table->timestamps();

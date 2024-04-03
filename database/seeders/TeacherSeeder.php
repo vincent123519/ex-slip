@@ -29,6 +29,7 @@ class TeacherSeeder extends Seeder
                 'email' => $teacherData['email'], // Include the email field
                 'password' => Hash::make('12345'), // You can set a default password
                 'role_id' => 2, // Replace 2 with the actual role ID for teachers
+                
             ]);
 
             $department = Department::where('department_name', $teacherData['department'])->first();

@@ -22,7 +22,6 @@ class CourseOffering extends Model
         'start_time',
         'end_time',
         'days_of_week',
-        'department_id',
     ];
 
     public function course()
@@ -40,12 +39,11 @@ class CourseOffering extends Model
         return $this->belongsTo(Teacher::class, 'teacher_id', 'teacher_id');
     }
 
-    public function department()
-    {
-        return $this->belongsTo(Department::class, 'department_id', 'department_id');
-    }
+    
     public function studyLoads()
     {
         return $this->belongsToMany(StudyLoad::class, 'study_load_course_offerings', 'offer_code', 'study_load_id');
     }
+
+
 }

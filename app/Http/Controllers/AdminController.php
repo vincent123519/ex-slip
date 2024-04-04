@@ -18,6 +18,7 @@ use App\Models\DepartmentDegree;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -301,62 +302,65 @@ public function importStudents(Request $request)
         'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
     ]);
 
-    $file = $request->file('file');
-
     try {
+        $file = $request->file('file');
         $data = array_map('str_getcsv', file($file));
 
         foreach ($data as $row) {
-            // Validate the data format
-            if (count($row) < 8) {
-                throw new \Exception("Invalid data format");
+            // Ensure that the row has the correct number of columns
+            if (count($row) < 7) {
+                Log::error('Invalid row format: ' . implode(',', $row));
+                continue; // Skip invalid rows
             }
 
             // Extract data from the row
             $offerCode = $row[0];
             $courseCode = $row[1];
             $semesterId = $row[2];
-            $teacherName = $row[3];
+            $teacherId = $row[3];
             $startTime = $row[4];
             $endTime = $row[5];
             $daysOfWeek = $row[6];
-            $departmentId = $row[7];
 
-            // Map teacher name to teacher ID
-            $teacherId = $this->getTeacherIdByName($teacherName);
-
-            if ($teacherId !== null) {
-                // Create the course offering
-                CourseOffering::create([
-                    'offer_code' => $offerCode,
-                    'course_code' => $courseCode,
-                    'semester_id' => $semesterId,
-                    'teacher_id' => $teacherId,
-                    'start_time' => $startTime,
-                    'end_time' => $endTime,
-                    'days_of_week' => $daysOfWeek,
-                    'department_id' => $departmentId,
-                ]);
-            } else {
-                throw new \Exception("Teacher not found for name: $teacherName");
+            // Check if the course exists
+            $course = Course::where('course_code', $courseCode)->first();
+            if (!$course) {
+                Log::error("Course with code '{$courseCode}' not found for offering with offer code '{$offerCode}'");
+                continue; // Skip this row
             }
+
+            // Check if the semester exists
+            $semester = Semester::find($semesterId);
+            if (!$semester) {
+                Log::error("Semester with ID '{$semesterId}' not found for offering with offer code '{$offerCode}'");
+                continue; // Skip this row
+            }
+
+            // Check if the teacher exists
+            $teacher = Teacher::find($teacherId);
+            if (!$teacher) {
+                Log::error("Teacher with ID '{$teacherId}' not found for offering with offer code '{$offerCode}'");
+                continue; // Skip this row
+            }
+
+            // Create the course offering
+            CourseOffering::create([
+                'offer_code' => $offerCode,
+                'course_code' => $courseCode,
+                'semester_id' => $semesterId,
+                'teacher_id' => $teacherId,
+                'start_time' => $startTime,
+                'end_time' => $endTime,
+                'days_of_week' => $daysOfWeek,
+            ]);
         }
 
         return redirect()->back()->with('success', 'Course offerings imported successfully.');
     } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error occurred while importing course offerings: ' . $e->getMessage());
+        Log::error('Error occurred while importing course offerings: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Error occurred while importing course offerings.');
     }
 }
-
-private function getTeacherIdByName($name)
-{
-    // Retrieve the teacher ID based on the provided name
-    $teacher = Teacher::where('name', $name)->first();
-
-    return $teacher ? $teacher->id : null;
-}
-
-
 
 
 }

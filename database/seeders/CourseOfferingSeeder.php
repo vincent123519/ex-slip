@@ -7,7 +7,6 @@ use App\Models\CourseOffering;
 use App\Models\Course;
 use App\Models\Semester;
 use App\Models\Teacher;
-use App\Models\Department;
 use Faker\Factory as Faker;
 
 class CourseOfferingSeeder extends Seeder
@@ -59,7 +58,6 @@ class CourseOfferingSeeder extends Seeder
                                 'start_time' => $faker->time('H:i:s'),
                                 'end_time' => $faker->time('H:i:s'),
                                 'days_of_week' => $faker->randomElement(['MWF', 'TTH', 'MW', 'TH', 'F']),
-                                'department_id' => Department::inRandomOrder()->first()->department_id,
                             ]);
                         }
                     }

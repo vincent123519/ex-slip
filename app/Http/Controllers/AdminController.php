@@ -294,4 +294,69 @@ public function importStudents(Request $request)
 }
 
 
+    //
+    public function importCourseOfferings(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
+    ]);
+
+    $file = $request->file('file');
+
+    try {
+        $data = array_map('str_getcsv', file($file));
+
+        foreach ($data as $row) {
+            // Validate the data format
+            if (count($row) < 8) {
+                throw new \Exception("Invalid data format");
+            }
+
+            // Extract data from the row
+            $offerCode = $row[0];
+            $courseCode = $row[1];
+            $semesterId = $row[2];
+            $teacherName = $row[3];
+            $startTime = $row[4];
+            $endTime = $row[5];
+            $daysOfWeek = $row[6];
+            $departmentId = $row[7];
+
+            // Map teacher name to teacher ID
+            $teacherId = $this->getTeacherIdByName($teacherName);
+
+            if ($teacherId !== null) {
+                // Create the course offering
+                CourseOffering::create([
+                    'offer_code' => $offerCode,
+                    'course_code' => $courseCode,
+                    'semester_id' => $semesterId,
+                    'teacher_id' => $teacherId,
+                    'start_time' => $startTime,
+                    'end_time' => $endTime,
+                    'days_of_week' => $daysOfWeek,
+                    'department_id' => $departmentId,
+                ]);
+            } else {
+                throw new \Exception("Teacher not found for name: $teacherName");
+            }
+        }
+
+        return redirect()->back()->with('success', 'Course offerings imported successfully.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Error occurred while importing course offerings: ' . $e->getMessage());
+    }
+}
+
+private function getTeacherIdByName($name)
+{
+    // Retrieve the teacher ID based on the provided name
+    $teacher = Teacher::where('name', $name)->first();
+
+    return $teacher ? $teacher->id : null;
+}
+
+
+
+
 }

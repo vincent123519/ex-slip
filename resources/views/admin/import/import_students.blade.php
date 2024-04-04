@@ -59,7 +59,10 @@
             </div>
         </div>
     </div>
-    <div class="import-data-stud">
+   
+
+
+<div class="import-data-stud">
 
     <div class="row justify-content-center">
             <div class="col-md-8">
@@ -85,8 +88,36 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
 
+
+<div class="import-data-stud">
+
+<div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Import Course') }}</div>
+
+                <div class="card-body">
+                    @if (session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <form action="{{ route('import.course.offerings.form') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="file">Choose CSV File:</label>
+                        <input type="file" class="form-control-file" id="file" name="file" accept=".csv">
+                    </div>
+                    <button type="submit" class="btn-btn-primary">Import Course Offerings</button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 

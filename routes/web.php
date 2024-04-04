@@ -157,3 +157,4 @@ Route::post('/admin/import-students', [AdminController::class, 'importStudents']
 Route::get('/admin/import', [AdminController::class, 'showImportForm'])->name('admin.import.index');
 Route::post('/admin/import-teachers', [AdminController::class, 'importTeachers'])->name('admin.import.teachers');
 Route::post('/admin/import-courses', [AdminController::class, 'importCourses'])->name('admin.import.courses');
+Route::post('/import-course-offerings', [AdminController::class, 'importCourseOfferings'])->name('import.course.offerings.form');

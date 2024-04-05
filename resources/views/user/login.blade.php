@@ -17,7 +17,7 @@
                     <div class="card">
                         <div class="card-header">{{ __('Login') }}</div>
 
-                        <div class="card-body">
+                        <div class="login-card">
                             @if (session('success'))
                                 <div class="alert alert-success" role="alert">
                                     {{ session('success') }}

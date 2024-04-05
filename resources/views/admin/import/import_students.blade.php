@@ -19,15 +19,8 @@
                                 <label for="file">Choose CSV File:</label>
                                 <input type="file" class="form-control-file" id="file" name="file" accept=".csv">
                             </div>
-                            <button type="submit" class="btn btn-primary" style=" color: darkgreen;
-    background-color: yellow;
-    font-size: 15px;
-    font-family: system-ui;
-    border-radius: 10px;
-    font-weight: bold;
-    border-color: white;
-">Import Students</button>
-                        </form>
+                            <button type="submit" class="btn-btn-primary">Import Students</button>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -124,13 +117,17 @@
 
 <style>
 .btn-btn-primary{
-    color: darkgreen;
-    background-color: yellow;
-    font-size: 15px;
-    font-family: system-ui;
-    border-radius: 10px;
-    font-weight: bold;
-    border-color: white;
+    display: inline-block;
+  
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #04AA6D;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
 
 }
 
@@ -139,7 +136,6 @@
     padding: 20px;
     position: relative;
     border: 5px solid #ccc;
-    border-radius: 60px;
     width: 80%;
     margin: 20px auto;
     margin-right: auto;

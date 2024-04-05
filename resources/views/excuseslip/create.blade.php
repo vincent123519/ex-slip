@@ -81,12 +81,6 @@
     </div>
 
 
-        
-
-
-    <div class="form-group">
-    
-</div>
 
 <div class="form-group">
     <label for="offer_code">Course Offerings:</label>
@@ -158,6 +152,11 @@
 
     .form-group {
         margin-bottom: 20px;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 10px;
+        box-sizing: border-box;
     }
 
     label {

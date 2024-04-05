@@ -46,7 +46,7 @@
 
         input[type=submit] {
             width: 100%;
-            background-color: #4CAF50;
+            background-color: #274829;
             color: white;
             padding: 14px 20px;
             margin: 8px 0;
@@ -56,7 +56,7 @@
         }
 
         input[type=submit]:hover {
-            background-color: #45a049;
+            background-color: #fec039;
         }
 
         .change-pass-user {

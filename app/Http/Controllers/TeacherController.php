@@ -35,7 +35,7 @@ class TeacherController extends Controller
     {
         $teacherId = auth()->user()->teacher->teacher_id;
         $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
-        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'course_code' ,'end_date', 'status_id')
+        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'offer_code' ,'end_date', 'status_id')
         ->where('teacher_id', $teacherId)
         ->whereHas('status', function ($query) {
             $query->where('status_name', 'Approved by Dean')

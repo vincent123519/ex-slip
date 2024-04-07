@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
             $table->string('middle_name', 50)->nullable();
             $table->string('title', 10)->nullable();
             $table->string('email', 100)->nullable(); // Add the email column
+            $table->string('image')->nullable(); // Add column for user image
             $table->string('username', 50)->default('');
             $table->string('password', 255); // Keep this as 'password'
             $table->unsignedBigInteger('role_id')->default(1); // Set a default value

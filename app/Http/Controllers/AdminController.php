@@ -362,5 +362,24 @@ public function importStudents(Request $request)
     }
 }
 
+public function updateProfileImage(Request $request)
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Retrieve the authenticated user
+    $user = Auth::user();
+
+    // Handle image upload
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('user_images/' . $user->id, 'public');
+        $user->image = $imagePath;
+        $user->save();
+    }
+
+    // Redirect back or return a response
+}
+
 
 }

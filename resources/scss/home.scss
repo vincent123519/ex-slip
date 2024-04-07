@@ -9,6 +9,7 @@
 }
 
 
+
 .main.container .container-fluid{
     width: 100%;
     padding-right: 15px;
@@ -20,7 +21,7 @@
 
 .navmenu > ul > li:first-child {
     background: rgba(13, 62, 32, 0.98);
-    width: 100%;
+    width: 120%;
     list-style-type: none;
 }
 
@@ -36,6 +37,48 @@
     text-align: left;
     color: #fff;
 }
+
+.navmenus > ul > li:first-child {
+    font-weight: bold;
+    font-size: 1.2em;
+    font-family: "Custom Fonts", sans-serif;
+    text-align: left;
+    color: #fff;
+    // margin-left: -39px;
+  }
+
+  //student navmenu
+
+  .navmenus > ul > li:first-child {
+    background: rgba(13, 62, 32, 0.98);
+    width: 120%;
+    list-style-type: none;
+    margin-left: -39px;
+}
+
+.navmenus > ul > li:first-child {
+    padding: 15px 10px;
+    border: none;
+    font-weight: bold;
+    font-size: 1.2em;
+    font-family: 'Custom Fonts', sans-serif;
+    border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    -webkit-border-radius: 3px 3px 0 0;
+    text-align: left;
+    color: #fff;
+}
+
+.navmenus > ul > li:first-child {
+    font-weight: bold;
+    font-size: 1.2em;
+    font-family: "Custom Fonts", sans-serif;
+    text-align: left;
+    color: #fff;
+    // margin-left: -39px;
+  }
+
+
 
 .inline-navbar {
     z-index: 1;
@@ -211,10 +254,217 @@
         
         // menu side bar
       //stud
-      .stud-navmenu{
+  
+
+    .stud-navmenu {
         display: inline-block;
         padding: 2px;
         border-bottom: 1px solid rgba(13, 62, 32, 0.98);
         border-top: none;
         width: 250px;
+        margin-left: -39px;
+      }
+
+
+    // media queries
+
+    @media screen and (max-width: 768px) {
+        .sidebar {
+            width: 103px;
+            height: 180%;            opacity: .9;
+            transition: 0.3s;
+            transition-property: all;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .divider {
+            height: 0;
+            margin: 0.5rem 0;
+            overflow: hidden;
+            border-top: 1px solid #e9ecef;
+          }
+
+          .navmenu > ul > li:first-child {
+            padding: 15px 10px;
+            border: none;
+            font-weight: bold;
+            font-size: 10;
+            font-family: "Custom Fonts", sans-serif;
+            border-radius: 3px 3px 0 0;
+            -moz-border-radius: 3px 3px 0 0;
+            -webkit-border-radius: 3px 3px 0 0;
+            text-align: left;
+            color: #fff;
+          }
+
+          .header {
+            z-index: 1;
+            background-color: rgba(13, 62, 32, 0.98);
+            background-image: linear-gradient(to right, rgba(13, 62, 32, 0.98), rgba(2, 28, 2, 0.98));
+            width: 100%;
+            height: 100px;
+            display: flex;
+            top: 0;
+            position: static;
+
+        }
+
+        .yellow-navbar {
+            background-color: rgb(254, 192, 57);
+            HEIGHT: 30px;
+            WIDTH: 1000;
+        }
+        
+        .inline-navbar {
+            z-index: 1;
+            background-color: rgba(13, 62, 32, 0.98);
+            background-image: linear-gradient(to right, rgba(13, 62, 32, 0.98), rgba(2, 28, 2, 0.98));
+            width: 300%;
+            height: 100px;
+            display: flex;
+            top: 0;
+            position: static;
+        }
+        
+        .student-details-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            width: 450;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
+            margin-left: 120;
+        }
+
+
+        .manage-slip-container {
+        background-color: #f8f9fa;
+        padding: 20;
+        border: 1px solid #dee2e6;
+        width: 200%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Montserrat', sans-serif;
+        margin-left: 120;
+        }
+
+    .profile-name {
+        font-size: 11;
+        font-weight: bold;
+    }
+
+    .nav-right {
+        padding: 0 200px;
+    }
+
+    .login-card{
+        background-color: rgba(15, 63, 34, 0.9);
+        padding: 500px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(149, 0, 0, 0.1);
+    }
+
+    //dashboard counselor
+
+    .excuse-slip-table th, .excuse-slip-table td {
+        width: auto; /* Set back to auto for smaller screens */
+        max-width: none; /* Set back to none for smaller screens */
+        overflow: visible; /* Set back to visible for smaller screens */
+        white-space: normal; /* Set back to normal for smaller screens */
+        text-overflow: clip; /* Set back to clip for smaller screens */
+    }
+
+    .excuse-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        width: 120%; /* Adjusted width */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-left: 115px; /* Adjusted margin */
+        font-size: 12;
+    }
+
+    .import-data-stud {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: bold;
+        line-height: 1.5;
+        margin-left: 30%;
+      }
+
+      //admin dashboard
+      .user-container {
+        background-color: #f8f9fa;
+        position: relative;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        width: 80%;
+        font-family: 'Montserrat', sans-serif;
+        border-collapse: collapse;
+        background-color: rgba(255, 255, 255, 0.5);
+        font-size: 9;
+        margin-left: 110;
+        margin-top: 44;
+      }
+
+      //sidebar
+
+      .navmenu li {
+        display: inline-block;
+        padding: 10px;
+        border-bottom: 1px solid rgba(13,62,32,0.98);
+        border-top: none;
+        width: 250px;
+        font-size: 6;
+      }
+
+      .ad-profile-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #20430a;
+        margin-bottom: 10px;
+        background-image: url("http://[::1]:5173/resources/scss/image/ad.png");
+        background-size: cover;
+        background-position: center;
+      }
+
+      .stud-navmenu {
+        display: inline-block;
+        padding: 2px;
+        border-bottom: 1px solid rgba(13, 62, 32, 0.98);
+        border-top: none;
+        width: 250px;
+        margin-left: -35px;
+      }
+      
+      .navmenu > ul > li:first-child {
+        background: rgba(13, 62, 32, 0.98);
+        width: 120;
+        list-style-type: none;
+      }
+
+      .counselor-details-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        width: 60%;
+        margin: 20px auto;
+          margin-left: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-left: 117;
+        font-size: 10;
+      }
+
+      //student side  bar
+     
+.navmenus > ul > li:first-child {
+    background: rgba(13, 62, 32, 0.98);
+    width: 120;
+    list-style-type: none;
+    margin-left: -40px;
+}
     }

@@ -99,86 +99,95 @@
 @endsection
 
 <style>
-    .student-details-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
-        width: 62%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-family: 'Montserrat', sans-serif;
+    .sidebar {
+    z-index: 0;
+    background: #fec039;
+    position: absolute;
+    width: 250px;
+    height: calc(100% - 9%);
+    /* opacity: .9; */
+    transition: 0.3s;
+    transition-property: width;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+}
 
+.header {
+    z-index: 1;
+    background-color: rgba(13, 62, 32, 0.98);
+    background-image: linear-gradient(to right, rgba(13, 62, 32, 0.98), rgba(2, 28, 2, 0.98));
+    width: 100%;
+    height: 100px;
+    display: flex;
+    top: 0;
+    position: static;
+}
+
+/* Added CSS for .student-details-container */
+.student-details-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    width: 62%;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Added CSS for .excuse-slip-table */
+.excuse-slip-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.excuse-slip-table th, .excuse-slip-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    width: auto; /* Adjust the width as needed */
+}
+
+.excuse-slip-table th {
+    background-color: #f2f2f2;
+}
+
+.excuse-slip-table td {
+    vertical-align: top;
+}
+
+@media screen and (max-width: 768px) {
+    /* Added CSS for responsive sidebar and header */
+    .sidebar {
+        z-index: 1;
+        background: #fec039;
+        position: absolute;
+        width: 103px;
+        height: 120%;
+        opacity: .9;
+        transition: 0.3s;
+        transition-property: all;
+        overflow-y: auto;
+        font-family: Arial, sans-serif;
     }
 
-    h1 {
-        margin-bottom: 10px;
-    }
-
-    p {
-        margin-bottom: 5px;
-    }
-
-    .create-slip-button {
-        display: inline-block;
-        /* padding: 12px 400px; */
-        font-size: 20px;
-        text-align: center;
-        text-decoration: none;
-        background-color: #28a745;
-        color: #fff;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-        border: 5px solid #218838;
-    }
-
-    .create-slip-button:hover {
-        background-color: #218838;
-    }
-
-    .manage-slip-container {
-        margin-top: 20px;
-    }
-
-    .excuse-slip {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-    }
-
-    .excuse-slip p {
-        margin-bottom: 5px;
-    }
-
-    .alert {
-        margin-top: 20px;
-    }
-
-    .alert-success {
-        background-color: #d4edda;
-        border-color: #c3e6cb;
-        color: #155724;
-    }
-    .excuse-slip-table {
+    .header {
+        z-index: 1;
+        background-color: rgba(13, 62, 32, 0.98);
+        background-image: linear-gradient(to right, rgba(13, 62, 32, 0.98), rgba(2, 28, 2, 0.98));
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
+        height: 100px;
+        display: flex;
+        top: 0;
+        position: static;
     }
 
+    /* Added CSS to reset table cell width for smaller screens */
     .excuse-slip-table th, .excuse-slip-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
+        width: auto; /* Set back to auto for smaller screens */
     }
-
-    .excuse-slip-table th {
-        background-color: #f2f2f2;
-    }
-
-    .excuse-slip-table td {
-        vertical-align: top;
-    }
+}
 
     
 

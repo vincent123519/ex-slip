@@ -25,7 +25,10 @@
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">
-                <div class="circle-icon"></div><i>Logout</i>
+                <div class="circle-icon"></div><i style="
+    color: beige;
+    font-weight: bold;
+">Logout</i>
             </button>
         </form></div>
             
@@ -46,7 +49,7 @@
     </div>
     <div class="divider"></div>
     <div class="divider"></div>
-    <div class="navmenu"><ul>
+    <div class="navmenus"><ul>
 
         <li><span>DASHBOARD</span></li>
         <li class="stud-navmenu">

@@ -322,3 +322,15 @@ padding: 20px;
 border-radius: 10px;
 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle lift effect */
 }
+
+
+@media screen and (max-width: 768px) {
+    .login-card{
+        background-color: rgba(15, 63, 34, 0.9);
+        padding: 300px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(149, 0, 0, 0.1);
+        margin-right: 200px;
+    }   
+}
+

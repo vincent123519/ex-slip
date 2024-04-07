@@ -52,16 +52,16 @@
 
 <style>
     .teacher-details-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-family: 'Montserrat', sans-serif;
-
-    }
+    background-color: #f8f9fa;
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    width: 60%;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    margin-left: 120px;
+}
 
     h1 {
         margin-bottom: 10px;

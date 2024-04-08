@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="student-details-container">
+    <div class="logosc"></div>
         <h1>Absence Request</h1>        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
 
         <hr>
@@ -43,7 +44,7 @@
 
         <div class="manage-slip-container">
 
-            <h1>Excuse Slips Dashboard</h1>
+            <h2>Excuse Slips Dashboard</h2>
 
             @if($excuseSlips->isEmpty())
                 <p>No Excuse Slips found.</p>
@@ -99,11 +100,24 @@
 @endsection
 
 <style>
+    .logosc {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -15px;
+    margin-left: 485px;
+    position: absolute;
+    height: 50px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+}
     .student-details-container {
         background-color: #f8f9fa;
         padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
+        border: 10px solid #55825f;
+        border-radius: 0px;
         width: 62%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -111,8 +125,9 @@
 
     }
 
-    h1 {
-        margin-bottom: 10px;
+    h1{
+       margin-top: 75px;
+       margin-left: 418px;
     }
 
     p {
@@ -169,7 +184,7 @@
     .excuse-slip-table th, .excuse-slip-table td {
         border: 1px solid #ddd;
         padding: 8px;
-        text-align: left;
+        text-align: center;
     }
 
     .excuse-slip-table th {

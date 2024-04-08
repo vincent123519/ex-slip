@@ -3,6 +3,8 @@
 @extends('components.signlayout') <!-- You might need to create this layout -->
 @section('title', 'ExsisSlip Login')
 @section('content')
+<link href='https://fonts.googleapis.com/css?family=Alumni Sans' rel='stylesheet'>
+
     <br>
     <div class="login-greetings">
         <h2>Welcome to the USJR SIS Excuse Slip Manager</h2>
@@ -15,16 +17,23 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header">{{ __('Login') }}</div>
 
                         <div class="login-card">
+                        <div class="logos"></div>
+                        <div class="card-header"style="
+                                                    margin-top: 68px;
+                                                    margin-left: 62px;
+                                                    color: #455a64;
+                                                    font-family: 'Alumni Sans';
+                                                    font-size: 29px;
+                                                    ">{{ __('Login to your account') }}</div>
                             @if (session('success'))
                                 <div class="alert alert-success" role="alert">
                                     {{ session('success') }}
                                 </div>
                             @endif
 
-                            <form method="POST" action="{{ route('login') }}">
+                            <form method="POST" action="http://127.0.0.1:8000" style="margin-top: 25px;">
                                 @csrf
 
                                 <div class="form-group row">
@@ -60,11 +69,11 @@
                                         <button type="submit" class="btn btn-primary">
                                             {{ __('Login') }}
                                         </button>
-                                        <button class="reg">
+                                        <!-- <button class="reg">
                                         <a class="reg" href="{{ route('register') }}">
                                             Create Account
                                         </a>
-                                        </button>
+                                        </button> -->
                                     </div>
                                 </div>
                             </form>

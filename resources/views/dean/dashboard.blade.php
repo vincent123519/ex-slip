@@ -1,9 +1,10 @@
 @extends('components.dean')
 @section('content')
     <div class="dean-details-container">
+    <div class="logosc"></div>
         <h1>Absence Request</h1>
         <hr>
-        <a href="" class="create-slip-button"> Number of Excuse slip</a>
+        <!-- <a href="" class="create-slip-button"> Number of Excuse slip</a> -->
         <h2>Total Excuse Slips: {{ count($excuseSlips) }}
 </h2>
         @if(count($excuseSlips) > 0)
@@ -31,7 +32,7 @@
                                 ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
                                 <td width="500">
                                 <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-    @csrf
+    <!-- @csrf
     @method('PUT')
     <button type="submit" class="btn btn-approved">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
@@ -50,7 +51,7 @@
             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
         </svg> REJECT
     </button>
-</form>
+</form> -->
 
 
 <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">
@@ -84,11 +85,24 @@
         @endsection
 
 <style>
+    .logosc {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -15px;
+    margin-left: 485px;
+    position: absolute;
+    height: 50px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+}
     .dean-details-container {
     background-color: #f8f9fa;
     padding: 30px;
     border: 10px solid #55825f;
-    border-radius: 10px;
+    border-radius: 0px;
     width: 60%;
     margin: 20px auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -115,7 +129,8 @@
     }
 
     h1 {
-        margin-bottom: 10px;
+       margin-top: 75px;
+       margin-left: 418px;
     }
 
     p {
@@ -138,11 +153,12 @@
     .excuse-slip-table td {
         border: 1px solid #ccc;
         padding: 10px;
-        text-align: left;
+        text-align: center;
+        width: 110px;
     }
 
     .excuse-slip-table th {
-        background-color: #f8f9fa;
+        background-color: #f2f2f2;
     }
 
     .btn-approved {

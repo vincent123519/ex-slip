@@ -44,8 +44,7 @@ class DeanController extends Controller
         
 
         // Return a success response
-        return redirect()->back()->with('success', 'Excuse slip approved successfully.');
-
+        return redirect()->route('dean.dashboard')->with('success', 'Excuse slip approved successfully.');
     }
 
     
@@ -67,7 +66,7 @@ class DeanController extends Controller
         $excuseSlip->update(['status_id' => 'rejected']);
 
         // Return a success response
-        return response()->json(['message' => 'Excuse slip rejected successfully']);
+        return redirect()->route('dean.dashboard')->with('success', 'Excuse slip rejected successfully.');
     }
 
     /**

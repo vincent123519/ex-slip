@@ -113,7 +113,11 @@
 <div class="slip-view-container">
     <div class="slip-view-card">
         <div class="slip-view-header">
-            <h1>View Slip</h1>
+        <div class="logosc"></div>         
+        <h1 style="
+    margin-top: 62px;
+">View Slip</h1>
+        <hr>
         </div>
         <p><strong>Excuse slip ID:</strong> {{ $excuseSlip->excuse_slip_id }}</p>
 
@@ -121,7 +125,7 @@
             <div class="excuse-slip">
                 <div class="name-container">
                     <p><strong>Student:</strong> {{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</p>
-                    <p><strong>Degree Yr Level:</strong>{{ $excuseSlip->student->year_level}} - {{ $excuseSlip->student->degree->degree_name}} </p>
+                    <p><strong style=" margin-left: 145px;">Degree Yr Level:</strong>{{ $excuseSlip->student->year_level}} - {{ $excuseSlip->student->degree->degree_name}} </p>
                 </div>
                 <div class="teacher-container">
                 <p><strong>Teacher:</strong> {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</p>
@@ -165,7 +169,7 @@
             <ul>
                 <li>Approved by Teacher</li>
                 <li>Approved by Dean</li>
-                <li>Approved by Counselor</li>
+                <li>Noted by Counselor</li>
             </ul>
         @elseif ($excuseSlip->status->status_id == 1)
             <ul>
@@ -236,14 +240,12 @@
                 <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-approved">Approve</button>
-                                </form>
+                                    <button type="submit" class="btn btn-approved" style="margin-left: 899px;border: red;border-style: solid;">Approve</button>                                </form>
 
                 <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn-reject">Reject</button>
-                                </form>
+                                        <button type="submit" class="btn-reject" style="background: red;border: green;border-style: solid;">Reject</button>                                </form>
 
                 <form action="{{ route('dean.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                     @csrf
@@ -335,6 +337,22 @@
 </body>
 @endsection
 <style>
+.slip-view-container button[type="submitap"] {
+    background-color: #28a745;
+    height: 32px;
+    width: 11%;
+    border-radius: 5px;
+    color: white;
+    margin-left: 753px;
+}
+.slip-view-container button[type="submitre"] {
+    background-color: red;
+    height: 32px;
+    width: 11%;
+    border-radius: 5px;
+    color: white;
+    margin-left: 872px;
+}
     .slip-view-container button[type="submit"] {
         background-color: #28a745;
         height: 50px; /* Set the height you desire */
@@ -346,5 +364,34 @@
     .slip-view-container button[type="submit"]:hover {
     background-color: #218838; /* Change the background color on hover */
     cursor: pointer; /* Add a pointer cursor on hover */
+}
+.logosc {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -15px;
+    margin-left: 471px;
+    position: absolute;
+    height: 50px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+}
+hr{
+        height: 1px;
+        background-color: green;
+        border: 2px solid black;
+        border-radius: 10px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .slip-view-container input[type="text"], .slip-view-container textarea {
+    width: 98%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
 }
 </style>

@@ -16,7 +16,10 @@
     margin-right: auto;
     margin-left: auto;
 }
-
+body{
+    margin: 0;
+    overflow-x: hidden;
+}
 
 .navmenu > ul > li:first-child {
     background: rgba(13, 62, 32, 0.98);
@@ -66,50 +69,80 @@
     background-size: cover;
     width: calc(100% - 0%);
     /* Add more styles as needed */
+    overflow-x: hidden;
 }
 
 
-
-.logo {
-    background-image: url('image/usjr_trans.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-top: 1px;
-    position: absolute;
-    height: 120px;
-    width: 140px;
-    z-index: 1;
-    padding: 20px;
-    
-
-
-}
 
 .sis {
     display: flex;
     font-size: larger;
     align-items: center;
-    /* background-color: rgba(13,62,32,0.98); */
-    padding: 40px 150px;
-
-}
-
-.sis .yellow {
-    color: #FFD700; /* Yellow color */
-    font-weight: bold;
-    padding: 5px;
-    font-size: xx-large;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 155px;
 }
 
 .sis .White {
-    color: whitesmoke; /* White color */
+    color: whitesmoke;
     font-weight: bold;
     padding: 0px;
     font-size: large;
-
+    margin-left: -192px;
+    font-family: "Montserrat", sans-serif;
+    margin-top: 27px;
 }
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 27px;
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 27px;
+}
+    .logo{
+    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -14px;
+    margin-left: 10px;
+    position: absolute;
+    height: 105px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+    }
+    .sis{
+        display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 174px;
+    }
 
+
+
+    .sis .yellow {
+        color: #FFD700;
+        font-weight: bold;
+        padding: 1px;
+        font-size: 49px;
+        margin-top: -39px;
+        /* font-family: "Montserrat", sans-serif; */
+        margin-left: -1px;
+        font-family: 'Angkor';
+    }
+    
 .navigation a {
     color: white; /* White color for links */
     text-decoration: none;
@@ -197,6 +230,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            margin-left: 489px;
         }
         
         .circle-icon {
@@ -210,11 +244,4 @@
 
         
         // menu side bar
-      //stud
-      .stud-navmenu{
-        display: inline-block;
-        padding: 2px;
-        border-bottom: 1px solid rgba(13, 62, 32, 0.98);
-        border-top: none;
-        width: 250px;
-    }
+      

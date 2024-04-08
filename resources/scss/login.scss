@@ -1,3 +1,11 @@
+html {
+    margin: 0;
+}
+
+body{
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
 .inline-navbar {
     z-index: 1;
     background-color: rgba(13,62,32,0.98);
@@ -27,54 +35,139 @@
     background-size: cover;
     width: calc(100% - 0%);
     /* Add more styles as needed */
+    overflow: hidden;
 }
 
 
-
-.logo {
-    background-image: url('../scss/image/usjr_trans.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-top: 1px;
-    position: absolute;
-    height: 120px;
-    width: 140px;
-    z-index: 1;
-    padding: 5px;
-
-
-}
 
 .sis {
     display: flex;
     font-size: larger;
     align-items: center;
-    /* background-color: rgba(13,62,32,0.98); */
-    padding: 40px 150px;
-
-}
-
-.sis .yellow {
-    color: #FFD700; /* Yellow color */
-    font-weight: bold;
-    padding: 5px;
-    font-size: xx-large;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 155px;
 }
 
 .sis .White {
-    color: whitesmoke; /* White color */
+    color: whitesmoke;
     font-weight: bold;
     padding: 0px;
     font-size: large;
+    margin-left: -156px;
+    font-family: "Montserrat", sans-serif;
+}
+
+
+
+.sis {
+    display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 174px;
+}
+.sis {
+    display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 155px;
+}
+.sis {
+    display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 174px;
+}
+.sis {
+    display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 155px;
+}
+user agent stylesheet
+ul {
+    list-style-type: disc;
+}
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+}
+body {
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
 
 }
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+    .logo{
+    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 1px;
+    margin-left: 10px;
+    position: absolute;
+    height: 105px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+    }
+    .logos {
+        background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        margin-top: -15px;
+        margin-left: 78px;
+        position: absolute;
+        height: 50px;
+        width: 102px;
+        z-index: 1;
+        padding: 21px 22px;
+    }
+
+    .sis{
+        display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 174px;
+    }
+
+    .sis .yellow {
+        color: #FFD700;
+        font-weight: bold;
+        padding: 1px;
+        font-size: 49px;
+        margin-top: -39px;
+        /* font-family: "Montserrat", sans-serif; */
+        margin-left: -1px;
+        font-family: 'Angkor';
+    }
 
 .navigation a {
     color: white; /* White color for links */
     text-decoration: none;
     padding: 10p 200px;
-    margin-left: 10px;
+    margin-left: 0px;
 }
 
 .navigation a:hover {
@@ -154,14 +247,25 @@
     color: rgba(254, 192, 57);
 }
 
-.login-container button[type="submit"] {
-    color: rgb(0, 172, 26);
-    background-color: rgba(255, 255, 255, 1);
-    border: 1px solid rgb(0, 172, 26);
+.login-container button[type=submit] {
+    height: 35px;
+    margin-left: 51px;
+    padding: 0px 5px;
+    width: 65%;
+    cursor: pointer;
+    border: 2px solid orange;
+    color: yellow;
+    float: center;
+    margin-top: 16px;
+    border-radius: 50px;
+    background-color: green;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: color 0.3s ease, transform 0.2 ease;
+    font-weight: bold;
 }
 
 .login-container button[type="submit"]:hover {
-    background-color: rgb(0, 231, 23);
+    background-color: greenyellow;
 }
 .signup-link {
     text-decoration: none;
@@ -223,13 +327,6 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.reg {
-    color: white;
-    background-color: rgb(0, 231, 23);
-  }
-
-
-  
 .register-container button[type="submit"]:hover {
     background-color: #0056b3;
 }
@@ -265,14 +362,16 @@
     height: 80vh;
 }
 
-
-
-.login-card{
-    background-color: rgba(15, 63, 34, 0.9);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(149, 0, 0, 0.1);
+.login-card {
+    height: 342px;
+    width: 306px;
+    padding: 20px;
+    border: 1px solid #000000;
+    border-radius: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 
 .form-group {
     margin-bottom: 15px;
@@ -281,13 +380,17 @@
 .form-group label {
     display: block;
     margin-bottom: 5px;
+    color: #455a64;
 }
 
 .form-control {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: 96%;
+    padding: 7px;
+    margin-left: -1px;
+    border-top: 7px;
+    border-radius: 0px;
+    border-right: 0;
+    border-left: 0;
 }
 
 .btn {

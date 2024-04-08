@@ -2,8 +2,11 @@
 
 @section('content')
 <div class="manage-users-container">
-    <h1>Manage Users Password</h1>
-
+<div class="logoss"></div>
+<h1 style="
+    margin-top: 92px;
+    margin-left: 546px;
+">Manage Users Password</h1>
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -13,7 +16,12 @@
     <form action="{{ route('manage-users') }}" method="GET">
         <div class="form-group">
             <label for="role_filter">Filter by Role:</label>
-            <select name="role_filter" id="role_filter" class="form-control" onchange="this.form.submit()">
+            <select name="role_filter" id="role_filter" class="form-control" onchange="this.form.submit()" style="
+    font-weight: bold;
+    background: yellow;
+    color: darkgreen;
+    font-family: auto;
+">
                 <option value="">All</option>
                 <option value="Head Counselor">Head Counselor</option>
                 <option value="Teacher">Teacher</option>
@@ -24,14 +32,15 @@
                 <!-- Add reset option -->
                 <!-- Add other roles as needed -->
             </select>
-        </div>
-        <button type="submit" class="btn btn-reset">
+       
+         <button type="submit" class="btn btn-reset">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
                 <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
             </svg>
             
-        </button>
+          </button>
+</div>
     </form>
 
     <table class="user-table">
@@ -85,13 +94,12 @@
     }
 
     .manage-users-container {
-        position: relative;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        width: 80%;
-        margin: 20px auto;
-        margin-right: 30px;
-    }
+    position: relative;
+    border: 10px solid #55825f;
+    width: 80%;
+    margin: 20px auto;
+    margin-right: 30px;
+}
 
     /* CSS styles for the user table */
     .user-table {
@@ -101,15 +109,29 @@
 
     .user-table th,
     .user-table td {
-        border: 1px solid #ccc;
+        border: 3px solid #ccc;
         padding: 6px;
-        text-align: left;
+        text-align: center;
         font-size: 14px;
+        font-weight: bold;
     }
 
     .user-table th {
         background-color: #4CAF50;
         color: white;
+    }
+    .logoss {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 7px;
+    margin-left: 668px;
+    position: absolute;
+    height: 50px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
     }
 
     /* Change delete button color to yellow */

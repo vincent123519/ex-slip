@@ -25,7 +25,7 @@ class TeacherController extends Controller
         $excuseSlip->status_id = 5; // Assuming status_id 2 represents the "signed" status
         $excuseSlip->save();
 
-        return redirect()->back()->with('success', 'Excuse slip approved successfully.');
+        return redirect()->route('teacher.dashboard')->with('success', 'Excuse slip approved successfully.');
     }
 
    

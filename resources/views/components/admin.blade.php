@@ -15,9 +15,12 @@
  <ul> 
         <div class="logo"></div>
         <div class="sis">
-            <span class="yellow">Ex</span>
-            <span class="White">Sis</span>
+        <span class="yellow">Ex</span>
+            <span class="yellow">Sis</span>
             <span class="yellow">Slip</span>
+            <span class="White">Excuse</span>
+            <span class="Whites">Slip</span>
+            <span class="Whitess">System</span>
             
 
             <div class="nav-right">
@@ -116,25 +119,9 @@
     /* background-color: rgba(13, 62, 32, 0.98); */
     padding: 39px 155px;
 }
-.sis .White {
-    color: whitesmoke;
-    font-weight: bold;
-    padding: 0px;
-    font-size: xx-large;
-}
-    .logo{
-    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-top: 1px;
-    margin-left: 10px;
-    position: absolute;
-    height: 105px;
-    width: 102px;
-    z-index: 1;
-    padding: 21px 22px;
-    }
+
+
+
     .sis{
         display: flex;
     font-size: larger;

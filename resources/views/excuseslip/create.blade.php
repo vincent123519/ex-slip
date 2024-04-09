@@ -5,10 +5,8 @@
 
     
     <div class="manage-slip-container">
-        
-        <h2 class="excuse-slip-header">Excuse Slip</h2>
-
-        <!-- Display errors if there are any -->
+    <div class="logoss"></div>
+    <h2 class="excuse-slip-header" style="margin-left: 473px;margin-top: 79px;">Excuse Slip</h2>        <!-- Display errors if there are any -->
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -83,7 +81,7 @@
 
 
 <div class="form-group">
-    <label for="offer_code">Course Offerings:</label>
+    <label for="offer_code">Courses:</label>
     <select class="form-control" name="offer_code" id="offer_code_select">
         @foreach($courseOfferings as $courseOffering)
             <option value="{{ $courseOffering->offer_code }}" data-teacher-id="{{ $courseOffering->teacher->id }}">
@@ -134,30 +132,46 @@
 
 
 <style>
-    .manage-slip-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-family: 'Montserrat', sans-serif;
-
-    }
-
+    body{
+    margin: 0;
+    overflow-x: hidden;
+}
+.logoss {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -6px;
+    margin-left: 470px;
+    position: absolute;
+    height: 50px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+}
+.manage-slip-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border: 7px solid yellow;
+    border-radius: 0px;
+    width: 60%;
+    padding: 5px -2px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    border-style: inset;
+}
     .text-center {
         text-align: center;
     }
 
     .form-group {
-        margin-bottom: 20px;
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 10px;
-        box-sizing: border-box;
-    }
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid #ced4da;
+    box-sizing: border-box;
+}
 
     label {
         font-weight: bold;
@@ -166,12 +180,12 @@
     }
 
     .form-control {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
+    width: 100%;
+    padding: 10px;
+    border-radius: 0px;
+    background-color: #f8f9fa;
+    border: 0;
+}
 
     .form-check-input {
         margin-top: 3px;

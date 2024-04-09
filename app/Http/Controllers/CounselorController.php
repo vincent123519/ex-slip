@@ -119,15 +119,17 @@ public function dashboard(Request $request)
 
 
 
-    public function approve($id)
-    {
-        $excuseSlip = ExcuseSlip::findOrFail($id);
+public function approve($id)
+{
+    $excuseSlip = ExcuseSlip::findOrFail($id);
 
-        // Update the status to 'approved' or use the appropriate logic
-        $excuseSlip->update(['status_id' => '2']);
+    // Update the status to 'approved' or use the appropriate logic
+    $excuseSlip->update(['status_id' => '2']);
 
-        return redirect()->back()->with('success', 'Excuse slip approved successfully.');
-    }
+    // Redirect back to the dashboard after approving
+    return redirect()->route('counselor.dashboard')->with('success', 'Excuse slip approved successfully.');
+}
+
 
     public function reject($id)
     {

@@ -2,13 +2,17 @@
 
 @section('content')
     <div class="counselor-details-container">
+    <div class="logosc"></div>
         <h1>Absence Request</h1>
-        <a href="" class="create-slip-button">Number of Excuse slip</a>
-        <p>Total Excuse Slips: {{ $excuseSlips->count() }}</p> <!-- Display the count of excuse slips -->
+        <hr>
+        
+        <!-- <a href="" class="create-slip-button">Number of Excuse slip</a> -->
+    
+        <p style="font-weight: bold;">Total Excuse Slips: {{ $excuseSlips->count() }}</p> <!-- Display the count of excuse slips -->
 
         <form action="{{ route('counselor.dashboard') }}" method="GET">
-            <label for="sort_by">Sort By:</label>
-            <select name="sort_by" id="sort_by">
+        <label for="sort_by" style="font-weight: bold;">Sort By:</label>
+        <select name="sort_by" id="sort_by" style="font-weight: bold; background: darkseagreen;">
                 <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
                 <option value="weekly" {{ request()->input('sort_by') == 'weekly' ? 'selected' : '' }}>Last 7 Days</option>
                 <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
@@ -39,7 +43,11 @@
 
 
     <div class="excuse-container">
-        <h2>List of Student Excuse Slips</h2>
+    <div class="logosc"></div>
+    <h2 style="
+    margin-top: 71px;
+    margin-left: 395px;
+">List of Student Excuse Slips</h2>
 
         @if($excuseSlips->count() > 0)
             <table class="excuse-slip-table">
@@ -107,14 +115,28 @@
 
 
 <style>
+.logosc {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -15px;
+    margin-left: 485px;
+    position: absolute;
+    height: 50px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+}
+
     body{
         font-family: 'Montserrat', sans-serif;
     }
     .counselor-details-container {
         background-color: #f8f9fa;
         padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
+        border: 10px solid #55825f;
+        border-radius: 1px;
         width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -123,16 +145,28 @@
     .excuse-container {
         background-color: #f8f9fa;
         padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
+        border: 10px solid yellowgreen;
+        border-radius: 0px;
         width: 60%;
         margin: 20px auto;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
-        margin-bottom: 10px;
+    margin-top: 75px;
+    margin-left: 418px;
+}
+
+hr{
+        height: 1px;
+        background-color: darkgreen;
+        border: 2px solid black;
+        border-radius: 10px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
+
 
     p {
         margin-bottom: 5px;

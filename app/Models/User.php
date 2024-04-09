@@ -13,7 +13,6 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
-    use HasRoles;
 
     protected $primaryKey = 'user_id';
 

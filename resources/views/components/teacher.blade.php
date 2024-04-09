@@ -14,9 +14,13 @@
  <ul> 
         <div class="logo"></div>
         <div class="sis">
-            <span class="yellow">Ex</span>
-            <span class="White">Sis</span>
+        <span class="yellow">Ex</span>
+            <span class="yellow">Sis</span>
             <span class="yellow">Slip</span>
+            <span class="White">Excuse</span>
+            <span class="Whites">Slip</span>
+            <span class="Whitess">System</span>
+
             
 
             <div class="nav-right">

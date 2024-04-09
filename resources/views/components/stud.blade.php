@@ -14,10 +14,12 @@
  <ul> 
         <div class="logo"></div>
         <div class="sis">
-            <span class="yellow">Ex</span>
-            <span class="White">Sis</span>
+        <span class="yellow">Ex</span>
+            <span class="yellow">Sis</span>
             <span class="yellow">Slip</span>
-            
+            <span class="White">Excuse</span>
+            <span class="Whites">Slip</span>
+            <span class="Whitess">System</span>
 
             <div class="nav-right">
             <a href="#"><i class="fas fa-home"></i> </a>
@@ -25,10 +27,14 @@
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">
+<<<<<<< HEAD
                 <div class="circle-icon"></div><i style="
     color: beige;
     font-weight: bold;
 ">Logout</i>
+=======
+                <div class="circle-icon"></div><i></i>
+>>>>>>> backupbranch
             </button>
         </form></div>
             
@@ -62,6 +68,49 @@
     @yield('content')   
 
 </body>
+
+<style>
+.sis .yellow {
+    color: #FFD700;
+    font-weight: bold;
+    padding: 1px;
+    font-size: 49px;
+    margin-top: -49px;
+    /* font-family: "Montserrat", sans-serif; */
+    margin-left: -1px;
+    font-family: "Angkor";
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 17px;
+
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 17px;
+}
+.sis .White {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: -193px;
+    font-family: "Montserrat", sans-serif;
+    margin-top: 17px;
+}
+
+
+    </style>
 
 
 @section('head')

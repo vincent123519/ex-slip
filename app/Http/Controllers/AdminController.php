@@ -68,10 +68,15 @@ class AdminController extends Controller
     }
 
     public function deleteUser(User $user)
-    {
-        $user->delete();
-        return redirect()->route('manage-users')->with('success', 'User deleted successfully');
-    }
+{
+    // Manually delete related records in the students table
+    $user->student()->delete();
+
+    // Delete the user
+    $user->delete();
+
+    return redirect()->route('manage-users')->with('success', 'User deleted successfully');
+}
     public function showStudents()
 {
     $students = Student::all();

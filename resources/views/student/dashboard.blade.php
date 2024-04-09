@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="student-details-container">
+    <div class="logosc"></div>
         <h1>Absence Request</h1>        <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
 
         <hr>
@@ -43,7 +44,7 @@
 
         <div class="manage-slip-container">
 
-            <h1>Excuse Slips Dashboard</h1>
+            <h2>Excuse Slips Dashboard</h2>
 
             @if($excuseSlips->isEmpty())
                 <p>No Excuse Slips found.</p>
@@ -99,6 +100,7 @@
 @endsection
 
 <style>
+<<<<<<< HEAD
     .sidebar {
     z-index: 0;
     background: #fec039;
@@ -111,6 +113,30 @@
     overflow-y: auto;
     font-family: Arial, sans-serif;
 }
+=======
+    .logosc {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -15px;
+    margin-left: 485px;
+    position: absolute;
+    height: 50px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+}
+    .student-details-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border: 10px solid #55825f;
+        border-radius: 0px;
+        width: 62%;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Montserrat', sans-serif;
+>>>>>>> backupbranch
 
 .header {
     z-index: 1;
@@ -172,10 +198,64 @@
         font-family: Arial, sans-serif;
     }
 
+<<<<<<< HEAD
     .header {
         z-index: 1;
         background-color: rgba(13, 62, 32, 0.98);
         background-image: linear-gradient(to right, rgba(13, 62, 32, 0.98), rgba(2, 28, 2, 0.98));
+=======
+    h1{
+       margin-top: 75px;
+       margin-left: 418px;
+    }
+
+    p {
+        margin-bottom: 5px;
+    }
+
+    .create-slip-button {
+        display: inline-block;
+        /* padding: 12px 400px; */
+        font-size: 20px;
+        text-align: center;
+        text-decoration: none;
+        background-color: #28a745;
+        color: #fff;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        border: 5px solid #218838;
+    }
+
+    .create-slip-button:hover {
+        background-color: #218838;
+    }
+
+    .manage-slip-container {
+        margin-top: 20px;
+    }
+
+    .excuse-slip {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .excuse-slip p {
+        margin-bottom: 5px;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+    .excuse-slip-table {
+>>>>>>> backupbranch
         width: 100%;
         height: 100px;
         display: flex;
@@ -185,7 +265,21 @@
 
     /* Added CSS to reset table cell width for smaller screens */
     .excuse-slip-table th, .excuse-slip-table td {
+<<<<<<< HEAD
         width: auto; /* Set back to auto for smaller screens */
+=======
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .excuse-slip-table th {
+        background-color: #f2f2f2;
+    }
+
+    .excuse-slip-table td {
+        vertical-align: top;
+>>>>>>> backupbranch
     }
 }
 

@@ -12,12 +12,8 @@
                         <tr>
                             <th>Student Name</th>
                             <th>Status</th>
-<<<<<<< HEAD
                             <th>Course Name</th>
                             <th>Date</th>
-=======
-                            <th>Date Absent</th>
->>>>>>> backupbranch
                             <th>Duration day</th>
                            
                             <th>Action</th>
@@ -71,7 +67,6 @@
     padding: 21px 22px;
 }
     .teacher-details-container {
-<<<<<<< HEAD
     background-color: #f8f9fa;
     padding: 20px;
     border: 1px solid #dee2e6;
@@ -80,29 +75,7 @@
     margin: 20px auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
-    margin-left: 120px;
 }
-=======
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 10px solid #55825f;
-        border-radius: 0px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        font-family: 'Montserrat', sans-serif;
-
-    }    
-    hr{
-        height: 1px;
-        background-color: darkgreen;
-        border: 2px solid black;
-        border-radius: 10px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
->>>>>>> backupbranch
 
 
     h1 {

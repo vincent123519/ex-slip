@@ -27,14 +27,10 @@
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">
-<<<<<<< HEAD
                 <div class="circle-icon"></div><i style="
     color: beige;
     font-weight: bold;
 ">Logout</i>
-=======
-                <div class="circle-icon"></div><i></i>
->>>>>>> backupbranch
             </button>
         </form></div>
             

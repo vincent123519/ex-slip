@@ -45,5 +45,4 @@ class CourseOffering extends Model
         return $this->belongsToMany(StudyLoad::class, 'study_load_course_offerings', 'offer_code', 'study_load_id');
     }
 
-
 }

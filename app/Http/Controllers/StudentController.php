@@ -244,11 +244,11 @@ public function dashboard(Request $request)
             $query->whereDate('created_at', today());
             break;
         case 'month':
-                // Filter by the selected year and month
-                $year = $request->input('year', date('Y'));
-                $month = $request->input('month', date('m'));
-                $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-                break;
+            // Filter by the selected year and month
+            $year = $request->input('year', date('Y'));
+            $month = $request->input('month', date('m'));
+            $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            break;
         case 'year':
             // Filter by the selected year
             $year = $request->input('year', date('Y')); // Default to current year
@@ -259,12 +259,13 @@ public function dashboard(Request $request)
             break;
     }
 
-    $excuseSlips = $query->get();
+    // Paginate the results
+    $excuseSlips = $query->paginate(10); // Change the number of items per page as needed
 
     // Format the created_at field in each ExcuseSlip to exclude hours, minutes, and seconds
-    foreach ($excuseSlips as $excuseSlip) {
+    $excuseSlips->each(function ($excuseSlip) {
         $excuseSlip->formatted_created_at = $excuseSlip->created_at->format('Y-m-d'); // Exclude hours, minutes, and seconds
-    }
+    });
 
     return view('student.dashboard', compact('excuseSlips'));
 }

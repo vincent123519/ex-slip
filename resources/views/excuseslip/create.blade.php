@@ -80,16 +80,18 @@
 
 
 
-<div class="form-group">
-    <label for="offer_code">Courses:</label>
-    <select class="form-control" name="offer_code" id="offer_code_select">
-        @foreach($courseOfferings as $courseOffering)
-            <option value="{{ $courseOffering->offer_code }}" data-teacher-id="{{ $courseOffering->teacher->id }}">
-                {{ $courseOffering->course->course_name }} - {{ $courseOffering->teacher->first_name }} (ID: {{ $courseOffering->teacher->teacher_id }})
-            </option>
+    <div class="form-group-course">
+    <label for="offer_codes">Select Courses:</label>
+    <ul>
+        @foreach($selectedCourseOfferings as $courseOffering)
+            <li>
+                <input type="checkbox" name="offer_codes[]" id="offer_code_{{ $courseOffering['offer_code'] }}" value="{{ $courseOffering['offer_code'] }}" data-teacher-id="{{ $courseOffering['teacher_id'] }}">
+                <label for="offer_code_{{ $courseOffering['offer_code'] }}">
+                    {{ $courseOffering['course_name'] }} - {{ $courseOffering['teacher_name'] }} (ID: {{ $courseOffering['teacher_id'] }})
+                </label>
+            </li>
         @endforeach
-    </select>
-    <input type="hidden" name="teacher_id" id="teacher_id">
+    </ul>
 </div>
 
 
@@ -190,6 +192,8 @@
     .form-check-input {
         margin-top: 3px;
     }
+
+   
 
     button {
         background-color: darkgreen;
@@ -305,3 +309,64 @@
         document.getElementById('teacher_id').value = teacherId;
     });
 </script>
+
+<style>
+    .form-group-course ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .form-group-course li {
+        margin-bottom: 10px;
+    }
+
+    .form-group-course input[type="checkbox"] {
+        display: none;
+    }
+
+    .form-group-course li {
+        display: block;
+        position: relative;
+        padding-left: 30px; /* Adjust this value to change the spacing between the checkbox and label */
+        cursor: pointer;
+        font-family: Arial, sans-serif; /* Adjust font family as needed */
+        font-size: 16px; /* Adjust font size as needed */
+    }
+
+    /* Style the custom checkbox */
+    .form-group-course label:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 2px; /* Adjust this value to center the checkbox vertically */
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 3px; /* Round the corners */
+    }
+
+    /* Style the custom checkbox when checked */
+    .form-group-course input[type="checkbox"]:checked + label:before {
+        background-color: #007bff; /* Change this to the desired color when the checkbox is checked */
+    }
+
+    /* Style the custom checkmark */
+    .form-group-course label:after {
+        content: "";
+        position: absolute;
+        left: 7px; /* Adjust this value to position the checkmark */
+        top: 5px; /* Adjust this value to position the checkmark */
+        width: 6px;
+        height: 12px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        display: none;
+    }
+
+    /* Show the custom checkmark when the checkbox is checked */
+    .form-group-course input[type="checkbox"]:checked + label:after {
+        display: block;
+    }
+</style>

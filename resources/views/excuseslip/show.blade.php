@@ -394,4 +394,10 @@ hr{
     border: 1px solid #ccc;
     margin-bottom: 10px;
 }
+
+
+.teacher-container p {
+  display: inline-block;
+  margin-right: 197px;
+}
 </style>

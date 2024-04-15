@@ -22,7 +22,15 @@
             <span class="Whitess">System</span>
 
             <div class="nav-right">
-            <a href="#"><i class="fas fa-home"></i> </a>
+            <form action="{{ route('counselor.dashboard') }}" method="get" style="display: inline;">
+            @csrf
+            <button type="submit" class="home-btn">
+           <div class="home-icon"><i style="
+                color: beige;
+                font-weight: bold;
+            "> Home</i></div>
+            </button>
+        </form>
 
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf

@@ -21,22 +21,46 @@
             <span class="Whites">Slip</span>
             <span class="Whitess">System</span>
 
-            <div class="nav-right">
-            <a href="#"><i class="fas fa-home"></i> </a>
+        <div class="nav-right">
+        <form action="{{ route('student.dashboard') }}" method="get" style="display: inline;">
+            @csrf
+            <button type="submit" class="home-btn">
+           <div class="home-icon"><i style="
+                color: beige;
+                font-weight: bold;
+            "> Home</i></div>
+            </button>
+        </form>
+       
+
+        @if(auth()->user()->role_id == 4)
+
+        <form action="{{ route('counselor.dashboard') }}" method="get" style="display: inline;">
+        @csrf
+        <button type="submit" class="home-btn">
+        <div class="home-icon"><i style="
+            color: beige;
+            font-weight: bold;
+        "> Home</i></div>
+        </button>
+        </form>
+@endif
+
 
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">
                 <div class="circle-icon"></div><i style="
-    color: beige;
-    font-weight: bold;
-">Logout</i>
+                color: beige;
+                font-weight: bold;
+            ">Logout</i>
             </button>
-        </form></div>
+        </form>
+</div>
             
 
                         
-                    </div>
+    </div>
             </nav>
         </div>
         <nav class="yellow-navbar">
@@ -104,7 +128,6 @@
     font-family: "Montserrat", sans-serif;
     margin-top: 17px;
 }
-
 
     </style>
 

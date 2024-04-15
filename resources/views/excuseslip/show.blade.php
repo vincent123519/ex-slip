@@ -337,6 +337,7 @@
 </body>
 @endsection
 <style>
+    
 .slip-view-container button[type="submitap"] {
     background-color: #28a745;
     height: 32px;

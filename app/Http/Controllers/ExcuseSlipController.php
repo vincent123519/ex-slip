@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Notifications\ExcuseSlipCreatedNotification;
 
 use App\Models\Dean;
 use App\Models\User; 
@@ -18,6 +19,7 @@ use App\Models\DepartmentDegree;
 use App\Models\SupportingDocument;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class ExcuseSlipController extends Controller
 {
@@ -123,8 +125,8 @@ public function store(Request $request)
         'student_id' => 'required',
         'counselor_id' => 'required',
         'dean_id' => 'required',
-        'offer_codes' => 'required|array', // Ensure offer_codes is an array
-        'offer_codes.*' => 'required',     // Ensure each offer code is not empty
+        'offer_codes' => 'required|array',
+        'offer_codes.*' => 'required',
         'reason' => 'required',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
@@ -144,7 +146,7 @@ public function store(Request $request)
         if ($courseOffering) {
             $teacherId = $courseOffering->teacher_id;
             $courseOfferingId = $courseOffering->id;
-            
+
             // Add teacher_id and course_offering_id to the validated data
             $excuseData = [
                 'student_id' => $validatedData['student_id'],
@@ -161,9 +163,13 @@ public function store(Request $request)
 
             // Create the excuse slip request
             $excuseSlip = ExcuseSlip::create($excuseData);
-            
+
             // Add the created excuse slip to the list
             $createdSlips[] = $excuseSlip;
+
+            // Send notification to counselor
+            $counselor = User::find($validatedData['counselor_id']); // Assuming the counselor is represented by the User model
+            Notification::send($counselor, new ExcuseSlipCreatedNotification($excuseSlip));
         }
     }
 
@@ -173,7 +179,6 @@ public function store(Request $request)
 
     return redirect()->route('student.dashboard');
 }
-
 
 
     public function edit($id)

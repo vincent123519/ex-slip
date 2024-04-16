@@ -138,6 +138,8 @@ public function store(Request $request)
     // Store a list of created excuse slips
     $createdSlips = [];
 
+    
+
     // Create the excuse slips for each selected offer code
     foreach ($validatedData['offer_codes'] as $offerCode) {
         // Determine the teacher_id and course_offering_id based on the selected offer_code
@@ -171,7 +173,20 @@ public function store(Request $request)
             $counselor = User::find($validatedData['counselor_id']); // Assuming the counselor is represented by the User model
             Notification::send($counselor, new ExcuseSlipCreatedNotification($excuseSlip));
         }
+        if ($request->hasFile('supporting_document')) {
+            $file = $request->file('supporting_document');
+            $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); // Adjust the storage path as needed
+    
+            // Create a new SupportingDocument instance and associate it with the ExcuseSlip
+            $document = new SupportingDocument([
+                'document_path' => $path,
+                'upload_date' => now(),
+            ]);
+    
+            $excuseSlip->supportingDocuments()->save($document);
+        }
     }
+    
 
     // Handle supporting document upload here
 

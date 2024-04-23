@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ExcuseSlipApprovedNotification extends Notification implements ShouldQueue
+class ApprovedByDeanNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -45,14 +45,14 @@ class ExcuseSlipApprovedNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Excuse Slip Approval Notification')
-            ->greeting('Hello ' .  $this->excuseSlip->dean->first_name)
-            ->line('An excuse slip is pending for your approval.')
+            ->subject('Excuse Slip Pending for Approval')
+            ->greeting('Hello ' . $this->excuseSlip->teacher->first_name)
+            ->line('excuse slip has been approved by the Dean.')
             ->line('Excuse Slip Details:')
             ->line('Student Name: ' . $this->excuseSlip->student->first_name . ' ' . $this->excuseSlip->student->last_name)
             ->line('Reason: ' . $this->excuseSlip->reason)
-            ->line('Submitted By: ' . $this->excuseSlip->counselor->first_name)
-            ->line('Please review and take appropriate action.')
+            ->line('Submitted By Dean: ' . $this->excuseSlip->dean->first_name)
+            ->line('Please contact your counselor for further instructions, if any.')
             ->line('Thank you.');
     }
 }

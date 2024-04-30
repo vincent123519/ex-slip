@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Notifications\ExcuseSlipCreatedNotification;
-
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Log;
 use App\Models\Dean;
 use App\Models\User; 
 use App\Models\Course;
@@ -259,7 +260,80 @@ public function store(Request $request)
         return redirect()->route('excuse_slips.index');
     }
 
+    public function export(Request $request)
+    {
+        // Debug: Check received sorting criteria
+        $sort_by = $request->input('sort_by');
+        $month = $request->input('month');
+        $year = $request->input('year');
+        Log::info("Sort By: $sort_by, Month: $month, Year: $year");
+    
+        // Initialize query builder
+        $excuseSlipsQuery = ExcuseSlip::query();
+    
+        // Apply sorting criteria
+        switch ($sort_by) {
+            case 'today':
+                $excuseSlipsQuery->whereDate('created_at', today());
+                break;
+            case 'weekly':
+                $excuseSlipsQuery->whereDate('created_at', '>=', today()->subDays(7));
+                break;
+            case 'month':
+                $excuseSlipsQuery->whereYear('created_at', $year)
+                                 ->whereMonth('created_at', $month);
+                break;
+            case 'year':
+                $excuseSlipsQuery->whereYear('created_at', $year);
+                break;
+            default:
+                // No sorting criteria selected, fetch all data
+                break;
+        }
+    
+        // Fetch the sorted data
+        $excuseSlips = $excuseSlipsQuery->get();
+    
+        // Get the total count of excuse slips
+        $totalExcuseSlips = $excuseSlips->count();
+    
+        // Define CSV file headers
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="excuse_slips.csv"',
+        ];
+    
+        // Create and return the CSV response
+        return response()->stream(function () use ($excuseSlips, $totalExcuseSlips) {
+            $handle = fopen('php://output', 'w');
+    
+            // Add CSV headers
+            fputcsv($handle, ['Date', 'Student Name', 'Reason', 'Duration', 'Status']);
+    
+            // Add data rows
+            foreach ($excuseSlips as $excuseSlip) {
+                fputcsv($handle, [
+                    $excuseSlip->created_at->format('Y-m-d'),
+                    $excuseSlip->student->first_name . ' ' . $excuseSlip->student->last_name,
+                    $excuseSlip->reason,
+                    $excuseSlip->start_date . ' to ' . $excuseSlip->end_date,
+                    $excuseSlip->status->status_name == 'Approved by Counselor' ? 'Approved' : $excuseSlip->status->status_name
+                ]);
+            }
 
+             // Add two empty rows
+            fputcsv($handle, []);
+            fputcsv($handle, []);
+    
+            // Add total count row
+            fputcsv($handle, ['Total Excuse Slips:', $totalExcuseSlips]);
+    
+            fclose($handle);
+        }, 200, $headers);
+    }
+    
+    
+    
 
 
 }   

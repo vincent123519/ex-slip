@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Counselor;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
@@ -12,6 +14,7 @@ use App\Http\Controllers\DeanController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\HeadCounselorController;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
     ->name('reports.view');
@@ -158,3 +161,5 @@ Route::get('/admin/import', [AdminController::class, 'showImportForm'])->name('a
 Route::post('/admin/import-teachers', [AdminController::class, 'importTeachers'])->name('admin.import.teachers');
 Route::post('/admin/import-courses', [AdminController::class, 'importCourses'])->name('admin.import.courses');
 Route::post('/import-course-offerings', [AdminController::class, 'importCourseOfferings'])->name('import.course.offerings.form');
+
+Route::get('/excuse-slips/export', [ExcuseSlipController::class, 'export'])->name('excuse_slips.export');

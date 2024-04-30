@@ -41,9 +41,9 @@
         </form>
     </div>
 
-
     <div class="excuse-container">
     <div class="logosc"></div>
+    <a href="{{ route('excuse_slips.export') }}" class="btn btn-primary">Export to CSV</a>
     <h2 style="
     margin-top: 71px;
     margin-left: 395px;
@@ -51,6 +51,7 @@
 
         @if($excuseSlips->count() > 0)
             <table class="excuse-slip-table">
+                
                 <thead>
                     <tr>
                         <th>Date</th>

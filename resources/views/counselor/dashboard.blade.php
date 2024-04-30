@@ -43,7 +43,8 @@
 
     <div class="excuse-container">
     <div class="logosc"></div>
-    <a href="{{ route('excuse_slips.export') }}" class="btn btn-primary">Export to CSV</a>
+    <a href="{{ $exportUrl }}">Export Excuse Slips</a>
+
     <h2 style="
     margin-top: 71px;
     margin-left: 395px;
@@ -267,3 +268,8 @@ hr{
     }
     
 </style>
+<script>
+    document.getElementById('exportBtn').addEventListener('click', function() {
+        window.location.href = "{{ $exportUrl }}";
+    });
+</script>

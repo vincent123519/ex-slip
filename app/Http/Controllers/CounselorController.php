@@ -89,6 +89,8 @@ public function dashboard(Request $request)
 
     // Sorting logic based on the request parameter
     $sort_by = $request->input('sort_by', 'today');
+    $month = $request->input('month', date('m'));
+    $year = $request->input('year', date('Y'));
 
     switch ($sort_by) {
         case 'today':
@@ -114,7 +116,14 @@ public function dashboard(Request $request)
 
     $excuseSlips = $query->get();
 
-    return view('counselor.dashboard', compact('excuseSlips'));
+    // Generate export URL with query parameters
+    $exportUrl = route('excuse_slips.export', [
+        'sort_by' => $sort_by,
+        'month' => $month,
+        'year' => $year
+    ]);
+
+    return view('counselor.dashboard', compact('excuseSlips', 'exportUrl'));
 }
 
 

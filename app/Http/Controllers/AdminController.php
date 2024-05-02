@@ -18,6 +18,7 @@ use App\Models\DepartmentDegree;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -367,24 +368,43 @@ public function importStudents(Request $request)
     }
 }
 
-public function updateProfileImage(Request $request)
+public function uploadUserImages(Request $request)
 {
+    // Validation for csvfile
     $request->validate([
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'csv_file' => 'required|file|mimes:csv,txt',
     ]);
 
-    // Retrieve the authenticated user
-    $user = Auth::user();
+    $file = $request->file('csv_file');
 
-    // Handle image upload
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('user_images/' . $user->id, 'public');
-        $user->image = $imagePath;
-        $user->save();
+    $csv = array_map('str_getcsv', file($file->path()));
+
+    foreach ($csv as $row) {
+        $userId = $row[0]; // Assuming user_id is in the first column
+        $fileName = $row[1]; // Assuming image file name is in the second column
+
+        // Find the user by id
+        $user = User::find($userId);
+
+        if ($user) {
+            // Remove existing image if any
+            if ($user->image) {
+                Storage::disk('public')->delete('user_images/' . $user->image);
+            }
+
+            // Store the uploaded image as user image
+            $file->storeAs('user_images', $fileName, 'public');
+
+            // Update the user's image column
+            $user->image = $fileName;
+            $user->save();
+        }
     }
 
-    // Redirect back or return a response
+    return redirect()->back()->with('success', 'CSV file uploaded successfully.');
 }
+
+
 
 public function importStudyLoad(Request $request)
 {

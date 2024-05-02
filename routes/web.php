@@ -164,4 +164,5 @@ Route::post('/import-course-offerings', [AdminController::class, 'importCourseOf
 
 Route::get('/excuse-slips/export', [ExcuseSlipController::class, 'export'])->name('excuse_slips.export');
 Route::post('/import-study-load', [AdminController::class, 'importStudyLoad'])->name('import.studyload');
+Route::post('/upload-user-images', [AdminController::class, 'uploadUserImages'])->name('upload.user.images');
 

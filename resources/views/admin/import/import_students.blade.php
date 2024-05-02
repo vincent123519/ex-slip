@@ -141,6 +141,38 @@
         </div>
 </div>
 
+
+<div class="import-data-stud">
+
+    <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Import Profile images') }}</div>
+
+                    <div class="card-body">
+                        @if (session('success'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <form action="{{ route('upload.user.images') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <label for="csv_file">CSV File:</label>
+                        <input type="file" name="csv_file" id="csv_file">
+                        <br>
+                        <button type="submit" class="btn-btn-primary">Upload</button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>  
+
+
+
+
 @endsection
 
 

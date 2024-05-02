@@ -62,6 +62,7 @@
     <div class="navmenu">
             <ul>
                 <li><span>DASHBOARD</span></li>
+                <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
                 <li class="dropdown-li">
                     <span id="schoolYearButton"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
                     <ul class="dropdown" id="schoolYearDropdown">

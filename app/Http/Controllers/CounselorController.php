@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use Illuminate\Support\Facades\Response;
-=======
-use DateTime;
-use App\Models\Dean;
->>>>>>> for100-morales
 use App\Models\Student;
 use App\Models\Feedback;
 use App\Models\Counselor;

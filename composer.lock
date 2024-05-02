@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
     "content-hash": "6d0b228ccd9a0703d95e899e5e19f95b",
-=======
-    "content-hash": "ae5d901e36bbeee197fad6a93c7c63af",
->>>>>>> for100-morales
     "packages": [
         {
             "name": "brick/math",

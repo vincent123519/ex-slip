@@ -161,10 +161,7 @@ Route::get('/admin/import', [AdminController::class, 'showImportForm'])->name('a
 Route::post('/admin/import-teachers', [AdminController::class, 'importTeachers'])->name('admin.import.teachers');
 Route::post('/admin/import-courses', [AdminController::class, 'importCourses'])->name('admin.import.courses');
 Route::post('/import-course-offerings', [AdminController::class, 'importCourseOfferings'])->name('import.course.offerings.form');
-<<<<<<< HEAD
 
 Route::get('/excuse-slips/export', [ExcuseSlipController::class, 'export'])->name('excuse_slips.export');
-=======
 Route::post('/import-study-load', [AdminController::class, 'importStudyLoad'])->name('import.studyload');
 
->>>>>>> for100-morales

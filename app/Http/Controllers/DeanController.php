@@ -7,6 +7,9 @@ use App\Models\Dean;
 use App\Models\Feedback;
 use App\Models\ExcuseSlip;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ApprovedByDeanNotification;
 
 class DeanController extends Controller
 {
@@ -34,18 +37,24 @@ class DeanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function approveExcuseSlip(Request $request, $id)
-    {
-        // Find the excuse slip by ID assigned to the dean
-        $excuseSlip = ExcuseSlip::where('dean_id', auth()->user()->dean->dean_id)
-            ->findOrFail($id);
+{
+    // Find the excuse slip by ID assigned to the dean
+    $excuseSlip = ExcuseSlip::where('dean_id', auth()->user()->dean->dean_id)
+        ->findOrFail($id);
 
-        // Update the excuse slip status to approved
-        $excuseSlip->update(['status_id' => '4']);
-        
-
-        // Return a success response
-        return redirect()->route('dean.dashboard')->with('success', 'Excuse slip approved successfully.');
+    // Update the excuse slip status to approved
+    $excuseSlip->update(['status_id' => '4']);
+    
+    // Notify the teacher associated with the excuse slip
+    $teacherEmail = $excuseSlip->teacher->email;
+    if ($teacherEmail) {
+        Notification::route('mail', $teacherEmail)
+            ->notify(new ApprovedByDeanNotification($excuseSlip));
     }
+
+    // Return a success response
+    return redirect()->route('dean.dashboard')->with('success', 'Excuse slip approved successfully.');
+}
 
     
 

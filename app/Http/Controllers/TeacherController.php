@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\ExcuseSlip;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ExcuseSlipSignedNotification;
 
 class TeacherController extends Controller
 {
@@ -18,15 +20,22 @@ class TeacherController extends Controller
     }
 
     public function signExcuseSlip(Request $request, $excuseSlipId)
-    {
-        $teacherId = $request->user()->teacher->teacher_id;
+{
+    $teacherId = $request->user()->teacher->teacher_id;
 
-        $excuseSlip = ExcuseSlip::where('teacher_id', $teacherId)->findOrFail($excuseSlipId);
-        $excuseSlip->status_id = 5; // Assuming status_id 2 represents the "signed" status
-        $excuseSlip->save();
+    $excuseSlip = ExcuseSlip::where('teacher_id', $teacherId)->findOrFail($excuseSlipId);
+    $excuseSlip->status_id = 5; // Assuming status_id 5 represents the "signed" status
+    $excuseSlip->save();
 
-        return redirect()->route('teacher.dashboard')->with('success', 'Excuse slip approved successfully.');
+    // Notify the student associated with the excuse slip
+    $studentEmail = $excuseSlip->student->email;
+    if ($studentEmail) {
+        Notification::route('mail', $studentEmail)
+            ->notify(new ExcuseSlipSignedNotification($excuseSlip));
     }
+
+    return redirect()->route('teacher.dashboard')->with('success', 'Excuse slip approved successfully.');
+}
 
    
 

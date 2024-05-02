@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Response;
+=======
+use DateTime;
+use App\Models\Dean;
+>>>>>>> for100-morales
 use App\Models\Student;
 use App\Models\Feedback;
 use App\Models\Counselor;
 use App\Models\ExcuseSlip;
+
+
 use App\Models\ExcuseStatus;
-use DateTime;
-
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\CounselorFeedback;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ExcuseSlipApprovedNotification;
 
 class CounselorController extends Controller
 {
@@ -135,6 +141,15 @@ public function approve($id)
 
     // Update the status to 'approved' or use the appropriate logic
     $excuseSlip->update(['status_id' => '2']);
+
+    // Retrieve the dean's email address
+    $deanEmail = $excuseSlip->dean->email;
+
+    // Notify the dean
+    if ($deanEmail) {
+        Notification::route('mail', $deanEmail)
+            ->notify(new ExcuseSlipApprovedNotification($excuseSlip));
+    }
 
     // Redirect back to the dashboard after approving
     return redirect()->route('counselor.dashboard')->with('success', 'Excuse slip approved successfully.');

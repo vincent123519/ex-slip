@@ -386,5 +386,53 @@ public function updateProfileImage(Request $request)
     // Redirect back or return a response
 }
 
+public function importStudyLoad(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
+    ]);
+
+    try {
+        $file = $request->file('file');
+        $data = array_map('str_getcsv', file($file));
+
+        // Remove the header row
+        array_shift($data);
+
+        // Process the remaining rows
+        foreach ($data as $row) {
+            // Validate the data format
+            if (count($row) !== 3) {
+                throw new \Exception("Invalid row format. Each row must contain student ID, semester ID, and offer code.");
+            }
+
+            // Extract data from the row
+            $studentId = $row[0];
+            $semesterId = $row[1];
+            $offerCode = $row[2];
+
+            // Validate the extracted data if needed
+
+            // Create or update the study load record
+            $studyLoad = StudyLoad::firstOrNew([
+                'student_id' => $studentId,
+                'semester_id' => $semesterId,
+            ]);
+
+            if (!$studyLoad->exists) {
+                $studyLoad->save();
+            }
+
+            // Attach the offer code to the study load
+            $studyLoad->courseOfferings()->attach($offerCode);
+        }
+
+        return redirect()->back()->with('success', 'Study load imported successfully.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Error occurred while importing study load: ' . $e->getMessage());
+    }
+}
+
+
 
 }

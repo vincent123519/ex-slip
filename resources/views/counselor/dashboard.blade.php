@@ -43,7 +43,7 @@
 
     <div class="excuse-container">
     <div class="logosc"></div>
-    <a href="{{ $exportUrl }}">Export Excuse Slips</a>
+    <a class="records "href="{{ $exportUrl }}">Download Records</a>
 
     <h2 style="
     margin-top: 71px;
@@ -117,6 +117,22 @@
 
 
 <style>
+.records {
+    color: green;
+    text-decoration: none;
+    border: 2px solid yellowgreen;
+    background: yellow;
+    font-weight: bold;
+    font-size: 19px;
+}
+.records:hover {
+    color: yellow;
+    text-decoration: none;
+    border: 2px solid yellowgreen;
+    background: green;
+    font-weight: bold;
+    font-size: 19px;
+}
 .logosc {
     background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
     background-size: contain;
@@ -135,24 +151,32 @@
         font-family: 'Montserrat', sans-serif;
     }
     .counselor-details-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 10px solid #55825f;
-        border-radius: 1px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-    }
-    .excuse-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 10px solid yellowgreen;
-        border-radius: 0px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+    background-color: #f8f9fa;
+    padding: 20px;
+    width: 60%;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-left: 1px solid yellowgreen;
+    border-right: 1px solid yellowgreen;
+    border-bottom: 5px solid #fec039;
+    border-top: 1px solid yellowgreen;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: .25rem;
+}
+.excuse-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 0px;
+    width: 60%;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-left: 1px solid #fec039;
+    border-right: 1px solid #fec039;
+    border-bottom: 5px solid yellowgreen;
+    border-top: 1px solid #fec039;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: .25rem;
+}
 
     h1 {
     margin-top: 75px;

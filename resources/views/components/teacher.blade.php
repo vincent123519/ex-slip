@@ -54,7 +54,6 @@
     <div class="navmenu"><ul>
         <li><span>DASHBOARD</span></li>
         <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
-        <li>AttendanceSlip</li>
     </ul></div>    </div>
     
     @yield('content')   

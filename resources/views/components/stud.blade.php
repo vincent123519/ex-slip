@@ -28,7 +28,7 @@
            <div class="home-icon"><i style="
                 color: beige;
                 font-weight: bold;
-            "> Home</i></div>
+            "> </i></div>
             </button>
         </form>
        
@@ -41,7 +41,7 @@
         <div class="home-icon"><i style="
             color: beige;
             font-weight: bold;
-        "> Home</i></div>
+        "> </i></div>
         </button>
         </form>
 @endif
@@ -53,7 +53,7 @@
                 <div class="circle-icon"></div><i style="
                 color: beige;
                 font-weight: bold;
-            ">Logout</i>
+            "></i>
             </button>
         </form>
 </div>
@@ -90,6 +90,7 @@
 </body>
 
 <style>
+
 .sis .yellow {
     color: #FFD700;
     font-weight: bold;
@@ -129,12 +130,11 @@
     margin-top: 17px;
 }
 
+
     </style>
 
 
 @section('head')
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 @endsection
-
-
 

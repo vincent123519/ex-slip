@@ -98,17 +98,21 @@
     z-index: 1;
     padding: 21px 22px;
 }
-    .dean-details-container {
+.dean-details-container {
     background-color: #f8f9fa;
     padding: 30px;
-    border: 10px solid #55825f;
     border-radius: 0px;
     width: 60%;
     margin: 20px auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
-
-    }
+    border-left: 1px solid yellowgreen;
+    border-right: 1px solid yellowgreen;
+    border-bottom: 5px solid #fec039;
+    border-top: 1px solid yellowgreen;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: .25rem;
+}
 
     hr{
         height: 1px;

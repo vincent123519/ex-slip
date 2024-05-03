@@ -28,11 +28,21 @@
 
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
+            <button type="submit" class="home-btn">
+           <div class="home-icon"><i style="
+                color: beige;
+                font-weight: bold;
+            "> </i></div>
+            </button>
+        </form>
+
+            <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
+            @csrf
             <button type="submit" class="logout-btn">
                 <div class="circle-icon"></div><i style="
     color: beige;
     font-weight: bold;
-">Logout</i>
+"></i>
             </button>
         </form></div>
             

@@ -28,7 +28,7 @@
            <div class="home-icon"><i style="
                 color: beige;
                 font-weight: bold;
-            "> Home</i></div>
+            "> </i></div>
             </button>
         </form>
 
@@ -38,7 +38,7 @@
                 <div class="circle-icon"></div><i style="
     color: beige;
     font-weight: bold;
-">Logout</i>
+"></i>
             </button>
         </form></div>
             

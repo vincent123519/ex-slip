@@ -75,6 +75,12 @@
     margin: 20px auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
+    border-left: 1px solid yellowgreen;
+    border-right: 1px solid yellowgreen;
+    border-bottom: 5px solid #fec039;
+    border-top: 1px solid yellowgreen;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: .25rem;
 }
 
 

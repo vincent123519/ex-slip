@@ -104,99 +104,163 @@
 @endsection
 
 <style>
-    .sidebar {
-    z-index: 0;
-    background: #fec039;
+     .logosc {
+    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -6px;
+    margin-left: 470px;
     position: absolute;
-    width: 250px;
-    height: calc(100% - 9%);
-    /* opacity: .9; */
-    transition: 0.3s;
-    transition-property: width;
-    overflow-y: auto;
-    font-family: Arial, sans-serif;
-}
-
-.header {
+    height: 50px;
+    width: 102px;
     z-index: 1;
-    background-color: rgba(13, 62, 32, 0.98);
-    background-image: linear-gradient(to right, rgba(13, 62, 32, 0.98), rgba(2, 28, 2, 0.98));
-    width: 100%;
-    height: 100px;
-    display: flex;
-    top: 0;
-    position: static;
+    padding: 21px 22px;
 }
+   .logo{
+    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: -14px;
+    margin-left: 10px;
+    position: absolute;
+    height: 105px;
+    width: 102px;
+    z-index: 1;
+    padding: 21px 22px;
+    }
+    .sis .White {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: -156px;
+    font-family: 'Montserrat', sans-serif;
 
-/* Added CSS for .student-details-container */
-.student-details-container {
+}
+.sis .Whites {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .Whitess {
+    color: whitesmoke;
+    font-weight: bold;
+    padding: 0px;
+    font-size: large;
+    margin-left: 4px;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.sis .yellow {
+        color: #FFD700;
+        font-weight: bold;
+        padding: 1px;
+        font-size: xx-large;
+        margin-top: -59px;
+        font-family: "Montserrat", sans-serif;
+        margin-left: -4px;
+    }
+    .student-details-container {
     background-color: #f8f9fa;
     padding: 20px;
     border: 1px solid #dee2e6;
-    border-radius: 10px;
     width: 62%;
     margin: 20px auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
+    border-top-right-radius: .25rem;
+    border-top-left-radius: 1rem;
+    border-left: 1px solid yellowgreen;
+    border-right: 1px solid yellowgreen;
+    border-bottom: 5px solid #fec039;
+    border-top: 1px solid yellowgreen;
 }
 
-/* Added CSS for .excuse-slip-table */
-.excuse-slip-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    h1 {
+    margin-bottom: 10px;
+    margin-top: 81px;
+    margin-left: 403px;
 }
 
-.excuse-slip-table th, .excuse-slip-table td {
+    p {
+        margin-bottom: 5px;
+    }
+
+    .create-slip-button {
+    display: inline-block;
+    /* padding: 12px 400px; */
+    font-size: 20px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    background-color: green;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    border: 3px solid green;
+}
+    .create-slip-button:hover {
+        background-color: yellowgreen;
+        border: 3px solid yellowgreen;
+
+    }
+
+    .manage-slip-container {
+        margin-top: 20px;
+    }
+
+    .excuse-slip {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+
+    .excuse-slip p {
+        margin-bottom: 5px;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+    .excuse-slip-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .excuse-slip-table th, .excuse-slip-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .excuse-slip-table th, .excuse-slip-table td {
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
-    width: auto; /* Adjust the width as needed */
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
-.excuse-slip-table th {
-    background-color: #f2f2f2;
-}
-
-.excuse-slip-table td {
-    vertical-align: top;
-}
-
-@media screen and (max-width: 768px) {
-    /* Added CSS for responsive sidebar and header */
-    .sidebar {
-        z-index: 1;
-        background: #fec039;
-        position: absolute;
-        width: 103px;
-        height: 120%;
-        opacity: .9;
-        transition: 0.3s;
-        transition-property: all;
-        overflow-y: auto;
-        font-family: Arial, sans-serif;
+    .excuse-slip-table td {
+        vertical-align: top;
     }
 
-    .header {
-        z-index: 1;
-        background-color: rgba(13, 62, 32, 0.98);
-        background-image: linear-gradient(to right, rgba(13, 62, 32, 0.98), rgba(2, 28, 2, 0.98));
-        width: 100%;
-        height: 100px;
-        display: flex;
-        top: 0;
-        position: static;
-    }
-
-    /* Added CSS to reset table cell width for smaller screens */
-    .excuse-slip-table th, .excuse-slip-table td {
-        width: auto; /* Set back to auto for smaller screens */
-    }
-}
-.hidden-pagination {
-    display: none;
-}
     
 
 </style>
-<style></style>
+

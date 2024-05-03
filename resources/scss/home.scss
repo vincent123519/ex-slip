@@ -8,6 +8,16 @@
 
 }
 
+.stat {
+    text-decoration: none;
+    font-weight: bold;
+    color: rgba(13, 62, 32, 0.98);
+    margin-left: 11px;
+    border-bottom: 1px solid rgba(13, 62, 32, 0.98);
+}
+.stat:hover {
+    color:red;
+}
 
 
 .main.container .container-fluid{
@@ -273,12 +283,12 @@ body{
             cursor: pointer;
             display: flex;
             align-items: center;
-            margin-left: 489px;
+            margin-left: 451px;
+            margin-top: -9px;
         }
-        
         .circle-icon {
             width: 35px;
-            height: 35px;
+            height: 34px;
             background: url('../scss/image/logout.png') center/cover; /* Set your image path */
             border-radius: 50%;
             margin-right: 10px; /* Adjust margin as needed */
@@ -291,19 +301,19 @@ body{
             margin-right: 10px;
         }
 
-        .home-btn{
+        .home-btn {
             background: #fff;
-            color: rgba(13,62,32,0.98);
+            color: rgba(13, 62, 32, 0.98);
             display: block;
             margin: -36px 406px;
             font-size: 18px;
-            width: 35px;
-            height: 35px;
+            width: 41px;
+            height: 37px;
             line-height: 35px;
             text-align: center;
             border-radius: 50%;
             transition: 0.3s;
-          }
+        }
           
         
         

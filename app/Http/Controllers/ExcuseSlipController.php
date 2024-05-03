@@ -76,21 +76,11 @@ class ExcuseSlipController extends Controller
     public function createExcuseSlip()
 {
     $student = auth()->user()->student;
-
-    // Fetch all study loads of the student
     $studyLoads = $student->studyLoads;
-
-    // Initialize an empty array to hold all selected course offerings
     $selectedCourseOfferings = [];
-
-    // Loop through each study load to collect course offerings
     foreach ($studyLoads as $studyLoad) {
-        // Collect all course offerings for this study load
         $courseOfferings = $studyLoad->courseOfferings;
-
-        // Add course offerings to the selected course offerings array
         foreach ($courseOfferings as $courseOffering) {
-            // Create an array containing course offering and teacher details
             $selectedCourseOfferings[] = [
                 'course_offering_id' => $courseOffering->id,
                 'offer_code' => $courseOffering->offer_code,
@@ -100,8 +90,6 @@ class ExcuseSlipController extends Controller
             ];
         }
     }
-
-    // Fetch other necessary data
     $degree = $student->degree;
     $department = $degree->department;
     $school = School::where('school_code', $department->school_code)->first();
@@ -114,8 +102,8 @@ class ExcuseSlipController extends Controller
     $deanData = Dean::select('dean_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
     $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
     $excuseSlip = new ExcuseSlip();
-
-    return view('excuseslip.create', compact('selectedCourseOfferings', 'student', 'degree', 'department', 'school', 'dean', 'counselor', 'excuseStatuses', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData', 'excuseSlip'));
+    return view('excuseslip.create', compact('selectedCourseOfferings', 'student', 'degree', 'department', 'school', 'dean', 'counselor', 
+    'excuseStatuses', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData', 'excuseSlip'));
 }
 
 
@@ -135,22 +123,13 @@ public function store(Request $request)
     ]);
 
     $validatedData['status_id'] = 1;
-
-    // Store a list of created excuse slips
     $createdSlips = [];
-
-    
-
-    // Create the excuse slips for each selected offer code
     foreach ($validatedData['offer_codes'] as $offerCode) {
-        // Determine the teacher_id and course_offering_id based on the selected offer_code
         $courseOffering = CourseOffering::where('offer_code', $offerCode)->first();
 
         if ($courseOffering) {
             $teacherId = $courseOffering->teacher_id;
             $courseOfferingId = $courseOffering->id;
-
-            // Add teacher_id and course_offering_id to the validated data
             $excuseData = [
                 'student_id' => $validatedData['student_id'],
                 'counselor_id' => $validatedData['counselor_id'],
@@ -163,36 +142,22 @@ public function store(Request $request)
                 'end_date' => $validatedData['end_date'],
                 'status_id' => $validatedData['status_id'],
             ];
-
-            // Create the excuse slip request
             $excuseSlip = ExcuseSlip::create($excuseData);
-
-            // Add the created excuse slip to the list
             $createdSlips[] = $excuseSlip;
-
-            // Send notification to counselor
-            $counselor = User::find($validatedData['counselor_id']); // Assuming the counselor is represented by the User model
+            $counselor = User::find($validatedData['counselor_id']);
             Notification::send($counselor, new ExcuseSlipCreatedNotification($excuseSlip));
         }
         if ($request->hasFile('supporting_document')) {
             $file = $request->file('supporting_document');
-            $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); // Adjust the storage path as needed
-    
-            // Create a new SupportingDocument instance and associate it with the ExcuseSlip
+            $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); 
             $document = new SupportingDocument([
                 'document_path' => $path,
                 'upload_date' => now(),
             ]);
-    
             $excuseSlip->supportingDocuments()->save($document);
         }
     }
-    
-
-    // Handle supporting document upload here
-
     session()->flash('success', 'Excuse slip requests created successfully.');
-
     return redirect()->route('student.dashboard');
 }
 
@@ -250,13 +215,8 @@ public function store(Request $request)
 
     public function destroy($id)
     {
-        // Retrieve the excuse slip with the given ID from the database
         $excuseSlip = ExcuseSlip::find($id);
-
-        // Delete the excuse slip from the database
         $excuseSlip->delete();
-
-        // Redirect the user to the excuse slips list page
         return redirect()->route('excuse_slips.index');
     }
 
@@ -290,11 +250,7 @@ public function store(Request $request)
                 // No sorting criteria selected, fetch all data
                 break;
         }
-    
-        // Fetch the sorted data
         $excuseSlips = $excuseSlipsQuery->get();
-    
-        // Get the total count of excuse slips
         $totalExcuseSlips = $excuseSlips->count();
     
         // Define CSV file headers
@@ -332,7 +288,58 @@ public function store(Request $request)
         }, 200, $headers);
     }
     
-    
+    public function export(Request $request)
+{
+    $sort_by = $request->input('sort_by');
+    $month = $request->input('month');
+    $year = $request->input('year');
+
+    $excuseSlipsQuery = ExcuseSlip::query();
+
+    switch ($sort_by) {
+        case 'today':
+            $excuseSlipsQuery->whereDate('created_at', today());
+            break;
+        case 'weekly':
+            $excuseSlipsQuery->whereDate('created_at', '>=', today()->subDays(7));
+            break;
+        case 'month':
+            $excuseSlipsQuery->whereYearMonth('created_at', $year, $month);
+            break;
+        case 'year':
+            $excuseSlipsQuery->whereYear('created_at', $year);
+            break;
+    }
+    $excuseSlips = $excuseSlipsQuery->get();
+    $totalExcuseSlips = $excuseSlips->count();
+
+    $headers = [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => 'attachment; filename="excuse_slips.csv"',
+    ];
+
+    return response()->stream(function () use ($excuseSlips, $totalExcuseSlips) {
+        $handle = fopen('php://output', 'w');
+
+        fputcsv($handle, ['Date', 'Student Name', 'Reason', 'Duration', 'Status']);
+
+        foreach ($excuseSlips as $excuseSlip) {
+            fputcsv($handle, [
+                $excuseSlip->created_at->format('Y-m-d'),
+                $excuseSlip->student->fullName(),
+                $excuseSlip->reason,
+                $excuseSlip->start_date . ' to ' . $excuseSlip->end_date,
+                $excuseSlip->status->formattedStatus(),
+            ]);
+        }
+
+        fputcsv($handle, ['', '']); // Adding empty rows
+        fputcsv($handle, ['Total Excuse Slips:', $totalExcuseSlips]);
+
+        fclose($handle);
+    }, 200, $headers);
+}
+
     
 
 

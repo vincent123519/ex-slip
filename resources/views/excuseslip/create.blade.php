@@ -163,6 +163,43 @@
     font-family: 'Montserrat', sans-serif;
     border-style: inset;
 }
+.logout-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-left: 451px;
+            margin-top: -9px;
+        }
+        .circle-icon {
+            width: 35px;
+            height: 34px;
+            background: url('../scss/image/logout.png') center/cover; /* Set your image path */
+            border-radius: 50%;
+            margin-right: 10px; /* Adjust margin as needed */
+        }
+        .home-icon {
+            width: 26px;
+            height: 30px;
+            background: url("http://[::1]:4000/resources/scss/image/home.png") center/cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .home-btn {
+            background: #fff;
+            color: rgba(13, 62, 32, 0.98);
+            display: block;
+            margin: -36px 406px;
+            font-size: 18px;
+            width: 41px;
+            height: 37px;
+            line-height: 35px;
+            text-align: center;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
     .text-center {
         text-align: center;
     }
@@ -334,17 +371,7 @@
     }
 
     /* Style the custom checkbox */
-    .form-group-course label:before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 2px; /* Adjust this value to center the checkbox vertically */
-        width: 20px;
-        height: 20px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        border-radius: 3px; /* Round the corners */
-    }
+
 
     /* Style the custom checkbox when checked */
     .form-group-course input[type="checkbox"]:checked + label:before {

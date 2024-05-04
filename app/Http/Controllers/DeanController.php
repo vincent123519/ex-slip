@@ -113,23 +113,27 @@ class DeanController extends Controller
     }
     
     public function dashboard()
-    {
-        $deanId = auth()->user()->dean->dean_id;
+{
+    $deanId = auth()->user()->dean->dean_id;
 
-        $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
-        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'offer_code' ,'end_date', 'status_id')
+    $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'read_by_dean','updated_at')
         ->where('dean_id', $deanId)
         ->whereHas('status', function ($query) {
-            $query->whereIN('status_id', [2,4,3]);
+            $query->whereIn('status_id', [2, 4, 3]);
         })
+        ->orderByDesc('created_at')
         ->get();
 
-        foreach ($excuseSlips as $excuseSlip) {
-            $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
-            $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
-        }
-        return view('dean.dashboard', ['excuseSlips' => $excuseSlips]);
+    foreach ($excuseSlips as $excuseSlip) {
+        $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
+        $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
     }
+
+    $unreadExcuseSlips = $excuseSlips; // Retrieve only the unread excuse slips
+
+    return view('dean.dashboard', ['excuseSlips' => $excuseSlips, 'unreadExcuseSlips' => $unreadExcuseSlips]);
+}
 
     public function sendToTeacher($excuseSlipId, $teacherId)
     {
@@ -182,4 +186,35 @@ class DeanController extends Controller
         abort(403, 'Unauthorized action.');
     }
 }
+
+
+public function deanNotification()
+{
+    $deanId = auth()->user()->dean->dean_id;
+
+    // Query for fetching the latest unread excuse slip notifications for the dean
+    $notificationQuery = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at', 'read_by_dean')
+        ->where('dean_id', $deanId)
+        ->where('read_by_dean', false) 
+        ->orderByDesc('created_at')
+        ->take(5)
+        ->get();
+
+    return $notificationQuery;
+
+}
+
+//mark as read
+public function markAsReadbyDean($excuseSlipId)
+{
+    $excuseSlip = ExcuseSlip::find($excuseSlipId);
+    if ($excuseSlip) {
+        $excuseSlip->read_by_dean = true;
+        $excuseSlip->save();
+    }
+
+    return redirect()->back();
+}
+
 }

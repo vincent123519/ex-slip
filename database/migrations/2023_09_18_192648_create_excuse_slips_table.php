@@ -20,6 +20,10 @@ class CreateExcuseSlipsTable extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->unsignedBigInteger('status_id');
+            $table->boolean('read_by_counselor')->default(false); // New column for tracking read status by counselor
+            $table->boolean('read_by_dean')->default(false); // New column for tracking read status by dean
+            $table->boolean('read_by_teacher')->default(false);
+            $table->boolean('read_by_student')->default(false); 
             $table->timestamps();
 
             // Modify foreign key constraints to match the Students table

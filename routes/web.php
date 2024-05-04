@@ -166,3 +166,8 @@ Route::get('/excuse-slips/export', [ExcuseSlipController::class, 'export'])->nam
 Route::post('/import-study-load', [AdminController::class, 'importStudyLoad'])->name('import.studyload');
 Route::post('/upload-user-images', [AdminController::class, 'uploadUserImages'])->name('upload.user.images');
 
+//notificationapp
+
+
+Route::put('/excuse_slips/{excuseSlipId}/mark-as-read', [CounselorController::class, 'markAsRead'])->name('excuse_slips.mark_as_read');
+Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-dean', [DeanController::class, 'markAsReadByDean'])->name('excuse_slips.markAsReadByDean');

@@ -113,6 +113,36 @@
             <p>No excuse slips found.</p>
         @endif
     </div>
+
+    <footer>
+    <div class="notification">
+      <span>notification</span>
+      <div class="notification-content">
+      @foreach ($latestExcuseSlips as $latestExcuseSlip)
+    <h4>{{ $latestExcuseSlip->student->first_name }} created an excuse slip {{ $latestExcuseSlip->created_at }}
+      @if ($latestExcuseSlip->read_by_counselor == 1)
+        <span style="color: green;">(Seen)</span>
+      @else
+        <span style="color: red;">(Not Seen)</span>
+      @endif
+    </h4>
+    <!-- Additional details or actions related to the excuse slip -->
+    <p>Course: {{ $latestExcuseSlip->course->course_code }}</p>
+    <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" style="display: inline;">
+      @csrf
+      @method('PUT')
+      <button type="submit" class="view-button">
+
+      </button>
+      <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">
+
+    </form>
+    <hr style="color: #55825f;">
+  @endforeach
+</div>
+    </div>
+  </footer>
+
 @endsection
 
 
@@ -267,9 +297,97 @@ hr{
     .excuse-slip-table tbody td {
     }
     
+
+    
+
+
+footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(13, 62, 32, 0.98);
+      text-align: right; /* Align the notification to the right */
+      padding: 0 20px;
+    }
+    footer hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 10px auto;
+    }
+    .notification {
+      background-color: #fec039;
+      color: white;
+      text-decoration: none;
+      position: relative;
+      display: inline-block;
+      border-radius: 2px;
+      padding-right: 250px;
+      cursor: pointer; /* Add cursor pointer to indicate interactivity */
+    }
+    .notification:hover {
+      background: #fec039;
+    }
+    .notification-content {
+    display: none;
+    position: absolute;
+    top: -145px;
+    right: 0;
+    width: 341px;
+    height: 200px; /* Set a specific height for the container */
+    background-color: #fec039;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    font-size: xx-small;
+    color: #28a745;
+    text-align: left;
+    overflow: auto; /* Add the overflow property for scrollable content */
+}
+    .notification.active .notification-content {
+      display: block; /* Show the notification content when the notification is active */
+    }
+   
+    
 </style>
 <script>
     document.getElementById('exportBtn').addEventListener('click', function() {
         window.location.href = "{{ $exportUrl }}";
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const notification = document.querySelector('.notification');
+      const notificationContent = document.querySelector('.notification-content');
+
+      notification.addEventListener('click', function() {
+        notification.classList.toggle('active');
+      });
+    });
+  </script>
+
+<script>
+function markAsRead(excuseSlipId) {
+  // Send an AJAX request to mark the excuse slip as read by the counselor
+  fetch('/excuse_slips/' + excuseSlipId + '/mark-as-read', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure to include the CSRF token
+    },
+    body: JSON.stringify({ excuse_slip_id: excuseSlipId })
+  })
+  .then(response => {
+    // Handle the response
+    if (response.ok) {
+      // Success: Update the UI or perform any necessary actions
+    } else {
+      // Error: Handle the error case
+    }
+  })
+  .catch(error => {
+    // Error: Handle the error case
+  });
+}
 </script>

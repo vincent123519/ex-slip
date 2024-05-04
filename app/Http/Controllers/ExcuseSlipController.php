@@ -21,6 +21,8 @@ use App\Models\SupportingDocument;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use App\Models\Notification as AppNotification;
+
 
 class ExcuseSlipController extends Controller
 {
@@ -171,8 +173,13 @@ public function store(Request $request)
             $createdSlips[] = $excuseSlip;
 
             // Send notification to counselor
-            $counselor = User::find($validatedData['counselor_id']); // Assuming the counselor is represented by the User model
-            Notification::send($counselor, new ExcuseSlipCreatedNotification($excuseSlip));
+            $counselor = Counselor::find($validatedData['counselor_id']); // Assuming the counselor is represented by the Counselor model
+            $counselorEmail = $counselor->email;
+            
+
+            if ($counselorEmail) {
+                Notification::route('mail', $counselorEmail)
+                    ->notify(new ExcuseSlipCreatedNotification($excuseSlip));}
         }
         if ($request->hasFile('supporting_document')) {
             $file = $request->file('supporting_document');

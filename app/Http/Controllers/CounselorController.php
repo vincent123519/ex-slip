@@ -116,6 +116,8 @@ public function dashboard(Request $request)
     }
 
     $excuseSlips = $query->get();
+    $latestExcuseSlips = $this->counselorNotification($counselorId);
+
 
     // Generate export URL with query parameters
     $exportUrl = route('excuse_slips.export', [
@@ -124,8 +126,34 @@ public function dashboard(Request $request)
         'year' => $year
     ]);
 
-    return view('counselor.dashboard', compact('excuseSlips', 'exportUrl'));
+    return view('counselor.dashboard', compact('excuseSlips', 'exportUrl', 'latestExcuseSlips'));
 }
+
+
+public function counselorNotification()
+{
+    $counselorId = auth()->user()->counselor->counselor_id;
+
+    // Query for fetching the latest unread excuse slip for notification
+    $notificationQuery = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at','read_by_counselor')
+        ->where('counselor_id', $counselorId)
+        ->orderByDesc('created_at')
+        ->get(); // Retrieve only the latest unread excuse slip for notification
+
+    return $notificationQuery;
+}
+
+public function markAsRead($excuseSlipId)
+    {
+        $excuseSlip = ExcuseSlip::find($excuseSlipId);
+        if ($excuseSlip) {
+            $excuseSlip->read_by_counselor = true;
+            $excuseSlip->save();
+        }
+
+        return redirect()->back();
+    }
 
 
 

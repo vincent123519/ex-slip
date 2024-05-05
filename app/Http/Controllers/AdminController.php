@@ -6,12 +6,14 @@ use Exception;
 use App\Models\Dean;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Semester;
 use App\Models\Counselor;
 use App\Models\StudyLoad;
 use App\Models\Department;
+use App\Models\ExcuseSlip;
 use Illuminate\Http\Request;
 use App\Models\CourseOffering;
 use App\Models\DepartmentDegree;
@@ -85,6 +87,34 @@ class AdminController extends Controller
     return view('admin.students.index', compact('students'));
 }
 
+public function showExcuseSlip(Request $request)
+{
+    $excuseslips = ExcuseSlip::query();
+
+    // Apply filters
+    if ($request->has('school_code')) {
+        $schoolId = $request->input('school_code');
+        $excuseslips->whereHas('student.degree.department.school', function ($query) use ($schoolId) {
+            $query->where('school_code', $schoolId);
+        });
+    }
+
+    if ($request->has('department_id')) {
+        $departmentId = $request->input('department_id');
+        $excuseslips->whereHas('student.degree.department', function ($query) use ($departmentId) {
+            $query->where('department_id', $departmentId);
+        });
+    }
+
+    $excuseslips = $excuseslips->get();
+
+    // Fetch all schools and departments for the dropdowns
+    $schools = School::all();
+    $departments = Department::all();
+
+    return view('admin.excuseslips.index', compact('excuseslips', 'schools', 'departments'));
+}
+
 public function createStudyLoad($studentId)
 {
     // Retrieve the student from the database
@@ -142,6 +172,8 @@ public function storeStudyLoad(Request $request)
         'total_teachers' => Teacher::count(),
         'total_deans' => Dean::count(),
         'total_counselors' => Counselor::count(),
+        'total_excuse' => ExcuseSlip::count(),
+
         // Add more data as needed
     ];
 
@@ -452,6 +484,10 @@ public function importStudyLoad(Request $request)
         return redirect()->back()->with('error', 'Error occurred while importing study load: ' . $e->getMessage());
     }
 }
+
+
+
+
 
 
 

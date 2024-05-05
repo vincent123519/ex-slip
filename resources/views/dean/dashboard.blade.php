@@ -89,7 +89,7 @@
             <div class="notification-content">
             @php
             $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
-        @endphp
+            @endphp
             @if ($unreadExcuseSlips->count() > 0)
             
             @foreach ($unreadExcuseSlips as $unreadExcuseSlip)

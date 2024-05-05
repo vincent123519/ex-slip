@@ -14,6 +14,7 @@ use App\Http\Controllers\DeanController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\HeadCounselorController;
+use App\Models\Teacher;
 use Illuminate\Support\Facades\Log;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
@@ -171,3 +172,4 @@ Route::post('/upload-user-images', [AdminController::class, 'uploadUserImages'])
 
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read', [CounselorController::class, 'markAsRead'])->name('excuse_slips.mark_as_read');
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-dean', [DeanController::class, 'markAsReadByDean'])->name('excuse_slips.markAsReadByDean');
+Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-teacher', [TeacherController::class, 'markAsReadByTeacher'])->name('excuse_slips.markAsReadByTeacher');

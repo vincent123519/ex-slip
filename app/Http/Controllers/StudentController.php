@@ -19,46 +19,18 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $students = Student::all();
-    
-        return view('student.index', compact('students'));
-    }
 
     /**
      * Show the form for creating a new student.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        // Show the create student form
-        return view('student.create');
-    }
     /**
      * Store a newly created student in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        // Validate the input
-        $validatedData = $request->validate([
-            'user_id' => 'required',
-            'name' => 'required',
-            'degree_id' => 'required',
-            'year_level' => 'required',
-        ]);
-
-        // Create the student
-        $student = Student::create($validatedData);
-
-        // Redirect to the student's detail page
-        return redirect()->route('students.show', $student->id)
-            ->with('success', 'Student created successfully.');
-    }
 
     /**
      * Display the specified student.
@@ -66,26 +38,12 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        $student = Student::findOrFail($id);
-
-        return view('students.show', compact('student'));
-    }
-
     /**
      * Show the form for editing the specified student.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $student = Student::findOrFail($id);
-
-        return view('students.edit', compact('student'));
-    }
-
     /**
      * Update the specified student in storage.
      *
@@ -93,26 +51,6 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        // Validate the input
-        $validatedData = $request->validate([
-            'user_id' => 'required',
-            'name' => 'required',
-            'degree_id' => 'required',
-            'year_level' => 'required',
-        ]);
-
-        // Find the student
-        $student = Student::findOrFail($id);
-
-        // Update the student
-        $student->update($validatedData);
-
-        // Redirect to the student's detail page
-        return redirect()->route('students.show', $student->id)
-            ->with('success', 'Student updated successfully.');
-    }
 
     /**
      * Remove the specified student from storage.
@@ -120,18 +58,6 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        // Find the student
-        $student = Student::findOrFail($id);
-
-        // Delete the student
-        $student->delete();
-
-        // Redirect to the students' list
-        return redirect()->route('students.index')
-            ->with('success', 'Student deleted successfully.');
-    }
 
     /**
      * Show the form for creating a new excuse slip.
@@ -267,7 +193,10 @@ public function dashboard(Request $request)
         $excuseSlip->formatted_created_at = $excuseSlip->created_at->format('Y-m-d'); // Exclude hours, minutes, and seconds
     });
 
-    return view('student.dashboard', compact('excuseSlips'));
+
+    $unreadExcuseSlips = $excuseSlips; 
+    return view('student.dashboard', compact('excuseSlips', 'unreadExcuseSlips'));
+
 }
 
 }

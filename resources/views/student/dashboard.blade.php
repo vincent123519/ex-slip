@@ -101,6 +101,42 @@
             @endif
         </div>
     </div>
+
+
+    <footer>
+    <div class="notification">
+        <span>notification</span>
+        <div class="notification-content">
+            @if ($unreadExcuseSlips->count() > 0)
+                @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
+                    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
+                        @php
+                            $approver = '';
+                            if ($unreadExcuseSlip->status_id == 2) {
+                                $approver = $unreadExcuseSlip->counselor->first_name. ' ' . $unreadExcuseSlip->counselor->last_name;
+                            } elseif ($unreadExcuseSlip->status_id == 4) {
+                                $approver = $unreadExcuseSlip->dean->first_name. ' ' . $unreadExcuseSlip->dean->last_name;
+                            } elseif ($unreadExcuseSlip->status_id == 5) {
+                                $approver = $unreadExcuseSlip->teacher->first_name . ' ' . $unreadExcuseSlip->teacher->last_name;
+                            }
+                        @endphp
+                        <p>
+                            @if ($unreadExcuseSlip->status_id == 1)
+                                An excuse slip is sent  to <b>{{$unreadExcuseSlip->counselor->first_name}}, {{$unreadExcuseSlip->counselor->last_name}}</b>
+                            @else
+                                <b>{{ $approver }}</b> approved your excuse slip
+                            @endif
+                        </p>
+                        <p>View excuse slip.. 
+                    </a>
+                    <hr>
+                @endforeach
+            @else
+                <p>No unread excuse slips.</p>
+            @endif
+        </div>
+    </div>
+</footer>
 @endsection
 
 <style>
@@ -196,7 +232,68 @@
 .hidden-pagination {
     display: none;
 }
+
+footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(13, 62, 32, 0.98);
+      text-align: right; /* Align the notification to the right */
+      padding: 0 20px;
+    }
+    footer hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 10px auto;
+    }
+    .notification {
+      background-color: #fec039;
+      color: white;
+      text-decoration: none;
+      position: relative;
+      display: inline-block;
+      border-radius: 2px;
+      padding-right: 250px;
+      cursor: pointer; /* Add cursor pointer to indicate interactivity */
+    }
+    .notification:hover {
+      background: #fec039;
+    }
+    .notification-content {
+    display: none;
+    position: absolute;
+    top: -145px;
+    right: 0;
+    width: 341px;
+    height: 200px; /* Set a specific height for the container */
+    background-color: #fec039;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    font-size: small;
+    color: #28a745;
+    text-align: left;
+    overflow: auto; /* Add the overflow property for scrollable content */
+    font-family: 'Montserrat', sans-serif;
+
+}
+    .notification.active .notification-content {
+      display: block; /* Show the notification content when the notification is active */
+    }
+   
     
 
 </style>
 <style></style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const notification = document.querySelector('.notification');
+      const notificationContent = document.querySelector('.notification-content');
+
+      notification.addEventListener('click', function() {
+        notification.classList.toggle('active');
+      });
+    });
+  </script>

@@ -50,10 +50,55 @@
 
         </div>
     </div>
+
+
+        <footer>
+                <div class="notification">
+                <span>notification</span>
+                <div class="notification-content">
+                @php
+                $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
+                @endphp
+                @if ($unreadExcuseSlips->count() > 0)
+                
+                @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
+        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
+            <p>
+                <b>{{ $unreadExcuseSlip->dean->first_name }} {{ $unreadExcuseSlip->created_at }},{{ $unreadExcuseSlip->dean->last_name }}</b>
+                approved <b>{{ $unreadExcuseSlip->student->first_name }} {{ $unreadExcuseSlip->student->last_name }}</b>
+                excuse slip
+            </p>
+            <p>pending for Teacher's approval.. 
+            @if ($unreadExcuseSlip->read_by_teacher == 1)
+                <span style="color: green;">(Seen)</span>
+            @elseif($unreadExcuseSlip->read_by_teacher == 0)
+                <span style="color: red;">(Not Seen)</span>
+                <form action="{{ route('excuse_slips.markAsReadByTeacher', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit">Mark as Read</button>
+                </form>
+            @endif
+            </p>
+        
+
+        
+            <hr>
+        @endforeach
+        </ul>
+    @else
+        <p>No unread excuse slips.</p>
+    @endif
+                
+
+                
+            </div>
+        </div>
+    </footer>
         @endsection
 
 <style>
-        .logosc {
+    .logosc {
     background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
     background-size: contain;
     background-repeat: no-repeat;
@@ -149,4 +194,64 @@
         width: 45%; /* Full width of the container */
         
     }
+
+    footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(13, 62, 32, 0.98);
+      text-align: right; /* Align the notification to the right */
+      padding: 0 20px;
+    }
+    footer hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 10px auto;
+    }
+    .notification {
+      background-color: #fec039;
+      color: white;
+      text-decoration: none;
+      position: relative;
+      display: inline-block;
+      border-radius: 2px;
+      padding-right: 250px;
+      cursor: pointer; /* Add cursor pointer to indicate interactivity */
+    }
+    .notification:hover {
+      background: #fec039;
+    }
+    .notification-content {
+    display: none;
+    position: absolute;
+    top: -145px;
+    right: 0;
+    width: 341px;
+    height: 200px; /* Set a specific height for the container */
+    background-color: #fec039;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    font-size: small;
+    color: #28a745;
+    text-align: left;
+    overflow: auto; /* Add the overflow property for scrollable content */
+    font-family: 'Montserrat', sans-serif;
+
+    }
+    .notification.active .notification-content {
+      display: block; /* Show the notification content when the notification is active */
+    }
+   
 </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const notification = document.querySelector('.notification');
+      const notificationContent = document.querySelector('.notification-content');
+
+      notification.addEventListener('click', function() {
+        notification.classList.toggle('active');
+      });
+    });
+  </script>

@@ -34,6 +34,7 @@ class TeacherController extends Controller
             ->notify(new ExcuseSlipSignedNotification($excuseSlip));
     }
 
+
     return redirect()->route('teacher.dashboard')->with('success', 'Excuse slip approved successfully.');
 }
 
@@ -44,7 +45,7 @@ class TeacherController extends Controller
     {
         $teacherId = auth()->user()->teacher->teacher_id;
         $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
-        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'offer_code' ,'end_date', 'status_id')
+        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'offer_code' ,'end_date', 'status_id','read_by_teacher')
         ->where('teacher_id', $teacherId)
         ->whereHas('status', function ($query) {
             $query->where('status_name', 'Approved by Dean')
@@ -56,25 +57,12 @@ class TeacherController extends Controller
             $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
             $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
         }
-        return view('teacher.dashboard', ['excuseSlips' => $excuseSlips]);
+        $unreadExcuseSlips = $excuseSlips; 
+
+        return view('teacher.dashboard', ['excuseSlips' => $excuseSlips, 'unreadExcuseSlips' => $unreadExcuseSlips]);
     }
 
-    public function delete($id)
-    {
-        // Find the excuse slip
-        $excuseSlip = ExcuseSlip::find($id);
-
-        // Check if the excuse slip exists
-        if (!$excuseSlip) {
-            return redirect()->back()->with('error', 'Excuse slip not found.');
-        }
-
-        // Perform the delete operation
-        $excuseSlip->delete();
-
-        // Redirect or perform other actions as needed
-        return redirect()->back()->with('success', 'Excuse slip deleted successfully.');
-    }   
+   
 
     public function teacherStoreFeedback(Request $request, $id)
 {
@@ -99,5 +87,16 @@ class TeacherController extends Controller
         // Unauthorized action, redirect with an error message
         abort(403, 'Unauthorized action.');
     }
+}
+
+public function markAsReadbyTeacher($excuseSlipId)
+{
+    $excuseSlip = ExcuseSlip::find($excuseSlipId);
+    if ($excuseSlip) {
+        $excuseSlip->read_by_teacher = true;
+        $excuseSlip->save();
+    }
+
+    return redirect()->back();
 }
 }

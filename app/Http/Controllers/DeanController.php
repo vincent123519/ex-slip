@@ -130,7 +130,7 @@ class DeanController extends Controller
         $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
     }
 
-    $unreadExcuseSlips = $excuseSlips; // Retrieve only the unread excuse slips
+    $unreadExcuseSlips = $excuseSlips; 
 
     return view('dean.dashboard', ['excuseSlips' => $excuseSlips, 'unreadExcuseSlips' => $unreadExcuseSlips]);
 }

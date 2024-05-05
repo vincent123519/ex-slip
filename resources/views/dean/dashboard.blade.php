@@ -83,7 +83,7 @@
         </div>
     </div>
 
-        <footer>
+    <footer>
             <div class="notification">
             <span>notification</span>
             <div class="notification-content">
@@ -111,8 +111,6 @@
             <button type="submit">Mark as Read</button>
         </form>
         <hr>
-
-        <!-- Display other details as needed -->
     @endforeach
     </ul>
 @else

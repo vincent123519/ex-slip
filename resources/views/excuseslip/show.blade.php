@@ -115,8 +115,8 @@
         <div class="slip-view-header">
         <div class="logosc"></div>         
         <h1 style="
-    margin-top: 62px;
-">View Slip</h1>
+        margin-top: 60px;
+"       >View Slip</h1>
         <hr>
         </div>
         <p><strong>Excuse slip ID:</strong> {{ $excuseSlip->excuse_slip_id }}</p>
@@ -153,31 +153,7 @@
         @endif
                 
 
-            @if ($excuseSlip->status->status_id == 2)
-            <ul>
-                <li>Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
-                <li>To be approved by Dean</li>
-                <li>To be approved by Teacher</li>
-            </ul>
-        @elseif ($excuseSlip->status->status_id == 4)
-            <ul>
-            <li>Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
-                <li>Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
-                <li>To be approved by Teacher</li>
-            </ul>
-        @elseif ($excuseSlip->status->status_id == 5)
-            <ul>
-                <li>Approved by Teacher</li>
-                <li>Approved by Dean</li>
-                <li>Noted by Counselor</li>
-            </ul>
-        @elseif ($excuseSlip->status->status_id == 1)
-            <ul>
-                <li>Pending for Approval</li>
-                <li>Sent to Counselor</li>
-
-            </ul>
-@endif
+        
 
 @if(auth()->user()->role_id == 4)
 
@@ -212,7 +188,7 @@
  @endif
 
 
-                @if(auth()->user()->role_id == 4)
+@if(auth()->user()->role_id == 4)
                 <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
                         @csrf
                         @method('PUT')
@@ -271,10 +247,8 @@
             </form>
 
             @endif
-        @endif
+            @endif
 
-
-                
             </div>
         </div>
      
@@ -325,6 +299,37 @@
         @endif
 
         @endif
+
+        <hr>
+
+        <div class="status">
+        @if ($excuseSlip->status->status_id == 2)
+            <ul>
+                <li style="background-color: #26d187;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+                <li style="background-color: #ecf08d;">To be approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
+                <li style="background-color: #ecf08d;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
+            </ul>
+        @elseif ($excuseSlip->status->status_id == 4)
+            <ul>
+            <li style="background-color: #26d187;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+            <li style="background-color: #26d187;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
+            <li style="background-color: #ecf08d;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
+            </ul>
+        @elseif ($excuseSlip->status->status_id == 5)
+            <ul>
+            <li style="background-color: #26d187;">Approved by {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</li>
+            <li style="background-color: #26d187;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
+            <li style="background-color: #26d187;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+            </ul>
+        @elseif ($excuseSlip->status->status_id == 1)
+            <ul>
+                <li>Pending for Approval</li>
+                <li style="background-color: #ecf08d;">Sent to {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+
+            </ul>
+    @endif
+        </div>
+        
 
       
 
@@ -400,5 +405,20 @@ hr{
 .teacher-container p {
   display: inline-block;
   margin-right: 197px;
+}
+
+
+.status{
+    margin-left: 800px;
+}
+
+.status ul{
+    list-style-type: none;
+    
+}
+
+.status li{
+    
+    
 }
 </style>

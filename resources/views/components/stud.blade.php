@@ -88,6 +88,7 @@
         <li><span>DASHBOARD</span></li>
         <li class="stud-navmenu">
         <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
+        <li> <a href="" class="stat">Reports</a></li>
 
         
 

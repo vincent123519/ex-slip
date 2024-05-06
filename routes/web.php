@@ -63,6 +63,8 @@ Route::group(['middleware' => ['web', 'student']], function () {
 
 Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
+Route::get('/student/status', [StudentController::class, 'dashboard'])->name('student.dashboard');
+
 Route::get('/counselor/dashboard', [CounselorController::class, 'dashboard'])->name('counselor.dashboard');
 Route::put('/excuse_slips/reject/{id}', [CounselorController::class, 'reject'])->name('excuse.reject');
 

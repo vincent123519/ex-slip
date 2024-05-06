@@ -16,7 +16,7 @@ class UsersSeeder extends Seeder
             'last_name' =>'user Admin',
             'username' => 'admin',
             'password' => Hash::make('12345'), // You can set a default password
-            'email' => 'christianmorales192001@gmail.com',
+            'email' => 'jocelynmart.2024@gmail.com',
             'role_id' => 6,
         ];
 

@@ -27,7 +27,7 @@ class StudentSeeder extends Seeder
             [
                 'first_name' => 'Vincent John',
                 'last_name' => 'Orat',
-                'email' => 'Orat@gmail.com',
+                'email' => 'vincentjohn.r.orat@gmail.com',
                 'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2020012',
                 'year_level' => 3,

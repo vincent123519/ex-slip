@@ -21,7 +21,7 @@ class CounselorSeeder extends Seeder
                 'first_name' => 'Jocelyn',
                 'last_name' => 'Martinez',
                 'username' => 'jocelyn.martinez',
-                'email' => 'jocelyn@gmail.com',
+                'email' => 'jocelynmart.2024@gmail.com',
                 'department' => 'School of Computer Studies',
 
             ],

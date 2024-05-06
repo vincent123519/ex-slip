@@ -58,6 +58,7 @@
                 <li><span>DASHBOARD</span></li>
                 <li class="dropdown-li">
                 <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
+                <li> <a href="" class="stat">Reports</a></li>
                     <span id="schoolYearButton"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
                     <ul class="dropdown" id="schoolYearDropdown">
                         <!-- Add your school year options here -->

@@ -21,7 +21,7 @@ class DeansSeeder extends Seeder
                 'first_name' => 'Dr. Jovelyn',
                 'last_name' => 'Cuizon',
                 'school' => 'School of Computer Studies',
-                'email' => 'Jovelyn@gmail.com',
+                'email' => ' jovelyn.cuiz2024@gmail.com',
                 'username' => 'jovelyn.Cuizon',
             ],
             [

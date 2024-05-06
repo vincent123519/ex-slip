@@ -21,6 +21,7 @@
                             <td>{{ $student->degree->degree_name }}-{{ $student->year_level }}</td>
                             <td>
                                 <a href="{{ route('admin.studyload.create', ['studentId' => $student->student_id]) }}" class="btn btn-primary btn-sm">Add Studyload</a>
+                                <a href="{{ route('admin.students.edit', ['id' => $student->student_id]) }}" class="btn btn-secondary btn-sm">Edit Student</a>
                             </td>
                         </tr>
                     @endforeach

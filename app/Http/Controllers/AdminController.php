@@ -165,7 +165,7 @@ public function storeStudyLoad(Request $request)
 }
     
 
-    public function dashboard()
+public function dashboard()
             {
          $data = [
         'total_students' => Student::count(),
@@ -486,9 +486,34 @@ public function importStudyLoad(Request $request)
 }
 
 
+public function editStudentDetails($id)
+{
+    $student = Student::findOrFail($id);
+    $degrees = DepartmentDegree::all();
+
+
+    return view('admin.students.edit-student-details', compact('student', 'degrees'));
+}
 
 
 
+public function updateStudentDetails(Request $request, $id)
+{
+    $student = Student::findOrFail($id);
 
+    $validatedData = $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'year_level' => 'required|integer|min:1|max:5',
+        'degree_id' => 'required|exists:department_degrees,degree_id',
+        'email' => 'required|email|max:255',
+    ]);
+
+    // Update student details
+    $student->fill($validatedData);
+    $student->save();
+
+    return redirect()->route('admin.students.index')->with('success', 'Student details updated successfully.');
+}
 
 }

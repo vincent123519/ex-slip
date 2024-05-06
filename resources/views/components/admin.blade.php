@@ -55,7 +55,7 @@
     <div class="divider"></div>
     <div class="navmenu">
     <ul>
-    <li><span>DASHBOARD</span></li>
+    <li><span>DASHBOARD</span><a class="links" href="{{ route('admin.dashboard') }}"></a></li>
     <li class="dropdown-li">
     <span id="schoolYearButton" style="
     font-weight: bold;
@@ -70,7 +70,7 @@
     </li>
     <!-- Add Changeuser password below -->
     <li><a class="links" href="{{ route('manage-users') }}">MANAGE USER ACCOUNTS</a></li>
-    <li><a class="links" href="{{ route('head-counselor.assign.form') }}">ASSIGN COUNSELORS</a></li>
+    <li><a class="links" href="{{ route('admin.excuseslip.index') }}">EXCUSE SLIPS</a></li>
     <li><a class="links" href="{{ route('admin.import.index') }}">IMPORT DATA</a></li>
 
 

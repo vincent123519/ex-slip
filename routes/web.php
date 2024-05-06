@@ -177,3 +177,12 @@ Route::post('/upload-user-images', [AdminController::class, 'uploadUserImages'])
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read', [CounselorController::class, 'markAsRead'])->name('excuse_slips.mark_as_read');
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-dean', [DeanController::class, 'markAsReadByDean'])->name('excuse_slips.markAsReadByDean');
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-teacher', [TeacherController::class, 'markAsReadByTeacher'])->name('excuse_slips.markAsReadByTeacher');
+
+
+//edit detailes
+
+Route::get('/admin/students/{id}/edit', [AdminController::class, 'editStudentDetails'])
+    ->name('admin.students.edit');
+
+Route::put('/admin/students/{id}', [AdminController::class, 'updateStudentDetails'])
+    ->name('admin.students.update');

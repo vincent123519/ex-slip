@@ -93,7 +93,7 @@ public function dashboard(Request $request)
 $sort_by = $request->input('sort_by', 'today');
 $month = $request->input('month', date('m'));
 $year = $request->input('year', date('Y'));
-$semesterId = $request->input('semester_id'); 
+$semesterId = 0;
 
 
 switch ($sort_by) {

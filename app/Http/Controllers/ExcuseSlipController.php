@@ -273,7 +273,9 @@ public function store(Request $request)
         $sort_by = $request->input('sort_by');
         $month = $request->input('month');
         $year = $request->input('year');
-        Log::info("Sort By: $sort_by, Month: $month, Year: $year");
+        $semesterId = $request->input('semester_id'); // Add this line
+        
+        Log::info("Sort By: $sort_by, Month: $month, Year: $year, Semester ID: $semesterId"); // Add $semesterId to the log
     
         // Initialize query builder
         $excuseSlipsQuery = ExcuseSlip::query();
@@ -292,6 +294,11 @@ public function store(Request $request)
                 break;
             case 'year':
                 $excuseSlipsQuery->whereYear('created_at', $year);
+                break;
+            case 'semester': // Add this case
+                $excuseSlipsQuery->whereHas('course', function ($subquery) use ($semesterId) {
+                    $subquery->where('semester_id', $semesterId);
+                });
                 break;
             default:
                 // No sorting criteria selected, fetch all data
@@ -327,8 +334,8 @@ public function store(Request $request)
                     $excuseSlip->status->status_name == 'Approved by Counselor' ? 'Approved' : $excuseSlip->status->status_name
                 ]);
             }
-
-             // Add two empty rows
+    
+            // Add two empty rows
             fputcsv($handle, []);
             fputcsv($handle, []);
     

@@ -12,32 +12,49 @@
 
         <form action="{{ route('counselor.dashboard') }}" method="GET">
         <label for="sort_by" style="font-weight: bold;">Sort By:</label>
-        <select name="sort_by" id="sort_by" style="font-weight: bold; background: darkseagreen;">
-                <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
-                <option value="weekly" {{ request()->input('sort_by') == 'weekly' ? 'selected' : '' }}>Last 7 Days</option>
-                <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
-                <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
-            </select>
+<select name="sort_by" id="sort_by" style="font-weight: bold; background: darkseagreen;">
+    <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
+    <option value="weekly" {{ request()->input('sort_by') == 'weekly' ? 'selected' : '' }}>Last 7 Days</option>
+    <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
+    <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
+    <option value="semester" {{ request()->input('sort_by') == 'semester' ? 'selected' : '' }}>Semester</option>
+</select>
 
-            <!-- Display month dropdown if "month" is selected -->
-            @if (request()->input('sort_by') == 'month')
-                <select name="month">
-                    @foreach (range(1, 12) as $month)
-                        <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
-                    @endforeach
-                </select>
-            @endif
+<!-- Display month dropdown if "month" is selected -->
+@if (request()->input('sort_by') == 'month')
+    <select name="month">
+        @foreach (range(1, 12) as $month)
+            <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
+        @endforeach
+    </select>
+@endif
 
-            <!-- Display year dropdown if "year" is selected -->
-            @if (request()->input('sort_by') == 'year')
-                <select name="year">
-                    @for ($year = date('Y'); $year >= 2000; $year--)
-                        <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                    @endfor
-                </select>
-            @endif
+<!-- Display year dropdown if "year" is selected -->
+@if (request()->input('sort_by') == 'year')
+    <select name="year">
+        @for ($year = date('Y'); $year >= 2000; $year--)
+            <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+        @endfor
+    </select>
+@endif
 
-            <button type="submit">Sort</button>
+<!-- Display semester dropdown if "semester" is selected -->
+@php
+    $semesters = App\Models\Semester::all();
+@endphp
+
+@if (request()->input('sort_by') == 'semester')
+    <select name="semester_id">
+        <!-- Populate the semester options here -->
+        @foreach ($semesters as $semester)
+            <option value="{{ $semester->semester_id }}" {{ request()->input('semester_id') == $semester->semester_id ? 'selected' : '' }}>
+                {{ $semester->semester_name }}
+            </option>
+        @endforeach
+    </select>
+@endif
+
+<button type="submit">Sort</button>
         </form>
     </div>
 

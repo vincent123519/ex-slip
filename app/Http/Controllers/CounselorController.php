@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Response;
 use App\Models\Student;
 use App\Models\Feedback;
 use App\Models\Counselor;
 use App\Models\ExcuseSlip;
-
-
 use App\Models\ExcuseStatus;
+
+
 use Illuminate\Http\Request;
+use App\Models\CourseOffering;
 use Illuminate\Support\Carbon;
 use App\Models\CounselorFeedback;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ExcuseSlipApprovedNotification;
 
@@ -85,48 +86,57 @@ public function dashboard(Request $request)
 
     // Query for fetching excuse slips
     $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at')
-        ->where('counselor_id', $counselorId);
+    ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at')
+    ->where('counselor_id', $counselorId);
 
-    // Sorting logic based on the request parameter
-    $sort_by = $request->input('sort_by', 'today');
-    $month = $request->input('month', date('m'));
-    $year = $request->input('year', date('Y'));
+// Sorting logic based on the request parameter
+$sort_by = $request->input('sort_by', 'today');
+$month = $request->input('month', date('m'));
+$year = $request->input('year', date('Y'));
+$semesterId = $request->input('semester_id'); 
 
-    switch ($sort_by) {
-        case 'today':
-            $query->whereDate('created_at', today());
+
+switch ($sort_by) {
+    case 'today':
+        $query->whereDate('excuse_slips.created_at', today());
+        break;
+    case 'month':
+        $month = $request->input('month', date('m'));
+        $year = $request->input('year', date('Y'));
+        $query->whereYear('excuse_slips.created_at', $year)->whereMonth('excuse_slips.created_at', $month);
+        break;
+    case 'year':
+        $year = $request->input('year', date('Y'));
+        $query->whereYear('excuse_slips.created_at', $year);
+        break;
+    case 'weekly':
+        // Filter by the last 7 days
+        $query->whereDate('excuse_slips.created_at', '>=', now()->subDays(7));
+    case 'semester':
+            $semesterId = $request->input('semester_id');
+            $query->whereHas('course', function ($subquery) use ($semesterId) {
+                $subquery->where('semester_id', $semesterId);
+            });
+            
             break;
-        case 'month':
-            $month = $request->input('month', date('m'));
-            $year = $request->input('year', date('Y'));
-            $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-            break;
-        case 'year':
-            $year = $request->input('year', date('Y'));
-            $query->whereYear('created_at', $year);
-            break;
-        case 'weekly':
-            // Filter by the last 7 days
-            $query->whereDate('created_at', '>=', now()->subDays(7));
-            break;
-        default:
-            // For invalid inputs, no additional filtering needed
-            break;
-    }
+    default:
+        // For invalid inputs, no additional filtering needed
+        break;
+}
 
-    $excuseSlips = $query->get();
-    $latestExcuseSlips = $this->counselorNotification($counselorId);
+$excuseSlips = $query->get();
+$latestExcuseSlips = $this->counselorNotification($counselorId);
 
+// Generate export URL with query parameters
+$exportUrl = route('excuse_slips.export', [
+    'sort_by' => $sort_by,
+    'month' => $month,
+    'year' => $year,
+    'semester_id' => $semesterId
 
-    // Generate export URL with query parameters
-    $exportUrl = route('excuse_slips.export', [
-        'sort_by' => $sort_by,
-        'month' => $month,
-        'year' => $year
-    ]);
+]);
 
-    return view('counselor.dashboard', compact('excuseSlips', 'exportUrl', 'latestExcuseSlips'));
+return view('counselor.dashboard', compact('excuseSlips', 'exportUrl', 'latestExcuseSlips'));
 }
 
 

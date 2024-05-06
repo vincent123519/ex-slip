@@ -41,27 +41,55 @@ class TeacherController extends Controller
    
 
     
-    public function dashboard()
-    {
-        $teacherId = auth()->user()->teacher->teacher_id;
-        $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course','status')
-        ->select( 'excuse_slip_id','counselor_id', 'student_id' , 'reason', 'dean_id', 'teacher_id','start_date', 'offer_code' ,'end_date', 'status_id','read_by_teacher')
+public function dashboard()
+{
+    $teacherId = auth()->user()->teacher->teacher_id;
+
+    // Query for excuse slips with status "Approved by Dean" or "Rejected"
+    $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'read_by_teacher')
         ->where('teacher_id', $teacherId)
         ->whereHas('status', function ($query) {
-            $query->where('status_name', 'Approved by Dean')
-            ->orWhere('status_name', 'Rejected');
+            $query->whereIn('status_name', ['Approved by Dean', 'Rejected']);
         })
         ->get();
 
-        foreach ($excuseSlips as $excuseSlip) {
-            $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
-            $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
-        }
-        $unreadExcuseSlips = $excuseSlips; 
-
-        return view('teacher.dashboard', ['excuseSlips' => $excuseSlips, 'unreadExcuseSlips' => $unreadExcuseSlips]);
+    foreach ($excuseSlips as $excuseSlip) {
+        $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
+        $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
     }
 
+    // Query for excuse slips with status "Pending" or "Approved by Teacher" or "Rejected" or "Approved by Dean"
+    $sort = request('sort', 'status'); // Get the sort value from the request, default to 'status'
+    $allExcuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'read_by_teacher')
+        ->whereHas('status', function ($query) {
+            $query->whereIn('status_name', ['Pending', 'Approved by Teacher', 'Rejected', 'Approved by Dean']);
+        });
+
+    if ($sort == 'date') {
+        $allExcuseSlips->orderBy('start_date', 'asc');
+    } else {
+        $allExcuseSlips->orderBy('status_id', 'asc');
+    }
+
+    $allExcuseSlips = $allExcuseSlips->get();
+
+    foreach ($allExcuseSlips as $excuseSlip) {
+        $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
+        $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
+    }
+
+    // Query for unread excuse slips
+    $unreadExcuseSlips = $excuseSlips;
+
+    return view('teacher.dashboard', [
+        'excuseSlips' => $excuseSlips,
+        'allExcuseSlips' => $allExcuseSlips,
+        'unreadExcuseSlips' => $unreadExcuseSlips,
+        'sort' => $sort // Pass the sort variable to the view
+    ]);
+}
    
 
     public function teacherStoreFeedback(Request $request, $id)

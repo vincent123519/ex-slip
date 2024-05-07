@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\DeansSeeder;
 use Database\Seeders\UsersSeeder;
 use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\SchoolYearSeeder;
 use Database\Seeders\SemesterSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\SchoolSeeder;
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             // HeadCounselorSeeder::class,
             DepartmentDegreeSeeder::class,
+            SchoolYearSeeder::class,
             SemesterSeeder::class,
             TeacherSeeder::class,
             CounselorSeeder::class,

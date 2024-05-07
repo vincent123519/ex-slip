@@ -19,10 +19,11 @@
       </div>
     </a>
       <div>
+      <a href="{{ route('admin.dean.index') }}" class="stat">
         <h3>Total Deans</h3>
         <p>{{ $total_deans }}</p>
       </div>
-    </a>
+      </a>
       <div>
         <h3>Total Counselors</h3>
         <p>{{ $total_counselors }}</p>

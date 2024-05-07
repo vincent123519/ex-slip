@@ -189,6 +189,14 @@ public function showTeacher()
     return view('admin.teachers.index', compact('teachers'));
 }
 
+public function showdean()
+{
+    $deans = Dean::with('School')->get();
+
+    return view('admin.dean.index', compact('deans'));
+}
+
+
 public function importStudents(Request $request)
     {
         $request->validate([

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite(['resources/css/app.css', 'resources/scss/home.scss', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/scss/home.scss', 'resources/js/app.js','resources/scss/actors-css/student.scss'])
     @yield('styles')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
@@ -98,46 +98,9 @@
 </body>
 
 <style>
-.sis .yellow {
-    color: #FFD700;
-    font-weight: bold;
-    padding: 1px;
-    font-size: 49px;
-    margin-top: -49px;
-    /* font-family: "Montserrat", sans-serif; */
-    margin-left: -1px;
-    font-family: "Angkor";
-}
-.sis .Whites {
-    color: whitesmoke;
-    font-weight: bold;
-    padding: 0px;
-    font-size: large;
-    margin-left: 4px;
-    font-family: 'Montserrat', sans-serif;
-    margin-top: 17px;
 
-}
-.sis .Whitess {
-    color: whitesmoke;
-    font-weight: bold;
-    padding: 0px;
-    font-size: large;
-    margin-left: 4px;
-    font-family: 'Montserrat', sans-serif;
-    margin-top: 17px;
-}
-.sis .White {
-    color: whitesmoke;
-    font-weight: bold;
-    padding: 0px;
-    font-size: large;
-    margin-left: -193px;
-    font-family: "Montserrat", sans-serif;
-    margin-top: 17px;
-}
 
-    </style>
+</style>
 
 
 @section('head')

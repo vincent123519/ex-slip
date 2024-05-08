@@ -165,210 +165,8 @@
 @endsection
 
 
-<style>
-.logosc {
-    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-top: -15px;
-    margin-left: 485px;
-    position: absolute;
-    height: 50px;
-    width: 102px;
-    z-index: 1;
-    padding: 21px 22px;
-}
-
-    body{
-        font-family: 'Montserrat', sans-serif;
-    }
-    .counselor-details-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 10px solid #55825f;
-        border-radius: 1px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-    }
-    .excuse-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 10px solid yellowgreen;
-        border-radius: 0px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-    margin-top: 75px;
-    margin-left: 418px;
-}
-
-hr{
-        height: 1px;
-        background-color: darkgreen;
-        border: 2px solid black;
-        border-radius: 10px;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
 
 
-    p {
-        margin-bottom: 5px;
-    }
-
-    .btn {
-        display: inline-block;
-        padding: 10px 15px;
-        font-size: 16px;
-        text-align: center;
-        text-decoration: none;
-        background-color: #007bff;
-        color: #fff;
-        border-radius: 4px;
-        transition: background-color 0.3s;
-    }
-
-    .btn:hover {
-        background-color: #0056b3;
-    }
-
-    .excuse-slips-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-    .excuse-slip {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
-        padding: 15px;
-        width: 95%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .excuse-slip p {
-        margin: 0 0 10px;
-    }
-
-    .excuse-slip strong {
-        font-weight: bold;
-    }
-
-    .btn-approved {
-        background-color: #28a745;
-        height: 30px; /* Set the height you desire */
-        width: 40%; /* Full width of the container */
-        border: none;
-        border-radius: 5px;
-        color: white;
-    }
-
-    .btn-approved:hover {
-        background-color: darkgreen;
-        height: 30px; /* Set the height you desire */
-        width: 45%; /* Full width of the container */
-        
-    }
-    .btn-reject {
-        background-color: red;
-        height: 30px; /* Set the height you desire */
-        width: 40%; /* Full width of the container */
-        border: none;
-        border-radius: 5px;
-        color: white;
-    }
-
-    .btn-reject:hover {
-        background-color: darkred;
-        height: 30px; /* Set the height you desire */
-        width: 45%; /* Full width of the container */
-        
-    }
-
-    .excuse-slip-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    .excuse-slip-table th, .excuse-slip-table td {
-        border: 1px solid #ddd;
-        padding: px;
-        text-align: center;
-    }
-
-    .excuse-slip-table th {
-        background-color: #f2f2f2;
-    }
-
-    .excuse-slip-table td {
-        vertical-align: top;
-    }
-
-    .excuse-slip-table tbody td {
-    }
-    
-
-    
-
-
-footer {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      background-color: rgba(13, 62, 32, 0.98);
-      text-align: right; /* Align the notification to the right */
-      padding: 0 20px;
-    }
-    footer hr {
-      border: none;
-      border-top: 1px solid #ccc;
-      margin: 10px auto;
-    }
-    .notification {
-      background-color: #fec039;
-      color: white;
-      text-decoration: none;
-      position: relative;
-      display: inline-block;
-      border-radius: 2px;
-      padding-right: 250px;
-      cursor: pointer; /* Add cursor pointer to indicate interactivity */
-    }
-    .notification:hover {
-      background: #fec039;
-    }
-    .notification-content {
-    display: none;
-    position: absolute;
-    top: -145px;
-    right: 0;
-    width: 341px;
-    height: 200px; /* Set a specific height for the container */
-    background-color: #fec039;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    font-size: xx-small;
-    color: #28a745;
-    text-align: left;
-    overflow: auto; /* Add the overflow property for scrollable content */
-}
-    .notification.active .notification-content {
-      display: block; /* Show the notification content when the notification is active */
-    }
-   
-    
-</style>
 <script>
     document.getElementById('exportBtn').addEventListener('click', function() {
         window.location.href = "{{ $exportUrl }}";
@@ -388,25 +186,21 @@ footer {
 
 <script>
 function markAsRead(excuseSlipId) {
-  // Send an AJAX request to mark the excuse slip as read by the counselor
   fetch('/excuse_slips/' + excuseSlipId + '/mark-as-read', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure to include the CSRF token
+      'X-CSRF-TOKEN': '{{ csrf_token() }}' 
     },
     body: JSON.stringify({ excuse_slip_id: excuseSlipId })
   })
   .then(response => {
-    // Handle the response
     if (response.ok) {
-      // Success: Update the UI or perform any necessary actions
     } else {
       // Error: Handle the error case
     }
   })
   .catch(error => {
-    // Error: Handle the error case
-  });
+e  });
 }
 </script>

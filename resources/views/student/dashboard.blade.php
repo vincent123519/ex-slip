@@ -42,11 +42,17 @@
 
             <button type="submit">Sort</button>
         </form>
-
-        <div class="manage-slip-container">
-
-            <h2>Excuse Slips Dashboard</h2>
-
+        <div class="filter-container">
+        <label for="filter">Filter by:</label>
+        <select id="filter" name="filter">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="approved_by_counselor">Approved by Counselor</option>
+            <option value="rejected">Rejected</option>
+            <option value="approved_by_dean">Approved by Dean</option>
+            <option value="approved_by_teacher">Approved by Teacher</option>
+        </select>
+        </div>
             @if($excuseSlips->isEmpty())
                 <p>No Excuse Slips found.</p>
             @else
@@ -151,3 +157,28 @@
       });
     });
   </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        function filterExcuseSlips(option) {
+            var rows = $('.excuse-slip-table tbody tr');
+
+            rows.each(function() {
+                var status = $(this).find('td:nth-child(2)').text().toLowerCase();
+
+                if (option === 'all' || status.includes(option)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        $('#filter').change(function() {
+            var selectedOption = $(this).val();
+            filterExcuseSlips(selectedOption);
+        });
+    });
+</script>

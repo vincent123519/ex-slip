@@ -6,9 +6,8 @@
         <h1>Absence Request</h1>
         <hr>
         
-        <!-- <a href="" class="create-slip-button">Number of Excuse slip</a> -->
     
-        <p style="font-weight: bold;">Total Excuse Slips: {{ $excuseSlips->count() }}</p> <!-- Display the count of excuse slips -->
+        <p style="font-weight: bold;">Total Excuse Slips: {{ $excuseSlips->count() }}</p>
 
         <form action="{{ route('counselor.dashboard') }}" method="GET">
         <label for="sort_by" style="font-weight: bold;">Sort By:</label>
@@ -18,6 +17,7 @@
     <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
     <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
     <option value="semester" {{ request()->input('sort_by') == 'semester' ? 'selected' : '' }}>Semester</option>
+    <option value="school_year" {{ request()->input('sort_by') == 'school_year' ? 'selected' : '' }}>School Year</option>
 </select>
 
 <!-- Display month dropdown if "month" is selected -->
@@ -41,6 +41,8 @@
 <!-- Display semester dropdown if "semester" is selected -->
 @php
     $semesters = App\Models\Semester::all();
+    $schoolYears = App\Models\SchoolYear::all();
+
 @endphp
 
 @if (request()->input('sort_by') == 'semester')
@@ -54,6 +56,17 @@
     </select>
 @endif
 
+
+@if (request()->input('sort_by') == 'school_year')
+    <select name="school_year_id">
+        @foreach ($schoolYears as $schoolYear)
+            <option value="{{ $schoolYear->sy_id }}" {{ request()->input('school_year_id') == $schoolYear->sy_id ? 'selected' : '' }}>
+                {{ $schoolYear->sy_name }}
+            </option>
+        @endforeach
+    </select>
+@endif
+
 <button type="submit">Sort</button>
         </form>
     </div>
@@ -61,6 +74,7 @@
     <div class="excuse-container">
     <div class="logosc"></div>
     <a href="{{ $exportUrl }}">Export Excuse Slips</a>
+    
 
     <h2 style="
     margin-top: 71px;
@@ -69,6 +83,17 @@
 
         @if($excuseSlips->count() > 0)
             <table class="excuse-slip-table">
+            <div class="filter-container">
+        <label for="filter">Filter by:</label>
+        <select id="filter" name="filter">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="approved_by_counselor">Approved by Counselor</option>
+            <option value="rejected">Rejected</option>
+            <option value="approved_by_dean">Approved by Dean</option>
+            <option value="approved_by_teacher">Approved by Teacher</option>
+        </select>
+        </div>
                 
                 <thead>
                     <tr>
@@ -203,4 +228,29 @@ function markAsRead(excuseSlipId) {
   .catch(error => {
 e  });
 }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        function filterExcuseSlips(option) {
+            var rows = $('.excuse-slip-table tbody tr');
+
+            rows.each(function() {
+                var status = $(this).find('td:nth-child(2)').text().toLowerCase();
+
+                if (option === 'all' || status.includes(option)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+
+        $('#filter').change(function() {
+            var selectedOption = $(this).val();
+            filterExcuseSlips(selectedOption);
+        });
+    });
 </script>

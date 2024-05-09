@@ -54,7 +54,7 @@
 <div class="sidebar">
     <div class="profile-container">
         <div class="profile-image"></div>
-        <div class="profile-name">Counselor:{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+        <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
 
     </div>
     <div class="divider"></div>

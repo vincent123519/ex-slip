@@ -119,6 +119,12 @@ switch ($sort_by) {
             });
             
             break;
+    case 'school_year':
+            $schoolYearId = $request->input('school_year_id');
+            $query->whereHas('course.semester', function ($subquery) use ($schoolYearId) {
+            $subquery->where('sy_id', $schoolYearId);
+                });
+                break;
     default:
         // For invalid inputs, no additional filtering needed
         break;

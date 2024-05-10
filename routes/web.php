@@ -188,3 +188,8 @@ Route::get('/admin/students/{id}/edit', [AdminController::class, 'editStudentDet
 
 Route::put('/admin/students/{id}', [AdminController::class, 'updateStudentDetails'])
     ->name('admin.students.update');
+
+Route::get('/admin/school_years', [AdminController::class, 'indexSchoolYear'])->name('admin.school_years.index');
+
+Route::post('/school_years/{syId}/activate', [AdminController::class, 'activateSchoolYear'])->name('school-year.activate');
+Route::post('/school_years', [AdminController::class, 'addSchoolYear'])->name('school-year.add');

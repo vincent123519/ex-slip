@@ -14,6 +14,7 @@ use App\Models\Counselor;
 use App\Models\StudyLoad;
 use App\Models\Department;
 use App\Models\ExcuseSlip;
+use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use App\Models\CourseOffering;
 use App\Models\DepartmentDegree;
@@ -524,4 +525,70 @@ public function updateStudentDetails(Request $request, $id)
     return redirect()->route('admin.students.index')->with('success', 'Student details updated successfully.');
 }
 
+
+//for school year
+public function indexSchoolYear()
+    {
+        $schoolYears = SchoolYear::all();
+
+        return view('admin.school_years.index', compact('schoolYears'));
+    }
+
+    public function activateSchoolYear($syId)
+{
+    SchoolYear::where('is_active', true)->update(['is_active' => false]);
+
+    $schoolYear = SchoolYear::findOrFail($syId);
+    $schoolYear->is_active = true;
+    $schoolYear->save();
+
+    $this->createSemesters($schoolYear->sy_id);
+
+    return redirect()->back()->with('success', 'School year activated successfully.');
+}
+
+    public function addSchoolYear(Request $request)
+    {
+        $request->validate([
+            'sy_id' => 'required|unique:school_years',
+            'sy_name' => 'required',
+        ]);
+
+        $schoolYear = new SchoolYear();
+        $schoolYear->sy_id = $request->sy_id;
+        $schoolYear->sy_name = $request->sy_name;
+        $schoolYear->is_active = false;
+        $schoolYear->save();
+
+        return redirect()->back()->with('success', 'School year added successfully.');
+    }
+
+  
+
+    private function createSemesters($syId)
+    {
+        $semesters = [
+            ['semester_name' => '1st sem'],
+            ['semester_name' => '2nd sem'],
+            ['semester_name' => 'Summer'],
+            // Add more semester records here
+        ];
+    
+        $schoolYear = SchoolYear::where('sy_id', $syId)->first();
+        $syName = $schoolYear->sy_name;
+    
+        foreach ($semesters as $semesterData) {
+            $semesterData['semester_name'] = $syName . ' ' . $semesterData['semester_name'];
+            $semesterData['updated_at'] = now();
+            $semesterData['created_at'] = now();
+            $semesterData['sy_id'] = $syId;
+    
+            try {
+                DB::table('semesters')->insert($semesterData);
+            } catch (\Exception $e) {
+                // Handle the exception
+                // Log or display an error message
+            }
+        }
+    }
 }

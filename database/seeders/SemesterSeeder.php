@@ -17,12 +17,15 @@ class SemesterSeeder extends Seeder
             // Add more semester records here
         ];
 
-        $schoolYears = SchoolYear::all();
+        $activeSchoolYear = SchoolYear::where('is_active', true)->first();
 
-        foreach ($schoolYears as $schoolYear) {
+        if ($activeSchoolYear) {
+            $syId = $activeSchoolYear->sy_id;
+            $syName = $activeSchoolYear->sy_name;
+
             foreach ($semesters as $semesterData) {
-                $semesterData['semester_name'] = $schoolYear->sy_name . ' ' . $semesterData['semester_name'];
-                $semesterData['sy_id'] = $schoolYear->sy_id;
+                $semesterData['semester_name'] = $syName . ' ' . $semesterData['semester_name'];
+                $semesterData['sy_id'] = $syId;
                 Semester::create($semesterData);
             }
         }

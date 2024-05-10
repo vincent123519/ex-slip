@@ -80,7 +80,11 @@ body{
     color: #fff;
     // margin-left: -39px;
   }
-
+  .stat {
+    text-decoration: none;
+    color: rgba(13, 62, 32, 0.98);
+    margin-left: 44px;
+}
 
 
 .inline-navbar {
@@ -291,19 +295,19 @@ body{
             margin-right: 10px;
         }
 
-        .home-btn{
+        .home-btn {
             background: #fff;
-            color: rgba(13,62,32,0.98);
+            color: rgba(13, 62, 32, 0.98);
             display: block;
-            margin: -36px 406px;
+            margin: -36px 451px;
             font-size: 18px;
-            width: 35px;
+            width: 39px;
             height: 35px;
             line-height: 35px;
             text-align: center;
             border-radius: 50%;
             transition: 0.3s;
-          }
+        }
           
         
         

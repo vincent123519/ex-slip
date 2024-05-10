@@ -57,7 +57,6 @@ hr{
     margin-bottom: 10px;
 }
 
-
 .teacher-container p {
   display: inline-block;
   margin-right: 197px;
@@ -172,4 +171,117 @@ body {
 .teacher-container p {
             display: inline-block;
             margin-right: 100px; /* Adjust the margin to control the space between Teacher and Subject */
+        }
+
+
+        .form-group-course input[type="checkbox"] {
+            display: flex;
+        }
+
+        .sh1 {
+            margin-bottom: 10px;
+            margin-top: 81px;
+            margin-left: 603px;
+        }
+        h2 {
+            margin-top: 90px;
+            margin-left: 518px;
+        }
+
+        .logocp {
+            background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-top: -6px;
+            margin-left: 470px;
+            position: absolute;
+            height: 50px;
+            width: 102px;
+            z-index: 1;
+            padding: 21px 22px;
+        }
+        //         input[type=text], select {
+        //             width: 100%;
+        //             padding: 12px 20px;
+        //             margin: 8px 0;
+        //             display: inline-block;
+        //             border: 1px solid #ccc;
+        //             border-radius: 4px;
+        //             box-sizing: border-box;
+        //         }
+        
+        //         input[type=password] {
+        //     width: 100%;
+        //     padding: 12px 20px;
+        //     margin: 8px 0;
+        //     display: inline-block;
+        //     border: 1px solid #ccc;
+        //     border-radius: 4px;
+        //     box-sizing: border-box;
+        //     border-top: 7px;
+        //     border-radius: 0px;
+        //     border-right: 0;
+        //     border-left: 0;
+        //     background: #ccc;
+        // }
+        
+        //         input[type=submit] {
+        //             width: 100%;
+        //             background-color: #274829;
+        //             color: white;
+        //             padding: 14px 20px;
+        //             margin: 8px 0;
+        //             border: none;
+        //             border-radius: 4px;
+        //             cursor: pointer;
+        //         }
+        
+        //         input[type=submit]:hover {
+        //             background-color: #fec039;
+        //         }
+        
+                .change-pass-user {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+            width: 58%;
+            margin: auto;
+            margin-top: 50px;
+            font-family: 'Montserrat', sans-serif;
+            border-left: 1px solid yellow;
+            border-right: 1px solid yellow;
+            border-bottom: 5px solid #fec039;
+            border-top: 1px solid yellow;
+        }
+        
+        h2 {
+            margin-top: 90px;
+            margin-left: 518px;
+        }
+        .slip-view-container button[type=submit] {
+            padding: 15px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid violet;
+            width: 9%;
+        }
+        .slip-view-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            width: 2087px;
+        }
+        .btn-approved{
+            margin-left: 1000px;
+    margin-top: 4px;
+    border: 2px yellow;
+    border-style: solid;
+    background: greenyellow;
+    color: black;
+    font-weight: bold;
         }

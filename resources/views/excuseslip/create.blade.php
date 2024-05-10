@@ -11,6 +11,7 @@
 @extends('components.stud')
 
 @section('content')
+
     <div class="manage-slip-container">
     <div class="logoss"></div>
     <h2 class="excuse-slip-header" style="margin-left: 473px;margin-top: 79px;">Excuse Slip</h2>        <!-- Display errors if there are any -->
@@ -87,8 +88,9 @@
 
 
 
-    <div class="form-group-course">
     <label for="offer_codes">Select Courses:</label>
+    <div class="form-group-course">
+
     <ul>
         @foreach($selectedCourseOfferings as $courseOffering)
             <li>
@@ -135,14 +137,43 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
-
+    <!-- <div class="nav-right">
+        <form action="{{ route('student.dashboard') }}" method="get" style="display: inline;">
+            @csrf
+            <button type="submit" class="home-btn">
+           <div class="home-icon"><i style="
+                color: beige;
+                font-weight: bold;
+            "> </i></div>
+            </button>
+        </form> -->
 @endsection
 
 
 
 <style>
 
-    
+.home-icon {
+            width: 26px;
+            height: 30px;
+            background: url("http://[::1]:4000/resources/scss/image/home.png") center/cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .home-btn {
+            background: #fff;
+            color: rgba(13, 62, 32, 0.98);
+            display: block;
+            margin: -36px 451px;
+            font-size: 18px;
+            width: 39px;
+            height: 35px;
+            line-height: 35px;
+            text-align: center;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
 </style>
 
 <script>

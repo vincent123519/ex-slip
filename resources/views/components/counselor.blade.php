@@ -28,7 +28,7 @@
            <div class="home-icon"><i style="
                 color: beige;
                 font-weight: bold;
-            "> Home</i></div>
+            "> </i></div>
             </button>
         </form>
 
@@ -38,7 +38,7 @@
                 <div class="circle-icon"></div><i style="
     color: beige;
     font-weight: bold;
-">Logout</i>
+"></i>
             </button>
         </form></div>
             
@@ -57,21 +57,12 @@
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
 
     </div>
-    <div class="divider"></div>
-    <div class="divider"></div>
+    <!-- <div class="divider"></div>
+    <div class="divider"></div> -->
+    <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
     <div class="navmenu">
             <ul>
                 <li><span>DASHBOARD</span></li>
-                <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
-                <li class="dropdown-li">
-                    <span id="schoolYearButton"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
-                    <ul class="dropdown" id="schoolYearDropdown">
-                        <!-- Add your school year options here -->
-                        <li><a href="#">SY 2021-2022</a></li>
-                        <li><a href="#">SY 2022-2023</a></li>
-                        <li><a href="#">SY 2023-2024</a></li>
-                        <!-- Add more options as needed -->
-                    </ul>
                 </li>
             </ul>
         </div>    </div>

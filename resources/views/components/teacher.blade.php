@@ -28,7 +28,7 @@
                 <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">
-                <div class="circle-icon"></div><i>Logout</i>
+                <div class="circle-icon"></div><i></i>
             </button>
         </form>
                 
@@ -49,12 +49,12 @@
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
 
     </div>
-    <div class="divider"></div>
-    <div class="divider"></div>
+    <!-- <div class="divider"></div>
+    <div class="divider"></div> -->
+    <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
     <div class="navmenu"><ul>
-        <li><span>DASHBOARD</span></li>
-        <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
-        <li>AttendanceSlip</li>
+        <span>DASHBOARD</span>
+
     </ul></div>    </div>
     
     @yield('content')   

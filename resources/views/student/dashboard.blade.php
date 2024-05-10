@@ -2,14 +2,18 @@
 @section('content')
 
     <div class="student-details-container">
-        <div class="logosc"></div>
-        <h1>Absence Request</h1>
+        <div class="logosc">
+            
+        </div>
+        <h1 class="sh1">Absence Request</h1>
         <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
 
         <hr>
 
         <form action="{{ route('student.dashboard') }}" method="GET">
-            <label for="sort_by">Sort By:</label>
+        <label for="sort_by" style="
+    font-weight: bold;
+">Sort By:</label>
             <select name="sort_by" id="sort_by">
                 <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>All</option>
                 <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
@@ -43,7 +47,9 @@
             <button type="submit">Sort</button>
         </form>
         <div class="filter-container">
-    <label for="filter">Filter by:</label>
+    <label style="
+    font-weight: bold;
+" for="filter">Filter by:</label>
     <select id="filter" name="filter">
         <option value="all">All</option>
         <option value="pending">Pending</option>
@@ -111,7 +117,8 @@
 
     <footer>
     <div class="notification">
-        <span>notification</span>
+        <!-- <span>notification</span> -->
+        <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
         <div class="notification-content">
             @if ($unreadExcuseSlips->count() > 0)
                 @foreach ($unreadExcuseSlips as $unreadExcuseSlip)

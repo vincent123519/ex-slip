@@ -18,13 +18,11 @@
 <div class="slip-view-container">
     <div class="slip-view-card">
         <div class="slip-view-header">
-        <div class="logosc"></div>         
-        <h1 style="
-        margin-top: 60px;
-"       >View Slip</h1>
+        <div class="logosp"></div>         
+        <h1 class="h1s"  >View Slip</h1>
         <hr>
         </div>
-        <p><strong>Excuse slip ID:</strong> {{ $excuseSlip->excuse_slip_id }}</p>
+        <!-- <p><strong>Excuse slip ID:</strong> {{ $excuseSlip->excuse_slip_id }}</p> -->
 
         <div class="slip-view-body">
             <div class="excuse-slip">
@@ -34,7 +32,9 @@
                 </div>
                 <div class="teacher-container">
                 <p><strong>Teacher:</strong> {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</p>
-                <p><strong>Subject:</strong> {{ $excuseSlip->course->course_code}} - {{ $excuseSlip->course->offer_code}}</p>
+                <strong style="
+    margin-left: 34px;
+">Subject:</strong> {{ $excuseSlip->course->course_code}} - {{ $excuseSlip->course->offer_code}}</p>
 
 
                 </div>
@@ -121,7 +121,7 @@
                 <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-approved" style="margin-left: 899px;border: red;border-style: solid;">Approve</button>                                </form>
+                                    <button type="submit" class="btn-approved">Approve</button>                                </form>
 
                 <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                         @csrf
@@ -210,26 +210,26 @@
         <div class="status">
         @if ($excuseSlip->status->status_id == 2)
             <ul>
-                <li style="background-color: #26d187;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
-                <li style="background-color: #ecf08d;">To be approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
-                <li style="background-color: #ecf08d;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
+            <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+            <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
+            <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
             </ul>
         @elseif ($excuseSlip->status->status_id == 4)
             <ul>
-            <li style="background-color: #26d187;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
-            <li style="background-color: #26d187;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
-            <li style="background-color: #ecf08d;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
+            <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+            <li  style="color: #26d187;font-weight: bold;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
+            <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
             </ul>
         @elseif ($excuseSlip->status->status_id == 5)
             <ul>
-            <li style="background-color: #26d187;">Approved by {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</li>
-            <li style="background-color: #26d187;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
-            <li style="background-color: #26d187;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+            <li style="color: green;font-weight: bold;">Approved by {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</li>
+            <li style="color: green;font-weight: bold;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
+            <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
             </ul>
         @elseif ($excuseSlip->status->status_id == 1)
             <ul>
                 <li>Pending for Approval</li>
-                <li style="background-color: #ecf08d;">Sent to {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+                <li style="color: orange;font-weight: bold;">Sent to {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
 
             </ul>
     @endif

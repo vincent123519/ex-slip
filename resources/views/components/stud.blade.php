@@ -7,6 +7,7 @@
     @yield('styles')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 </head>
 <body class="bg-image">
 <header>
@@ -28,7 +29,7 @@
            <div class="home-icon"><i style="
                 color: beige;
                 font-weight: bold;
-            "> Home</i></div>
+            "> </i></div>
             </button>
         </form>
        
@@ -41,7 +42,7 @@
         <div class="home-icon"><i style="
             color: beige;
             font-weight: bold;
-        "> Home</i></div>
+        "> </i></div>
         </button>
         </form>
 @endif
@@ -53,7 +54,7 @@
                 <div class="circle-icon"></div><i style="
                 color: beige;
                 font-weight: bold;
-            ">Logout</i>
+            "></i>
             </button>
         </form>
 </div>
@@ -81,17 +82,19 @@
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
 
     </div>
-    <div class="divider"></div>
-    <div class="divider"></div>
+    <!-- <div class="divider"></div>
+    <div class="divider"></div> -->
+    <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
+    
     <div class="navmenus"><ul>
-
+        
         <li><span>DASHBOARD</span></li>
-        <li class="stud-navmenu">
-        <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
+       
 
         
 
     </ul></div>    </div>
+    
     
     @yield('content')   
 
@@ -100,12 +103,14 @@
 <style>
 
 
-</style>
+    </style>
 
 
 @section('head')
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 @endsection
+
+
 
 
 

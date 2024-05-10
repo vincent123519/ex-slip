@@ -11,7 +11,7 @@
 
         <form action="{{ route('counselor.dashboard') }}" method="GET">
         <label for="sort_by" style="font-weight: bold;">Sort By:</label>
-<select name="sort_by" id="sort_by" style="font-weight: bold; background: darkseagreen;">
+<select class="sorting"name="sort_by" id="sort_by">
     <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
     <option value="weekly" {{ request()->input('sort_by') == 'weekly' ? 'selected' : '' }}>Last 7 Days</option>
     <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
@@ -67,13 +67,13 @@
     </select>
 @endif
 
-<button type="submit">Sort</button>
+<button class="sorting" type="submit">Sort</button>
         </form>
     </div>
 
     <div class="excuse-container">
     <div class="logosc"></div>
-    <a href="{{ $exportUrl }}">Export Excuse Slips</a>
+    <a class="expo"href="{{ $exportUrl }}">Export Excuse Slips</a>
     
 
     <h2 style="
@@ -112,13 +112,8 @@
                     <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
                     <td>{{ $excuseSlip->reason }}</td>
                     <td>{{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</td>
-                    <td>
-                    @if($excuseSlip->status->status_name == 'Approved by Counselor')
-                        Approved
-                    @else
-                        {{ $excuseSlip->status->status_name }}
-                    @endif
-                </td>
+                    <td>{{ $excuseSlip->status->status_name}}</td>
+                    
                     <td>
                     <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
     @csrf
@@ -158,7 +153,8 @@
 
     <footer>
     <div class="notification">
-      <span>notification</span>
+    <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
+      <!-- <span>notification</span> -->
       <div class="notification-content">
       @foreach ($latestExcuseSlips as $latestExcuseSlip)
       <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}" class="view-button">
@@ -188,7 +184,6 @@
   </footer>
 
 @endsection
-
 
 
 

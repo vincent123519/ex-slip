@@ -14,7 +14,6 @@
     border-top: none;
     width: 250px;
 }
-
 .navmenu li span {
     padding: 10px;
     cursor: pointer;
@@ -161,14 +160,12 @@ hr{
         gap: 20px;
     }
 
-    .excuse-slip {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
-        padding: 15px;
-        width: 95%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+.excuse-slip {
+    /* border: 1px solid #ccc; */
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
 
     .excuse-slip p {
         margin: 0 0 10px;
@@ -224,6 +221,13 @@ hr{
     .excuse-slip-table th {
         background-color: #f2f2f2;
     }
+    .slip-view-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+        width: 2087px;
+    }
 
     .excuse-slip-table td {
         vertical-align: top;
@@ -232,54 +236,94 @@ hr{
     .excuse-slip-table tbody td {
     }
     
+    #sort_by {
+        padding: 0px -1px 0 15px;
+        height: 25px;
+        width: 100px;
+        border: 1px solid #a4c3ca;
+        font: bold 14px "Roboto", arial, helvetica;
+        color: #23441e;
+        border-radius: 3px;
+        outline: none;
+    }
+    .sorting {
+        color: black;
+        font-weight: bold;
+        width: 65px;
+        height: 25px;
+        background: greenyellow;
+        border-radius: 8px;
+        border: 1px solid yellowgreen;
+    }    
+.expo {   
+     text-decoration: none;
+    border: 1px solid blue;
+    background: mediumspringgreen;
+    font-weight: bold;
+}    
+.expo:hover {   
+
+   border: mediumspringgreen;
+   background: 1px solid blue;
+
+}    
+
 
     
-
-
 footer {
-      position: fixed;
-      left: 0;
-      bottom: 0;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(13, 62, 32, 0.98);
+    text-align: right; /* Align the notification to the right */
+    padding: 0 20px;
+  }
+  hr {
+      height: 1px;
+      background-color: green;
+      border: 1px solid black;
+      border-radius: 10px;
       width: 100%;
-      background-color: rgba(13, 62, 32, 0.98);
-      text-align: right; /* Align the notification to the right */
-      padding: 0 20px;
-    }
-    footer hr {
-      border: none;
-      border-top: 1px solid #ccc;
-      margin: 10px auto;
-    }
-    .notification {
-      background-color: #fec039;
-      color: white;
-      text-decoration: none;
-      position: relative;
-      display: inline-block;
-      border-radius: 2px;
-      padding-right: 250px;
-      cursor: pointer; /* Add cursor pointer to indicate interactivity */
-    }
-    .notification:hover {
-      background: #fec039;
-    }
-    .notification-content {
-    display: none;
-    position: absolute;
-    top: -145px;
-    right: 0;
-    width: 341px;
-    height: 200px; /* Set a specific height for the container */
+      margin-left: auto;
+      margin-right: auto;
+  }
+  footer hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 10px auto;
+  }
+  .notification {
     background-color: #fec039;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    font-size: xx-small;
-    color: #28a745;
-    text-align: left;
-    overflow: auto; /* Add the overflow property for scrollable content */
+    color: white;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    border-radius: 2px;
+    padding-right: 250px;
+    cursor: pointer; /* Add cursor pointer to indicate interactivity */
+  }
+  .notification:hover {
+    background: #fec039;
+  }
+  .notification-content {
+  display: none;
+  position: absolute;
+  top: -145px;
+  right: 0;
+  width: 341px;
+  height: 200px; /* Set a specific height for the container */
+  background-color: #fec039;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  font-size: small;
+  color: #28a745;
+  text-align: left;
+  overflow: auto; /* Add the overflow property for scrollable content */
+  font-family: 'Montserrat', sans-serif;
+
 }
-    .notification.active .notification-content {
-      display: block; /* Show the notification content when the notification is active */
-    }
-   
+  .notification.active .notification-content {
+    display: block; /* Show the notification content when the notification is active */
+  }

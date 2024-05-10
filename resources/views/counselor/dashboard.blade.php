@@ -234,23 +234,36 @@ e  });
 
 <script>
     $(document).ready(function() {
-        function filterExcuseSlips(option) {
-            var rows = $('.excuse-slip-table tbody tr');
+    function filterExcuseSlips(option) {
+        var rows = $('.excuse-slip-table tbody tr');
 
-            rows.each(function() {
-                var status = $(this).find('td:nth-child(2)').text().toLowerCase();
+        rows.each(function() {
+            var status = $(this).find('td:nth-child(5)').text().trim().toLowerCase();
 
-                if (option === 'all' || status.includes(option)) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
+            console.log('Status:', status); // Debugging statement
 
-        $('#filter').change(function() {
-            var selectedOption = $(this).val();
-            filterExcuseSlips(selectedOption);
+            if (option === 'all') {
+                $(this).show();
+            } else if (option === 'pending' && status.includes('pending')) {
+                $(this).show();
+            } else if (option === 'approved_by_counselor' && status.includes('approved by counselor')) {
+                $(this).show();
+            } else if (option === 'rejected' && status.includes('rejected')) {
+                $(this).show();
+            } else if (option === 'approved_by_dean' && status.includes('approved by dean')) {
+                $(this).show();
+            } else if (option === 'approved_by_teacher' && status.includes('approved by teacher')) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
         });
+    }
+
+    $('#filter').change(function() {
+        var selectedOption = $(this).val();
+        console.log('Selected Option:', selectedOption); // Debugging statement
+        filterExcuseSlips(selectedOption);
     });
+});
 </script>

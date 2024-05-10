@@ -533,46 +533,33 @@ public function indexSchoolYear()
 
         return view('admin.school_years.index', compact('schoolYears'));
     }
-
     public function activateSchoolYear($syId)
     {
-        $schoolYear = SchoolYear::find($syId);
+        $schoolYear = SchoolYear::findOrFail($syId);
     
-        if ($schoolYear) {
-            $schoolYear->is_active = true;
-            $schoolYear->save();
+        SchoolYear::where('is_active', true)->update([
+            'is_active' => false
+        ]);
     
-            $activeSchoolYear = SchoolYear::where('is_active', true)->first();
+        $schoolYear->is_active = true;
+        $schoolYear->save();
     
-            if ($activeSchoolYear) {
-                $syId = $activeSchoolYear->sy_id;
-                $syName = $activeSchoolYear->sy_name;
+        $semesters = [
+            ['semester_name' => $schoolYear->sy_name . ' 1st sem', 'sy_id' => $schoolYear->sy_id],
+            ['semester_name' => $schoolYear->sy_name . ' 2nd sem', 'sy_id' => $schoolYear->sy_id],
+            ['semester_name' => $schoolYear->sy_name . ' Summer', 'sy_id' => $schoolYear->sy_id],
+            // Add more semester records here
+        ];
     
-                $semesters = [
-                    ['semester_name' => $syName . ' 1st sem', 'sy_id' => $syId],
-                    ['semester_name' => $syName . ' 2nd sem', 'sy_id' => $syId],
-                    ['semester_name' => $syName . ' Summer', 'sy_id' => $syId],
-                    // Add more semester records here
-                ];
+        Semester::where('sy_id', $schoolYear->sy_id)->delete();
     
-                foreach ($semesters as $semesterData) {
-                    try {
-                        Semester::create($semesterData);
-                    } catch (\Exception $e) {
-                        // Handle the exception
-                        // Log or display an error message
-                    }
-                }
-            }
-    
-            return redirect()->back()->with('success', 'School year activated successfully.');
-        } else {
-            return redirect()->back()->with('error', 'School year not found.');
+        foreach ($semesters as $semesterData) {
+            $semester = new Semester($semesterData);
+            $semester->save();
         }
+    
+        return redirect()->back()->with('success', 'School year activated successfully.');
     }
-    
-    
-
 
     public function addSchoolYear(Request $request)
     {

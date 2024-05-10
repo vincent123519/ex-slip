@@ -535,17 +535,44 @@ public function indexSchoolYear()
     }
 
     public function activateSchoolYear($syId)
-{
-    SchoolYear::where('is_active', true)->update(['is_active' => false]);
+    {
+        $schoolYear = SchoolYear::find($syId);
+    
+        if ($schoolYear) {
+            $schoolYear->is_active = true;
+            $schoolYear->save();
+    
+            $activeSchoolYear = SchoolYear::where('is_active', true)->first();
+    
+            if ($activeSchoolYear) {
+                $syId = $activeSchoolYear->sy_id;
+                $syName = $activeSchoolYear->sy_name;
+    
+                $semesters = [
+                    ['semester_name' => $syName . ' 1st sem', 'sy_id' => $syId],
+                    ['semester_name' => $syName . ' 2nd sem', 'sy_id' => $syId],
+                    ['semester_name' => $syName . ' Summer', 'sy_id' => $syId],
+                    // Add more semester records here
+                ];
+    
+                foreach ($semesters as $semesterData) {
+                    try {
+                        Semester::create($semesterData);
+                    } catch (\Exception $e) {
+                        // Handle the exception
+                        // Log or display an error message
+                    }
+                }
+            }
+    
+            return redirect()->back()->with('success', 'School year activated successfully.');
+        } else {
+            return redirect()->back()->with('error', 'School year not found.');
+        }
+    }
+    
+    
 
-    $schoolYear = SchoolYear::findOrFail($syId);
-    $schoolYear->is_active = true;
-    $schoolYear->save();
-
-    $this->createSemesters($schoolYear->sy_id);
-
-    return redirect()->back()->with('success', 'School year activated successfully.');
-}
 
     public function addSchoolYear(Request $request)
     {
@@ -564,31 +591,4 @@ public function indexSchoolYear()
     }
 
   
-
-    private function createSemesters($syId)
-    {
-        $semesters = [
-            ['semester_name' => '1st sem'],
-            ['semester_name' => '2nd sem'],
-            ['semester_name' => 'Summer'],
-            // Add more semester records here
-        ];
-    
-        $schoolYear = SchoolYear::where('sy_id', $syId)->first();
-        $syName = $schoolYear->sy_name;
-    
-        foreach ($semesters as $semesterData) {
-            $semesterData['semester_name'] = $syName . ' ' . $semesterData['semester_name'];
-            $semesterData['updated_at'] = now();
-            $semesterData['created_at'] = now();
-            $semesterData['sy_id'] = $syId;
-    
-            try {
-                DB::table('semesters')->insert($semesterData);
-            } catch (\Exception $e) {
-                // Handle the exception
-                // Log or display an error message
-            }
-        }
-    }
 }

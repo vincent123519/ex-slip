@@ -9,8 +9,13 @@ class Semester extends Model
     protected $primaryKey = 'semester_id';
     protected $table = 'semesters';
 
-
     protected $fillable = [
         'semester_name',
+        'sy_id',
     ];
+
+    public function schoolYear()
+    {
+        return $this->belongsTo(SchoolYear::class, 'sy_id');
+    }
 }

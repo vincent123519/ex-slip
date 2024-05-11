@@ -10,7 +10,7 @@ class SchoolYear extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['sy_id', 'sy_name'];
+    protected $fillable = ['sy_id', 'sy_name','is_active'];
 
     public function semesters()
     {

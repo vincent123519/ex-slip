@@ -533,13 +533,13 @@ public function indexSchoolYear()
 
         return view('admin.school_years.index', compact('schoolYears'));
     }
-    public function activateSchoolYear($syId)
+public function activateSchoolYear($syId)
     {
         $schoolYear = SchoolYear::findOrFail($syId);
     
-        SchoolYear::where('is_active', true)->update([
-            'is_active' => false
-        ]);
+        // SchoolYear::where('is_active', true)->update([
+        //     'is_active' => false
+        // ]);
     
         $schoolYear->is_active = true;
         $schoolYear->save();
@@ -551,7 +551,6 @@ public function indexSchoolYear()
             // Add more semester records here
         ];
     
-        Semester::where('sy_id', $schoolYear->sy_id)->delete();
     
         foreach ($semesters as $semesterData) {
             $semester = new Semester($semesterData);
@@ -562,20 +561,25 @@ public function indexSchoolYear()
     }
 
     public function addSchoolYear(Request $request)
-    {
-        $request->validate([
-            'sy_id' => 'required|unique:school_years',
-            'sy_name' => 'required',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'sy_id' => 'required|unique:school_years,sy_id|regex:/^\d{4}-\d{4}$/',
+        'sy_name' => 'required|in:SY ' . $request->input('sy_id'),
+    ], [
+        'sy_name.in' => 'The :attribute must be SY ' . $request->input('sy_id'),
+    ]);
 
-        $schoolYear = new SchoolYear();
-        $schoolYear->sy_id = $request->sy_id;
-        $schoolYear->sy_name = $request->sy_name;
-        $schoolYear->is_active = false;
-        $schoolYear->save();
-
-        return redirect()->back()->with('success', 'School year added successfully.');
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
 
+    $schoolYear = new SchoolYear();
+    $schoolYear->sy_id = $request->input('sy_id');
+    $schoolYear->sy_name = 'SY ' . $request->input('sy_id');
+    $schoolYear->is_active = false;
+    $schoolYear->save();
+
+    return redirect()->back()->with('success', 'School year added successfully.');
+}
   
 }

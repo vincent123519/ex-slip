@@ -56,19 +56,9 @@
     <div class="navmenu">
     <ul>
     <li><span>DASHBOARD</span><a class="links" href="{{ route('admin.dashboard') }}"></a></li>
-    <li class="dropdown-li">
-    <span id="schoolYearButton" style="
-    font-weight: bold;
-"><i class="fas fa-caret-down"></i> SCHOOL YEAR</span>
-        <ul class="dropdown" id="schoolYearDropdown">
-            <!-- Add your school year options here -->
-            <li><a class="years" href="#">SY 2021-2022</a></li>
-            <li><a class="years" href="#">SY 2022-2023</a></li>
-            <li><a class="years" href="#">SY 2023-2024</a></li>
-            <!-- Add more options as needed -->
-        </ul>
-    </li>
+   
     <!-- Add Changeuser password below -->
+    <li><a class="links" href="{{ route('admin.school_years.index') }}">SCHOOL YEAR</a></li>
     <li><a class="links" href="{{ route('manage-users') }}">MANAGE USER ACCOUNTS</a></li>
     <li><a class="links" href="{{ route('admin.excuseslip.index') }}">EXCUSE SLIPS</a></li>
     <li><a class="links" href="{{ route('admin.import.index') }}">IMPORT DATA</a></li>
@@ -82,16 +72,7 @@
 
 
 @yield('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var schoolYearButton = document.getElementById('schoolYearButton');
-        var schoolYearDropdown = document.getElementById('schoolYearDropdown');
 
-        schoolYearButton.addEventListener('click', function () {
-            schoolYearDropdown.style.display = (schoolYearDropdown.style.display === 'block') ? 'none' : 'block';
-        });
-    });
-</script>
     
 @yield('content')   
 

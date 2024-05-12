@@ -26,10 +26,7 @@
         <form action="{{ route('student.dashboard') }}" method="get" style="display: inline;">
             @csrf
             <button type="submit" class="home-btn">
-           <div class="home-icon"><i style="
-                color: beige;
-                font-weight: bold;
-            "> </i></div>
+           <div class="home-icon"></div>
             </button>
         </form>
        

@@ -1,19 +1,57 @@
 @extends('components.teacher')
 @section('content')
 <div class="teacher-details-container">
-    <div class="logosc"></div>
-        <h1>Absence Request</h1>
+    <!-- <div class="logosc"></div> -->
+    <h1 style="margin-left: 31vw;">Absence Request</h1>
+    <div class="notifContainer">
+        <div class="notification">
+            <i id="bell" class="fas fa-solid fa-bell fa-2x"></i>
+            <div class="notification-content">
+                @php
+                $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
+                @endphp
+                @if ($unreadExcuseSlips->count() > 0)
+                
+                @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
+                <div>
+                    <p>
+                        <b>{{ $unreadExcuseSlip->dean->first_name }} {{ $unreadExcuseSlip->created_at }},{{ $unreadExcuseSlip->dean->last_name }}</b>
+                        approved <b>{{ $unreadExcuseSlip->student->first_name }} {{ $unreadExcuseSlip->student->last_name }}</b>
+                        excuse slip
+                    </p>
+                    <p>pending for Teacher's approval.. 
+                        @if ($unreadExcuseSlip->read_by_teacher == 1)
+                        <span style="color: green;">(Seen)</span>
+                        @elseif($unreadExcuseSlip->read_by_teacher == 0)
+                        <span style="color: red;">(Not Seen)</span>
+                        <form action="{{ route('excuse_slips.markAsReadByTeacher', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit">Mark as Read</button>
+                        </form>
+                        @endif
+                    </p>
+                    <hr>
+                </div>
+                @endforeach
+                @else
+                <p>No unread excuse slips.</p>
+                @endif       
+            </div>
+        </div>
         <hr>
+    </div>
+    <div>
         <h2>Excuse Slips</h2>
         <div class="filter-container">
-    <label for="filter">Filter by:</label>
-    <select id="filter" name="filter">
-        <option value="all">All</option>
-        <option value="pending">Pending</option>
-        <option value="approved_by_dean">Approved by Dean</option>
-        <option value="rejected">Rejected</option>
-    </select>
-</div>
+            <label for="filter" style="font-weight: bold;">Filter by:</label>
+            <select id="filter" name="filter">
+                <option value="all">All</option>
+                <option value="pending">Pending</option>
+                <option value="approved_by_dean">Approved by Dean</option>
+                <option value="rejected">Rejected</option>
+            </select>
+        </div>
         @if($allExcuseSlips->count() > 0)
         <table class="excuse-slip-table">
             <thead>
@@ -28,76 +66,32 @@
             </thead>
             <tbody>
                 @foreach($allExcuseSlips as $excuseSlip)
-                    <tr>
-                        <td>{{ $excuseSlip->student->first_name}} {{ $excuseSlip->student->last_name}}</td>
-                        <td>{{ $excuseSlip->status->status_name }}</td>
-                        <td>{{ $excuseSlip->course->course_code }} - {{ $excuseSlip->course->offer_code }}</td>
-                        <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
-                        <td>{{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
-                            ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
-                        <td width="300">
-                            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                                </svg>
-                            </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>{{ $excuseSlip->student->first_name}} {{ $excuseSlip->student->last_name}}</td>
+                    <td>{{ $excuseSlip->status->status_name }}</td>
+                    <td>{{ $excuseSlip->course->course_code }} - {{ $excuseSlip->course->offer_code }}</td>
+                    <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
+                    <td>{{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
+                        ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>
+                    <td width="300">
+                        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
                 @endforeach
             </tbody>
         </table>
         @else
-            <p>No excuse slips found.</p>
+        <p>No excuse slips found.</p>
         @endif
     </div>
 </div>
+@endsection
 
-
-        <footer>
-                <div class="notification">
-                <span>notification</span>
-                <div class="notification-content">
-                @php
-                $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
-                @endphp
-                @if ($unreadExcuseSlips->count() > 0)
-                
-                @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
-        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
-            <p>
-                <b>{{ $unreadExcuseSlip->dean->first_name }} {{ $unreadExcuseSlip->created_at }},{{ $unreadExcuseSlip->dean->last_name }}</b>
-                approved <b>{{ $unreadExcuseSlip->student->first_name }} {{ $unreadExcuseSlip->student->last_name }}</b>
-                excuse slip
-            </p>
-            <p>pending for Teacher's approval.. 
-            @if ($unreadExcuseSlip->read_by_teacher == 1)
-                <span style="color: green;">(Seen)</span>
-            @elseif($unreadExcuseSlip->read_by_teacher == 0)
-                <span style="color: red;">(Not Seen)</span>
-                <form action="{{ route('excuse_slips.markAsReadByTeacher', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit">Mark as Read</button>
-                </form>
-            @endif
-            </p>
-        
-
-        
-            <hr>
-        @endforeach
-        </ul>
-    @else
-        <p>No unread excuse slips.</p>
-    @endif
-                
-
-                
-            </div>
-        </div>
-    </footer>
-        @endsection
 
 <style>
   

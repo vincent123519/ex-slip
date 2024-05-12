@@ -95,7 +95,7 @@ h1 {
     /* opacity: .9; */
     transition: 0.3s;
     transition-property: width;
-    overflow-y: auto;
+    overflow-x: hidden;
     font-family: Arial, sans-serif;
 }
 
@@ -111,29 +111,29 @@ h1 {
 }
 
 /* Added CSS for .student-details-container */
-.student-details-container {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border: 1px solid #dee2e6;
-    width: 78%;
-    margin: 20px auto;
-    margin-left: 313px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Montserrat', sans-serif;
-    border-top-right-radius: .25rem;
-    border-top-left-radius: 1rem;
-    border-left: 1px solid yellowgreen;
-    border-right: 1px solid yellowgreen;
-    border-bottom: 5px solid #fec039;
-    border-top: 1px solid yellowgreen;
-}
+// .student-details-container {
+//     background-color: #f8f9fa;
+//     padding: 20px;
+//     border: 1px solid #dee2e6;
+//     width: 78%;
+//     margin: 20px auto;
+//     margin-left: 313px;
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//     font-family: 'Montserrat', sans-serif;
+//     border-top-right-radius: .25rem;
+//     border-top-left-radius: 1rem;
+//     border-left: 1px solid yellowgreen;
+//     border-right: 1px solid yellowgreen;
+//     border-bottom: 5px solid #fec039;
+//     border-top: 1px solid yellowgreen;
+// }
 
-.student-details-container:hover {
-    border-left: 1px solid #fec039;
-    border-right: 1px solid #fec039;
-    border-bottom: 5px solid yellowgreen;
-    border-top: 1px solid #fec039;
-}
+// .student-details-container:hover {
+//     border-left: 1px solid #fec039;
+//     border-right: 1px solid #fec039;
+//     border-bottom: 5px solid yellowgreen;
+//     border-top: 1px solid #fec039;
+// }
 
 /* Added CSS for .excuse-slip-table */
 .excuse-slip-table {
@@ -156,7 +156,14 @@ h1 {
 .excuse-slip-table td {
     vertical-align: top;
 }
-
+.excuse-slip-table tr:hover {
+    // border: 1px solid #ddd;
+    // padding: 8px;
+    // text-align: center;
+    background-color: #fec039;
+    font-style:italic;
+    // color: white;
+}
 
 .hidden-pagination {
     display: none;
@@ -167,7 +174,7 @@ footer {
       left: 0;
       bottom: 0;
       width: 100%;
-      background-color: rgba(13, 62, 32, 0.98);
+    //   background-color: rgba(13, 62, 32, 0.98);
       text-align: right; /* Align the notification to the right */
       padding: 0 20px;
     }
@@ -186,36 +193,46 @@ footer {
       margin: 10px auto;
     }
     .notification {
-      background-color: #fec039;
-      color: white;
-      text-decoration: none;
-      position: relative;
-      display: inline-block;
-      border-radius: 2px;
-      padding-right: 250px;
-      cursor: pointer; /* Add cursor pointer to indicate interactivity */
+        background-color: green;
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+        float: right;
+        width: 4vw;
+        text-align: center;
+        padding: .2vw;
+        border-radius: 5px;
+        margin-top: 1vw;
     }
     .notification:hover {
       background: #fec039;
+      color: black;
     }
     .notification-content {
-    display: none;
-    position: absolute;
-    top: -145px;
-    right: 0;
-    width: 341px;
-    height: 200px; /* Set a specific height for the container */
-    background-color: #fec039;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    font-size: small;
-    color: #28a745;
-    text-align: left;
-    overflow: auto; /* Add the overflow property for scrollable content */
-    font-family: 'Montserrat', sans-serif;
+        display: none;
+        position: absolute;
+        // top: -145px;
+        right: 0;
+        width: 341px;
+        height: 200px; /* Set a specific height for the container */
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        font-size: small;
+        color: #28a745;
+        text-align: left;
+        overflow: auto; /* Add the overflow property for scrollable content */
+        font-family: 'Montserrat', sans-serif;
+        overflow-x: hidden;
+        padding: 1vw;
+        border: 2px solid black;
+    }
+    .notification-content a {
+        text-decoration: none;
+        color: black;
+    }
 
-}
     .notification.active .notification-content {
       display: block; /* Show the notification content when the notification is active */
     }
@@ -251,7 +268,7 @@ footer {
     }
 
     #sort_by{
-        padding: 0px -1px 0 15px;
+    padding: 0px -1px 0 15px;
     height: 25px;
     width: 100px;
     border: 1px solid #a4c3ca;
@@ -260,31 +277,40 @@ footer {
     border-radius: 3px;
     outline: none;
     }
-   
 
+    .filterSection {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+    .filter-container {
+        margin: 1vw;
+    }
     .student-details-container {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border: 1px solid #dee2e6;
-    width: 78%;
-    margin: 20px auto;
+    // background-color: #f8f9fa;
+    // padding: 20px;
+    // border: 1px solid #dee2e6;
+    // width: 78%;
+    // margin: 20px auto;
     margin-left: 313px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Montserrat', sans-serif;
-    border-top-right-radius: .25rem;
-    border-top-left-radius: 1rem;
-    border-left: 1px solid yellowgreen;
-    border-right: 1px solid yellowgreen;
-    border-bottom: 5px solid #fec039;
-    border-top: 1px solid yellowgreen;
+    width: 80%;
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    // font-family: 'Montserrat', sans-serif;
+    // border-top-right-radius: .25rem;
+    // border-top-left-radius: 1rem;
+    // border-left: 1px solid yellowgreen;
+    // border-right: 1px solid yellowgreen;
+    // border-bottom: 5px solid #fec039;
+    // border-top: 1px solid yellowgreen;
 }
 
-.student-details-container:hover {
-    border-left: 1px solid #fec039;
-    border-right: 1px solid #fec039;
-    border-bottom: 5px solid yellowgreen;
-    border-top: 1px solid #fec039;
-}
+// .student-details-container:hover {
+//     border-left: 1px solid #fec039;
+//     border-right: 1px solid #fec039;
+//     border-bottom: 5px solid yellowgreen;
+//     border-top: 1px solid #fec039;
+// }
 .absence {
     margin-bottom: 10px;
     margin-top: 81px;
@@ -302,7 +328,7 @@ footer {
     }
 
     .create-slip-button {
-    display: inline-block;
+    // display: inline-block;
     /* padding: 12px 400px; */
     font-size: 20px;
     text-align: center;
@@ -312,6 +338,9 @@ footer {
     border-radius: 4px;
     transition: background-color 0.3s;
     border: 3px solid green;
+    padding: .3vw;
+    float: right;
+    margin: 1vw;
 }
     .create-slip-button:hover {
         background-color: yellowgreen;
@@ -355,22 +384,35 @@ footer {
         text-align: center;
     }
 
-    .excuse-slip-table th, .excuse-slip-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-}
-.excuse-slip-table td {
-    vertical-align: top;
-    border-bottom: 1px solid greenyellow;
-}
-.form-group-course input[type=checkbox] {
-    display: none;
-}
-.h1s {
+    .excuse-slip-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+    .excuse-slip-table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        background-color: #155724;
+        color: white;
+    }
+    .excuse-slip-table td, .excuse-slip-table th {
+        vertical-align: top;
+        border: 1px solid black;
+    }
+    .sortButton {
+        background-color: #155724;
+        padding: .1vw;
+        width: 4vw;
+        color: white;
+    }
+    .form-group-course input[type=checkbox] {
+        display: none;
+    }
+    .h1s {
     margin-bottom: 10px;
     margin-top: 88px;
     margin-left: -6px;

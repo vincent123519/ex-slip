@@ -4,7 +4,9 @@
 
 <div class ="change-pass-user">
 <div class="logocp"></div>
-    <h2>Change Password</h2>
+<h2 style="
+    margin-left: 22.5vw;
+">Change Password</h2>
 
     <form action="{{ route('change-password') }}" method="POST">
         @csrf

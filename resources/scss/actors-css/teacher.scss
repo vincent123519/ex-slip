@@ -14,14 +14,32 @@
     z-index: 1;
     padding: 21px 22px;
 }
+#filter{
+    padding: 0px -1px 0 15px;
+height: 25px;
+width: 188px;
+border: 1px solid #a4c3ca;
+font: bold 14px 'Roboto', arial, helvetica;
+color: #23441e;
+border-radius: 3px;
+outline: none;
+}
     .teacher-details-container {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border: 10px solid #55825f;
-        border-radius: 0px;
-        width: 60%;
-        margin: 20px auto;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+// background-color: #f8f9fa;
+    // padding: 20px;
+    // border: 1px solid #dee2e6;
+    // width: 78%;
+    // margin: 20px auto;
+    margin-left: 313px;
+    width: 80%;
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    // font-family: 'Montserrat', sans-serif;
+    // border-top-right-radius: .25rem;
+    // border-top-left-radius: 1rem;
+    // border-left: 1px solid yellowgreen;
+    // border-right: 1px solid yellowgreen;
+    // border-bottom: 5px solid #fec039;
+    // border-top: 1px solid yellowgreen;
         font-family: 'Montserrat', sans-serif;
 
     }    
@@ -35,7 +53,45 @@
         margin-right: auto;
     }
 
-
+    .notification {
+        color: #155724;
+        text-decoration: none;
+        position: relative;
+        display: inline-block;
+        border-radius: 2px;
+        // padding-right: 250px;
+        cursor: pointer;
+        margin-left: 77vw;
+    }
+    .notification:hover {
+        color: #fec039;
+      }
+    //   .notification-content {
+    //         display: none;
+    //         position: absolute;
+    //         /* top: -145px; */
+    //         right: 0;
+    //         width: 341px;
+    //         height: 200px;
+    //         background-color: white;
+    //         border-radius: 4px;
+    //         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    //         z-index: 1;
+    //         font-size: small;
+    //         color: #28a745;
+    //         text-align: left;
+    //         overflow-x: hidden;
+    //         font-family: "Montserrat", sans-serif;
+    //         padding: 1vw;
+    //         border: 2px solid black;
+    //    }
+    
+    
+    .notification.active .notification-content {
+        display: block;
+        margin-top: 9vw;
+        margin-right: 14vw;
+    }
     h1 {
        margin-top: 75px;
        margin-left: 418px;
@@ -60,6 +116,7 @@
     .btn:hover {
         background-color: #0056b3;
     }
+
     .excuse-slip-table {
         width: 100%;
         border-collapse: collapse;
@@ -71,12 +128,24 @@
         border: 1px solid #ccc;
         padding: 10px;
         text-align: center;
+        width: 110px;
     }
 
     .excuse-slip-table th {
-        background-color: #f2f2f2;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        background-color: #155724;
+        color: white;
     }
-
+    .excuse-slip-table tr:hover {
+        // border: 1px solid #ddd;
+        // padding: 8px;
+        // text-align: center;
+        background-color: #fec039;
+        font-weight:bold;
+        // color: white;
+    }
     .btn-approved {
         background-color: #28a745;
         height: 30px; /* Set the height you desire */
@@ -123,8 +192,8 @@
       margin: 10px auto;
     }
     .notification {
-      background-color: #fec039;
-      color: white;
+    //   background-color: #fec039;
+      color:  #28a745;
       text-decoration: none;
       position: relative;
       display: inline-block;
@@ -133,28 +202,30 @@
       cursor: pointer; /* Add cursor pointer to indicate interactivity */
     }
     .notification:hover {
-      background: #fec039;
+      color: #fec039;
     }
-    .notification-content {
-    display: none;
-    position: absolute;
-    top: -145px;
-    right: 0;
-    width: 341px;
-    height: 200px; /* Set a specific height for the container */
-    background-color: #fec039;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    font-size: small;
-    color: #28a745;
-    text-align: left;
-    overflow: auto; /* Add the overflow property for scrollable content */
-    font-family: 'Montserrat', sans-serif;
+    // .notification-content {
+    // display: none;
+    // position: absolute;
+    // top: -145px;
+    // right: 0;
+    // width: 341px;
+    // height: 200px; /* Set a specific height for the container */
+    // background-color: #fec039;
+    // border-radius: 4px;
+    // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    // z-index: 1;
+    // font-size: small;
+    // color: #28a745;
+    // text-align: left;
+    // overflow: auto; /* Add the overflow property for scrollable content */
+    // font-family: 'Montserrat', sans-serif;
 
-    }
+    // }
     .notification.active .notification-content {
-      display: block; /* Show the notification content when the notification is active */
+        display: block;
+        margin-top: 9vw;
+        margin-right: 14vw;
     }
     .navmenu {
         padding: 11px 10px;
@@ -169,4 +240,69 @@
         color: #fff;
         background: rgba(13, 62, 32, 0.98);;
     }
-   
+    .sis .yellow {
+        color: #FFD700;
+        font-weight: bold;
+        padding: 1px;
+        font-size: 49px;
+        margin-top: -43px;
+        /* font-family: "Montserrat", sans-serif; */
+        margin-left: -1px;
+        font-family: "Angkor";
+    }
+    .sis .White {
+        color: whitesmoke;
+        font-weight: bold;
+        padding: 0px;
+        font-size: large;
+        margin-left: -192px;
+        font-family: "Montserrat", sans-serif;
+        margin-top: 16px;
+    }
+    .sis .Whites {
+        color: whitesmoke;
+        font-weight: bold;
+        padding: 0px;
+        font-size: large;
+        margin-left: 4px;
+        font-family: "Montserrat", sans-serif;
+        margin-top: 17px;
+    }
+    .sis .Whitess {
+        color: whitesmoke;
+        font-weight: bold;
+        padding: 0px;
+        font-size: large;
+        margin-left: 4px;
+        font-family: "Montserrat", sans-serif;
+        margin-top: 18px;
+    }
+    .notification:hover {
+        color: #fec039;
+      }
+      .notification-content {
+            display: none;
+            position: absolute;
+            top: -145px; 
+            right: 0;
+            width: 341px;
+            height: 200px;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            font-size: small;
+            color: #28a745;
+            text-align: left;
+            overflow-x: hidden;
+            font-family: "Montserrat", sans-serif;
+            padding: 1vw;
+            border: 2px solid black;
+       }
+    
+    
+       .notification.active .notification-content {
+        display: block;
+        margin-top: 9vw;
+        margin-right: 14vw;
+    }

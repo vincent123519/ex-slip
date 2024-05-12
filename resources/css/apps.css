@@ -8,12 +8,19 @@ body{
     background-repeat: no-repeat;
     background-position: center;
     margin-top: -6px;
-    margin-left: 470px;
+    /* margin-left: 470px; */
     position: absolute;
     height: 50px;
     width: 102px;
     z-index: 1;
     padding: 21px 22px;
+}
+
+.excuse-slip-header {
+    margin-top: 1.5vw;
+    text-align: center;
+    margin-bottom: 3vw;
+    font-size: 1.8vw;
 }
 .manage-slip-container {
     background-color: #f8f9fa;
@@ -26,18 +33,42 @@ body{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
     border-style: inset;
+    margin-left: 25vw;
 }
     .text-center {
         text-align: center;
     }
 
+    .formContainer{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        grid-gap: 3vw;
+    }
+
     .form-group {
-    margin-bottom: 20px;
-    width: 100%;
-    padding: 10px;
-    border-bottom: 1px solid #ced4da;
-    box-sizing: border-box;
-}
+        margin-bottom: 20px;
+        width: 100%;
+        /* height: 100px; */
+        padding: 10px;
+        border-bottom: 2px solid #ced4da;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .form-group-files {
+        /* margin-bottom: 20px; */
+        width: 100%;
+        /* height: 100px; */
+        padding: 10px;
+        border-bottom: 2px solid #ced4da;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
     label {
         font-weight: bold;
@@ -66,6 +97,7 @@ body{
         padding: 12px 20px;
         border-radius: 4px;
         cursor: pointer;
+        width: 100%;
     }
     
     .form-check {
@@ -158,23 +190,29 @@ body{
         .form-group-course ul {
             list-style: none;
             padding: 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
         }
     
-        .form-group-course li {
-            margin-bottom: 10px;
+        /* .form-group-course li {
+            margin: 2vw;
         }
-    
+     */
         .form-group-course input[type="checkbox"] {
             display: none;
         }
     
         .form-group-course li {
             display: block;
+            margin: 1vw;
             position: relative;
-            padding-left: 30px; /* Adjust this value to change the spacing between the checkbox and label */
+            padding-left: 30px; 
             cursor: pointer;
-            font-family: Arial, sans-serif; /* Adjust font family as needed */
-            font-size: 16px; /* Adjust font size as needed */
+            font-family: Arial, sans-serif; 
+            font-size: 16px; 
         }
     
         /* Style the custom checkbox */
@@ -212,4 +250,14 @@ body{
         /* Show the custom checkmark when the checkbox is checked */
         .form-group-course input[type="checkbox"]:checked + label:after {
             display: block;
+        }
+
+        .dateContainer{
+            position: relative;
+            left: 0vw;
+        }
+
+        .feedback-container {
+            display: flex;
+            margin-left: 32px;
         }

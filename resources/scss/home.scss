@@ -100,12 +100,12 @@ body{
     
 }
 
-.yellow-navbar{
-    background-color: rgba(254,192,57);
-    height: 30px;
-    margin-top: 0px;
+// .yellow-navbar{
+//     background-color: rgba(254,192,57);
+//     height: 30px;
+//     margin-top: 0px;
 
-}
+// }
 
 .bg-image {
     background-image: url('image/bg.png'); /* Update this path */
@@ -213,7 +213,7 @@ body{
     /* opacity: .9; */
     transition: 0.3s;
     transition-property: width;
-    overflow-y: auto;
+    overflow-x: hidden;
     font-family: Arial, sans-serif;
 
         }

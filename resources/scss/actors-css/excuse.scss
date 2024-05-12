@@ -63,19 +63,21 @@ hr{
 }
 
 
-.status{
-    margin-left: 800px;
-}
+// .status{
+//     margin-left: 800px;
+// }
 
 .status ul{
     list-style-type: none;
-    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
-.status li{
+// .status li{
     
     
-}
+// }
 
 body {
     font-family: 'Montserrat', sans-serif;
@@ -104,11 +106,11 @@ body {
 
 .slip-view-header {
     text-align: center;
-    padding: 20px;
+    padding: 20px 20px 0 20px;
 }
 
 .slip-view-body {
-    margin-top: 20px;
+    margin: 20px;
 }
 
 .slip-view-container .form-group {
@@ -133,18 +135,21 @@ body {
     padding: 10px;
 }
 
-.slip-view-container button[type="submit"] {
-    padding: 15px 20px;
-    background-color: #007bff;
-    color: #fff;
+.slip-view-container button[type=submit] {
+    padding: 0px 20px;
+    background-color: #fec039;
+    color: rgba(13, 62, 32, 0.98);
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    width: 100%;
+    border: 1px solid violet;
+    width: 9%;
+    font-weight: bold;
+    margin-top: 84px;
 }
 
 .slip-view-container button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: wheat;
 }
 
 /* Add custom styles for alignment */
@@ -259,16 +264,16 @@ body {
             margin-top: 90px;
             margin-left: 518px;
         }
-        .slip-view-container button[type=submit] {
-            padding: 15px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            border: 1px solid violet;
-            width: 9%;
-        }
+        // .slip-view-container button[type=submit] {
+        //     padding: 15px 20px;
+        //     background-color: #007bff;
+        //     color: #fff;
+        //     border: none;
+        //     border-radius: 4px;
+        //     cursor: pointer;
+        //     border: 1px solid violet;
+        //     width: 9%;
+        // }
         .slip-view-container {
             display: flex;
             justify-content: center;

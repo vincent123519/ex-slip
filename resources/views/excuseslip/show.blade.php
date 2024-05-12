@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @vite(['resources/css/apps.css'])
     <title>View Slip</title>
     <style>
         
@@ -26,19 +27,18 @@
 
         <div class="slip-view-body">
             <div class="excuse-slip">
+                <div class="dateContainer">
+                    <p><strong>Date:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
+                </div>
                 <div class="name-container">
                     <p><strong>Student:</strong> {{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</p>
-                    <p><strong style=" margin-left: 145px;">Degree Yr Level:</strong>{{ $excuseSlip->student->year_level}} - {{ $excuseSlip->student->degree->degree_name}} </p>
+                    <p><strong style=" margin-left: 145px;">Degree & Year Level: </strong> {{ $excuseSlip->student->year_level}} - {{ $excuseSlip->student->degree->degree_name}} </p>
                 </div>
                 <div class="teacher-container">
-                <p><strong>Teacher:</strong> {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</p>
-                <strong style="
-    margin-left: 34px;
-">Subject:</strong> {{ $excuseSlip->course->course_code}} - {{ $excuseSlip->course->offer_code}}</p>
-
-
+                    <p><strong>Teacher:</strong> {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</p>
+                    <strong style="margin-left: 34px;">Subject:</strong> {{ $excuseSlip->course->course_code}} - {{ $excuseSlip->course->offer_code}}</p>
                 </div>
-                <p><strong>Date:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p>
+                <!-- <p><strong>Date:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p> -->
                 <p><strong>Reason:</strong> {{ $excuseSlip->reason }}</p>
 
 
@@ -64,15 +64,23 @@
 
 <!-- counselor -->
  @if ($deanFeedback)
-     <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+    <div class="feedback-container">
+        <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+    </div>
  @else
-     <p>No Dean feedback available.</p>
+    <div class="feedback-container">
+        <p>No Dean feedback available.</p>
+    </div>
  @endif
 
  @if ($teacherFeedback)
-     <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+    <div class="feedback-container">
+        <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+    </div>
  @else
-     <p>No teacher feedback available.</p>
+    <div class="feedback-container">
+        <p>No teacher feedback available.</p>
+    </div>
  @endif
  @endif
 
@@ -80,40 +88,49 @@
 
 <!-- dean -->
  @if ($counselorFeedback)
-     <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+    <div class="feedback-container">
+        <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+    </div>
  @else
-     <p>No Counselor feedback available.</p>
+    <div class="feedback-container">
+        <p>No Counselor feedback available.</p>
+    </div>
  @endif
 
  @if ($teacherFeedback)
-     <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+    <div class="feedback-container">
+        <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+    </div>
  @else
-     <p>No teacher feedback available.</p>
+    <div class="feedback-container">
+        <p>No teacher feedback available.</p>
+    </div>
  @endif
  @endif
 
 
 @if(auth()->user()->role_id == 4)
+            <div>
                 <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
                         @csrf
                         @method('PUT')
                         <button type="submit" class="approve button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-check" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
-                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
-            </svg>
-            Note
-        </button>
-                    </form>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-check" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+                            </svg>
+                            Note
+                        </button>
+                </form>
                 <!-- Add this to your view where counselors can provide feedback -->
                 <form action="{{ route('counselor.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                     @csrf
-                    <label for="feedback_remarks">Feedback Remarks:</label>
+                    <label for="feedback_remarks" style=" margin-top: -124px;">Feedback Remarks:</label>
                     <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
-                    <button type="submit">Submit Feedback</button>
+                    <button type="submit" style="margin-top: 0px;">Submit Feedback</button>
                 </form>
-
+            </div>
                 @endif
 
                 @if(auth()->user()->role_id == 5)
@@ -121,7 +138,7 @@
                 <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn-approved">Approve</button>                                </form>
+                                    <button type="submit" class="btn-approved" style="margin-left: 50vw; margin-top: 0vw; background-color: green; color: yellow;">Approve</button>                              </form>
 
                 <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                         @csrf
@@ -130,9 +147,9 @@
 
                 <form action="{{ route('dean.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                     @csrf
-                    <label for="feedback_remarks">Feedback Remarks:</label>
+                    <label for="feedback_remarks" style="margin-top: -6.4vw;">Feedback Remarks:</label>
                     <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
-                    <button type="submit">Submit Feedback</button>
+                    <button type="submit" style="margin-top: -1vw;">Submit Feedback</button>
                 </form>
             @endif
 
@@ -142,13 +159,13 @@
             <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn-approved">Approve</button>
+                                        <button type="submit" class="btn-approved" style=" margin-top: 5vw;">Approve</button>
             </form>
             <form action="{{ route('teacher.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                 @csrf
-                <label for="feedback_remarks">Feedback Remarks:</label>
+                <label for="feedback_remarks" style="margin-top: -119px;">Feedback Remarks:</label>
                 <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
-                <button type="submit">Submit Feedback</button>
+                <button type="submit" style=" margin-top: -1vw;">Submit Feedback</button>
             </form>
 
             @endif
@@ -161,46 +178,70 @@
         @if(auth()->user()->role_id == 3)
 
         @if ($counselorFeedback)
+            <div class="feedback-container">
             <p><strong>Counselor Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+            </div>
         @else
-            <p>No counselor feedback available.</p>
+            <div class="feedback-container">
+                <p>No counselor feedback available.</p>
+            </div>
         @endif
         @if ($deanFeedback)
-            <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+            <div class="feedback-container">
+                <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+            </div>
         @else
-            <p>No Dean feedback available.</p>
+            <div class="feedback-container">
+                <p>No Dean feedback available.</p>
+            </div>
         @endif
 
         @if ($teacherFeedback)
-            <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+            <div class="feedback-container">
+                <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+            </div>
         @else
-            <p>No teacher feedback available.</p>
+            <div class="feedback-container">
+                <p>No teacher feedback available.</p>
+            </div>
         @endif
         @endif
 
         @if(auth()->user()->role_id == 4)
 
         @if ($counselorFeedback)
-            <p><strong>Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+            <div class="feedback-container">
+                <p><strong>Feedback:</strong> {{ $counselorFeedback->remarks }}</p>
+            </div>
         @else
-            <p>No feedback available.</p>
+            <div class="feedback-container">
+                <p>No feedback available.</p>
+            </div>
         @endif
         @endif
 
           @if(auth()->user()->role_id == 5)
 
         @if ($deanFeedback)
-            <p><strong>Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+            <div class="feedback-container">
+                <p><strong>Feedback:</strong> {{ $deanFeedback->remarks }}</p>
+            </div>
         @else
-            <p>No feedback available.</p>
+            <div class="feedback-container">
+                <p>No feedback available.</p>
+            </div>
         @endif
         @endif
         
         @if(auth()->user()->role_id == 2)
         @if ($teacherFeedback)
-            <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+            <div class="feedback-container">
+                <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
+            </div>
         @else
-            <p>No teacher feedback available.</p>
+            <div class="feedback-container">
+                <p>No teacher feedback available.</p>
+            </div>
         @endif
 
         @endif
@@ -247,6 +288,6 @@
 </body>
 @endsection
 <style>
-    
+
 
 </style>

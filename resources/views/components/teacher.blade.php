@@ -7,6 +7,8 @@
     @yield('styles')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
 </head>
 <body class="bg-image">
 <header>
@@ -24,7 +26,7 @@
             
 
             <div class="nav-right">
-                <a href="#"><i class="fas fa-home"></i></a>
+                <!-- <a href="#"><i class="fas fa-home"></i></a> -->
                 <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
             @csrf
             <button type="submit" class="logout-btn">

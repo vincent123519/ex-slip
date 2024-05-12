@@ -151,6 +151,8 @@ Route::post('/admin/studyload/store', [AdminController::class, 'storeStudyLoad']
 Route::get('admin/teachers', [AdminController::class, 'showTeacher'])->name('admin.teachers.index');
 Route::get('admin/excuseslip', [AdminController::class, 'showExcuseslip'])->name('admin.excuseslip.index');
 
+Route::get('/admin/counselors', [AdminController::class, 'showCounselor'])->name('admin.counselors.index');
+
 Route::get('/admin/dean', [AdminController::class, 'showdean'])->name('admin.dean.index');
 
 

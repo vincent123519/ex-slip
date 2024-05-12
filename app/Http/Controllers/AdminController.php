@@ -167,13 +167,16 @@ public function storeStudyLoad(Request $request)
     
 
 public function dashboard()
-            {
-         $data = [
+{
+    $data = [
         'total_students' => Student::count(),
         'total_teachers' => Teacher::count(),
         'total_deans' => Dean::count(),
         'total_counselors' => Counselor::count(),
         'total_excuse' => ExcuseSlip::count(),
+        'pending_excuses' => ExcuseSlip::whereIn('status_id', [1, 2, 4])->count(),
+        'approved_excuses' => ExcuseSlip::where('status_id', 5)->count(),
+        'rejected_excuses' => ExcuseSlip::where('status_id', 3)->count(),
 
         // Add more data as needed
     ];
@@ -188,6 +191,12 @@ public function showTeacher()
     $teachers = Teacher::with('department')->get();
 
     return view('admin.teachers.index', compact('teachers'));
+}
+public function showCounselor()
+{
+    $counselors = Counselor::all();
+
+    return view('admin.counselors.index', compact('counselors'));
 }
 
 public function showdean()
@@ -530,8 +539,10 @@ public function updateStudentDetails(Request $request, $id)
 public function indexSchoolYear()
     {
         $schoolYears = SchoolYear::all();
+        $semesters = Semester::all();
 
-        return view('admin.school_years.index', compact('schoolYears'));
+        return view('admin.school_years.index', compact('schoolYears', 'semesters'));
+
     }
 public function activateSchoolYear($syId)
     {

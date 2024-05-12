@@ -14,7 +14,7 @@
 
     <div class="manage-slip-container">
     <div class="logoss"></div>
-    <h2 class="excuse-slip-header" style="margin-left: 473px;margin-top: 79px;">Excuse Slip</h2>        <!-- Display errors if there are any -->
+    <h3 class="excuse-slip-header">Excuse Slip</h3>        <!-- Display errors if there are any -->
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -24,30 +24,33 @@
                 </ul>
             </div>
         @endif
-            <!-- <div class="form-group">
-            <input type="hidden" name="course_id" id="course_id" value="">
-            </div> -->
-            <div class="form-group">
-                <label for="name" id="student_name">Name: {{ Auth::user()->last_name }}, {{ Auth::user()->first_name }}</label>
+            <div class="formContainer">
+                <!-- <div class="form-group">
+                <input type="hidden" name="course_id" id="course_id" value="">
+                </div> -->
+                <div class="form-group">
+                    <label for="name" id="student_name">Name:</label>
+                    <input type="text" class="form-control" for="name" id="student_name" value="{{ Auth::user()->last_name }}, {{ Auth::user()->first_name }}" readonly >
+                </div>
+
+                <!-- <div class="form-group">
+                    <label for="name" id="student_id">Student ID:</label>
+                    <ul class="list-unstyled">
+                        <li>{{ Auth::user()->student->student_id }}</li>
+                    </ul>
+                </div> -->
+
+                <div class="form-group">
+                    <label for="degree">Degree: </label>
+                    @if($degree)
+                        <input type="text" class="form-control" id="degree" name="degree" value="{{$yearLevel}} - {{ $degree->degree_name }}" readonly>
+                        <input type="hidden" name="degree_id" value="{{ $degree->degree_id }}">
+                    @else
+                        <input type="text" class="form-control" id="degree" name="degree" value="No Degree found" readonly>
+                        <input type="hidden" name="degree_id" value="">
+                    @endif
+                </div>
             </div>
-
-            <!-- <div class="form-group">
-                <label for="name" id="student_id">Student ID:</label>
-                <ul class="list-unstyled">
-                    <li>{{ Auth::user()->student->student_id }}</li>
-                </ul>
-            </div> -->
-
-            <div class="form-group">
-            <label for="degree">Degree: </label>
-            @if($degree)
-                <input type="text" class="form-control" id="degree" name="degree" value="{{$yearLevel}} - {{ $degree->degree_name }}" readonly>
-                <input type="hidden" name="degree_id" value="{{ $degree->degree_id }}">
-            @else
-                <input type="text" class="form-control" id="degree" name="degree" value="No Degree found" readonly>
-                <input type="hidden" name="degree_id" value="">
-            @endif
-        </div>
 
 
 
@@ -58,60 +61,58 @@
             @csrf
 
             <div class="form-group" style="display: none;">
-            <label for="student_id">Student ID:</label>
-            <input type="text" name="student_id" id="student_id" class="form-control" value="{{ Auth::user()->student->student_id }}" required readonly>
-        </div>
+                <label for="student_id">Student ID:</label>
+                <input type="text" name="student_id" id="student_id" class="form-control" value="{{ Auth::user()->student->student_id }}" required readonly>
+            </div>
 
-        <div class="form-group">
-        <label for="dean">Dean:</label>
-        @if($dean)
-            <input type="text" class="form-control" id="dean" name="dean" value="{{ $dean->first_name }} {{ $dean->last_name }}" readonly>
-            <input type="hidden" name="dean_id" value="{{ $dean->dean_id }}">
-        @else
-            <input type="text" class="form-control" id="dean" name="dean" value="No Dean found" readonly>
-            <input type="hidden" name="dean_id" value="">
-        @endif
-    </div>
-
-
-        
-    <div class="form-group">
-        <label for="counselor">Counselor:</label>
-        @if($counselor)
-            <input type="text" class="form-control" id="counselor" name="counselor" value="{{ $counselor->first_name }} {{ $counselor->last_name }}" readonly>
-            <input type="hidden" name="counselor_id" value="{{ $counselor->counselor_id }}">
-        @else
-            <input type="text" class="form-control" id="counselor" name="counselor" value="No Counselor found" readonly>
-            <input type="hidden" name="counselor_id" value="">
-        @endif
-    </div>
-
-
-
-    <label for="offer_codes">Select Courses:</label>
-    <div class="form-group-course">
-
-    <ul>
-        @foreach($selectedCourseOfferings as $courseOffering)
-            <li>
-                <input type="checkbox" name="offer_codes[]" id="offer_code_{{ $courseOffering['offer_code'] }}" value="{{ $courseOffering['offer_code'] }}" data-teacher-id="{{ $courseOffering['teacher_id'] }}">
-                <label for="offer_code_{{ $courseOffering['offer_code'] }}">
-                    {{ $courseOffering['course_name'] }} - {{ $courseOffering['teacher_name'] }} (ID: {{ $courseOffering['teacher_id'] }})
-                </label>
-            </li>
-        @endforeach
-    </ul>
-</div>
-
-
+            <div class="formContainer">
+                <div class="form-group">
+                    <label for="dean">Dean:</label>
+                    @if($dean)
+                        <input type="text" class="form-control" id="dean" name="dean" value="{{ $dean->first_name }} {{ $dean->last_name }}" readonly>
+                        <input type="hidden" name="dean_id" value="{{ $dean->dean_id }}">
+                    @else
+                        <input type="text" class="form-control" id="dean" name="dean" value="No Dean found" readonly>
+                        <input type="hidden" name="dean_id" value="">
+                    @endif
+                </div>
+            
+                <div class="form-group">
+                    <label for="counselor">Counselor:</label>
+                    @if($counselor)
+                        <input type="text" class="form-control" id="counselor" name="counselor" value="{{ $counselor->first_name }} {{ $counselor->last_name }}" readonly>
+                        <input type="hidden" name="counselor_id" value="{{ $counselor->counselor_id }}">
+                    @else
+                        <input type="text" class="form-control" id="counselor" name="counselor" value="No Counselor found" readonly>
+                        <input type="hidden" name="counselor_id" value="">
+                    @endif
+                </div>
+            </div>
 
             <div class="form-group">
-        <label for="supporting_document">Supporting Document</label>
-        <div class="custom-file">
-            <input type="file" class="custom-file-input" id="supporting_document" name="supporting_document" accept=".pdf" required>
-            <label class="custom-file-label" for="supporting_document"></label>
-        </div>
-    </div>
+                <label for="offer_codes">Select Courses:</label>
+                <div class="form-group-course">
+
+                    <ul>
+                        @foreach($selectedCourseOfferings as $courseOffering)
+                            <li>
+                                <input type="checkbox" name="offer_codes[]" id="offer_code_{{ $courseOffering['offer_code'] }}" value="{{ $courseOffering['offer_code'] }}" data-teacher-id="{{ $courseOffering['teacher_id'] }}">
+                                <label for="offer_code_{{ $courseOffering['offer_code'] }}">
+                                    {{ $courseOffering['course_name'] }} - {{ $courseOffering['teacher_name'] }} (ID: {{ $courseOffering['teacher_id'] }})
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group-files">
+                <label for="supporting_document">Supporting Document/s: </label>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="supporting_document" name="supporting_document" accept=".pdf" required>
+                    <label class="custom-file-label" for="supporting_document"></label>
+                </div>
+            </div>
 
 
             <div class="form-group">
@@ -119,14 +120,16 @@
                 <textarea name="reason" id="reason" class="form-control" rows="4" required>{{ old('reason') }}</textarea>
             </div>
 
-            <div class="form-group">
-                <label for="start_date">Start Date:</label>
-                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ old('start_date') }}" required>
-            </div>
+            <div class="formContainer">
+                <div class="form-group">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ old('start_date') }}" required>
+                </div>
 
-            <div class="form-group">
-                <label for="end_date">End Date:</label>
-                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ old('end_date') }}" required>
+                <div class="form-group">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ old('end_date') }}" required>
+                </div>
             </div>
 
             <!-- <div class="form-group">
@@ -134,9 +137,9 @@
                 <input type="text" name="status_id" id="status_id" class="form-control" value="{{ old('status_id') }}" required readonly>
             </div> -->
             <div class="button color">
-            <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-    </div>
+            </div>
     <!-- <div class="nav-right">
         <form action="{{ route('student.dashboard') }}" method="get" style="display: inline;">
             @csrf

@@ -2,63 +2,98 @@
 @section('content')
 
     <div class="student-details-container">
-        <div class="logosc">
+        <!-- <div class="logosc">
             
-        </div>
+        </div> -->
+
         <h1 class="sh1">Absence Request</h1>
         <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
-
+        <div>
+            <div class="notification">
+                <!-- <span>notification</span> -->
+                <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
+                <div class="notification-content">
+                    @if ($unreadExcuseSlips->count() > 0)
+                        @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
+                            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
+                                @php
+                                    $approver = '';
+                                    if ($unreadExcuseSlip->status_id == 2) {
+                                        $approver = $unreadExcuseSlip->counselor->first_name. ' ' . $unreadExcuseSlip->counselor->last_name;
+                                    } elseif ($unreadExcuseSlip->status_id == 4) {
+                                        $approver = $unreadExcuseSlip->dean->first_name. ' ' . $unreadExcuseSlip->dean->last_name;
+                                    } elseif ($unreadExcuseSlip->status_id == 5) {
+                                        $approver = $unreadExcuseSlip->teacher->first_name . ' ' . $unreadExcuseSlip->teacher->last_name;
+                                    }
+                                @endphp
+                                <p>
+                                    @if ($unreadExcuseSlip->status_id == 1)
+                                        An excuse slip is sent  to <b>{{$unreadExcuseSlip->counselor->first_name}}, {{$unreadExcuseSlip->counselor->last_name}}</b>
+                                    @else
+                                        <b>{{ $approver }}</b> approved your excuse slip
+                                    @endif
+                                </p>
+                                <p>View excuse slip.. 
+                            </a>
+                            <hr>
+                        @endforeach
+                    @else
+                        <p>No unread excuse slips.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
         <hr>
+        <div class="filterSection">
+            <div class="filter-container">
+                <form action="{{ route('student.dashboard') }}" method="GET">
+                    <label for="sort_by" style="font-weight: bold;">Sort By:</label>
+                        <select name="sort_by" id="sort_by">
+                            <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>All</option>
+                            <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
+                            <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
+                            <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
+                        </select>
 
-        <form action="{{ route('student.dashboard') }}" method="GET">
-        <label for="sort_by" style="
-    font-weight: bold;
-">Sort By:</label>
-            <select name="sort_by" id="sort_by">
-                <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>All</option>
-                <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
-                <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
-                <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
-            </select>
+                        @if (request()->input('sort_by') == 'month')
+                            <label for="month">Select Month:</label>
+                            <select name="month" id="month">
+                                @foreach (range(1, 12) as $month)
+                                    <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
+                                @endforeach
+                            </select>
+                            <label for="year">Select Year:</label>
+                            <select name="year" id="year">
+                                @for ($year = date('Y'); $year >= 2000; $year--)
+                                    <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                @endfor
+                            </select>
+                        @endif
 
-            @if (request()->input('sort_by') == 'month')
-                <label for="month">Select Month:</label>
-                <select name="month" id="month">
-                    @foreach (range(1, 12) as $month)
-                        <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
-                    @endforeach
+                        @if (request()->input('sort_by') == 'year')
+                            <select name="year">
+                                @for ($year = date('Y'); $year >= 2000; $year--)
+                                    <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                @endfor
+                            </select>
+                        @endif
+
+                        <button type="submit" class="sortButton">Sort</button>
+                </form>
+            </div>
+
+            <div class="filter-container">
+                <label style="font-weight: bold;" for="filter">Filter by:</label>
+                <select id="filter" name="filter">
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved_by_counselor">Approved by Counselor</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="approved_by_dean">Approved by Dean</option>
+                    <option value="approved_by_teacher">Approved by Teacher</option>
                 </select>
-                <label for="year">Select Year:</label>
-                <select name="year" id="year">
-                    @for ($year = date('Y'); $year >= 2000; $year--)
-                        <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                    @endfor
-                </select>
-            @endif
-
-            @if (request()->input('sort_by') == 'year')
-                <select name="year">
-                    @for ($year = date('Y'); $year >= 2000; $year--)
-                        <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                    @endfor
-                </select>
-            @endif
-
-            <button type="submit">Sort</button>
-        </form>
-        <div class="filter-container">
-    <label style="
-    font-weight: bold;
-" for="filter">Filter by:</label>
-    <select id="filter" name="filter">
-        <option value="all">All</option>
-        <option value="pending">Pending</option>
-        <option value="approved_by_counselor">Approved by Counselor</option>
-        <option value="rejected">Rejected</option>
-        <option value="approved_by_dean">Approved by Dean</option>
-        <option value="approved_by_teacher">Approved by Teacher</option>
-    </select>
-</div>
+            </div>
+        </div>
             @if($excuseSlips->isEmpty())
                 <p>No Excuse Slips found.</p>
             @else
@@ -113,46 +148,7 @@
             @endif
         </div>
     </div>
-
-
-    <footer>
-    <div class="notification">
-        <!-- <span>notification</span> -->
-        <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
-        <div class="notification-content">
-            @if ($unreadExcuseSlips->count() > 0)
-                @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
-                    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
-                        @php
-                            $approver = '';
-                            if ($unreadExcuseSlip->status_id == 2) {
-                                $approver = $unreadExcuseSlip->counselor->first_name. ' ' . $unreadExcuseSlip->counselor->last_name;
-                            } elseif ($unreadExcuseSlip->status_id == 4) {
-                                $approver = $unreadExcuseSlip->dean->first_name. ' ' . $unreadExcuseSlip->dean->last_name;
-                            } elseif ($unreadExcuseSlip->status_id == 5) {
-                                $approver = $unreadExcuseSlip->teacher->first_name . ' ' . $unreadExcuseSlip->teacher->last_name;
-                            }
-                        @endphp
-                        <p>
-                            @if ($unreadExcuseSlip->status_id == 1)
-                                An excuse slip is sent  to <b>{{$unreadExcuseSlip->counselor->first_name}}, {{$unreadExcuseSlip->counselor->last_name}}</b>
-                            @else
-                                <b>{{ $approver }}</b> approved your excuse slip
-                            @endif
-                        </p>
-                        <p>View excuse slip.. 
-                    </a>
-                    <hr>
-                @endforeach
-            @else
-                <p>No unread excuse slips.</p>
-            @endif
-        </div>
-    </div>
-</footer>
-@endsection
-
-
+    @endsection
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

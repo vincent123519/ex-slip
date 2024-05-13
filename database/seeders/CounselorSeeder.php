@@ -33,6 +33,23 @@ class CounselorSeeder extends Seeder
                 'department' => 'Civil Engineering Department',
                 
             ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Education',
+                'username' => 'counselor.education',
+                'email' => 'edu@gmail.com',
+                'department' => 'Department of Mathematics and Sciences',
+                
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'accountancy',
+                'username' => 'counselor.accountancy',
+                'email' => 'counselor@gmail.com',
+                'department' => 'Accountancy and Finance Department',
+                
+            ],
+            
             // Add more sample counselors
         ];
 

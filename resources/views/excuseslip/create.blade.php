@@ -107,21 +107,15 @@
                 </div>
             </div>
 
-            <div id="supporting_documents_container">
-            <div class="form-group">
-                <label for="supporting_document">Supporting Document: </label>
-                <div class="custom-file">
-                <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required>
-                    <!-- <label class="custom-file-label">Choose file</label> -->
-                    <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required>
-                    <!-- <label class="custom-file-label">Choose file</label> -->
-                    <!-- <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required>
+            <div class="form-group-files">
+    <label for="supporting_documents">Supporting Document/s: </label>
+    <div class="custom-file">
+        <input type="file" class="custom-file-input" id="supporting_documents" name="supporting_documents[]" accept=".pdf" multiple required>
+        <label class="custom-file-label" for="supporting_documents">Choose file(s)</label>
+    </div>
+</div>
 
-                    <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required> -->
 
-                </div>
-            </div>
-        </div>
 
             <div class="form-group">
                 <label for="reason">Reason:</label>

@@ -177,6 +177,8 @@ public function dashboard()
         'pending_excuses' => ExcuseSlip::whereIn('status_id', [1, 2, 4])->count(),
         'approved_excuses' => ExcuseSlip::where('status_id', 5)->count(),
         'rejected_excuses' => ExcuseSlip::where('status_id', 3)->count(),
+        'total_schools' => School::count(),
+        'total_departments' => Department::count(),
 
         // Add more data as needed
     ];

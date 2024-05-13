@@ -15,7 +15,10 @@ class DepartmentDegreeSeeder extends Seeder
             ['department_id' => 1, 'degree_name' => 'Bachelor of Science in Information System'],
             ['department_id' => 4, 'degree_name' => 'Bachelor of civil engineering'],
             ['department_id' => 2, 'degree_name' => 'Bachelor of electronic engineering'],
-            // Add more sample degrees for other departments
+            ['department_id' => 14, 'degree_name' => 'Bachelor of Mathematics and Science'],
+            ['department_id' => 13, 'degree_name' => 'Bachelor of English and Literature'],
+
+
         ];
 
         foreach ($degrees as $degree) {

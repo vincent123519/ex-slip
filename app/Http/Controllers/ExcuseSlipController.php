@@ -133,15 +133,13 @@ public function store(Request $request)
         'reason' => 'required',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
-        'supporting_document' => 'required|mimetypes:application/pdf,application/pdfx',
+        'supporting_documents.*' => 'required|mimetypes:application/pdf,application/pdfx', // Updated validation rule for multiple files
     ]);
 
     $validatedData['status_id'] = 1;
 
     // Store a list of created excuse slips
     $createdSlips = [];
-
-    
 
     // Create the excuse slips for each selected offer code
     foreach ($validatedData['offer_codes'] as $offerCode) {
@@ -175,32 +173,31 @@ public function store(Request $request)
             // Send notification to counselor
             $counselor = Counselor::find($validatedData['counselor_id']); // Assuming the counselor is represented by the Counselor model
             $counselorEmail = $counselor->email;
-            
 
             if ($counselorEmail) {
                 Notification::route('mail', $counselorEmail)
-                    ->notify(new ExcuseSlipCreatedNotification($excuseSlip));}
-        }
-        if ($request->hasFile('supporting_document')) {
-            $file = $request->file('supporting_document');
-            $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); // Adjust the storage path as needed
+                    ->notify(new ExcuseSlipCreatedNotification($excuseSlip));
+            }
+
+            // Handle supporting documents
+            if ($request->hasFile('supporting_documents')) {
+                foreach ($request->file('supporting_documents') as $file) {
+                    $path = $file->store('supporting_documents', 'public'); // Adjust the storage path as needed
     
-            // Create a new SupportingDocument instance and associate it with the ExcuseSlip
-            $document = new SupportingDocument([
-                'document_path' => $path,
-                'upload_date' => now(),
-            ]);
+                    // Create a new SupportingDocument instance and associate it with the ExcuseSlip
+                    $document = new SupportingDocument([
+                        'document_path' => $path,
+                        'upload_date' => now(),
+                    ]);
     
-            $excuseSlip->supportingDocuments()->save($document);
+                    $excuseSlip->supportingDocuments()->save($document);
+                }
+            }
         }
     }
-    
 
-    // Handle supporting document upload here
-
-    session()->flash('success', 'Excuse slip requests created successfully.');
-
-    return redirect()->route('student.dashboard');
+    // Redirect with success message
+    return redirect()->route('student.dashboard')->with('success', 'Excuse slips created successfully.');
 }
 
 

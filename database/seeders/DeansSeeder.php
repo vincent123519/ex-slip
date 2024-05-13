@@ -32,6 +32,22 @@ class DeansSeeder extends Seeder
                 'username' => 'anthony.kilong',
 
             ],
+            [
+                'first_name' => 'Dr. Edgar',
+                'last_name' => 'Detoya',
+                'school' => 'School of Business Management', // Update the school name
+                'email' => 'Detoyaa@gmail.com',
+                'username' => 'edgar.detoya',
+
+            ],
+            [
+                'first_name' => 'Dr. Marietta',
+                'last_name' => 'Bongcales',
+                'school' => 'School of Arts and Science', // Update the school name
+                'email' => 'BongcalesM@gmail.com',
+                'username' => 'Marietta.Bongcales',
+
+            ],
             // Add more sample deans
         ];
 

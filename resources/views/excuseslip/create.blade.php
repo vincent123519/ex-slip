@@ -107,12 +107,13 @@
             </div>
 
             <div class="form-group-files">
-                <label for="supporting_document">Supporting Document/s: </label>
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="supporting_document" name="supporting_document" accept=".pdf" required>
-                    <label class="custom-file-label" for="supporting_document"></label>
-                </div>
-            </div>
+    <label for="supporting_documents">Supporting Document/s: </label>
+    <div class="custom-file">
+        <input type="file" class="custom-file-input" id="supporting_documents" name="supporting_documents[]" accept=".pdf" multiple required>
+        <label class="custom-file-label" for="supporting_documents">Choose file(s)</label>
+    </div>
+</div>
+
 
 
             <div class="form-group">

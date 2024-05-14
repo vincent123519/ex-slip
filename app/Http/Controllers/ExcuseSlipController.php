@@ -133,7 +133,7 @@ public function store(Request $request)
         'reason' => 'required',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
-        'supporting_document' => 'required|mimetypes:application/pdf,application/pdfx',
+        'supporting_documents.*' => 'required|mimetypes:application/pdf,application/pdfx,image/jpeg,image/png,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ]);
 
     $validatedData['status_id'] = 1;
@@ -141,10 +141,8 @@ public function store(Request $request)
     // Store a list of created excuse slips
     $createdSlips = [];
 
-    
-
     // Create the excuse slips for each selected offer code
-    foreach ($validatedData['offer_codes'] as $offerCode) {
+    foreach ($validatedData['offer_codes'] as $index => $offerCode) {
         // Determine the teacher_id and course_offering_id based on the selected offer_code
         $courseOffering = CourseOffering::where('offer_code', $offerCode)->first();
 
@@ -172,29 +170,30 @@ public function store(Request $request)
             // Add the created excuse slip to the list
             $createdSlips[] = $excuseSlip;
 
+            // Upload supporting documents
+            if ($request->hasFile("supporting_documents.$index")) {
+                $file = $request->file("supporting_documents.$index");
+                $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); // Adjust the storage path as needed
+
+                // Create a new SupportingDocument instance and associate it with the ExcuseSlip
+                $document = new SupportingDocument([
+                    'document_path' => $path,
+                    'upload_date' => now(),
+                ]);
+
+                $excuseSlip->supportingDocuments()->save($document);
+            }
+
             // Send notification to counselor
             $counselor = Counselor::find($validatedData['counselor_id']); // Assuming the counselor is represented by the Counselor model
             $counselorEmail = $counselor->email;
-            
 
             if ($counselorEmail) {
                 Notification::route('mail', $counselorEmail)
-                    ->notify(new ExcuseSlipCreatedNotification($excuseSlip));}
-        }
-        if ($request->hasFile('supporting_document')) {
-            $file = $request->file('supporting_document');
-            $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); // Adjust the storage path as needed
-    
-            // Create a new SupportingDocument instance and associate it with the ExcuseSlip
-            $document = new SupportingDocument([
-                'document_path' => $path,
-                'upload_date' => now(),
-            ]);
-    
-            $excuseSlip->supportingDocuments()->save($document);
+                    ->notify(new ExcuseSlipCreatedNotification($excuseSlip));
+            }
         }
     }
-    
 
     // Handle supporting document upload here
 
@@ -202,6 +201,7 @@ public function store(Request $request)
 
     return redirect()->route('student.dashboard');
 }
+
 
 
     public function edit($id)

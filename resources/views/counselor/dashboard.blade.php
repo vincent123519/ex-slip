@@ -102,7 +102,7 @@
                     </div>
                 </div>
             </div>
-            <a class="expo"href="{{ $exportUrl }}">Export Excuse Slips</a>
+            <a class="expo"href="{{ $exportUrl }}">Download Records</a>
             <hr>
 
             <div class="filterSection">

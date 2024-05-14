@@ -19,7 +19,7 @@
                         <td>{{ $student->last_name }}, {{ $student->first_name }}</td>
                         <td>{{ $student->degree->degree_name }}-{{ $student->year_level }}</td>
                         <td>
-                            <a href="{{ route('admin.studyload.create', ['studentId' => $student->student_id]) }}" class="btn btn-primary btn-sm">Add Study Load</a>
+                            <!-- <a href="{{ route('admin.studyload.create', ['studentId' => $student->student_id]) }}" class="btn btn-primary btn-sm">Add Study Load</a> -->
                             <a href="{{ route('admin.students.edit', ['id' => $student->student_id]) }}" class="btn btn-secondary btn-sm">Edit Student</a>
                         </td>
                     </tr>

@@ -42,13 +42,16 @@
                 <p><strong>Reason:</strong> {{ $excuseSlip->reason }}</p>
 
 
-                <h2>File Attachment</h2>
-                @if ($excuseSlip->supportingDocuments->isEmpty())
-                    <p>No supporting documents available.</p>
-                @else
-                    <ul>
-                        @foreach ($excuseSlip->supportingDocuments as $document)
-                            <li>
+                <h2>File Attachments</h2>
+<div id="supporting_documents_container">
+    <div class="form-group">
+        <label for="supporting_document">Supporting Documents: </label>
+        @if ($excuseSlip->supportingDocuments->isEmpty())
+            <p>No supporting documents available.</p>
+        @else
+            <ul>
+                @foreach ($excuseSlip->supportingDocuments as $document)
+                    <li>
                         <a href="{{ asset('storage/' . $document->document_path) }}" target="_blank">
                             {{ $document->document_path }}
                         </a>
@@ -56,14 +59,15 @@
                 @endforeach
             </ul>
         @endif
-                
+    </div>
+
 
         
 
 @if(auth()->user()->role_id == 4)
 
 <!-- counselor -->
- @if ($deanFeedback)
+ <!-- @if ($deanFeedback)
     <div class="feedback-container">
         <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
     </div>
@@ -80,9 +84,9 @@
  @else
     <div class="feedback-container">
         <p>No teacher feedback available.</p>
-    </div>
+    </div>-->
  @endif
- @endif
+ @endif 
 
  @if(auth()->user()->role_id == 5)
 
@@ -97,16 +101,16 @@
     </div>
  @endif
 
- @if ($teacherFeedback)
+ <!-- @if ($teacherFeedback)
     <div class="feedback-container">
         <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
     </div>
  @else
     <div class="feedback-container">
         <p>No teacher feedback available.</p>
-    </div>
+    </div>-->
  @endif
- @endif
+ @endif 
 
 
 @if(auth()->user()->role_id == 4)
@@ -115,12 +119,7 @@
                         @csrf
                         @method('PUT')
                         <button type="submit" class="approve button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-check" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-                                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
-                                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
-                            </svg>
-                            Note
+                            Send to Dean
                         </button>
                 </form>
                 <!-- Add this to your view where counselors can provide feedback -->
@@ -159,7 +158,7 @@
             <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn-approved" style=" margin-top: 5vw;">Approve</button>
+                                        <button type="submit" class="btn-approved" style=" margin-top: 5vw;">Noted</button>
             </form>
             <form action="{{ route('teacher.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                 @csrf
@@ -269,8 +268,8 @@
             </ul>
         @elseif ($excuseSlip->status->status_id == 1)
             <ul>
-                <li>Pending for Approval</li>
-                <li style="color: orange;font-weight: bold;">Sent to {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
+                <li style="color: orange;font-weight: bold;" >Pending for Approval</li>
+                <li style="color: #26d187;font-weight: bold;">Sent to {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
 
             </ul>
     @endif
@@ -287,7 +286,31 @@
 
 </body>
 @endsection
-<style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var submitFeedbackButton = document.getElementById("submitFeedbackButton");
+    var sendToDeanButton = document.getElementById("sendToDeanButton");
 
+    // Function to trigger both buttons
+    function triggerBothButtons() {
+        submitFeedbackButton.click(); // Simulate click on the first button
+        sendToDeanButton.click(); // Simulate click on the second button
+    }
 
-</style>
+    // Event listener for the first button
+    submitFeedbackButton.addEventListener("click", function() {
+        // Your code for submitting feedback
+        console.log("Submitting feedback...");
+    });
+
+    // Event listener for the second button
+    sendToDeanButton.addEventListener("click", function() {
+        // Your code for sending to Dean
+        console.log("Sending to Dean...");
+    });
+
+    // Event listener to trigger both buttons when any one of them is clicked
+    submitFeedbackButton.addEventListener("click", triggerBothButtons);
+    sendToDeanButton.addEventListener("click", triggerBothButtons);
+});
+</script>

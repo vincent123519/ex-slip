@@ -101,7 +101,7 @@
                     <thead>
                     <tr>
                         <th>Date Created</th>
-                        <th>Student</th>
+                        <!-- <th>Student</th> -->
                         <th>Teacher</th>
                         <th>Course</th>
                         <th>Start Date</th>
@@ -115,7 +115,7 @@
                     @foreach($excuseSlips as $excuseSlip)
                         <tr>
                             <td>{{ $excuseSlip->formatted_created_at }}</td>
-                            <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td>
+                            <!-- <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td> -->
                             <td>{{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</td>
                             <td>{{ $excuseSlip->course->course_code}} -{{ $excuseSlip->course->offer_code}}</td>
                             <td>{{ $excuseSlip->start_date }}</td>

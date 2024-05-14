@@ -37,8 +37,34 @@
             </div>
             <hr>
         </div>
+        <!-- <div class="filter-container">
+                    <label for="filter" style="font-weight: bold;">Filter by:</label>
+                    <select id="filter" name="filter">
+                        <option value="all">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved_by_counselor">Approved by Counselor</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="approved_by_dean">Approved by Dean</option>
+                        <option value="approved_by_teacher">Approved by Teacher</option>
+                    </select>
+                </div>
+
+            </div> -->
         <h2>Total Excuse Slips: {{ count($excuseSlips) }}</h2>
         @if(count($excuseSlips) > 0)
+        <div class="filter-container">
+                    <label for="filter" style="font-weight: bold;">Filter by:</label>
+                    <select id="filter" name="filter">
+                        <option value="all">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved_by_counselor">Approved by Counselor</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="approved_by_dean">Approved by Dean</option>
+                        <option value="approved_by_teacher">Approved by Teacher</option>
+                    </select>
+                </div>
+
+            
         <table class="excuse-slip-table">
             <thead>
                 <tr>
@@ -103,4 +129,37 @@
         notification.classList.toggle('active');
       });
     });
+    $(document).ready(function() {
+    function filterExcuseSlips(option) {
+        var rows = $('.excuse-slip-table tbody tr');
+
+        rows.each(function() {
+            var status = $(this).find('td:nth-child(5)').text().trim().toLowerCase();
+
+            console.log('Status:', status); // Debugging statement
+
+            if (option === 'all') {
+                $(this).show();
+            } else if (option === 'pending' && status.includes('pending')) {
+                $(this).show();
+            } else if (option === 'approved_by_counselor' && status.includes('approved by counselor')) {
+                $(this).show();
+            } else if (option === 'rejected' && status.includes('rejected')) {
+                $(this).show();
+            } else if (option === 'approved_by_dean' && status.includes('approved by dean')) {
+                $(this).show();
+            } else if (option === 'approved_by_teacher' && status.includes('approved by teacher')) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    $('#filter').change(function() {
+        var selectedOption = $(this).val();
+        console.log('Selected Option:', selectedOption); // Debugging statement
+        filterExcuseSlips(selectedOption);
+    });
+});
   </script>

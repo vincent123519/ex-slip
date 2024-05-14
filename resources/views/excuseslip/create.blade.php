@@ -57,8 +57,9 @@
 
 
 
-        <form action="{{ route('excuse_slips.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+            <form action="{{ route('excuse_slips.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+           
 
             <div class="form-group" style="display: none;">
                 <label for="student_id">Student ID:</label>
@@ -106,14 +107,21 @@
                 </div>
             </div>
 
-            <div class="form-group-files">
-                <label for="supporting_document">Supporting Document/s: </label>
+            <div id="supporting_documents_container">
+            <div class="form-group">
+                <label for="supporting_document">Supporting Document: </label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="supporting_document" name="supporting_document" accept=".pdf" required>
-                    <label class="custom-file-label" for="supporting_document"></label>
+                <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required>
+                    <!-- <label class="custom-file-label">Choose file</label> -->
+                    <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required>
+                    <!-- <label class="custom-file-label">Choose file</label> -->
+                    <!-- <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required>
+
+                    <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf, .png, .jpeg, .jpg, .doc, .docx" required> -->
+
                 </div>
             </div>
-
+        </div>
 
             <div class="form-group">
                 <label for="reason">Reason:</label>
@@ -188,6 +196,24 @@
         const teacherId = selectedOption.getAttribute('data-teacher-id');
         document.getElementById('teacher_id').value = teacherId;
     });
+    document.getElementById('add_supporting_document').addEventListener('click', function() {
+        var container = document.getElementById('supporting_documents_container');
+        var fileInput = document.createElement('div');
+        fileInput.classList.add('form-group');
+        fileInput.innerHTML = `
+            <label for="supporting_document">Supporting Document: </label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="supporting_documents[]" accept=".pdf" required>
+                <label class="custom-file-label">Choose file</label>
+            </div>`;
+        container.appendChild(fileInput);
+    });
+    document.querySelector('form').addEventListener('submit', function(event) {
+            var confirmation = confirm("Are you sure you want to submit the form?");
+            if (!confirmation) {
+                event.preventDefault();
+            }
+        });
 </script>
 
 <style>

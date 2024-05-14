@@ -89,7 +89,7 @@
 <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Import Course') }}</div>
+                <div class="card-header">{{ __('Import Course Offerings') }}</div>
 
                 <div class="card-body">
                     @if (session('success'))

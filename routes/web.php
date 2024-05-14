@@ -88,6 +88,7 @@ Route::put('/excuse_slips/approve/{id}', [CounselorController::class, 'approve']
 Route::put('/excuse_slips/approveteacher/{id}', [TeacherController::class, 'signExcuseSlip'])->name('excuse.approveteacher');
 
 
+Route::put('/excuse_slips/reject/{id}', [DeanController::class, 'rejectExcuseSlip'])->name('excuse.reject');
 
 
 

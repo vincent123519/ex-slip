@@ -134,7 +134,7 @@
         var rows = $('.excuse-slip-table tbody tr');
 
         rows.each(function() {
-            var status = $(this).find('td:nth-child(5)').text().trim().toLowerCase();
+            var status = $(this).find('td:nth-child(4)').text().trim().toLowerCase();
 
             console.log('Status:', status); // Debugging statement
 

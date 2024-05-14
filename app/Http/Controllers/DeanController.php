@@ -72,7 +72,7 @@ class DeanController extends Controller
             ->findOrFail($id);
 
         // Update the excuse slip status to rejected
-        $excuseSlip->update(['status_id' => '3']);
+        $excuseSlip->update(['status_id' => 'rejected']);
 
         // Return a success response
         return redirect()->route('dean.dashboard')->with('success', 'Excuse slip rejected successfully.');

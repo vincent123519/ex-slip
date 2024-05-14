@@ -89,6 +89,7 @@ Route::put('/excuse_slips/approveteacher/{id}', [TeacherController::class, 'sign
 
 
 
+Route::put('/excuse_slips/reject/{id}', [DeanController::class, 'rejectExcuseSlip'])->name('excuse.reject');
 
 
 Route::get('/head-counselor/assign', [HeadCounselorController::class, 'showAssignForm'])->name('head-counselor.assign.form');

@@ -55,12 +55,22 @@
 </header>
 <div class="sidebar">
     <div class="profile-container">
-        <div class="profile-image"></div>
+        @php
+        $imagePath = Auth::user()->image ? 'storage/user_image/' . Auth::user()->image : 'storage/user_image/user.png';
+        @endphp
+        <img src="{{ asset($imagePath) }}"
+        alt="image"
+        style="width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                background-color: #fff;
+                margin-bottom: 10px;
+                background-size: cover;
+                background-position: center;">
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
 
     </div>
-    <!-- <div class="divider"></div>
-    <div class="divider"></div> -->
+
     <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
     <div class="navmenu">
             <ul>

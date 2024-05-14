@@ -67,7 +67,10 @@
 </header>
 <div class="sidebar">
     <div class="profile-container">
-    <img src="{{ asset('storage/user_image/' . Auth::user()->image) }}"
+    @php
+    $imagePath = Auth::user()->image ? 'storage/user_image/' . Auth::user()->image : 'storage/user_image/user.png';
+    @endphp
+    <img src="{{ asset($imagePath) }}"
      alt="image"
      style="width: 100px;
             height: 100px;

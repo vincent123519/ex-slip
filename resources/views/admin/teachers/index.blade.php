@@ -3,6 +3,9 @@
 @section('content')
     <div class="container">
         <h1>All Teachers</h1>
+        <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search by name...">
+        </div>
         <table id="teachers" class="table">
             <thead>
                 <tr>
@@ -74,3 +77,27 @@
         color: white;
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const teachersTable = document.getElementById('teachers');
+        const searchInput = document.getElementById('search-input');
+        const teacherRows = document.querySelectorAll('#teachers tbody tr');
+
+        function filterTeachers() {
+            const searchQuery = searchInput.value.toLowerCase();
+
+            teacherRows.forEach((row, index) => {
+                const fullName = index === 1 || index === 2 ? `${row.children[1].textContent} ${row.children[2].textContent}` : row.children[1].textContent; // Combined Name column
+
+                if (fullName.toLowerCase().includes(searchQuery)) {
+                    row.style.display = ''; // Show matching row
+                } else {
+                    row.style.display = 'none'; // Hide non-matching row
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTeachers);
+    });
+</script>

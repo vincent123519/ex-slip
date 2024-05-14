@@ -43,6 +43,7 @@
     </div>
     <div>
         <h2>Excuse Slips</h2>
+        <input type="text" id="searchInput" placeholder="Search by student name, status, or course name">
         <div class="filter-container">
             <label for="filter" style="font-weight: bold;">Filter by:</label>
             <select id="filter" name="filter">
@@ -128,5 +129,29 @@ $(document).ready(function() {
             }
         });
     }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
+  const rows = Array.from(document.querySelectorAll('.excuse-slip-table tbody tr'));
+
+  function filterRows() {
+    const searchQuery = searchInput.value.toLowerCase();
+
+    rows.forEach(row => {
+      const studentName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+      const courseName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+
+      if (studentName.includes(searchQuery) || status.includes(searchQuery) || courseName.includes(searchQuery)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', filterRows);
 });
 </script>

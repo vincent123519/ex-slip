@@ -43,18 +43,22 @@
         <div class="filter-container">
                     <label for="filter" style="font-weight: bold;">Filter by:</label>
                     <select id="filter" name="filter">
-                        <option value="all">All</option>
                         <option value="pending">Pending</option>
                         <option value="approved_by_counselor">Approved by Counselor</option>
                         <option value="rejected">Rejected</option>
                         <option value="approved_by_dean">Approved by Dean</option>
                         <option value="approved_by_teacher">Approved by Teacher</option>
+                        <option value="all">All</option>
+
                     </select>
                 </div>
 
 
             
         <table class="excuse-slip-table">
+            <br>
+        <input type="text" id="searchInput" placeholder="seach by">
+
             <thead>
                 <tr>
                     <th>Student Name</th>
@@ -154,5 +158,29 @@ $(document).ready(function() {
 
     // Initial count update on page load
     filterExcuseSlips('all');
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
+  const rows = Array.from(document.querySelectorAll('.excuse-slip-table tbody tr'));
+
+  function filterRows() {
+    const searchQuery = searchInput.value.toLowerCase();
+
+    rows.forEach(row => {
+      const studentName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+      const teacherName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+
+      if (studentName.includes(searchQuery) || teacherName.includes(searchQuery)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', filterRows);
 });
 </script>

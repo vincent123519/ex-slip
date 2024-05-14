@@ -42,6 +42,9 @@
             <hr>
 
             <div class="filterSection">
+
+
+
                 <form action="{{ route('counselor.dashboard') }}" method="GET">
                     <label for="sort_by" style="font-weight: bold;">Sort By:</label>
                         <select class="sorting"name="sort_by" id="sort_by">
@@ -112,12 +115,17 @@
                     </select>
                 </div>
 
+
+                
+
             </div>
         
 
         <h2 style="text-align: center;">List of Student Excuse Slips</h2>
 
         @if($excuseSlips->count() > 0)
+        <input type="text" id="searchInput" placeholder="Search by student name">
+
             <table class="excuse-slip-table">
                 <thead>
                     <tr>
@@ -142,21 +150,8 @@
                         <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('PUT')
-                            <!-- <button type="submit" class="btn-approved">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-check" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-                                    <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
-                                    <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
-                                </svg> Note
-                            </button> -->
+                           
                         </form>
-
-
-                        <!-- <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn-reject">Reject</button>
-                        </form> -->
 
                         <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
@@ -252,5 +247,28 @@ e  });
         console.log('Selected Option:', selectedOption); // Debugging statement
         filterExcuseSlips(selectedOption);
     });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
+  const rows = Array.from(document.querySelectorAll('.excuse-slip-table tbody tr'));
+
+  function filterRows() {
+    const searchQuery = searchInput.value.toLowerCase();
+
+    rows.forEach(row => {
+      const studentName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+      if (studentName.includes(searchQuery)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', filterRows);
 });
 </script>

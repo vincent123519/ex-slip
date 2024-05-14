@@ -133,7 +133,7 @@ public function store(Request $request)
         'reason' => 'required',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
-        'supporting_documents.*' => 'required|mimetypes:application/pdf,application/pdfx,image/jpeg,image/png,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'supporting_documents.*' => 'required|mimetypes:application/pdf,application/pdfx', // Updated validation rule for multiple files
     ]);
 
     $validatedData['status_id'] = 1;
@@ -192,14 +192,26 @@ public function store(Request $request)
                 Notification::route('mail', $counselorEmail)
                     ->notify(new ExcuseSlipCreatedNotification($excuseSlip));
             }
+
+            // Handle supporting documents
+            if ($request->hasFile('supporting_documents')) {
+                foreach ($request->file('supporting_documents') as $file) {
+                    $path = $file->store('supporting_documents', 'public'); // Adjust the storage path as needed
+    
+                    // Create a new SupportingDocument instance and associate it with the ExcuseSlip
+                    $document = new SupportingDocument([
+                        'document_path' => $path,
+                        'upload_date' => now(),
+                    ]);
+    
+                    $excuseSlip->supportingDocuments()->save($document);
+                }
+            }
         }
     }
 
-    // Handle supporting document upload here
-
-    session()->flash('success', 'Excuse slip requests created successfully.');
-
-    return redirect()->route('student.dashboard');
+    // Redirect with success message
+    return redirect()->route('student.dashboard')->with('success', 'Excuse slips created successfully.');
 }
 
 

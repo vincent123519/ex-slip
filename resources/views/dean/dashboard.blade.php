@@ -37,20 +37,8 @@
             </div>
             <hr>
         </div>
-        <!-- <div class="filter-container">
-                    <label for="filter" style="font-weight: bold;">Filter by:</label>
-                    <select id="filter" name="filter">
-                        <option value="all">All</option>
-                        <option value="pending">Pending</option>
-                        <option value="approved_by_counselor">Approved by Counselor</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="approved_by_dean">Approved by Dean</option>
-                        <option value="approved_by_teacher">Approved by Teacher</option>
-                    </select>
-                </div>
-
-            </div> -->
-        <h2>Total Excuse Slips: {{ count($excuseSlips) }}</h2>
+    
+        <h2>Total Excuse Slips: <span id="total-count">{{ count($excuseSlips) }}</span></h2>
         @if(count($excuseSlips) > 0)
         <div class="filter-container">
                     <label for="filter" style="font-weight: bold;">Filter by:</label>
@@ -63,6 +51,7 @@
                         <option value="approved_by_teacher">Approved by Teacher</option>
                     </select>
                 </div>
+
 
             
         <table class="excuse-slip-table">
@@ -119,47 +108,51 @@
     </div>
 @endsection
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const notification = document.querySelector('.notification');
-      const notificationContent = document.querySelector('.notification-content');
-
-      notification.addEventListener('click', function() {
-        notification.classList.toggle('active');
-      });
-    });
-    $(document).ready(function() {
+$(document).ready(function() {
     function filterExcuseSlips(option) {
         var rows = $('.excuse-slip-table tbody tr');
+        var visibleCount = 0; // Counter for visible rows
 
         rows.each(function() {
-            var status = $(this).find('td:nth-child(5)').text().trim().toLowerCase();
-
-            console.log('Status:', status); // Debugging statement
+            var status = $(this).find('td:nth-child(4)').text().trim().toLowerCase();
+            var isVisible = false; // Track if the row should be visible
 
             if (option === 'all') {
-                $(this).show();
+                isVisible = true;
             } else if (option === 'pending' && status.includes('pending')) {
-                $(this).show();
+                isVisible = true;
             } else if (option === 'approved_by_counselor' && status.includes('approved by counselor')) {
-                $(this).show();
+                isVisible = true;
             } else if (option === 'rejected' && status.includes('rejected')) {
-                $(this).show();
+                isVisible = true;
             } else if (option === 'approved_by_dean' && status.includes('approved by dean')) {
-                $(this).show();
+                isVisible = true;
             } else if (option === 'approved_by_teacher' && status.includes('approved by teacher')) {
+                isVisible = true;
+            }
+
+            if (isVisible) {
                 $(this).show();
+                visibleCount++; // Increment the counter if the row is visible
             } else {
                 $(this).hide();
             }
         });
+
+        // Update the total count in the HTML
+        $('#total-count').text(visibleCount);
     }
 
     $('#filter').change(function() {
         var selectedOption = $(this).val();
-        console.log('Selected Option:', selectedOption); // Debugging statement
         filterExcuseSlips(selectedOption);
     });
+
+    // Initial count update on page load
+    filterExcuseSlips('all');
 });
-  </script>
+</script>

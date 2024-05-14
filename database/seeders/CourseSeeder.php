@@ -23,7 +23,7 @@ class CourseSeeder extends Seeder
             ],
             [
                 'course_code' => 'ICRPOG 1',
-                'course_name' => 'Computer PRogramming 1',
+                'course_name' => 'Computer Programming 1',
                 'department_id' => 1,
             ],
             [

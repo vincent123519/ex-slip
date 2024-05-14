@@ -3,6 +3,9 @@
 @section('content')
     <div class="container">
         <h1>All Students</h1>
+        <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search by name...">
+        </div>
         <table id="students" class="table">
             <thead>
                 <tr>
@@ -19,8 +22,7 @@
                         <td>{{ $student->last_name }}, {{ $student->first_name }}</td>
                         <td>{{ $student->degree->degree_name }}-{{ $student->year_level }}</td>
                         <td>
-                            <!-- <a href="{{ route('admin.studyload.create', ['studentId' => $student->student_id]) }}" class="btn btn-primary btn-sm">Add Study Load</a> -->
-                            <a href="{{ route('admin.students.edit', ['id' => $student->student_id]) }}" class="btn btn-secondary btn-sm">Edit Student</a>
+                            <a href="{{ route('admin.import.index')}}" class="btn btn-primary btn-sm">Add Study Load</a>
                         </td>
                     </tr>
                 @endforeach
@@ -131,3 +133,46 @@
         border-radius: 3px;
     }
 </style>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const studentsTable = document.getElementById('students');
+  const searchInput = document.getElementById('search-input');
+  let students = {!! json_encode($students) !!};
+
+  function renderStudents() {
+    const searchQuery = searchInput.value.toLowerCase();
+    const filteredStudents = students.filter(student => {
+      const fullName = `${student.last_name}, ${student.first_name}`.toLowerCase();
+      return fullName.includes(searchQuery);
+    });
+
+    const tableBody = studentsTable.querySelector('tbody');
+    tableBody.innerHTML = '';
+
+    filteredStudents.forEach(student => {
+      const row = document.createElement('tr');
+      const columns = [
+        student.student_id,
+        `${student.last_name}, ${student.first_name}`,
+        `${student.degree.degree_name}-${student.year_level}`,
+        `<a href="{{ route('admin.import.index')}}" class="btn btn-primary btn-sm">Add Study Load</a>`
+      ];
+
+      columns.forEach(column => {
+        const cell = document.createElement('td');
+        cell.innerHTML = column;
+        row.appendChild(cell);
+      });
+
+      tableBody.appendChild(row);
+    });
+  }
+
+  searchInput.addEventListener('input', renderStudents);
+  renderStudents();
+});
+
+</script>

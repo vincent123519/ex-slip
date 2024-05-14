@@ -60,11 +60,12 @@
 
 <div class="school-container">
     <h2>School Information</h2>
-    <p>School Name: Dummy School</p>
-    <p>Address: 123 Dummy Street</p>
+    <div class="school-icon"></div> 
+    <p>Total Schools: {{ $total_schools }}</p>
+    <p>Total Departments:{{ $total_departments }} </p>
     <p>Phone: 555-1234</p>
-    <!-- Add more school-related content as needed -->
 </div>
+
 
 @endsection
 
@@ -73,7 +74,9 @@
         --user-image-url: url('http://[::1]:4000/resources/scss/image/user.png');
         --approve-icon-url: url('http://[::1]:4000/resources/scss/image/approve.png');
         --pending-icon-url: url('http://[::1]:4000/resources/scss/image/pending.png');
-        --reject-icon-url: url('http://[::1]:4000/resources/scss/image/reject.png')
+        --reject-icon-url: url('http://[::1]:4000/resources/scss/image/reject.png');
+        --school-icon-url: url('http://[::1]:4000/resources/scss/image/school.png')
+
     }
 
 
@@ -168,9 +171,26 @@
         width: 40%;
         margin-left: 20px; /* Adjust margin as needed */
         font-family: 'Montserrat', sans-serif;
-        border-collapse: collapse;
         background-color: rgba(255, 255, 255, 0.5);
         text-align: center;
+        align-items: center;
+        display: array_multisort;
+        align-items: center;
+        justify-content: center;
+        position: relative; 
+
+
+
     }
+
+    .school-icon {
+    width: 80px;
+    height: 80px;
+    background-image: var(--school-icon-url);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 200;
+}
 
 </style>

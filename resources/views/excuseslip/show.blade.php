@@ -64,29 +64,7 @@
 
         
 
-@if(auth()->user()->role_id == 4)
 
-<!-- counselor -->
- <!-- @if ($deanFeedback)
-    <div class="feedback-container">
-        <p><strong>Dean Feedback:</strong> {{ $deanFeedback->remarks }}</p>
-    </div>
- @else
-    <div class="feedback-container">
-        <p>No Dean feedback available.</p>
-    </div>
- @endif
-
- @if ($teacherFeedback)
-    <div class="feedback-container">
-        <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
-    </div>
- @else
-    <div class="feedback-container">
-        <p>No teacher feedback available.</p>
-    </div>-->
- @endif
- @endif 
 
  @if(auth()->user()->role_id == 5)
 
@@ -101,19 +79,12 @@
     </div>
  @endif
 
- <!-- @if ($teacherFeedback)
-    <div class="feedback-container">
-        <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
-    </div>
- @else
-    <div class="feedback-container">
-        <p>No teacher feedback available.</p>
-    </div>-->
- @endif
  @endif 
 
 
 @if(auth()->user()->role_id == 4)
+@if($excuseSlip->status->status_id == 1 || $excuseSlip->status->status_id == 3)
+
             <div>
                 <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
                         @csrf
@@ -131,8 +102,11 @@
                 </form>
             </div>
                 @endif
+                @endif
 
                 @if(auth()->user()->role_id == 5)
+                @if($excuseSlip->status->status_id == 2)
+
                 
                 <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
@@ -150,11 +124,15 @@
                     <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
                     <button type="submit" style="margin-top: -1vw;">Submit Feedback</button>
                 </form>
-            @endif
+                @endif
+                @endif
+
 
             @if(auth()->user()->role_id == 2)
+            <!-- teacher -->
 
-            @if($excuseSlip->status->status_id == 4)
+            @if($excuseSlip->status->status_id == 4 || $excuseSlip->status->status_id == 3)
+)
             <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
                                         @csrf
                                         @method('PUT')

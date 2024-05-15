@@ -26,10 +26,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    public function bulkUploadStudents(Request $request)
-    {
-        // Upload and import student data
-    }
+
 
 
     public function manageUsers(Request $request)
@@ -73,10 +70,8 @@ class AdminController extends Controller
 
     public function deleteUser(User $user)
 {
-    // Manually delete related records in the students table
     $user->student()->delete();
 
-    // Delete the user
     $user->delete();
 
     return redirect()->route('manage-users')->with('success', 'User deleted successfully');
@@ -384,7 +379,7 @@ public function importStudents(Request $request)
             $course = Course::where('course_code', $courseCode)->first();
             if (!$course) {
                 Log::error("Course with code '{$courseCode}' not found for offering with offer code '{$offerCode}'");
-                continue; // Skip this row
+                continue; 
             }
 
             // Check if the semester exists
@@ -398,7 +393,7 @@ public function importStudents(Request $request)
             $teacher = Teacher::find($teacherId);
             if (!$teacher) {
                 Log::error("Teacher with ID '{$teacherId}' not found for offering with offer code '{$offerCode}'");
-                continue; // Skip this row
+                continue; 
             }
 
             // Create the course offering
@@ -432,8 +427,8 @@ public function uploadUserImages(Request $request)
     $csv = array_map('str_getcsv', file($file->path()));
 
     foreach ($csv as $row) {
-        $userId = $row[0]; // Assuming user_id is in the first column
-        $fileName = $row[1]; // Assuming image file name is in the second column
+        $userId = $row[0]; 
+        $fileName = $row[1]; 
 
         // Find the user by id
         $user = User::find($userId);
@@ -546,13 +541,14 @@ public function indexSchoolYear()
         return view('admin.school_years.index', compact('schoolYears', 'semesters'));
 
     }
-public function activateSchoolYear($syId)
+    public function activateSchoolYear($syId)
     {
         $schoolYear = SchoolYear::findOrFail($syId);
     
-        // SchoolYear::where('is_active', true)->update([
-        //     'is_active' => false
-        // ]);
+        // Deactivate all other school years
+        SchoolYear::where('is_active', true)->update([
+            'is_active' => false
+        ]);
     
         $schoolYear->is_active = true;
         $schoolYear->save();
@@ -564,35 +560,28 @@ public function activateSchoolYear($syId)
             // Add more semester records here
         ];
     
-    
-        foreach ($semesters as $semesterData) {
-            $semester = new Semester($semesterData);
-            $semester->save();
-        }
+        Semester::insert($semesters);
     
         return redirect()->back()->with('success', 'School year activated successfully.');
     }
-
+    
     public function addSchoolYear(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'sy_id' => 'required|unique:school_years,sy_id|regex:/^\d{4}-\d{4}$/',
-        'sy_name' => 'required|in:SY ' . $request->input('sy_id'),
-    ], [
-        'sy_name.in' => 'The :attribute must be SY ' . $request->input('sy_id'),
+        'sy_id' => 'required|unique:school_years,sy_id|regex:/^\d{4}$/',
     ]);
 
     if ($validator->fails()) {
         return redirect()->back()->withErrors($validator)->withInput();
     }
 
+    $year = $request->input('sy_id');
     $schoolYear = new SchoolYear();
-    $schoolYear->sy_id = $request->input('sy_id');
-    $schoolYear->sy_name = 'SY ' . $request->input('sy_id');
+    $schoolYear->sy_id = $year . '-' . ($year + 1);
+    $schoolYear->sy_name = 'SY ' . $schoolYear->sy_id;
     $schoolYear->is_active = false;
     $schoolYear->save();
 
     return redirect()->back()->with('success', 'School year added successfully.');
 }
-  
 }

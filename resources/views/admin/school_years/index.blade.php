@@ -10,23 +10,13 @@
                         <h4>Add School Year</h4>
                         <form action="{{ route('school-year.add') }}" method="POST">
                      @csrf
-                    <div class="form-group">
-                        <label for="school-year">School Year:</label>
-                        <select name="sy_id" id="school-year">
-                            @for ($year = 2027; $year <= 2040; $year++)
-                                <option value="{{ $year }}-{{ $year + 1 }}">{{ $year }}-{{ $year + 1 }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="sy_name">School Year Name:</label>
-                        <input type="text" name="sy_name" id="sy_name" class="form-control @error('sy_name') is-invalid @enderror" required>
-                        @error('sy_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <button type="submit" class="button school">Add</button>
+                     <div class="form-group">
+                    <label for="school-year">School Year:</label>
+                    <input type="number" name="sy_id" id="school-year-input" min="1900" max="2099" value="" placeholder="Enter a 4-digit year">
+                    <button type="submit" class="button school">Add</button>
 
                     </div>
+                   
                 </form>
 
                     <table id="manage-school-years">

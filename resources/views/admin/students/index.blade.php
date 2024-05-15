@@ -9,7 +9,7 @@
         <table id="students" class="table">
             <thead>
                 <tr>
-                    <th>Student ID</th>
+                    <th>Student ID | UserAccount</th>
                     <th>Name</th>
                     <th>Degree Year Level</th>
                     <th>Action</th>
@@ -18,7 +18,7 @@
             <tbody>
                 @foreach ($students as $student)
                     <tr>
-                        <td>{{ $student->student_id }}</td>
+                        <td>{{ $student->student_id }} | {{$student->user->username}} </td>
                         <td>{{ $student->last_name }}, {{ $student->first_name }}</td>
                         <td>{{ $student->degree->degree_name }}-{{ $student->year_level }}</td>
                         <td>
@@ -154,18 +154,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     filteredStudents.forEach(student => {
       const row = document.createElement('tr');
-      const columns = [
-        student.student_id,
-        `${student.last_name}, ${student.first_name}`,
-        `${student.degree.degree_name}-${student.year_level}`,
-        `<a href="{{ route('admin.import.index')}}" class="btn btn-primary btn-sm">Add Study Load</a>`
-      ];
+      const studentIdCell = document.createElement('td');
+      studentIdCell.textContent = `${student.student_id} | ${student.user.username}`;
+      row.appendChild(studentIdCell);
 
-      columns.forEach(column => {
-        const cell = document.createElement('td');
-        cell.innerHTML = column;
-        row.appendChild(cell);
-      });
+      const nameCell = document.createElement('td');
+      nameCell.textContent = `${student.last_name}, ${student.first_name}`;
+      row.appendChild(nameCell);
+
+      const degreeYearCell = document.createElement('td');
+      degreeYearCell.textContent = `${student.degree.degree_name}-${student.year_level}`;
+      row.appendChild(degreeYearCell);
+
+      const actionCell = document.createElement('td');
+      const actionLink = document.createElement('a');
+      actionLink.href = "{{ route('admin.import.index') }}";
+      actionLink.className = "btn btn-primary btn-sm";
+      actionLink.textContent = "Add Study Load";
+      actionCell.appendChild(actionLink);
+      row.appendChild(actionCell);
 
       tableBody.appendChild(row);
     });
@@ -174,5 +181,4 @@ document.addEventListener('DOMContentLoaded', function() {
   searchInput.addEventListener('input', renderStudents);
   renderStudents();
 });
-
 </script>

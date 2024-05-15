@@ -119,7 +119,7 @@
 $(document).ready(function() {
     function filterExcuseSlips(option) {
         var rows = $('.excuse-slip-table tbody tr');
-        var visibleCount = 0; // Counter for visible rows
+        var visibleCount = 0; 
 
         rows.each(function() {
             var status = $(this).find('td:nth-child(4)').text().trim().toLowerCase();
@@ -184,3 +184,4 @@ document.addEventListener('DOMContentLoaded', function() {
   searchInput.addEventListener('input', filterRows);
 });
 </script>
+

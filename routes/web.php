@@ -196,3 +196,8 @@ Route::get('/admin/school_years', [AdminController::class, 'indexSchoolYear'])->
 
 Route::post('/school_years/{syId}/activate', [AdminController::class, 'activateSchoolYear'])->name('school-year.activate');
 Route::post('/school_years', [AdminController::class, 'addSchoolYear'])->name('school-year.add');
+
+//
+
+Route::get('/admin/course_offerings_and_courses', [AdminController::class, 'showCourseOfferingsAndCourses'])
+    ->name('admin.course_offerings_and_courses');

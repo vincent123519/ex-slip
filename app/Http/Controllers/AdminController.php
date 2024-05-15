@@ -584,4 +584,12 @@ public function indexSchoolYear()
 
     return redirect()->back()->with('success', 'School year added successfully.');
 }
+
+public function showCourseOfferingsAndCourses()
+    {
+        $allCourseOfferings = CourseOffering::all();
+        $allCourses = Course::all();
+
+        return view('admin.course.index', compact('allCourseOfferings', 'allCourses'));
+    }
 }

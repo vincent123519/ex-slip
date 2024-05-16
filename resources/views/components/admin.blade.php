@@ -59,9 +59,10 @@
    
     <!-- Add Changeuser password below -->
     <li><a class="links" href="{{ route('admin.school_years.index') }}">SCHOOL YEAR</a></li>
+    <li><a class="links" href="{{ route('admin.course_offerings_and_courses') }}">COURSE</a></li>
+    <li><a class="links" href="{{ route('admin.import.index') }}">IMPORT DATA</a></li>
     <li><a class="links" href="{{ route('manage-users') }}">MANAGE USER ACCOUNTS</a></li>
     <li><a class="links" href="{{ route('admin.excuseslip.index') }}">EXCUSE SLIPS</a></li>
-    <li><a class="links" href="{{ route('admin.import.index') }}">IMPORT DATA</a></li>
 
 
 </ul>

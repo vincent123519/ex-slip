@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('username', 50)->default('');
             $table->string('password', 255); // Keep this as 'password'
             $table->unsignedBigInteger('role_id')->default(1); // Set a default value
+            $table->boolean('first_time_login')->default(true); // Track first-time login
             $table->timestamps();
 
             // Define foreign key relationship

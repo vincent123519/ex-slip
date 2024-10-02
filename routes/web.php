@@ -35,6 +35,9 @@ Route::get('/excuse_slips/{excuse_slip_id}', [ExcuseSlipController::class, 'show
 Route::put('/excuse_slips/{id}', [ExcuseSlipController::class, 'update'])->name('excuse_slips.update');
 
 
+// In web.php
+Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])->name('change-password');
+Route::post('/change-password', [UserController::class, 'changePassword'])->name('change-password.update');
 
 
 // Student Routes

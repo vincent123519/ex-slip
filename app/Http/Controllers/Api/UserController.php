@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-
-
 use App\Models\Dean;
 use App\Models\User;
 use App\Models\Student;
@@ -21,7 +19,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-
 class UserController extends Controller
 {
     /**
@@ -29,30 +26,23 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    
+    public function showRegistrationForm()
+    {
+        $roles = UserRole::all();
+        return view('user.registration_form', compact('roles'));
+    }
+
     /**
      * Register a new user.
      *
      * @param  Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-   
-
-    public function showRegistrationForm()
-    {
-        // You can include any logic needed for the registration form view
-        $roles = UserRole::all();
-        return view('user.registration_form', compact('roles'));
-
-    }
-
     public function register(Request $request)
     {
         try {
-            // Validate the incoming request data
             $validatedData = $this->validator($request->all());
 
-            // If validation fails, return back with errors
             if ($validatedData->fails()) {
                 return redirect()->back()->withErrors($validatedData)->withInput();
             }
@@ -66,9 +56,10 @@ class UserController extends Controller
                 'username' => $request->input('username'),
                 'password' => Hash::make($request->input('password')),
                 'role_id' => $request->input('role'),
+                'first_time_login' => true,  // New users will need to change their password
             ]);
 
-            // Check the role and perform role-specific actions
+            // Role-specific actions
             switch ($user->role_id) {
                 case 1:
                     $headCounselor = new HeadCounselor([
@@ -84,6 +75,13 @@ class UserController extends Controller
                     ]);
                     $user->teacher()->save($teacher);
                     break;
+                case 3:
+                    $student = new Student([
+                        'first_name' => $user->first_name,
+                        'last_name' => $user->last_name,
+                    ]);
+                    $user->student()->save($student);
+                    break;
                 case 4:
                     $counselor = new Counselor([
                         'first_name' => $user->first_name,
@@ -98,34 +96,23 @@ class UserController extends Controller
                     ]);
                     $user->dean()->save($dean);
                     break;
-                case 3:
-                    $student = new Student([
-                        'first_name' => $user->first_name,
-                        'last_name' => $user->last_name,
-                    ]);
-                    $user->student()->save($student);
-                    break;
                 default:
-                    // Handle other roles if needed
                     break;
             }
 
             DB::commit();
 
-            // Redirect to the login page
             return redirect()->route('login')->with('success', 'User registered successfully');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Registration error: ' . $e->getMessage());
-            Log::error('Exception Stack Trace: ' . $e->getTraceAsString());
-            dd($e); // Add this line for debugging
             return redirect()->back()->with('error', 'An error occurred during registration.');
         }
     }
 
     protected function validator(array $data)
     {
-        return validator($data, [
+        return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
@@ -134,9 +121,126 @@ class UserController extends Controller
         ]);
     }
 
-    // ... (other methods)
+    /**
+     * User login.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
+     */
+    public function login(Request $request)
+    {
+        $validatedData = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+    
+        // Find the user by username
+        $user = User::with('role')->where('username', $validatedData['username'])->first();
+    
+        // Check if the user exists and the password is correct
+        if (!$user || !Hash::check($validatedData['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'message' => 'Invalid username or password',
+            ])->status(401);
+        }
+    
+        // Log the user in
+        Auth::login($user);
+    
+        // Check if it's the user's first time logging in
+        if ($user->first_time_login) {
+            // Redirect to the change password page if it's the first login
+            return redirect()->route('change-password');
+        }
+    
+        // Default behavior based on the user's role
+        $userRole = $user->role;
+        switch ($userRole ? $userRole->role_id : null) {
+            case 3:
+                return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
+            case 2:
+                return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
+            case 1:
+                return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
+            case 4:
+                return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
+            case 5:
+                return redirect()->route('dean.dashboard')->with('success', 'Dean logged in successfully');
+            case 6:
+                return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
+            default:
+                return redirect()->intended('/student/dashboard')->with('success', 'Logged in successfully');
+        }
+    }
+    
 
+    /**
+     * Change password.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
+     */
+    public function changePassword(Request $request)
+    {
+        $user = $request->user();
 
+        $validatedData = $request->validate([
+            'current_password'=> 'required',
+            'new_password' => 'required|min:6',
+        ]);
+
+        if (!Hash::check($validatedData['current_password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => 'Current password is incorrect',
+            ])->status(422);
+        }
+
+        $user->update([
+            'password' => Hash::make($validatedData['new_password']),
+        ]);
+
+        // Add any additional logic or actions after changing the user's password
+
+        return redirect()->route('change-password')->with('success', 'User updated successfully');
+
+    }
+
+    /**
+     * Logout the user.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()->route('login')->with('success', 'Logout successful');
+    }
+
+    /**
+     * Update the user's profile image.
+     *
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProfileImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('user_images/' . $user->id, 'public');
+            $user->image = $imagePath;
+            $user->save();
+        }
+
+        return response()->json(['message' => 'Profile image updated successfully']);
+    }
 
 
 
@@ -179,37 +283,6 @@ class UserController extends Controller
         return view('user.change_password');
     }
 
-    /**
-     * Change the user's password.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws ValidationException
-     */
-    public function changePassword(Request $request)
-    {
-        $user = $request->user();
-
-        $validatedData = $request->validate([
-            'current_password'=> 'required',
-            'new_password' => 'required|min:6',
-        ]);
-
-        if (!Hash::check($validatedData['current_password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'current_password' => 'Current password is incorrect',
-            ])->status(422);
-        }
-
-        $user->update([
-            'password' => Hash::make($validatedData['new_password']),
-        ]);
-
-        // Add any additional logic or actions after changing the user's password
-
-        return redirect()->route('change-password')->with('success', 'User updated successfully');
-
-    }
 
     /**
      * Show the delete account form.
@@ -254,87 +327,14 @@ class UserController extends Controller
         return view('user.login');
     }
 
-    /**
-     * User login.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws ValidationException
-     */
-    public function login(Request $request)
-{
-    $validatedData = $request->validate([
-        'username' => 'required',
-        'password' => 'required',
-    ]);
-
-    $user = User::with('role')->where('username', $validatedData['username'])->first();
-
-    if (!$user || !Hash::check($validatedData['password'], $user->password)) {
-        throw ValidationException::withMessages([
-            'message' => 'Invalid username or password',
-        ])->status(401);
-    }
-
-    Auth::login($user);
-
-    \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
-
-    $userRole = $user->role;
-
-    switch ($userRole ? $userRole->role_id : null) {
-        case 3: 
-            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
-        case 2: 
-            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
-        case 1: 
-            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-        case 4: 
-            return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
-        case 5: 
-            return redirect()->route('dean.dashboard')->with('success', 'Dean logged in successfully');
-        case 6: 
-                return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-        default:
-            return redirect()->intended('/student/dashboard')->with('success', 'Default log in logged in successfully');
-    }
-}
-
-public function logout()
-{
-    Auth::logout();
-
-    // You can add any additional logic or redirection after logout if needed
-    return redirect()->route('login')->with('success', 'Logout successful');
-}
 
 
 
-public function updateProfileImage(Request $request)
-{
-    $request->validate([
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    // Retrieve the authenticated user
-    $user = $request->user();
-
-    // Handle image upload
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('user_images/' . $user->id, 'public');
-        $user->image = $imagePath;
-        $user->save();
-    }
-
-    // Redirect back or return a response
-}
-
-}
 
      
         
 
 
      
-
+}
 

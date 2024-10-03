@@ -128,84 +128,119 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws ValidationException
      */
-    public function login(Request $request)
-    {
-        $validatedData = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-    
-        // Find the user by username
-        $user = User::with('role')->where('username', $validatedData['username'])->first();
-    
-        // Check if the user exists and the password is correct
-        if (!$user || !Hash::check($validatedData['password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'message' => 'Invalid username or password',
-            ])->status(401);
-        }
-    
-        // Log the user in
-        Auth::login($user);
-    
-        // Check if it's the user's first time logging in
-        if ($user->first_time_login) {
-            // Redirect to the change password page if it's the first login
-            return redirect()->route('change-password');
-        }
-    
-        // Default behavior based on the user's role
-        $userRole = $user->role;
-        switch ($userRole ? $userRole->role_id : null) {
-            case 3:
-                return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
-            case 2:
-                return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
-            case 1:
-                return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-            case 4:
-                return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
-            case 5:
-                return redirect()->route('dean.dashboard')->with('success', 'Dean logged in successfully');
-            case 6:
-                return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-            default:
-                return redirect()->intended('/student/dashboard')->with('success', 'Logged in successfully');
-        }
+/**
+ * User login.
+ *
+ * @param  Request  $request
+ * @return \Illuminate\Http\RedirectResponse
+ * @throws ValidationException
+ */
+public function login(Request $request)
+{
+    $validatedData = $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
+
+    // Find the user by username
+    $user = User::with('role')->where('username', $validatedData['username'])->first();
+
+    // Check if the user exists and the password is correct
+    if (!$user || !Hash::check($validatedData['password'], $user->password)) {
+        throw ValidationException::withMessages([
+            'message' => 'Invalid username or password',
+        ])->status(401);
     }
-    
+
+    // Log the user in
+    Auth::login($user);
+
+    // Check if it's the user's first time logging in
+    if ($user->first_time_login) {
+        // Redirect to the change password page if it's the first login
+        return redirect()->route('change-password');
+    }
+
+    // Default behavior based on the user's role
+    $userRole = $user->role;
+    switch ($userRole ? $userRole->role_id : null) {
+        case 3:
+            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
+        case 2:
+            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
+        case 1:
+            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
+        case 4:
+            return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
+        case 5:
+            return redirect()->route('dean.dashboard')->with('success', 'Dean logged in successfully');
+        case 6:
+            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
+        default:
+            return redirect()->intended('/student/dashboard')->with('success', 'Logged in successfully');
+    }
+}
+
 
     /**
-     * Change password.
+     * Change the user's password.
      *
      * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      * @throws ValidationException
      */
-    public function changePassword(Request $request)
-    {
-        $user = $request->user();
-
-        $validatedData = $request->validate([
-            'current_password'=> 'required',
-            'new_password' => 'required|min:6',
-        ]);
-
-        if (!Hash::check($validatedData['current_password'], $user->password)) {
-            throw ValidationException::withMessages([
-                'current_password' => 'Current password is incorrect',
-            ])->status(422);
-        }
-
-        $user->update([
-            'password' => Hash::make($validatedData['new_password']),
-        ]);
-
-        // Add any additional logic or actions after changing the user's password
-
-        return redirect()->route('change-password')->with('success', 'User updated successfully');
-
+/**
+ * Change the user's password.
+ *
+ * @param  Request  $request
+ * @return \Illuminate\Http\RedirectResponse
+ * @throws ValidationException
+ */
+public function changePassword(Request $request)
+{
+    $user = $request->user();
+    
+    $validatedData = $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:6',
+    ]);
+    
+    // Check if the current password matches the user's stored password
+    if (!Hash::check($validatedData['current_password'], $user->password)) {
+        throw ValidationException::withMessages([
+            'current_password' => 'Current password is incorrect',
+        ])->status(422);
     }
+    
+    // Update user's password
+    $user->update([
+        'password' => Hash::make($validatedData['new_password']),
+    ]);
+    
+    // If this was the first-time login, update the flag
+    if ($user->first_time_login) {
+        $user->first_time_login = false;
+        $user->save();
+    }
+
+    // Redirect based on user role
+    switch ($user->role_id) {
+        case 1:
+            return redirect()->route('admin.dashboard')->with('success', 'Password changed successfully');
+        case 2:
+            return redirect()->route('teacher.dashboard')->with('success', 'Password changed successfully');
+        case 3:
+            return redirect()->route('student.dashboard')->with('success', 'Password changed successfully');
+        case 4:
+            return redirect()->route('counselor.dashboard')->with('success', 'Password changed successfully');
+        case 5:
+            return redirect()->route('dean.dashboard')->with('success', 'Password changed successfully');
+        default:
+            return redirect()->route('default.dashboard')->with('success', 'Password changed successfully');
+    }
+}
+
+    
 
     /**
      * Logout the user.

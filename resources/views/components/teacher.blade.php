@@ -60,9 +60,9 @@
             background-size: cover;
             background-position: center;">
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-
+        <div class="role-names">Teacher</div>
     </div>
-    <!-- <div class="divider"></div>
+    <!-- <div class="divider"></div
     <div class="divider"></div> -->
     <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
     <div class="navmenu"><ul>

@@ -1,4 +1,4 @@
-@extends('components.stud')
+@extends('components.changepass')
 
 @section('content')
 

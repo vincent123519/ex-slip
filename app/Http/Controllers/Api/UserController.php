@@ -142,34 +142,33 @@ public function login(Request $request)
         'password' => 'required',
     ]);
 
-    // Find the user by username
     $user = User::with('role')->where('username', $validatedData['username'])->first();
 
-    // Check if the user exists and the password is correct
     if (!$user || !Hash::check($validatedData['password'], $user->password)) {
         throw ValidationException::withMessages([
             'message' => 'Invalid username or password',
         ])->status(401);
     }
 
-    // Log the user in
     Auth::login($user);
 
-    // Check if it's the user's first time logging in
-    if ($user->first_time_login) {
-        // Redirect to the change password page if it's the first login
-        return redirect()->route('change-password');
+    // Log the user information for debugging purposes
+    \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
+
+    // Check if the user is logging in for the first time, but exclude admins (role_id = 6)
+    if ($user->first_time_login && $user->role_id !== 6) {
+        // Redirect to change password page for non-admin users
+        return redirect()->route('change-password')->with('warning', 'Please change your password for the first time.');
     }
 
-    // Default behavior based on the user's role
-    $userRole = $user->role;
-    switch ($userRole ? $userRole->role_id : null) {
-        case 3:
-            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
-        case 2:
-            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
+    // Redirect based on the user's role
+    switch ($user->role_id) {
         case 1:
             return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
+        case 2:
+            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
+        case 3:
+            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
         case 4:
             return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
         case 5:
@@ -177,9 +176,10 @@ public function login(Request $request)
         case 6:
             return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
         default:
-            return redirect()->intended('/student/dashboard')->with('success', 'Logged in successfully');
+            return redirect()->route('default.dashboard')->with('success', 'Logged in successfully');
     }
 }
+
 
 
     /**
@@ -200,6 +200,7 @@ public function changePassword(Request $request)
 {
     $user = $request->user();
     
+    // Validate the incoming request
     $validatedData = $request->validate([
         'current_password' => 'required',
         'new_password' => 'required|min:6',
@@ -217,8 +218,8 @@ public function changePassword(Request $request)
         'password' => Hash::make($validatedData['new_password']),
     ]);
     
-    // If this was the first-time login, update the flag
-    if ($user->first_time_login) {
+    // If this was the first-time login and the user is not an admin, update the flag
+    if ($user->first_time_login && $user->role_id != 6) {
         $user->first_time_login = false;
         $user->save();
     }

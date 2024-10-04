@@ -68,7 +68,7 @@
             background-size: cover;
             background-position: center;">
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-
+        <div class="role-names">Dean</div>
     </div>
     <!-- <div class="divider"></div>
     <div class="divider"></div> -->

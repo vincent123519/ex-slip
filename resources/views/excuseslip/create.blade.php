@@ -161,7 +161,7 @@
 .home-icon {
             width: 26px;
             height: 30px;
-            background: url("http://[::1]:4000/resources/scss/image/home.png") center/cover;
+            background: url("..s/scss/image/home.png") center/cover;
             border-radius: 50%;
             margin-right: 10px;
         }

@@ -35,19 +35,7 @@
 
 </html>
 <style>
-    .logo {
-    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    margin-top: -16px;
-    margin-left: 10px;
-    position: absolute;
-    height: 105px;
-    width: 102px;
-    z-index: 1;
-    padding: 21px 22px;
-}
+
 .sis .White {
     color: whitesmoke;
     font-weight: bold;

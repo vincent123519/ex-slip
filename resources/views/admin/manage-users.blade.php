@@ -121,7 +121,7 @@
         color: white;
     }
     .logoss {
-    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-image: url(..s/scss/image/ExcUseSlip.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

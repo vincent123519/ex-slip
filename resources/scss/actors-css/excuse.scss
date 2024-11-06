@@ -28,7 +28,7 @@
     cursor: pointer; /* Add a pointer cursor on hover */
 }
 .logosc {
-    background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+    background-image: url("../scss/image/ExcUseSlip.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -194,7 +194,7 @@ body {
         }
 
         .logocp {
-            background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+            background-image: url("../scss/image/ExcUseSlip.png");
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;

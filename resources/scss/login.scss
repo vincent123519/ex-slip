@@ -118,7 +118,7 @@ body {
 
 }
     .logo{
-    background-image: url(http://[::1]:4000/resources/scss/image/usjr_trans.png);
+    background: url('../scss/image/usjr_trans.png') center/cover; /* Set your image path */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -131,7 +131,7 @@ body {
     padding: 21px 22px;
     }
     .logos {
-        background-image: url(http://[::1]:4000/resources/scss/image/ExcUseSlip.png);
+        background-image: url('../scss/image/usjr_trans.png');
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;

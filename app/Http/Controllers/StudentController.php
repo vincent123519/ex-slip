@@ -154,13 +154,13 @@ class StudentController extends Controller
 
 public function dashboard(Request $request)
 {
-    // Retrieve excuse slips with status for the current user
+    // Retrieve the student ID of the currently authenticated user
     $studentId = auth()->user()->student->student_id;
 
-    // Query for fetching excuse slips
-    $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
+    // Query for fetching excuse slips through the pivot table
+    $query = ExcuseSlip::with(['student', 'teacher', 'counselor', 'dean', 'status', 'courseOfferings'])
         ->where('student_id', $studentId)
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at');
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at');
 
     // Sorting logic based on the request parameter
     $sort_by = $request->input('sort_by', 'day');
@@ -177,7 +177,7 @@ public function dashboard(Request $request)
             break;
         case 'year':
             // Filter by the selected year
-            $year = $request->input('year', date('Y')); // Default to current year
+            $year = $request->input('year', date('Y')); // Default to the current year
             $query->whereYear('created_at', $year);
             break;
         default:
@@ -186,17 +186,19 @@ public function dashboard(Request $request)
     }
 
     // Paginate the results
-    $excuseSlips = $query->paginate(10); // Change the number of items per page as needed
+    $excuseSlips = $query->paginate(10); // Adjust the number of items per page as needed
 
     // Format the created_at field in each ExcuseSlip to exclude hours, minutes, and seconds
     $excuseSlips->each(function ($excuseSlip) {
         $excuseSlip->formatted_created_at = $excuseSlip->created_at->format('Y-m-d'); // Exclude hours, minutes, and seconds
     });
 
+    // Get unread excuse slips (you may need to adjust this logic based on your criteria for "unread")
+    $unreadExcuseSlips = $excuseSlips->filter(function ($excuseSlip) {
+        return !$excuseSlip->is_read; // Assuming there is an 'is_read' field to check
+    });
 
-    $unreadExcuseSlips = $excuseSlips; 
     return view('student.dashboard', compact('excuseSlips', 'unreadExcuseSlips'));
-
 }
 
 }

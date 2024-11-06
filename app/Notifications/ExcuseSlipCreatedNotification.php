@@ -32,7 +32,6 @@ class ExcuseSlipCreatedNotification extends Notification implements ShouldQueue
             ->line('An excuse slip has been created for one of your students.')
             ->line('Excuse Slip Details:')
             ->line('Student ID: ' . $this->excuseSlip->student_id)
-            ->line('Course: ' . $this->excuseSlip->course->offer_code)
             ->line('Student Name: ' . $this->excuseSlip->student->first_name . ' ' . $this->excuseSlip->student->last_name)
             ->line('Reason: ' . $this->excuseSlip->reason)
             ->action('View Excuse Slip', url('/' . $this->excuseSlip->id))

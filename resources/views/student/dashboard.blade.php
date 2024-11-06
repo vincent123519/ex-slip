@@ -116,8 +116,9 @@
                         <tr>
                             <td>{{ $excuseSlip->formatted_created_at }}</td>
                             <!-- <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td> -->
-                            <td>{{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</td>
-                            <td>{{ $excuseSlip->course->course_code}} -{{ $excuseSlip->course->offer_code}}</td>
+                            <td>temporary teachers name</td>
+
+                            <td>temporary course name</td>
                             <td>{{ $excuseSlip->start_date }}</td>
                             <td>{{ $excuseSlip->end_date }}</td>
                             <td>{{ $excuseSlip->status->status_name }}</td>

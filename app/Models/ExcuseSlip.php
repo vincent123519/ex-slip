@@ -54,7 +54,7 @@ class ExcuseSlip extends Model
         return $this->belongsTo(Dean::class, 'dean_id');
     }
     
-    public function course()
+    public function courses()
     {
         return $this->belongsTo(CourseOffering::class, 'offer_code', 'offer_code');
     }
@@ -73,14 +73,17 @@ class ExcuseSlip extends Model
     {
         return $this->hasMany(SupportingDocument::class, 'excuse_slip_id');
     }
+// In ExcuseSlip.php
+public function courseOfferings()
+{
+    return $this->belongsToMany(CourseOffering::class, 'course_excuse_slip', 'excuse_slip_id', 'offer_code');
+}
     
     // Define the fillable attributes
     protected $fillable = [
         'student_id',
-        'teacher_id',
         'counselor_id',
         'dean_id',
-        'offer_code',
         'reason',
         'start_date',
         'end_date',

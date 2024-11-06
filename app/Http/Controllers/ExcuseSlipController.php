@@ -75,145 +75,116 @@ class ExcuseSlipController extends Controller
         return view ('student.dashboard', ['excuseSlips' => $excuseSlips]);
     }
 
-    public function createExcuseSlip()
-{
-    $student = auth()->user()->student;
-
-    // Fetch all study loads of the student
-    $studyLoads = $student->studyLoads;
-
-    // Initialize an empty array to hold all selected course offerings
-    $selectedCourseOfferings = [];
-
-    // Loop through each study load to collect course offerings
-    foreach ($studyLoads as $studyLoad) {
-        // Collect all course offerings for this study load
-        $courseOfferings = $studyLoad->courseOfferings;
-
-        // Add course offerings to the selected course offerings array
-        foreach ($courseOfferings as $courseOffering) {
-            // Create an array containing course offering and teacher details
-            $selectedCourseOfferings[] = [
-                'course_offering_id' => $courseOffering->id,
-                'offer_code' => $courseOffering->offer_code,
-                'course_name' => $courseOffering->course->course_name,
-                'teacher_id' => $courseOffering->teacher->id,
-                'teacher_name' => $courseOffering->teacher->first_name,
-            ];
+    public function createExcuseSlip(Request $request)
+    {
+        $student = auth()->user()->student;
+    
+        // Fetch all study loads of the student
+        $studyLoads = $student->studyLoads;
+    
+        // Initialize an empty array to hold all selected course offerings
+        $selectedCourseOfferings = [];
+    
+        // Loop through each study load to collect course offerings
+        foreach ($studyLoads as $studyLoad) {
+            // Collect all course offerings for this study load
+            $courseOfferings = $studyLoad->courseOfferings;
+    
+            // Add course offerings to the selected course offerings array
+            foreach ($courseOfferings as $courseOffering) {
+                // Create an array containing course offering and teacher details
+                $selectedCourseOfferings[] = [
+                    'course_offering_id' => $courseOffering->id,
+                    'offer_code' => $courseOffering->offer_code,
+                    'course_name' => $courseOffering->course->course_name,
+                    'teacher_id' => $courseOffering->teacher->id,
+                    'teacher_name' => $courseOffering->teacher->first_name,
+                ];
+            }
         }
+    
+        // Fetch other necessary data
+        $degree = $student->degree;
+        $department = $degree->department;
+        $school = School::where('school_code', $department->school_code)->first();
+        $dean = $school->dean;
+        $counselor = $department->counselor;
+        $excuseStatuses = ExcuseStatus::all();
+        $yearLevel = $student->year_level;
+        $coursesData = Course::select('course_code', 'course_name')->get();
+        $teacherData = Teacher::select('teacher_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
+        $deanData = Dean::select('dean_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
+        $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
+        $excuseSlip = new ExcuseSlip();
+    
+        return view('excuseslip.create', compact('selectedCourseOfferings', 'student', 'degree', 'department', 'school', 'dean', 'counselor', 'excuseStatuses', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData', 'excuseSlip'));
     }
 
-    // Fetch other necessary data
-    $degree = $student->degree;
-    $department = $degree->department;
-    $school = School::where('school_code', $department->school_code)->first();
-    $dean = $school->dean;
-    $counselor = $department->counselor;
-    $excuseStatuses = ExcuseStatus::all();
-    $yearLevel = $student->year_level;
-    $coursesData = Course::select('course_code', 'course_name')->get();
-    $teacherData = Teacher::select('teacher_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
-    $deanData = Dean::select('dean_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
-    $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
-    $excuseSlip = new ExcuseSlip();
 
-    return view('excuseslip.create', compact('selectedCourseOfferings', 'student', 'degree', 'department', 'school', 'dean', 'counselor', 'excuseStatuses', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData', 'excuseSlip'));
-}
-
-
-public function store(Request $request)
+    public function store(Request $request)
 {
     // Validate the input
     $validatedData = $request->validate([
-        'student_id' => 'required',
-        'counselor_id' => 'required',
-        'dean_id' => 'required',
+        'student_id' => 'required|exists:students,student_id',
+        'counselor_id' => 'required|exists:counselors,counselor_id',
+        'dean_id' => 'required|exists:deans,dean_id',
         'offer_codes' => 'required|array',
-        'offer_codes.*' => 'required',
-        'reason' => 'required',
+        'offer_codes.*' => 'required|string|exists:course_offerings,offer_code',
+        'reason' => 'required|string',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
-        'supporting_documents.*' => 'required|mimetypes:application/pdf,application/pdfx', // Updated validation rule for multiple files
+        'supporting_documents.*' => 'nullable|mimetypes:application/pdf,application/pdfx',
     ]);
 
     $validatedData['status_id'] = 1;
 
-    // Store a list of created excuse slips
-    $createdSlips = [];
+    // Create the excuse slip only once
+    $excuseSlip = ExcuseSlip::create([
+        'student_id' => $validatedData['student_id'],
+        'counselor_id' => $validatedData['counselor_id'],
+        'dean_id' => $validatedData['dean_id'],
+        'reason' => $validatedData['reason'],
+        'start_date' => $validatedData['start_date'],
+        'end_date' => $validatedData['end_date'],
+        'status_id' => $validatedData['status_id'],
+    ]);
 
-    // Create the excuse slips for each selected offer code
-    foreach ($validatedData['offer_codes'] as $index => $offerCode) {
-        // Determine the teacher_id and course_offering_id based on the selected offer_code
+    foreach ($validatedData['offer_codes'] as $offerCode) {
         $courseOffering = CourseOffering::where('offer_code', $offerCode)->first();
-
+        \Log::info("Searching for CourseOffering with offer code: {$offerCode}");
+    
         if ($courseOffering) {
-            $teacherId = $courseOffering->teacher_id;
-            $courseOfferingId = $courseOffering->id;
-
-            // Add teacher_id and course_offering_id to the validated data
-            $excuseData = [
-                'student_id' => $validatedData['student_id'],
-                'counselor_id' => $validatedData['counselor_id'],
-                'dean_id' => $validatedData['dean_id'],
-                'teacher_id' => $teacherId,
-                'course_offering_id' => $courseOfferingId,
-                'offer_code' => $offerCode,
-                'reason' => $validatedData['reason'],
-                'start_date' => $validatedData['start_date'],
-                'end_date' => $validatedData['end_date'],
-                'status_id' => $validatedData['status_id'],
-            ];
-
-            // Create the excuse slip request
-            $excuseSlip = ExcuseSlip::create($excuseData);
-
-            // Add the created excuse slip to the list
-            $createdSlips[] = $excuseSlip;
-
-            // Upload supporting documents
-            if ($request->hasFile("supporting_documents.$index")) {
-                $file = $request->file("supporting_documents.$index");
-                $path = $file->storeAs('supporting_documents', $file->getClientOriginalName(), 'public'); // Adjust the storage path as needed
-
-                // Create a new SupportingDocument instance and associate it with the ExcuseSlip
-                $document = new SupportingDocument([
-                    'document_path' => $path,
-                    'upload_date' => now(),
-                ]);
-
-                $excuseSlip->supportingDocuments()->save($document);
-            }
-
-            // Send notification to counselor
-            $counselor = Counselor::find($validatedData['counselor_id']); // Assuming the counselor is represented by the Counselor model
-            $counselorEmail = $counselor->email;
-
-            if ($counselorEmail) {
-                Notification::route('mail', $counselorEmail)
-                    ->notify(new ExcuseSlipCreatedNotification($excuseSlip));
-            }
-
-            // Handle supporting documents
-            if ($request->hasFile('supporting_documents')) {
-                foreach ($request->file('supporting_documents') as $file) {
-                    $path = $file->store('supporting_documents', 'public'); // Adjust the storage path as needed
+            \Log::info("Found CourseOffering: ID = {$courseOffering->id}, Offer Code = {$courseOffering->offer_code}");
     
-                    // Create a new SupportingDocument instance and associate it with the ExcuseSlip
-                    $document = new SupportingDocument([
-                        'document_path' => $path,
-                        'upload_date' => now(),
-                    ]);
-    
-                    $excuseSlip->supportingDocuments()->save($document);
-                }
-            }
+            $excuseSlip->courseOfferings()->attach($courseOffering->offer_code); // Use the offer code if it's a string
+        } else {
+            \Log::warning("CourseOffering not found for offer code: {$offerCode}");
         }
     }
+
+    // Handle supporting documents
+    if ($request->hasFile('supporting_documents')) {
+        foreach ($request->file('supporting_documents') as $file) {
+            $path = $file->store('supporting_documents', 'public');
+            $document = new SupportingDocument([
+                'document_path' => $path,
+                'upload_date' => now(),
+            ]);
+            // Associate the document with the same excuse slip
+            $excuseSlip->supportingDocuments()->save($document);
+        }
+    }
+
+    // Send notification to the counselor
+    $counselor = Counselor::find($validatedData['counselor_id']);
+    // if ($counselor && $counselor->email) {
+    //     Notification::route('mail', $counselor->email)
+    //         ->notify(new ExcuseSlipCreatedNotification($excuseSlip));
+    // }
 
     // Redirect with success message
     return redirect()->route('student.dashboard')->with('success', 'Excuse slips created successfully.');
 }
-
 
 
     public function edit($id)

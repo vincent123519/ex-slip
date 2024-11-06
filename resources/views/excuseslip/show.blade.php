@@ -35,8 +35,28 @@
                     <p><strong style=" margin-left: 145px;">Degree & Year Level: </strong> {{ $excuseSlip->student->year_level}} - {{ $excuseSlip->student->degree->degree_name}} </p>
                 </div>
                 <div class="teacher-container">
-                    <p><strong>Teacher:</strong> {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</p>
-                    <strong style="margin-left: 34px;">Subject:</strong> {{ $excuseSlip->course->course_code}} - {{ $excuseSlip->course->offer_code}}</p>
+                    @if ($offerCodesWithDetails->isEmpty())
+                        <p>No course offerings available.</p>
+                    @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Offer Code</th>
+                                    <th>Course Code</th> <!-- Add course code header -->
+                                    <th>Teacher Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($offerCodesWithDetails as $offering)
+                                    <tr>
+                                        <td>{{ $offering['offer_code'] }}</td>
+                                        <td>{{ $offering['course_code'] }}</td> <!-- Display course code -->
+                                        <td>{{ $offering['teacher_name'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div>
                 <!-- <p><strong>Date:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p> -->
                 <p><strong>Reason:</strong> {{ $excuseSlip->reason }}</p>

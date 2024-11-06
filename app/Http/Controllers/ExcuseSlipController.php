@@ -26,39 +26,35 @@ use App\Models\Notification as AppNotification;
 
 class ExcuseSlipController extends Controller
 {
-    // public function index()
-    // {
-    //     $excuseSlips = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')->get();
-    //     return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
-    // }
-
-    // public function index()
-    // {
-    //     // $studentId = auth()->user()->student->student_id;
-
-    //     // Retrieve only the excuse slips for the logged-in student
-    //     $excuseSlips = ExcuseSlip::select('start_date', 'end_date', 'status_id')->get();
-
-    //     return view('excuseslip.index', ['excuseSlips' => $excuseSlips]);
-    // }
 
     public function show($excuse_slip_id)
     {
-        $excuseSlip = ExcuseSlip::with(['supportingDocuments', 'counselorFeedbacks', 'deanFeedbacks', 'teacherFeedbacks'])->findOrFail($excuse_slip_id);
+        // Eager load the necessary relationships
+        $excuseSlip = ExcuseSlip::with([
+            'supportingDocuments',
+            'counselorFeedbacks',
+            'deanFeedbacks',
+            'teacherFeedbacks',
+            'courseOfferings.teacher', // Eager load teacher relationship
+            'courseOfferings.course' // Eager load course relationship
+        ])->findOrFail($excuse_slip_id);
     
-        // Fetch counselor feedback for the excuse slip
+        // Fetch feedbacks
         $counselorFeedback = $excuseSlip->counselorFeedbacks->first();
-    
-        // Fetch dean feedback for the excuse slip
         $deanFeedback = $excuseSlip->deanFeedbacks->first();
-    
-        // Fetch teacher feedback for the excuse slip
         $teacherFeedback = $excuseSlip->teacherFeedbacks->first();
     
-        return view('excuseslip.show', compact('excuseSlip', 'counselorFeedback', 'deanFeedback', 'teacherFeedback'));
+        // Retrieve offer codes, course codes, and associated teacher names
+        $offerCodesWithDetails = $excuseSlip->courseOfferings->map(function ($courseOffering) {
+            return [
+                'offer_code' => $courseOffering->offer_code,
+                'course_code' => $courseOffering->course->course_code, // Retrieve the course code
+                'teacher_name' => $courseOffering->teacher->first_name . ' ' . $courseOffering->teacher->last_name // Concatenate first and last name
+            ];
+        });
+    
+        return view('excuseslip.show', compact('excuseSlip', 'counselorFeedback', 'deanFeedback', 'teacherFeedback', 'offerCodesWithDetails'));
     }
-    
-    
 
     
 

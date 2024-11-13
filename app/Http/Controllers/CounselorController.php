@@ -85,64 +85,65 @@ public function dashboard(Request $request)
     $counselorId = auth()->user()->counselor->counselor_id;
 
     // Query for fetching excuse slips
-    $query = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
-    ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at')
-    ->where('counselor_id', $counselorId);
+    $query = ExcuseSlip::with('student', 'counselor', 'dean', 'courses', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at')
+        ->where('counselor_id', $counselorId);
 
-// Sorting logic based on the request parameter
-$sort_by = $request->input('sort_by', 'today');
-$month = $request->input('month', date('m'));
-$year = $request->input('year', date('Y'));
-$semesterId = 0;
+    // Sorting logic based on the request parameter
+    $sort_by = $request->input('sort_by', 'today');
+    $month = $request->input('month', date('m'));
+    $year = $request->input('year', date('Y'));
+    $semesterId = $request->input('semester_id', 0);
 
+    switch ($sort_by) {
+        case 'today':
+            $query->whereDate('excuse_slips.created_at', today());
+            break;
 
-switch ($sort_by) {
-    case 'today':
-        $query->whereDate('excuse_slips.created_at', today());
-        break;
-    case 'month':
-        $month = $request->input('month', date('m'));
-        $year = $request->input('year', date('Y'));
-        $query->whereYear('excuse_slips.created_at', $year)->whereMonth('excuse_slips.created_at', $month);
-        break;
-    case 'year':
-        $year = $request->input('year', date('Y'));
-        $query->whereYear('excuse_slips.created_at', $year);
-        break;
-    case 'weekly':
-        // Filter by the last 7 days
-        $query->whereDate('excuse_slips.created_at', '>=', now()->subDays(7));
-    case 'semester':
-            $semesterId = $request->input('semester_id');
-            $query->whereHas('course', function ($subquery) use ($semesterId) {
+        case 'month':
+            $query->whereYear('excuse_slips.created_at', $year)
+                  ->whereMonth('excuse_slips.created_at', $month);
+            break;
+
+        case 'year':
+            $query->whereYear('excuse_slips.created_at', $year);
+            break;
+
+        case 'weekly':
+            // Filter by the last 7 days
+            $query->whereDate('excuse_slips.created_at', '>=', now()->subDays(7));
+            break;
+
+        case 'semester':
+            $query->whereHas('courses', function ($subquery) use ($semesterId) {
                 $subquery->where('semester_id', $semesterId);
             });
-            
             break;
-    case 'school_year':
+
+        case 'school_year':
             $schoolYearId = $request->input('school_year_id');
-            $query->whereHas('course.semester', function ($subquery) use ($schoolYearId) {
-            $subquery->where('sy_id', $schoolYearId);
-                });
-                break;
-    default:
-        // For invalid inputs, no additional filtering needed
-        break;
-}
+            $query->whereHas('courses.semester', function ($subquery) use ($schoolYearId) {
+                $subquery->where('sy_id', $schoolYearId);
+            });
+            break;
 
-$excuseSlips = $query->get();
-$latestExcuseSlips = $this->counselorNotification($counselorId);
+        default:
+            // For invalid inputs, no additional filtering needed
+            break;
+    }
 
-// Generate export URL with query parameters
-$exportUrl = route('excuse_slips.export', [
-    'sort_by' => $sort_by,
-    'month' => $month,
-    'year' => $year,
-    'semester_id' => $semesterId
+    $excuseSlips = $query->get();
+    $latestExcuseSlips = $this->counselorNotification($counselorId);
 
-]);
+    // Generate export URL with query parameters
+    $exportUrl = route('excuse_slips.export', [
+        'sort_by' => $sort_by,
+        'month' => $month,
+        'year' => $year,
+        'semester_id' => $semesterId
+    ]);
 
-return view('counselor.dashboard', compact('excuseSlips', 'exportUrl', 'latestExcuseSlips'));
+    return view('counselor.dashboard', compact('excuseSlips', 'exportUrl', 'latestExcuseSlips'));
 }
 
 
@@ -151,8 +152,8 @@ public function counselorNotification()
     $counselorId = auth()->user()->counselor->counselor_id;
 
     // Query for fetching the latest unread excuse slip for notification
-    $notificationQuery = ExcuseSlip::with('student', 'teacher', 'counselor', 'dean', 'course', 'status')
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'teacher_id', 'start_date', 'offer_code', 'end_date', 'status_id', 'created_at','read_by_counselor')
+    $notificationQuery = ExcuseSlip::with('student', 'counselor', 'dean', 'courses', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id','start_date', 'end_date', 'status_id', 'created_at','read_by_counselor')
         ->where('counselor_id', $counselorId)
         ->orderByDesc('created_at')
         ->get(); // Retrieve only the latest unread excuse slip for notification
@@ -185,10 +186,10 @@ public function approve($id)
     $deanEmail = $excuseSlip->dean->email;
 
     // Notify the dean
-    if ($deanEmail) {
-        Notification::route('mail', $deanEmail)
-            ->notify(new ExcuseSlipApprovedNotification($excuseSlip));
-    }
+    // if ($deanEmail) {
+    //     Notification::route('mail', $deanEmail)
+    //         ->notify(new ExcuseSlipApprovedNotification($excuseSlip));
+    // }
 
     // Redirect back to the dashboard after approving
     return redirect()->route('counselor.dashboard')->with('success', 'Excuse slip approved successfully.');

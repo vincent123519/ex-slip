@@ -250,17 +250,16 @@
             <ul>
             <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
             <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
-            <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
             </ul>
         @elseif ($excuseSlip->status->status_id == 4)
             <ul>
             <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
             <li  style="color: #26d187;font-weight: bold;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
-            <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li>
+            <!-- <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li> -->
             </ul>
         @elseif ($excuseSlip->status->status_id == 5)
             <ul>
-            <li style="color: green;font-weight: bold;">Approved by {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</li>
+            <!-- <li style="color: green;font-weight: bold;">Approved by {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</li> -->
             <li style="color: green;font-weight: bold;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
             <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
             </ul>
@@ -312,3 +311,41 @@ document.addEventListener("DOMContentLoaded", function() {
     sendToDeanButton.addEventListener("click", triggerBothButtons);
 });
 </script>
+
+<style>
+   <style>
+    .teacher-container {
+        padding: 20px; 
+        border-radius: 8px; 
+        background-color: #f8f9fa; 
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    }
+
+    table {
+        margin-top: 20px; 
+        width: 100%; 
+        border-collapse: separate; 
+        border-spacing: 0 10px; 
+    }
+
+    th, td {
+        padding: 20px; 
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    th {
+        background-color: #343a40;
+        color: white; 
+    }
+
+    @media (max-width: 576px) {
+        .teacher-container {
+            padding: 10px;
+        }
+
+        th, td {
+            padding: 10px; 
+        }
+    }
+</style>

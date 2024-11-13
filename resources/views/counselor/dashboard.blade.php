@@ -23,7 +23,6 @@
                             @endif
                             </h4>
                             <!-- Additional details or actions related to the excuse slip -->
-                            <p>Course: {{ $latestExcuseSlip->course->course_code }}</p>
                             <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" style="display: inline;">
                             @csrf
                             @method('PUT')

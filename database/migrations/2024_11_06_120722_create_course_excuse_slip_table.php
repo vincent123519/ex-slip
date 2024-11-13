@@ -11,6 +11,8 @@ class CreateCourseExcuseSlipTable extends Migration
         Schema::create('course_excuse_slip', function (Blueprint $table) {
             $table->unsignedBigInteger('excuse_slip_id');
             $table->unsignedBigInteger('offer_code');
+            $table->boolean('is_remark_by_teacher')->default(false);
+            $table->text('teacher_feedback')->nullable(); // To store feedback from the teacher
             
             // Foreign key constraints
             $table->foreign('excuse_slip_id')->references('excuse_slip_id')->on('excuse_slips')->onDelete('cascade');

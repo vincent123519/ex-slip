@@ -74,8 +74,8 @@
                 @foreach($excuseSlips as $excuseSlip)
                 <tr>
                     <td>{{ $excuseSlip->student->first_name}} {{ $excuseSlip->student->last_name}}</td>
-                    <td>{{ $excuseSlip->Course->course_code}} - {{ $excuseSlip->Course->offer_code}}</td>
-                    <td>{{ $excuseSlip->teacher->first_name}} {{ $excuseSlip->teacher->Last_name}}</td>
+                    <td>temporary course name</td>
+                    <td>temp teachers name</td>
                     <td>{{ $excuseSlip->status->status_name }}</td>
                     <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
                     <td>{{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}

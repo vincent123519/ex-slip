@@ -129,7 +129,7 @@ class ExcuseSlipController extends Controller
         'reason' => 'required|string',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
-        'supporting_documents.*' => 'nullable|mimetypes:application/pdf,application/pdfx',
+        'supporting_documents.*' => 'required|mimetypes:application/pdf,application/pdfx',
     ]);
 
     $validatedData['status_id'] = 1;

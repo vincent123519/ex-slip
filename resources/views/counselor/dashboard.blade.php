@@ -44,62 +44,59 @@
 
 
 
-                <form action="{{ route('counselor.dashboard') }}" method="GET">
-                    <label for="sort_by" style="font-weight: bold;">Sort By:</label>
-                        <select class="sorting"name="sort_by" id="sort_by">
-                            <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
-                            <option value="weekly" {{ request()->input('sort_by') == 'weekly' ? 'selected' : '' }}>Last 7 Days</option>
-                            <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
-                            <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
-                            <option value="semester" {{ request()->input('sort_by') == 'semester' ? 'selected' : '' }}>Semester</option>
-                            <option value="school_year" {{ request()->input('sort_by') == 'school_year' ? 'selected' : '' }}>School Year</option>
-                        </select>
+            <form action="{{ route('counselor.dashboard') }}" method="GET">
+                <label for="sort_by" style="font-weight: bold;">Sort By:</label>
+                <select class="sorting" name="sort_by" id="sort_by">
+                    @foreach (['today' => 'Today', 'weekly' => 'Last 7 Days', 'month' => 'Month', 'year' => 'Year', 'semester' => 'Semester', 'school_year' => 'School Year'] as $value => $label)
+                        <option value="{{ $value }}" {{ request()->input('sort_by') == $value ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
 
-                    @if (request()->input('sort_by') == 'month')
-                        <select name="month">
-                            @foreach (range(1, 12) as $month)
-                                <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
-                            @endforeach
-                        </select>
-                    @endif
+                @if (request()->input('sort_by') == 'month')
+                    <select name="month">
+                        @foreach (range(1, 12) as $month)
+                            <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>
+                                {{ date('F', mktime(0, 0, 0, $month, 1)) }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
 
-                    @if (request()->input('sort_by') == 'year')
-                        <select name="year">
-                            @for ($year = date('Y'); $year >= 2000; $year--)
-                                <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                            @endfor
-                        </select>
-                    @endif
+                @if (request()->input('sort_by') == 'year')
+                    <select name="year">
+                        @for ($year = date('Y'); $year >= 2000; $year--)
+                            <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                        @endfor
+                    </select>
+                @endif
 
-                    @php
-                        $semesters = App\Models\Semester::all();
-                        $schoolYears = App\Models\SchoolYear::all();
+                @php
+                    $semesters = App\Models\Semester::all();
+                    $schoolYears = App\Models\SchoolYear::all();
+                @endphp
 
-                    @endphp
+                @if (request()->input('sort_by') == 'semester')
+                    <select name="semester_id">
+                        @foreach ($semesters as $semester)
+                            <option value="{{ $semester->semester_id }}" {{ request()->input('semester_id') == $semester->semester_id ? 'selected' : '' }}>
+                                {{ $semester->semester_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
 
-                    @if (request()->input('sort_by') == 'semester')
-                        <select name="semester_id">
-                            @foreach ($semesters as $semester)
-                                <option value="{{ $semester->semester_id }}" {{ request()->input('semester_id') == $semester->semester_id ? 'selected' : '' }}>
-                                    {{ $semester->semester_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    @endif
+                @if (request()->input('sort_by') == 'school_year')
+                    <select name="school_year_id">
+                        @foreach ($schoolYears as $schoolYear)
+                            <option value="{{ $schoolYear->sy_id }}" {{ request()->input('school_year_id') == $schoolYear->sy_id ? 'selected' : '' }}>
+                                {{ $schoolYear->sy_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
 
-
-                    @if (request()->input('sort_by') == 'school_year')
-                        <select name="school_year_id">
-                            @foreach ($schoolYears as $schoolYear)
-                                <option value="{{ $schoolYear->sy_id }}" {{ request()->input('school_year_id') == $schoolYear->sy_id ? 'selected' : '' }}>
-                                    {{ $schoolYear->sy_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    @endif
-
-                        <button class="sortingBtn" type="submit">Sort</button>
-                </form>
+                <button class="sortingBtn" type="submit">Sort</button>
+            </form>
 
                 
                 <div class="filter-container">

@@ -70,7 +70,13 @@
                 <tr>
                     <td>{{ $excuseSlip->student->first_name}} {{ $excuseSlip->student->last_name}}</td>
                     <td>{{ $excuseSlip->status->status_name }}</td>
-                    <td>{{ $excuseSlip->course->course_code }} - {{ $excuseSlip->course->offer_code }}</td>
+                    <td>             @foreach($excuseSlip->courseOfferings as $courseOffering)
+                        {{ $courseOffering->course->course_code }} - {{ $courseOffering->offer_code }}
+                        @if (!$loop->last)
+                            <br>
+                        @endif
+                    @endforeach
+                 </td>
                     <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
                     <td>{{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
                         ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)</td>

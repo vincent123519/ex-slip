@@ -53,9 +53,9 @@
                     <td>{{ $excuseslip->student->first_name }}, {{ $excuseslip->student->last_name }}</td>
                     <td>{{ $excuseslip->student->year_level }} -{{ $excuseslip->student->degree->degree_name }}</td>
                     <td>{{ $excuseslip->student->degree->department->department_name }} -{{ $excuseslip->student->degree->department->school->school_code }}</td>
-                    <td>{{ $excuseslip->offer_code }}-{{ $excuseslip->course->course_code }}</td>
+                    <td>temp name offercode</td>
                     <td>{{ $excuseslip->created_at}}</td>
-                    <td>{{ $excuseslip->teacher->first_name }} {{ $excuseslip->teacher->last_name }}</td>
+                    <td>tempname teacher</td>
                     <td>{{ $excuseslip->dean->first_name }} {{ $excuseslip->dean->last_name }}</td>
                     <td>{{ $excuseslip->counselor->first_name }} {{ $excuseslip->counselor->last_name }}</td>
                     <td><a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseslip->excuse_slip_id]) }}" class="view-button">

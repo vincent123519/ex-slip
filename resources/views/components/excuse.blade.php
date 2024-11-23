@@ -25,16 +25,16 @@
          <div class="nav-right">
             @if(auth()->user()->role_id == 3)
 
-                    <form action="{{ route('student.dashboard') }}" method="get" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="home-btn">
-                            <div class="home-icon"></div>
-                        </button>
-                    </form>
+            <form action="{{ route('student.dashboard') }}" method="get" style="display: none;">
+                @csrf
+                <button type="submit" class="home-btn"  style="display: none;">
+                    <div class="circle-icon"></div><i style="color: beige; font-weight: bold;"  style="display: none;"  ></i>
+                </button>
+            </form>
 
                     <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
                     @csrf
-                    <button type="submit" class="logout-btn">
+                        <button type="submit" class="home-btn">
                         <div class="circle-icon"></div><i style="color: beige; font-weight: bold;"></i>
                     </button>
                 </form>
@@ -51,20 +51,13 @@
                 @endif
 
                 @if(auth()->user()->role_id == 6)
+                    <form action="{{ route('admin.dashboard') }}" method="get" style="display: inline;">
+                        
+                        <button type="submit" class="logout-btn">
 
-                <form action="{{ route('admin.dashboard') }}" method="get">
-                    @csrf
-                    <button type="submit" class="home-btn">
-                            <div class="home-icon"><i style="color: beige; font-weight: bold;"></i></div>
+                            <div class="circle-icon"><i style="color: beige; font-weight: bold;"></i></div>
                         </button>
-                </form>
-
-                <form action="{{ route('user.logout') }}" method="post" style="display: inline;">
-                @csrf
-                <button type="submit" class="logout-btn">
-                    <div class="circle-icon"></div><i style="color: beige; font-weight: bold;"></i>
-                </button>
-                </form>
+                    </form>
                 @endif
 
                

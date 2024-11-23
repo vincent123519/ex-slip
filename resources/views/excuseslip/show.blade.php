@@ -11,7 +11,7 @@
     </style>
 </head>
 
-@extends('components.stud')
+@extends('components.excuse')
 @section('content')
 
 <body>

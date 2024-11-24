@@ -116,9 +116,23 @@
                         <tr>
                             <td>{{ $excuseSlip->formatted_created_at }}</td>
                             <!-- <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td> -->
-                            <td>temporary teachers name</td>
+                            <td>        @foreach($excuseSlip->courseOfferings as $courseOffering)
+                            @if ($courseOffering->teacher)
+                                {{ $courseOffering->teacher->first_name }} {{ $courseOffering->teacher->last_name }}
+                            @else
+                                N/A
+                            @endif
+                            @if (!$loop->last)
+                                <br>
+                            @endif
+                        @endforeach</td>
 
-                            <td>temporary course name</td>
+                            <td>   @foreach($excuseSlip->courseOfferings as $courseOffering)
+                                {{ $courseOffering->course->course_code }} - {{ $courseOffering->offer_code }}
+                                @if (!$loop->last)
+                                    <br>
+                                @endif
+                            @endforeach</td>
                             <td>{{ $excuseSlip->start_date }}</td>
                             <td>{{ $excuseSlip->end_date }}</td>
                             <td>{{ $excuseSlip->status->status_name }}</td>

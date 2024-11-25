@@ -38,7 +38,7 @@ class DeanController extends Controller
      */
     public function approveExcuseSlip(Request $request, $id)
 {
-    // Find the excuse slip by ID assigned to the dean
+    // Find the excuse slip by ID assigned to the 
     $excuseSlip = ExcuseSlip::where('dean_id', auth()->user()->dean->dean_id)
         ->findOrFail($id);
 
@@ -46,11 +46,11 @@ class DeanController extends Controller
     $excuseSlip->update(['status_id' => '4']);
     
     // Notify the teacher associated with the excuse slip
-    $teacherEmail = $excuseSlip->teacher->email;
-    if ($teacherEmail) {
-        Notification::route('mail', $teacherEmail)
-            ->notify(new ApprovedByDeanNotification($excuseSlip));
-    }
+    // $teacherEmail = $excuseSlip->teacher->email;
+    // if ($teacherEmail) {
+    //     Notification::route('mail', $teacherEmail)
+    //         ->notify(new ApprovedByDeanNotification($excuseSlip));
+    // }
 
     // Return a success response
     return redirect()->route('dean.dashboard')->with('success', 'Excuse slip approved successfully.');

@@ -542,30 +542,35 @@ public function indexSchoolYear()
 
     }
     public function activateSchoolYear($syId)
-    {
-        $schoolYear = SchoolYear::findOrFail($syId);
-    
-        // Deactivate all other school years
-        SchoolYear::where('is_active', true)->update([
-            'is_active' => false
-        ]);
-    
-        $schoolYear->is_active = true;
-        $schoolYear->save();
-    
-        $semesters = [
-            ['semester_name' => $schoolYear->sy_name . ' 1st sem', 'sy_id' => $schoolYear->sy_id],
-            ['semester_name' => $schoolYear->sy_name . ' 2nd sem', 'sy_id' => $schoolYear->sy_id],
-            ['semester_name' => $schoolYear->sy_name . ' Summer', 'sy_id' => $schoolYear->sy_id],
-            // Add more semester records here
-        ];
-    
-        Semester::insert($semesters);
-    
-        return redirect()->back()->with('success', 'School year activated successfully.');
+{
+    $schoolYear = SchoolYear::findOrFail($syId);
+
+    // Check if the school year is already active
+    if ($schoolYear->is_active) {
+        return redirect()->back()->with('info', 'School year is already active.');
     }
+
+    // Activate the selected school year
+    $schoolYear->is_active = true;
+    $schoolYear->save();
+
+    // Create semesters for the newly activated school year
+    $semesters = [
+        ['semester_name' => $schoolYear->sy_name . ' 1st sem', 'sy_id' => $schoolYear->sy_id],
+        ['semester_name' => $schoolYear->sy_name . ' 2nd sem', 'sy_id' => $schoolYear->sy_id],
+        ['semester_name' => $schoolYear->sy_name . ' Summer', 'sy_id' => $schoolYear->sy_id],
+        // Add more semester records here if needed
+    ];
+
+    // Check if semesters already exist to avoid duplicates
+    foreach ($semesters as $semester) {
+        Semester::firstOrCreate($semester);
+    }
+
+    return redirect()->back()->with('success', 'School year activated successfully.');
+}
     
-    public function addSchoolYear(Request $request)
+public function addSchoolYear(Request $request)
 {
     $validator = Validator::make($request->all(), [
         'sy_id' => 'required|unique:school_years,sy_id|regex:/^\d{4}$/',
@@ -579,10 +584,11 @@ public function indexSchoolYear()
     $schoolYear = new SchoolYear();
     $schoolYear->sy_id = $year . '-' . ($year + 1);
     $schoolYear->sy_name = 'SY ' . $schoolYear->sy_id;
-    $schoolYear->is_active = false;
+    $schoolYear->is_active = false; // Set to false initially
     $schoolYear->save();
 
-    return redirect()->back()->with('success', 'School year added successfully.');
+    // Automatically activate the school year now
+    return $this->activateSchoolYear($schoolYear->sy_id);
 }
 
 public function showCourseOfferingsAndCourses()

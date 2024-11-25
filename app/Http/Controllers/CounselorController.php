@@ -157,8 +157,6 @@ public function markAsRead($excuseSlipId)
     }
 
 
-
-
 public function approve($id)
 {
     $excuseSlip = ExcuseSlip::findOrFail($id);

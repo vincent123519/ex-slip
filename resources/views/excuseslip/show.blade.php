@@ -255,7 +255,17 @@
             <ul>
             <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
             <li  style="color: #26d187;font-weight: bold;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
-            <!-- <li style="color: orange;font-weight: bold;">To be approved by {{$excuseSlip->teacher->first_name}} {{$excuseSlip->teacher->last_name}}</li> -->
+            <li style="color: orange;font-weight: bold;">To be approved by 
+                @foreach($excuseSlip->courseOfferings as $courseOffering)
+                            @if ($courseOffering->teacher)
+                                {{ $courseOffering->teacher->first_name }} {{ $courseOffering->teacher->last_name }}
+                            @else
+                                N/A
+                            @endif
+                            @if (!$loop->last)
+                                <br>
+                            @endif
+                        @endforeach</li>
             </ul>
         @elseif ($excuseSlip->status->status_id == 5)
             <ul>

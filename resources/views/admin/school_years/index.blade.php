@@ -9,41 +9,28 @@
                 <div class="card-manage-sy">
                         <h4>Add School Year</h4>
                         <form action="{{ route('school-year.add') }}" method="POST">
-                     @csrf
-                     <div class="form-group">
-                    <label for="school-year">School Year:</label>
-                    <input type="number" name="sy_id" id="school-year-input" min="1900" max="2099" value="" placeholder="Enter a 4-digit year">
-                    <button type="submit" class="button school">Add</button>
-
-                    </div>
-                   
-                </form>
+                        @csrf
+                        <div>
+                            <input type="number" name="sy_id" id="school-year-input" min="1900" max="2099" value="" placeholder="Enter a 4-digit year" required>
+                            <button type="submit" class="button school">Add</button>
+                        </div>
+                    </form>
 
                     <table id="manage-school-years">
                         <thead>
                             <tr>
                                 <th>School Year ID</th>
                                 <th>School Year Name</th>
-                                <th>Status</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($schoolYears as $schoolYear)
-                                <tr>
-                                    <td>{{ $schoolYear->sy_id }}</td>
-                                    <td>{{ $schoolYear->sy_name }}</td>
-                                    <td>{{ $schoolYear->is_active ? 'Active' : 'Inactive' }}</td>
-                                    <td>
-                                        @if (!$schoolYear->is_active)
-                                            <form action="{{ route('school-year.activate', $schoolYear->sy_id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="button school">Activate</button>
-                                            </form>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
+                        @foreach ($schoolYears as $schoolYear)
+                        <tr>
+                            <td>{{ $schoolYear->sy_id }}</td>
+                            <td>{{ $schoolYear->sy_name }}</td>
+                           
+                        </tr>
+                    @endforeach
                         </tbody>
                     </table>
 

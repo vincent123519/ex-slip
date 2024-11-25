@@ -1,4 +1,4 @@
-@import '../home.scss';
+
 
 .navmenu ul {
     list-style-type: none;
@@ -120,9 +120,13 @@
    }
 
 
-  .notification.active .notification-content {
+   .notification-content {
+    display: none; /* Hide the notification content by default */
+}
+
+.notification.active .notification-content {
     display: block; /* Show the notification content when the notification is active */
-  }
+}
 
 .logosc {
     background-image: url("../scss/image/ExcUseSlip.png");
@@ -288,30 +292,4 @@
     //   padding-right: 250px;
     //   cursor: pointer; /* Add cursor pointer to indicate interactivity */
     // }
-    .notification:hover {
-        color: #fec039;
-      }
-      .notification-content {
-            display: none;
-            position: absolute;
-            /* top: -145px; */
-            right: 0;
-            width: 341px;
-            height: 200px;
-            background-color: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            font-size: small;
-            color: #28a745;
-            text-align: left;
-            overflow-x: hidden;
-            font-family: "Montserrat", sans-serif;
-            padding: 1vw;
-            border: 2px solid black;
-       }
-    
-    
-      .notification.active .notification-content {
-        display: block; /* Show the notification content when the notification is active */
-      }
+  

@@ -3,40 +3,37 @@
     <div class="dean-details-container">
         <h1 style="margin-left: 605px;">Absence Request</h1>
         <div class="notifContainer">
-            <div class="notification">
-                <i id="bell" class="fas fa-solid fa-bell fa-2x"></i>
-                <div class="notification-content">
-                    @php
-                    $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
-                    @endphp
-                    @if ($unreadExcuseSlips->count() > 0)
-                    @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
+    <div class="notification" id="notification">
+        <i id="bell" class="fas fa-solid fa-bell fa-2x"></i>
+        <div class="notification-content">
+            @if ($unreadExcuseSlips->isNotEmpty())
+                @foreach ($unreadExcuseSlips->sortByDesc('updated_at') as $unreadExcuseSlip)
                     <div>
-                        <p>
-                            <b>{{ $unreadExcuseSlip->counselor->first_name }} {{ $unreadExcuseSlip->created_at }},{{ $unreadExcuseSlip->counselor->last_name }}</b>
-                            approved <b>{{ $unreadExcuseSlip->student->first_name }} {{ $unreadExcuseSlip->student->last_name }}</b>
-                        </p>
-                        <p>pending for dean approval.. {{ $unreadExcuseSlip->updated_at->diffForHumans() }}</p>
-                        @if ($unreadExcuseSlip->read_by_dean == 1)
-                        <span style="color: green;">(Seen)</span>
-                        @elseif($unreadExcuseSlip->read_by_dean == 0)
-                        <span style="color: red;">(Not Seen)</span>
-                        @endif
-                        <form action="{{ route('excuse_slips.markAsReadByDean', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}" method="POST">
+                        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
+                            <p>
+                                <b>{{ $unreadExcuseSlip->counselor->first_name }} {{ $unreadExcuseSlip->counselor->last_name }}</b>
+                                approved <b>{{ $unreadExcuseSlip->student->first_name }} {{ $unreadExcuseSlip->student->last_name }}</b>
+                            </p>
+                            <p>Pending for dean approval.. {{ $unreadExcuseSlip->updated_at->diffForHumans() }}</p>
+                            <span style="color: {{ $unreadExcuseSlip->read_by_dean ? 'green' : 'red' }};">
+                                ({{ $unreadExcuseSlip->read_by_dean ? 'Seen' : 'Not Seen' }})
+                            </span>
+                        </a>
+                        <form action="{{ route('excuse_slips.markAsReadByDean', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('PUT')
                             <button type="submit">Mark as Read</button>
                         </form>
                         <hr>
                     </div>
-                    @endforeach
-                    @else
-                    <p>No unread excuse slips.</p>
-                    @endif
-                </div>
-            </div>
-            <hr>
+                @endforeach
+            @else
+                <p>No unread excuse slips.</p>
+            @endif
         </div>
+    </div>
+    <hr>
+</div>
     
         <h2>Total Excuse Slips: <span id="total-count">{{ count($excuseSlips) }}</span></h2>
         @if(count($excuseSlips) > 0)
@@ -74,8 +71,22 @@
                 @foreach($excuseSlips as $excuseSlip)
                 <tr>
                     <td>{{ $excuseSlip->student->first_name}} {{ $excuseSlip->student->last_name}}</td>
-                    <td>temporary course name</td>
-                    <td>temp teachers name</td>
+                    <td>   @foreach($excuseSlip->courseOfferings as $courseOffering)
+                                {{ $courseOffering->course->course_code }} - {{ $courseOffering->offer_code }}
+                                @if (!$loop->last)
+                                    <br>
+                                @endif
+                            @endforeach</td>
+                    <td>        @foreach($excuseSlip->courseOfferings as $courseOffering)
+                            @if ($courseOffering->teacher)
+                                {{ $courseOffering->teacher->first_name }} {{ $courseOffering->teacher->last_name }}
+                            @else
+                                N/A
+                            @endif
+                            @if (!$loop->last)
+                                <br>
+                            @endif
+                        @endforeach</td>
                     <td>{{ $excuseSlip->status->status_name }}</td>
                     <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
                     <td>{{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
@@ -182,6 +193,16 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   searchInput.addEventListener('input', filterRows);
+});
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const notification = document.querySelector('.notification');
+    
+    notification.addEventListener('click', function() {
+        this.classList.toggle('active'); // Toggle the 'active' class
+    });
 });
 </script>
 

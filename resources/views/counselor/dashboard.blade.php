@@ -12,7 +12,7 @@
                     <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
                     <span></span>
                     <div class="notification-content">
-                        @foreach ($latestExcuseSlips as $latestExcuseSlip)
+                    @foreach ($latestExcuseSlips as $latestExcuseSlip)
                             <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}" class="view-button">
 
                             <h4>{{ $latestExcuseSlip->student->first_name }} created an excuse slip {{ $latestExcuseSlip->created_at }}

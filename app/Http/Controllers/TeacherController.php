@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\ExcuseSlip;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ExcuseSlipSignedNotification;
 
@@ -18,29 +20,41 @@ class TeacherController extends Controller
 
         return view('excuse_slips.index', compact('excuseSlips'));
     }
-
+    
     public function signExcuseSlip(Request $request, $excuseSlipId)
 {
+    // Find the excuse slip with its course offerings
+    $excuseSlip = ExcuseSlip::with('courseOfferings')->findOrFail($excuseSlipId);
+
+    // Get the authenticated teacher's ID
     $teacherId = $request->user()->teacher->teacher_id;
 
-    $excuseSlip = ExcuseSlip::where('teacher_id', $teacherId)->findOrFail($excuseSlipId);
-    $excuseSlip->status_id = 5; // Assuming status_id 5 represents the "signed" status
-    $excuseSlip->save();
+    // Get all offer codes that match the authenticated teacher
+    $offerCodes = $excuseSlip->courseOfferings()
+        ->where('course_offerings.teacher_id', $teacherId) // Ensure to specify the table
+        ->pluck('course_offerings.offer_code'); // Get all matching offer codes
 
-    // Notify the student associated with the excuse slip
-    $studentEmail = $excuseSlip->student->email;
-    if ($studentEmail) {
-        Notification::route('mail', $studentEmail)
-            ->notify(new ExcuseSlipSignedNotification($excuseSlip));
+    // Check if there are any offer codes for the teacher
+    if ($offerCodes->isNotEmpty()) {
+        // Update the is_remark_by_teacher field for all matching offer codes
+        $updated = DB::table('course_excuse_slip')
+            ->where('excuse_slip_id', $excuseSlipId)
+            ->whereIn('offer_code', $offerCodes) // Use whereIn to update all matching offer codes
+            ->update(['is_remark_by_teacher' => 1]);
+
+        // Log the update result
+        Log::info('Update Result', ['updated_rows' => $updated]);
+
+        // Check if the update was successful
+        if ($updated) {
+            return redirect()->route('teacher.dashboard')->with('success', 'Course offerings signed successfully.');
+        }
+    } else {
+        return redirect()->back()->with('error', 'No offer codes found for the authenticated teacher.');
     }
 
-
-    return redirect()->route('teacher.dashboard')->with('success', 'Excuse slip approved successfully.');
+    return redirect()->back()->with('error', 'Failed to sign the course offerings.');
 }
-
-   
-
-    
 public function dashboard()
 {
     // Get the teacher's ID from the authenticated user
@@ -101,7 +115,7 @@ public function dashboard()
 }
    
 
-    public function teacherStoreFeedback(Request $request, $id)
+public function teacherStoreFeedback(Request $request, $id)
 {
     // Validate the request
     $request->validate([
@@ -113,13 +127,28 @@ public function dashboard()
 
     // Check if the authenticated user is a teacher and associated with the excuse slip
     if (auth()->user()->role_id == 2 && auth()->user()->teacher->teacher_id === $excuseSlip->teacher_id) {
-        // Store the feedback in the database
-        $excuseSlip->teacherFeedbacks()->create([
-            'remarks' => $request->input('feedback_remarks'),
-        ]);
+        // Get the associated course offering
+        $courseOffering = $excuseSlip->courseOfferings()->first(); // Assuming there's a relationship
+        
+        if ($courseOffering) {
+            // Store the feedback in the course_excuse_slip pivot table
+            DB::table('course_excuse_slip')->updateOrInsert(
+                [
+                    'excuse_slip_id' => $id,
+                    'offer_code' => $courseOffering->offer_code,
+                ],
+                [
+                    'is_remark_by_teacher' => true,
+                    'teacher_feedback' => $request->input('feedback_remarks'),
+                ]
+            );
 
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Teacher Feedback submitted successfully.');
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'Teacher Feedback submitted successfully.');
+        } else {
+            // Handle case when no course offering is found
+            return redirect()->back()->withErrors('No associated course offering found.');
+        }
     } else {
         // Unauthorized action, redirect with an error message
         abort(403, 'Unauthorized action.');

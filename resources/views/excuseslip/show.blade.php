@@ -38,24 +38,49 @@
                     @if ($offerCodesWithDetails->isEmpty())
                         <p>No course offerings available.</p>
                     @else
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Offer Code</th>
-                                    <th>Course Code</th> <!-- Add course code header -->
-                                    <th>Teacher Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($offerCodesWithDetails as $offering)
-                                    <tr>
-                                        <td>{{ $offering['offer_code'] }}</td>
-                                        <td>{{ $offering['course_code'] }}</td> <!-- Display course code -->
-                                        <td>{{ $offering['teacher_name'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <table>
+    <thead>
+        <tr>
+            <th>Offer Code</th>
+            <th>Course Code</th>
+            <th>Teacher Name</th>
+            <th>Actions</th>
+            <th>Feedback</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($offerCodesWithDetails as $details)
+            <tr>
+                <td>{{ $details['offer_code'] }}</td>
+                <td>{{ $details['course_code'] }}</td>
+                <td>{{ $details['teacher_name'] }}</td>
+                <td>
+    @if(auth()->user()->role_id == 2) <!-- Check if the user is a teacher -->
+        <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="btn btn-success btn-sm">Sign Slip</button>
+        </form>
+        
+        @if($details['is_remark_by_teacher'] == 1) <!-- Check if already approved -->
+            <span class="text-muted">Already approved</span>
+        @endif
+    @endif
+</td>
+                <td>
+                    @php
+                        // Retrieve feedback from the course_excuse_slip table
+                        $feedback = DB::table('course_excuse_slip')
+                            ->where('excuse_slip_id', $excuseSlip->excuse_slip_id)
+                            ->where('offer_code', $details['offer_code'])
+                            ->value('teacher_feedback');
+                    @endphp
+                    {{ $feedback ? $feedback : 'No feedback provided' }}
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
                     @endif
                 </div>
                 <!-- <p><strong>Date:</strong> {{ $excuseSlip->start_date }} to {{ $excuseSlip->end_date }}</p> -->
@@ -148,25 +173,7 @@
                 @endif
 
 
-            @if(auth()->user()->role_id == 2)
-            <!-- teacher -->
-
-            @if($excuseSlip->status->status_id == 4 || $excuseSlip->status->status_id == 3)
-)
-            <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="text-align: right;">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn-approved" style=" margin-top: 5vw;">Noted</button>
-            </form>
-            <form action="{{ route('teacher.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
-                @csrf
-                <label for="feedback_remarks" style="margin-top: -119px;">Feedback Remarks:</label>
-                <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
-                <button type="submit" style=" margin-top: -1vw;">Submit Feedback</button>
-            </form>
-
-            @endif
-            @endif
+            
 
             </div>
         </div>
@@ -193,15 +200,7 @@
             </div>
         @endif
 
-        @if ($teacherFeedback)
-            <div class="feedback-container">
-                <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
-            </div>
-        @else
-            <div class="feedback-container">
-                <p>No teacher feedback available.</p>
-            </div>
-        @endif
+   
         @endif
 
         @if(auth()->user()->role_id == 4)
@@ -230,18 +229,7 @@
         @endif
         @endif
         
-        @if(auth()->user()->role_id == 2)
-        @if ($teacherFeedback)
-            <div class="feedback-container">
-                <p><strong>Teacher Feedback:</strong> {{ $teacherFeedback->remarks }}</p>
-            </div>
-        @else
-            <div class="feedback-container">
-                <p>No teacher feedback available.</p>
-            </div>
-        @endif
 
-        @endif
 
         <hr>
 
@@ -269,7 +257,6 @@
             </ul>
         @elseif ($excuseSlip->status->status_id == 5)
             <ul>
-            <!-- <li style="color: green;font-weight: bold;">Approved by {{ $excuseSlip->teacher->first_name }} {{ $excuseSlip->teacher->last_name }}</li> -->
             <li style="color: green;font-weight: bold;">Approved by {{$excuseSlip->dean->first_name}} {{$excuseSlip->dean->last_name}}</li>
             <li style="color: #26d187;font-weight: bold;">Noted by {{$excuseSlip->counselor->first_name}} {{$excuseSlip->counselor->last_name}}</li>
             </ul>

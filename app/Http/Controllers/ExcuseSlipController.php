@@ -28,34 +28,38 @@ class ExcuseSlipController extends Controller
 {
 
     public function show($excuse_slip_id)
-    {
-        // Eager load the necessary relationships
-        $excuseSlip = ExcuseSlip::with([
-            'supportingDocuments',
-            'counselorFeedbacks',
-            'deanFeedbacks',
-            'teacherFeedbacks',
-            'courseOfferings.teacher', // Eager load teacher relationship
-            'courseOfferings.course' // Eager load course relationship
-        ])->findOrFail($excuse_slip_id);
-    
-        // Fetch feedbacks
-        $counselorFeedback = $excuseSlip->counselorFeedbacks->first();
-        $deanFeedback = $excuseSlip->deanFeedbacks->first();
-        $teacherFeedback = $excuseSlip->teacherFeedbacks->first();
-    
-        // Retrieve offer codes, course codes, and associated teacher names
-        $offerCodesWithDetails = $excuseSlip->courseOfferings->map(function ($courseOffering) {
-            return [
-                'offer_code' => $courseOffering->offer_code,
-                'course_code' => $courseOffering->course->course_code, // Retrieve the course code
-                'teacher_name' => $courseOffering->teacher->first_name . ' ' . $courseOffering->teacher->last_name // Concatenate first and last name
-            ];
-        });
-    
-        return view('excuseslip.show', compact('excuseSlip', 'counselorFeedback', 'deanFeedback', 'teacherFeedback', 'offerCodesWithDetails'));
-    }
+{
+    // Eager load the necessary relationships
+    $excuseSlip = ExcuseSlip::with([
+        'supportingDocuments',
+        'counselorFeedbacks',
+        'deanFeedbacks',
+        'courseOfferings.teacher', // Eager load teacher relationship
+        'courseOfferings.course' // Eager load course relationship
+    ])->findOrFail($excuse_slip_id);
 
+    // Fetch feedbacks
+    $counselorFeedback = $excuseSlip->counselorFeedbacks->first();
+    $deanFeedback = $excuseSlip->deanFeedbacks->first();
+
+    // Retrieve offer codes, course codes, and associated teacher names
+    $offerCodesWithDetails = $excuseSlip->courseOfferings->map(function ($courseOffering) use ($excuseSlip) {
+        // Retrieve the is_remark_by_teacher status
+        $isRemarkByTeacher = DB::table('course_excuse_slip')
+            ->where('excuse_slip_id', $excuseSlip->excuse_slip_id)
+            ->where('offer_code', $courseOffering->offer_code)
+            ->value('is_remark_by_teacher');
+
+        return [
+            'offer_code' => $courseOffering->offer_code,
+            'course_code' => $courseOffering->course->course_code, // Retrieve the course code
+            'teacher_name' => $courseOffering->teacher->first_name . ' ' . $courseOffering->teacher->last_name, // Concatenate first and last name
+            'is_remark_by_teacher' => $isRemarkByTeacher // Add this line to include the status
+        ];
+    });
+
+    return view('excuseslip.show', compact('excuseSlip', 'counselorFeedback', 'deanFeedback', 'offerCodesWithDetails'));
+}
     
 
 

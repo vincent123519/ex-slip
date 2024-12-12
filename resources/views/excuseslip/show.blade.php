@@ -44,41 +44,106 @@
             <th>Offer Code</th>
             <th>Course Code</th>
             <th>Teacher Name</th>
-            <th>Actions</th>
+            <th>
+                @if(auth()->user()->role_id == 2) <!-- Check if the user is a teacher -->
+                    Actions
+                @else
+                    Status
+                @endif
+            </th>
             <th>Feedback</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($offerCodesWithDetails as $details)
+        @php
+            // Get the teacher ID for the authenticated user
+            $teacherId = auth()->user()->role_id == 2 ? auth()->user()->teacher->teacher_id : null;
+            $excuseSlipId = $excuseSlip->excuse_slip_id; // Use the actual excuse slip ID passed from the controller
+
+            // Fetch offer codes related to the teacher if the user is a teacher
+            $offerCodesWithDetails = auth()->user()->role_id == 2
+                ? DB::table('course_excuse_slip as ces')
+                    ->join('course_offerings as co', 'ces.offer_code', '=', 'co.offer_code')
+                    ->join('teachers as t', 'co.teacher_id', '=', 't.teacher_id') // Join to get teacher info
+                    ->select('ces.offer_code', 'co.course_code', 't.first_name', 't.last_name', 'ces.is_remark_by_teacher')
+                    ->where('co.teacher_id', $teacherId)
+                    ->where('ces.excuse_slip_id', $excuseSlipId)
+                    ->distinct()
+                    ->get()
+                : DB::table('course_excuse_slip as ces')
+                    ->join('course_offerings as co', 'ces.offer_code', '=', 'co.offer_code')
+                    ->join('teachers as t', 'co.teacher_id', '=', 't.teacher_id') // Join to get teacher info
+                    ->select('ces.offer_code', 'co.course_code', 't.first_name', 't.last_name', 'ces.is_remark_by_teacher')
+                    ->where('ces.excuse_slip_id', $excuseSlipId)
+                    ->distinct()
+                    ->get();
+        @endphp
+
+        @if($offerCodesWithDetails->isEmpty())
             <tr>
-                <td>{{ $details['offer_code'] }}</td>
-                <td>{{ $details['course_code'] }}</td>
-                <td>{{ $details['teacher_name'] }}</td>
-                <td>
-    @if(auth()->user()->role_id == 2) <!-- Check if the user is a teacher -->
-        <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-            @csrf
-            @method('PUT')
-            <button type="submit" class="btn btn-success btn-sm">Sign Slip</button>
-        </form>
-        
-        @if($details['is_remark_by_teacher'] == 1) <!-- Check if already approved -->
-            <span class="text-muted">Already approved</span>
-        @endif
-    @endif
-</td>
-                <td>
-                    @php
-                        // Retrieve feedback from the course_excuse_slip table
-                        $feedback = DB::table('course_excuse_slip')
-                            ->where('excuse_slip_id', $excuseSlip->excuse_slip_id)
-                            ->where('offer_code', $details['offer_code'])
-                            ->value('teacher_feedback');
-                    @endphp
-                    {{ $feedback ? $feedback : 'No feedback provided' }}
-                </td>
+                <td colspan="5">No relevant offer codes found.</td>
             </tr>
-        @endforeach
+        @else
+            @foreach($offerCodesWithDetails as $details)
+                <tr>
+                    <td>{{ $details->offer_code }}</td>
+                    <td>{{ $details->course_code }}</td>
+                    <td>{{ $details->first_name }} {{ $details->last_name }}</td> <!-- Display teacher's full name -->
+                    <td>
+                        @if(auth()->user()->role_id == 2) <!-- Teacher View -->
+                            @if($details->is_remark_by_teacher != 1)
+                                <form action="{{ route('excuse.approveteacher', ['id' => $excuseSlipId]) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-success btn-sm">Sign Slip</button>
+                                </form>
+                            @else
+                                <span class="text-muted">Already approved</span>
+                            @endif
+                        @else <!-- Student View -->
+                            <span class="text-muted">
+                                @if($details->is_remark_by_teacher == 1)
+                                    Already approved
+                                @else
+                                    Not approved
+                                @endif
+                            </span>
+                        @endif
+                    </td>
+                    <td>
+                        @php
+                            // Retrieve feedback for the current offer code
+                            $feedback = DB::table('course_excuse_slip')
+                                ->where('excuse_slip_id', $excuseSlipId)
+                                ->where('offer_code', $details->offer_code)
+                                ->value('teacher_feedback');
+                        @endphp
+
+                        <p>Feedback: {{ $feedback ? $feedback : 'No feedback provided' }}</p>
+
+                        @if(auth()->user()->role_id == 2) <!-- Teacher View -->
+                            @if(!$feedback) <!-- Only show the feedback form if there is no feedback -->
+                                @php
+                                    // Check if the teacher has an association with the offer code
+                                    $courseOffering = $excuseSlip->courseOfferings()->where('teacher_id', auth()->user()->teacher->teacher_id)->first();
+                                @endphp
+
+                                @if($courseOffering) <!-- Only show the feedback form if associated -->
+                                    <form action="{{ route('teacher.feedback.store', ['id' => $excuseSlipId]) }}" method="POST">
+                                        @csrf
+                                        <label for="feedback_remarks">Feedback Remarks:</label>
+                                        <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
+                                        <button type="submit">Submit Feedback</button>
+                                    </form>
+                                @else
+                                    <span class="text-muted">You are not authorized to provide feedback for this course offering.</span>
+                                @endif
+                            @endif
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        @endif
     </tbody>
 </table>
                     @endif
@@ -332,7 +397,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     th {
-        background-color: #343a40;
+        background-color: rgba(13, 62, 32, 0.98);;
         color: white; 
     }
 

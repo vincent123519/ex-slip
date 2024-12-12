@@ -126,10 +126,12 @@ public function teacherStoreFeedback(Request $request, $id)
     $excuseSlip = ExcuseSlip::findOrFail($id);
 
     // Check if the authenticated user is a teacher and associated with the excuse slip
-    if (auth()->user()->role_id == 2 && auth()->user()->teacher->teacher_id === $excuseSlip->teacher_id) {
-        // Get the associated course offering
-        $courseOffering = $excuseSlip->courseOfferings()->first(); // Assuming there's a relationship
-        
+    if (auth()->user()->role_id == 2) { // Ensure user is a teacher
+        // Get the associated course offering for the authenticated teacher
+        $courseOffering = $excuseSlip->courseOfferings()
+            ->where('teacher_id', auth()->user()->teacher->teacher_id)
+            ->first();
+
         if ($courseOffering) {
             // Store the feedback in the course_excuse_slip pivot table
             DB::table('course_excuse_slip')->updateOrInsert(
@@ -144,10 +146,10 @@ public function teacherStoreFeedback(Request $request, $id)
             );
 
             // Redirect back with success message
-            return redirect()->back()->with('success', 'Teacher Feedback submitted successfully.');
+            return redirect()->back()->with('success', 'Teacher feedback submitted successfully.');
         } else {
             // Handle case when no course offering is found
-            return redirect()->back()->withErrors('No associated course offering found.');
+            return redirect()->back()->withErrors('You are not authorized to provide feedback for this course offering.');
         }
     } else {
         // Unauthorized action, redirect with an error message

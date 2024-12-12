@@ -29,19 +29,10 @@ class ExcuseSlip extends Model
     {
         return $this->hasMany(DeanFeedback::class, 'excuse_slip_id');
     }
-    public function teacherFeedbacks()
-    {
-        return $this->hasMany(TeacherFeedback::class, 'excuse_slip_id');
-    }
 
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');
-    }
-    
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
     
     public function counselor()

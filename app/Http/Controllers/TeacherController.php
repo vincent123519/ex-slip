@@ -164,37 +164,48 @@ public function dashboard(Request $request)
     // Validate the request
     $request->validate([
         'feedback_remarks' => 'required|string|max:255',
-        'offer_code' => 'required|string', // Ensure offer code is also validated
+        'offer_code' => 'required|integer', // Ensure an offer_code is provided
     ]);
 
     // Find the excuse slip by ID
     $excuseSlip = ExcuseSlip::findOrFail($id);
 
-    // Check if the authenticated user is a teacher and associated with the excuse slip
+    // Check if the authenticated user is a teacher
     if (auth()->user()->role_id == 2) { // Ensure user is a teacher
-        // Get the associated course offering
+        // Get the authenticated teacher's ID
+        $teacherId = auth()->user()->teacher->teacher_id;
+
+        // Get the submitted offer_code from the request
+        $submittedOfferCode = $request->input('offer_code');
+
+        // Check if the teacher is associated with the given offer code
         $courseOffering = $excuseSlip->courseOfferings()
-            ->where('teacher_id', auth()->user()->teacher->teacher_id)
+            ->where('course_offerings.offer_code', $submittedOfferCode) // Specify the table name
+            ->where('course_offerings.teacher_id', $teacherId) // Specify the table name
             ->first();
 
         if ($courseOffering) {
-            // Store the feedback in the course_excuse_slip table
+            // Store the feedback in the course_excuse_slip table for the specific offer_code
             DB::table('course_excuse_slip')->updateOrInsert(
                 [
                     'excuse_slip_id' => $id,
-                    'offer_code' => $request->input('offer_code'), // Use the offer code from the form
+                    'offer_code' => $submittedOfferCode, // Use the specific offer_code from the form
                 ],
                 [
-                    'teacher_feedback' => $request->input('feedback_remarks'), // Store feedback without setting is_remark_by_teacher
+                    'is_remark_by_teacher' => 1, // Mark as feedback given (if needed)
+                    'teacher_feedback' => $request->input('feedback_remarks'), // Store feedback
                 ]
             );
 
-            return redirect()->back()->with('success', 'Teacher feedback submitted successfully.');
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'Teacher feedback submitted successfully for the offer code.');
         } else {
-            return redirect()->back()->withErrors('You are not authorized to provide feedback for this course offering.');
+            // Handle case when no course offering is found for this teacher and offer code
+            return redirect()->back()->withErrors('You are not authorized to provide feedback for this offer code.');
         }
     } else {
-        return redirect()->back()->withErrors('Unauthorized action.');
+        // Unauthorized action, redirect with an error message
+        abort(403, 'Unauthorized action.');
     }
 }
 

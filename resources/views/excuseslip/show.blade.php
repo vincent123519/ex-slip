@@ -111,36 +111,40 @@
                         @endif
                     </td>
                     <td>
-                        @php
-                            // Retrieve feedback for the current offer code
-                            $feedback = DB::table('course_excuse_slip')
-                                ->where('excuse_slip_id', $excuseSlipId)
-                                ->where('offer_code', $details->offer_code)
-                                ->value('teacher_feedback');
-                        @endphp
+    @php
+        // Retrieve feedback for the current offer code
+        $feedback = DB::table('course_excuse_slip')
+            ->where('excuse_slip_id', $excuseSlipId)
+            ->where('offer_code', $details->offer_code) // This is fine as is
+            ->value('teacher_feedback');
+    @endphp
 
-                        <p>Feedback: {{ $feedback ? $feedback : 'No feedback provided' }}</p>
+    <p>Feedback: {{ $feedback ? $feedback : 'No feedback provided' }}</p>
 
-                        @if(auth()->user()->role_id == 2) <!-- Teacher View -->
-                            @if(!$feedback) <!-- Only show the feedback form if there is no feedback -->
-                                @php
-                                    // Check if the teacher has an association with the offer code
-                                    $courseOffering = $excuseSlip->courseOfferings()->where('teacher_id', auth()->user()->teacher->teacher_id)->first();
-                                @endphp
+    @if(auth()->user()->role_id == 2) <!-- Teacher View -->
+        @if(!$feedback) <!-- Only show the feedback form if there is no feedback -->
+            @php
+                // Check if the teacher has an association with the offer code
+                $courseOffering = $excuseSlip->courseOfferings()
+                    ->where('course_offerings.offer_code', $details->offer_code) // Specify the table for offer_code
+                    ->where('course_offerings.teacher_id', auth()->user()->teacher->teacher_id) // Specify the table for teacher_id
+                    ->first();
+            @endphp
 
-                                @if($courseOffering) <!-- Only show the feedback form if associated -->
-                                    <form action="{{ route('teacher.feedback.store', ['id' => $excuseSlipId]) }}" method="POST">
-                                        @csrf
-                                        <label for="feedback_remarks">Feedback Remarks:</label>
-                                        <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
-                                        <button type="submit">Submit Feedback</button>
-                                    </form>
-                                @else
-                                    <span class="text-muted">You are not authorized to provide feedback for this course offering.</span>
-                                @endif
-                            @endif
-                        @endif
-                    </td>
+            @if($courseOffering) <!-- Only show the feedback form if associated -->
+                <form action="{{ route('teacher.feedback.store', ['id' => $excuseSlipId]) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="offer_code" value="{{ $details->offer_code }}"> <!-- Hidden field for offer_code -->
+                    <label for="feedback_remarks">Feedback Remarks:</label>
+                    <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50" required></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            @else
+                <span class="text-muted">You are not authorized to provide feedback for this course offering.</span>
+            @endif
+        @endif
+    @endif
+</td>
                 </tr>
             @endforeach
         @endif

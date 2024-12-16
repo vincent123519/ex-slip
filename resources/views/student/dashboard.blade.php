@@ -14,32 +14,37 @@
                 <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
                 <div class="notification-content">
                 @if ($unreadExcuseSlips->count() > 0)
-                    @foreach ($unreadExcuseSlips->sortByDesc('created_at') as $unreadExcuseSlip)
-                        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
-                            @php
-                                $approver = '';
-                                if ($unreadExcuseSlip->status_id == 2) {
-                                    $approver = $unreadExcuseSlip->counselor->first_name . ' ' . $unreadExcuseSlip->counselor->last_name;
-                                } elseif ($unreadExcuseSlip->status_id == 4) {
-                                    $approver = $unreadExcuseSlip->dean->first_name . ' ' . $unreadExcuseSlip->dean->last_name;
-                                } elseif ($unreadExcuseSlip->status_id == 5) {
-                                    $approver = $unreadExcuseSlip->teacher->first_name . ' ' . $unreadExcuseSlip->teacher->last_name;
-                                }
-                            @endphp
-                            <p>
-                                @if ($unreadExcuseSlip->status_id == 1)
-                                    An excuse slip is sent to <b>{{ $unreadExcuseSlip->counselor->first_name }}, {{ $unreadExcuseSlip->counselor->last_name }}</b>
-                                @else
-                                    <b>{{ $approver }}</b> approved your excuse slip
-                                @endif
-                            </p>
-                            <p>View excuse slip...</p>
-                        </a>
-                        <hr>
-                    @endforeach
+    @foreach ($unreadExcuseSlips->sortByDesc('created_at') as $unreadExcuseSlip)
+        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
+            @php
+                $approver = '';
+                if ($unreadExcuseSlip->status_id == 2) {
+                    $approver = $unreadExcuseSlip->counselor->first_name . ' ' . $unreadExcuseSlip->counselor->last_name;
+                } elseif ($unreadExcuseSlip->status_id == 4) {
+                    $approver = $unreadExcuseSlip->dean->first_name . ' ' . $unreadExcuseSlip->dean->last_name;
+                } elseif ($unreadExcuseSlip->status_id == 5) {
+                    // Get all teachers' names from the course offerings
+                    $teachers = $unreadExcuseSlip->courseOfferings->pluck('teacher')->filter();
+                    $teacherNames = $teachers->map(function($teacher) {
+                        return $teacher->first_name . ' ' . $teacher->last_name;
+                    })->unique()->implode(', '); 
+                    $approver = $teacherNames ?: 'N/A'; 
+                }
+            @endphp
+            <p>
+                @if ($unreadExcuseSlip->status_id == 1)
+                    An excuse slip is sent to <b>{{ $unreadExcuseSlip->counselor->first_name }}, {{ $unreadExcuseSlip->counselor->last_name }}</b>
                 @else
-                    <p>No unread excuse slips.</p>
+                    <b>{{ $approver }}</b> approved your excuse slip
                 @endif
+            </p>
+            <p>View excuse slip...</p>
+        </a>
+        <hr>
+    @endforeach
+@else
+    <p>No unread excuse slips.</p>
+@endif
                 </div>
             </div>
         </div>

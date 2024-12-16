@@ -205,53 +205,58 @@ public function showdean()
 
 
 public function importStudents(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
-        ]);
+{
+    $request->validate([
+        'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
+    ]);
 
-        $file = $request->file('file');
+    $file = $request->file('file');
 
-        try {
-            $data = array_map('str_getcsv', file($file));
+    try {
+        $data = array_map('str_getcsv', file($file));
 
-            foreach ($data as $row) {
-                // Create a user with a username and set a default password
-                $user = User::create([
-                    'first_name' => $row[0], // Assuming the first column is the first name
-                    'last_name' => $row[1], // Assuming the second column is the last name
-                    'username' => $row[3], // Assuming the fourth column is the username
-                    'email' => $row[5],
-                    'password' => Hash::make('12345'), // You can set a default password
-                    'role_id' => 3, // Replace 3 with the actual role ID for students
+        foreach ($data as $row) {
+            $username = $row[3];
 
-                    
-                ]);
-
-                // Find the department degree
-                $degree = DepartmentDegree::where('degree_name', $row[2])->first(); // Assuming the third column is the degree name
-
-                if ($degree) {
-                    $student = new Student([
-                        'first_name' => $row[0],
-                        'last_name' => $row[1],
-                        'year_level' => $row[4], // Assuming the fifth column is the year level
-                        'email' => $row[5],
-                    ]);
-
-                    $student->user()->associate($user);
-                    $student->degree()->associate($degree);
-                    $student->save();
-                } else {
-                    return redirect()->back()->with('error', 'Department degree not found for student: ' . $row[0]);
-                }
+            // Check if the username already exists
+            if (User::where('username', $username)->exists()) {
+                return redirect()->back()->with('error', "User account '{$username}' already exists.");
             }
 
-            return redirect()->back()->with('success', 'Students imported successfully.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error occurred while importing students.');
+            // Create a user
+            $user = User::create([
+                'first_name' => $row[0],
+                'last_name' => $row[1],
+                'username' => $username,
+                'email' => $row[5],
+                'password' => Hash::make('12345'),
+                'role_id' => 3,
+            ]);
+
+            // Find the department degree
+            $degree = DepartmentDegree::where('degree_name', $row[2])->first();
+
+            if ($degree) {
+                $student = new Student([
+                    'first_name' => $row[0],
+                    'last_name' => $row[1],
+                    'year_level' => $row[4],
+                    'email' => $row[5],
+                ]);
+
+                $student->user()->associate($user);
+                $student->degree()->associate($degree);
+                $student->save();
+            } else {
+                return redirect()->back()->with('error', 'Department degree not found for student: ' . $row[0]);
+            }
         }
+
+        return redirect()->back()->with('success', 'Students imported successfully.');
+    } catch (Exception $e) {
+        return redirect()->back()->with('error', 'Error occurred while importing students: ');
     }
+}
 
     public function showImportForm()
     {
@@ -263,13 +268,22 @@ public function importStudents(Request $request)
         $request->validate([
             'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
         ]);
-
+    
         $file = $request->file('file');
-
+    
         try {
             $data = array_map('str_getcsv', file($file));
-
+    
+            // Initialize an array to hold error messages
+            $errors = [];
+    
             foreach ($data as $row) {
+                // Check if the username already exists across all users
+                if (User::where('username', $row[2])->exists()) {
+                    $errors[] = "User account '{$row[2]}' already exists.";
+                    continue; // Skip this user and continue with the next
+                }
+    
                 // Create a user with a username and set a default password
                 $user = User::create([
                     'first_name' => $row[0], // First Name
@@ -278,33 +292,35 @@ public function importStudents(Request $request)
                     'password' => Hash::make('12345'), // Default Password
                     'role_id' => 2, // Teacher Role ID
                     'email' => $row[4],
-
                 ]);
-
+    
                 // Find the department
                 $department = Department::where('department_name', $row[3])->first(); // Department Name
-
+    
                 if ($department) {
                     $teacher = new Teacher([
                         'user_id' => $user->id,
                         'first_name' => $user->first_name,
                         'last_name' => $user->last_name,
-                        // Add other teacher attributes if needed
                         'email' => $user->email,
-
                     ]);
-
+    
                     $teacher->user()->associate($user);
                     $teacher->department()->associate($department);
                     $teacher->save();
                 } else {
-                    return redirect()->back()->with('error', 'Department not found for teacher: ' . $row[0]);
+                    $errors[] = 'Department not found for teacher: ' . $row[0];
                 }
             }
-
+    
+            // Check for errors after the import process
+            if (!empty($errors)) {
+                return redirect()->back()->with('error', implode(', ', $errors));
+            }
+    
             return redirect()->back()->with('success', 'Teachers imported successfully.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Error occurred while importing teachers.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error occurred while importing teachers: ' . $e->getMessage());
         }
     }
     

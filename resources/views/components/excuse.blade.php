@@ -86,34 +86,190 @@
             margin-bottom: 10px;
             background-size: cover;
             background-position: center;">
+          @if (Auth::user()->role_id !== 6) <!-- Admin role check -->
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+    @endif
         
     </div>
-    <div class="role-name">Student</div>
+    <div class="role-name">
+    @switch(auth()->user()->role_id)
+        @case(2)
+            Teacher
+            @break
+
+        @case(3)
+            Student
+            @break
+
+        @case(4)
+            Counselor
+            @break
+
+        @case(5)
+            Dean
+            @break
+
+        @case(6)
+            Admin
+            @break
+
+        @default
+            Unknown Role
+    @endswitch
+</div>
     <!-- <div class="divider"></div>
     <div class="divider"></div> -->
     <!-- <div class="profile-name">{{ Auth::user()->role->role_name }}</div> -->
 
     <a href="{{ route('change-password') }}" class="stat">CHANGE PASSWORD</a>
     
-    <div class="navmenus"><ul>
-        
-        <li><span>DASHBOARD</span></li>
-       
+    <div class="divider"></div>
+    <div class="divider"></div>
+    <div class="navmenu">
+    <ul>
+    <li><span>DASHBOARD</span><a class="links" href="{{ route('admin.dashboard') }}"></a></li>
+   
+    @if (auth()->user()->role_id == 6) <!-- Admin role -->
+            <li><a class="links" href="{{ route('admin.school_years.index') }}">SCHOOL YEAR</a></li>
+            <li><a class="links" href="{{ route('admin.course_offerings_and_courses') }}">COURSE</a></li>
+            <li><a class="links" href="{{ route('admin.import.index') }}">IMPORT DATA</a></li>
+            <li><a class="links" href="{{ route('manage-users') }}">MANAGE USER ACCOUNTS</a></li>
+            <li><a class="links" href="{{ route('admin.excuseslip.index') }}">EXCUSE SLIPS</a></li>
+        @endif
 
-        
-
-    </ul></div>    </div>
-    
+</ul>
+        </div>
+    </div>
     
     @yield('content')   
 
 </body>
 
 <style>
+    /* Your existing styles */
+    .years{
+        font-weight: bold;
+        text-decoration: none;
+
+    }
+    .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-top: 66px;
+}
+    .sis {
+    display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 155px;
+}
 
 
-    </style>
+
+    .sis{
+        display: flex;
+    font-size: larger;
+    align-items: center;
+    /* background-color: rgba(13, 62, 32, 0.98); */
+    padding: 39px 174px;
+    }
+    .links
+    {
+        text-decoration: none;
+    color: rgba(13, 62, 32, 0.98);
+    font-weight: bold;
+    padding: 0px 10px;
+    }
+    .navmenu{
+        font-family: 'Montserrat', sans-serif;            
+
+    }
+
+    .navmenu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            
+        }
+        
+        .navmenu li {
+            display: inline-block;
+            padding: 2px;
+            border-bottom: 1px solid rgba(13,62,32,0.98);
+            border-top: none;
+            width: 250px;
+        }
+        
+        .navmenu li span {
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        .navmenu .dropdown {
+            display: none;
+            position: absolute;
+            background-color: #fec039;
+            width: 250px;
+            box-shadow: 2px 8px 16px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(13,62,32,0.98);
+            font-family: 'Montserrat', sans-serif;            
+        }
+        
+        .navmenu .dropdown li {
+            display: block;
+        }
+        
+        .dropdown-li:focus .dropdown {
+            display: block;
+        }
+        
+        .dropdown-li {
+            position: relative;
+            
+        }
+    
+        #schoolYearButton {
+            cursor: pointer;
+            color: rgba(13, 62, 32, 0.98);
+    
+        }
+    
+        .dropdown {
+            display: none;
+            position: absolute;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .dropdown li {
+            display: block;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: rgba(13, 62, 32, 0.98);
+            
+    
+        }
+    
+        .dropdown li:last-child {
+            border-bottom: none;
+        }
+    
+        .dropdown a {
+            text-decoration: none;
+            display: block;
+        }
+    
+        .dropdown a:hover {
+            background-color: #f5f5f5; /* Hover background color for options */
+        }
+</style>
 
 
 @section('head')

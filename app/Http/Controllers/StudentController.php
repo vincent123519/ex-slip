@@ -158,7 +158,7 @@ public function dashboard(Request $request)
     $studentId = auth()->user()->student->student_id;
 
     // Query for fetching excuse slips through the pivot table
-    $query = ExcuseSlip::with(['student', 'teacher', 'counselor', 'dean', 'status', 'courseOfferings'])
+    $query = ExcuseSlip::with(['student', 'counselor', 'dean', 'status', 'courseOfferings'])
         ->where('student_id', $studentId)
         ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at');
 

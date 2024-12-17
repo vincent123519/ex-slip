@@ -6,11 +6,12 @@
         <table id="dean" class="table">
             <thead>
                 <tr>
-                    <th>Dean ID - Useraccount</th>
+                    <th>Dean ID - User Account</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>School</th>
                     <th>Email</th>
+                    <th>Actions</th> <!-- New column for actions -->
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,9 @@
                         <td>{{ $dean->last_name }}</td>
                         <td>{{ $dean->school->school_name }}</td>
                         <td>{{ $dean->email }}</td>
+                        <td>
+                            <a href="{{ route('admin.dean.edit', $dean->dean_id) }}" class="btn btn-primary">Edit</a>
+                        </td> <!-- Edit button -->
                     </tr>
                 @endforeach
             </tbody>
@@ -55,5 +59,18 @@
         text-align: left;
         background-color: #04AA6D;
         color: white;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
     }
 </style>

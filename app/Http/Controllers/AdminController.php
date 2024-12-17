@@ -196,6 +196,45 @@ public function showCounselor()
     return view('admin.counselors.index', compact('counselors'));
 }
 
+public function editCounselor($counselorId)
+{
+    // Find the counselor along with their associated user
+    $counselor = Counselor::with('user')->findOrFail($counselorId);
+
+    // Pass both counselor and user to the view
+    return view('admin.counselors.edit', compact('counselor'));
+}
+
+public function updateCounselor(Request $request, $counselorId)
+{
+    // Find the counselor along with their associated user
+    $counselor = Counselor::with('user')->findOrFail($counselorId);
+    $user = $counselor->user; // Get the associated user from the counselor 
+
+    // Validate incoming request data
+    $request->validate([
+        'first_name' => 'required|string|max:100',
+        'last_name' => 'required|string|max:100',
+        'email' => 'nullable|email|max:100',
+        'username' => 'required|string|max:100|unique:users,username,' . $user->user_id . ',user_id', 
+    ]);
+
+    // Update counselor's information
+    $counselor->first_name = $request->input('first_name');
+    $counselor->last_name = $request->input('last_name');
+    $counselor->email = $request->input('email'); // Update email if provided
+    $counselor->save(); // Save updated counselor data
+
+    // Update the associated user's information
+    $user->first_name = $request->input('first_name');
+    $user->last_name = $request->input('last_name');
+    $user->username = $request->input('username');
+    $user->email = $request->input('email'); // Update email if provided
+    $user->save(); // Save updated user data
+
+    // Redirect back to the counselors index with a success message
+    return redirect()->route('admin.counselors.index')->with('success', 'Counselor updated successfully.');
+}
 public function showdean()
 {
     $deans = Dean::with('School')->get();
@@ -203,6 +242,38 @@ public function showdean()
     return view('admin.dean.index', compact('deans'));
 }
 
+public function editDean($deanId)
+{
+    $dean = Dean::with('School', 'User')->findOrFail($deanId); // Load the user relationship
+    return view('admin.dean.edit', compact('dean'));
+}
+
+public function updateDean(Request $request, $deanId)
+{
+    // Find the dean and associated user
+    $dean = Dean::with('user')->findOrFail($deanId);
+    $userId = $dean->user_id;  // Get the user ID associated with the dean
+
+    $request->validate([
+        'first_name' => 'required|string|max:100',
+        'last_name' => 'required|string|max:100',
+        'email' => 'nullable|email|max:100',
+        'username' => 'required|string|max:100|unique:users,username,' . $userId . ',user_id', // Add user_id to the uniqueness check
+    ]);
+
+    // Update dean's information
+    $dean->first_name = $request->input('first_name');
+    $dean->last_name = $request->input('last_name');
+    $dean->email = $request->input('email');
+    $dean->save();
+
+    // Update the associated user's username
+    $user = User::findOrFail($userId); // Find the user using the retrieved user ID
+    $user->username = $request->input('username');
+    $user->save();
+
+    return redirect()->route('admin.dean.index')->with('success', 'Dean updated successfully.');
+}
 
 public function importStudents(Request $request)
 {
@@ -320,7 +391,7 @@ public function importStudents(Request $request)
     
             return redirect()->back()->with('success', 'Teachers imported successfully.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Error occurred while importing teachers: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error occurred while importing teachers: '  );
         }
     }
     

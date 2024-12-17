@@ -156,8 +156,12 @@ Route::get('admin/teachers', [AdminController::class, 'showTeacher'])->name('adm
 Route::get('admin/excuseslip', [AdminController::class, 'showExcuseslip'])->name('admin.excuseslip.index');
 
 Route::get('/admin/counselors', [AdminController::class, 'showCounselor'])->name('admin.counselors.index');
+Route::get('/admin/counselors/edit/{counselor}', [AdminController::class, 'editCounselor'])->name('admin.counselor.edit');
+Route::put('/admin/counselors/update/{counselor}', [AdminController::class, 'updateCounselor'])->name('admin.counselors.update');
 
 Route::get('/admin/dean', [AdminController::class, 'showdean'])->name('admin.dean.index');
+Route::get('/admin/dean/edit/{dean}', [AdminController::class, 'editDean'])->name('admin.dean.edit');
+Route::put('/admin/dean/update/{dean}', [AdminController::class, 'updateDean'])->name('admin.dean.update');
 
 
 

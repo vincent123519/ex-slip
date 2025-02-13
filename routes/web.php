@@ -162,6 +162,7 @@ Route::put('/admin/counselors/update/{counselor}', [AdminController::class, 'upd
 Route::get('/admin/dean', [AdminController::class, 'showdean'])->name('admin.dean.index');
 Route::get('/admin/dean/edit/{dean}', [AdminController::class, 'editDean'])->name('admin.dean.edit');
 Route::put('/admin/dean/update/{dean}', [AdminController::class, 'updateDean'])->name('admin.dean.update');
+Route::put('/admin/dean/{deanId}/promote', [AdminController::class, 'promote'])->name('admin.dean.promote');
 
 
 

@@ -8,13 +8,26 @@
         @endphp
 
         <div class="user-details-container text-center">
-            <img src="{{ asset($imagePath) }}"
-                alt="User Image"
-                class="profile-image" />
+            <img src="{{ asset($imagePath) }}" alt="User Image" class="profile-image" />
             <h1>{{ $dean->first_name }} {{ $dean->last_name }}</h1>
             <hr>
             
-            <form action="{{ route('admin.dean.update', $dean->dean_id) }}" method="POST">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if(session('teacher_info'))
+                @php
+                    $teacherInfo = session('teacher_info');
+                @endphp
+                <div class="alert alert-info">
+                    Selected Teacher: {{ $teacherInfo['first_name'] }} {{ $teacherInfo['last_name'] }} ({{ $teacherInfo['username'] }})
+                </div>
+            @endif
+
+            <form action="{{ route('admin.dean.update', $dean->dean_id) }}" method="POST" id="deanForm">
                 @csrf
                 @method('PUT')
 
@@ -29,13 +42,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email', $dean->email) }}" required>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="{{ old('username', $dean->user->username) }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" value="{{ old('username', $dean->user->username) }}" required>
+                    <label for="teacher_id">Select Teacher</label>
+                    <select id="teacher_id" name="teacher_id">
+                        <option value="">Select a teacher</option>
+                        @foreach($teachers as $teacher)
+                            <option value="{{ $teacher->id }}" 
+                                data-first-name="{{ $teacher->first_name }}" 
+                                data-last-name="{{ $teacher->last_name }}" 
+                                data-username="{{ $teacher->user->username }}">
+                                {{ $teacher->first_name }} {{ $teacher->last_name }} ({{ $teacher->user->username }})
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
@@ -48,6 +71,20 @@
             </a>
         </div>
     </div>
+
+    <script>
+        document.getElementById('teacher_id').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const firstName = selectedOption.getAttribute('data-first-name');
+            const lastName = selectedOption.getAttribute('data-last-name');
+            const username = selectedOption.getAttribute('data-username');
+
+            // Update input fields with selected teacher's details
+            document.getElementById('first_name').value = firstName;
+            document.getElementById('last_name').value = lastName;
+            document.getElementById('username').value = username;
+        });
+    </script>
 </body>
 @endsection
 
@@ -101,7 +138,7 @@
     }
 
     .form-group input[type="text"],
-    .form-group input[type="email"] {
+    .form-group select {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;

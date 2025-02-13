@@ -83,6 +83,29 @@ class AdminController extends Controller
     return view('admin.students.index', compact('students'));
 }
 
+//promote teacher to dean
+public function promote(Request $request, $deanId)
+{
+    // Validate that the teacher ID is provided
+    $request->validate([
+        'teacher_id' => 'required|exists:teachers,id',
+    ]);
+
+    // Fetch the selected teacher
+    $teacher = Teacher::findOrFail($request->input('teacher_id'));
+
+    // Logic to promote the teacher to dean
+    // For example, creating a new Dean record
+    $dean = new Dean();
+    $dean->first_name = $teacher->first_name;
+    $dean->last_name = $teacher->last_name;
+    $dean->email = $teacher->email; // or whatever logic you want to use
+    $dean->user_id = $teacher->user_id;
+    $dean->save();
+
+    return redirect()->route('admin.dean.index')->with('success', 'Teacher promoted to Dean successfully!');
+}
+
 public function showExcuseSlip(Request $request)
 {
     $excuseslips = ExcuseSlip::query();
@@ -244,34 +267,69 @@ public function showdean()
 
 public function editDean($deanId)
 {
-    $dean = Dean::with('School', 'User')->findOrFail($deanId); // Load the user relationship
-    return view('admin.dean.edit', compact('dean'));
-}
+    $dean = Dean::with('School', 'User')->findOrFail($deanId); // Load the user and school relationships
+    $teachers = Teacher::all(); // Fetch all teachers
 
+    return view('admin.dean.edit', compact('dean', 'teachers'));
+}
 public function updateDean(Request $request, $deanId)
 {
+    // Log the incoming request data
+    \Log::info('Update Dean Request Data:', $request->all());
+
     // Find the dean and associated user
     $dean = Dean::with('user')->findOrFail($deanId);
-    $userId = $dean->user_id;  // Get the user ID associated with the dean
+    $userId = $dean->user_id; // Get the user ID associated with the dean
+    $user = User::findOrFail($userId); // Fetch the associated user
 
+    // Validate incoming request
     $request->validate([
         'first_name' => 'required|string|max:100',
         'last_name' => 'required|string|max:100',
         'email' => 'nullable|email|max:100',
-        'username' => 'required|string|max:100|unique:users,username,' . $userId . ',user_id', // Add user_id to the uniqueness check
+        'username' => 'required|string|max:100',
+        'teacher_id' => 'nullable|exists:teachers,id', // Validate teacher ID if provided
     ]);
 
     // Update dean's information
     $dean->first_name = $request->input('first_name');
     $dean->last_name = $request->input('last_name');
     $dean->email = $request->input('email');
-    $dean->save();
 
-    // Update the associated user's username
-    $user = User::findOrFail($userId); // Find the user using the retrieved user ID
+    // Handle selected teacher if provided
+    if ($request->filled('teacher_id')) {
+        $teacher = Teacher::findOrFail($request->input('teacher_id'));
+
+        // Flash teacher information to the session
+        session()->flash('teacher_info', [
+            'first_name' => $teacher->first_name,
+            'last_name' => $teacher->last_name,
+            'username' => $teacher->user->username,
+        ]);
+
+        // Update the dean's information with the teacher's details
+        $dean->first_name = $teacher->first_name;
+        $dean->last_name = $teacher->last_name;
+        $user->username = $teacher->user->username; // Update the associated user's username
+    }
+
+    // Update the user's information
+    $user->first_name = $request->input('first_name');
+    $user->last_name = $request->input('last_name');
     $user->username = $request->input('username');
-    $user->save();
 
+
+    // Save the dean's updated information
+    $deanSaved = $dean->save();
+
+    // Save the updated user information
+    $userSaved = $user->save();
+
+    // Log save results
+    \Log::info('Dean Save Result:', ['result' => $deanSaved]);
+    \Log::info('User Save Result:', ['result' => $userSaved]);
+
+    // Redirect with success message
     return redirect()->route('admin.dean.index')->with('success', 'Dean updated successfully.');
 }
 

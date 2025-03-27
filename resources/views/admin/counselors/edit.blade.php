@@ -1,17 +1,33 @@
 @extends('components.admin')
 
 @section('content')
+<body>
     <div class="container">
         @php
-            $imagePath = $counselor->user->image ? 'storage/user_image/' . $counselor->user->image : 'storage/user_image/user.png';
+            $imagePath = Auth::user()->image ? 'storage/user_image/' . Auth::user()->image : 'storage/user_image/user.png';
         @endphp
 
         <div class="user-details-container text-center">
-            <img src="{{ asset($imagePath) }}" alt="Counselor Image" class="profile-image" />
-            <h1>Edit Counselor Profile: {{ $counselor->user->first_name }} {{ $counselor->user->last_name }}</h1>
+            <img src="{{ asset($imagePath) }}" alt="User Image" class="profile-image" />
+            <h1>{{ $counselor->first_name }} {{ $counselor->last_name }}</h1>
             <hr>
+            
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-            <form action="{{ route('admin.counselors.update', $counselor->counselor_id) }}" method="POST">
+            @if(session('teacher_info'))
+                @php
+                    $teacherInfo = session('teacher_info');
+                @endphp
+                <div class="alert alert-info">
+                    Selected Teacher: {{ $teacherInfo['first_name'] }} {{ $teacherInfo['last_name'] }} ({{ $teacherInfo['username'] }})
+                </div>
+            @endif
+
+            <form action="{{ route('admin.counselors.update', $counselor->counselor_id) }}" method="POST" id="counselorForm">
                 @csrf
                 @method('PUT')
 
@@ -26,21 +42,50 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email', $counselor->email) }}" required>
-                </div>
-
-                <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" value="{{ old('username', $counselor->user->username) }}" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update Profile</button>
+                <div class="form-group">
+                    <label for="teacher_id">Select Teacher</label>
+                    <select id="teacher_id" name="teacher_id">
+                        <option value="">Select a teacher</option>
+                        @foreach($teachers as $teacher)
+                            <option value="{{ $teacher->id }}" 
+                                data-first-name="{{ $teacher->first_name }}" 
+                                data-last-name="{{ $teacher->last_name }}" 
+                                data-username="{{ $teacher->user->username }}">
+                                {{ $teacher->first_name }} {{ $teacher->last_name }} ({{ $teacher->user->username }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Update Profile
+                </button>
             </form>
 
-            <a href="{{ route('admin.counselors.index') }}" class="btn btn-secondary">Back to Counselors List</a>
+            <a href="{{ route('admin.counselors.index') }}" class="btn btn-secondary">
+                Back to Manage Counselors
+            </a>
         </div>
     </div>
+
+    <script>
+        document.getElementById('teacher_id').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const firstName = selectedOption.getAttribute('data-first-name');
+            const lastName = selectedOption.getAttribute('data-last-name');
+            const username = selectedOption.getAttribute('data-username');
+
+            // Update input fields with selected teacher's details
+            document.getElementById('first_name').value = firstName;
+            document.getElementById('last_name').value = lastName;
+            document.getElementById('username').value = username;
+        });
+    </script>
+</body>
 @endsection
 
 <style>
@@ -93,7 +138,7 @@
     }
 
     .form-group input[type="text"],
-    .form-group input[type="email"] {
+    .form-group select {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;

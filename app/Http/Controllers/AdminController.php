@@ -218,46 +218,74 @@ public function showCounselor()
 
     return view('admin.counselors.index', compact('counselors'));
 }
-
 public function editCounselor($counselorId)
 {
-    // Find the counselor along with their associated user
-    $counselor = Counselor::with('user')->findOrFail($counselorId);
+    $counselor = Counselor::with('department', 'User')->findOrFail($counselorId); // Load the user and school relationships
+    $teachers = Teacher::all(); // Fetch all teachers
 
-    // Pass both counselor and user to the view
-    return view('admin.counselors.edit', compact('counselor'));
+    return view('admin.counselors.edit', compact('counselor', 'teachers'));
 }
 
 public function updateCounselor(Request $request, $counselorId)
 {
-    // Find the counselor along with their associated user
-    $counselor = Counselor::with('user')->findOrFail($counselorId);
-    $user = $counselor->user; // Get the associated user from the counselor 
+    // Log the incoming request data
+    \Log::info('Update Counselor Request Data:', $request->all());
 
-    // Validate incoming request data
+    // Find the counselor and associated user
+    $counselor = Counselor::with('user')->findOrFail($counselorId);
+    $userId = $counselor->user_id; // Get the user ID associated with the counselor
+    $user = User::findOrFail($userId); // Fetch the associated user
+
+    // Validate incoming request
     $request->validate([
         'first_name' => 'required|string|max:100',
         'last_name' => 'required|string|max:100',
         'email' => 'nullable|email|max:100',
-        'username' => 'required|string|max:100|unique:users,username,' . $user->user_id . ',user_id', 
+        'username' => 'required|string|max:100',
+        'teacher_id' => 'nullable|exists:teachers,id', // Validate teacher ID if provided
     ]);
 
     // Update counselor's information
     $counselor->first_name = $request->input('first_name');
     $counselor->last_name = $request->input('last_name');
-    $counselor->email = $request->input('email'); // Update email if provided
-    $counselor->save(); // Save updated counselor data
+    $counselor->email = $request->input('email');
 
-    // Update the associated user's information
+    // Handle selected teacher if provided
+    if ($request->filled('teacher_id')) {
+        $teacher = Teacher::findOrFail($request->input('teacher_id'));
+
+        // Flash teacher information to the session
+        session()->flash('teacher_info', [
+            'first_name' => $teacher->first_name,
+            'last_name' => $teacher->last_name,
+            'username' => $teacher->user->username,
+        ]);
+
+        // Update the counselor's information with the teacher's details
+        $counselor->first_name = $teacher->first_name;
+        $counselor->last_name = $teacher->last_name;
+        $user->username = $teacher->user->username; // Update the associated user's username
+    }
+
+    // Update the user's information
     $user->first_name = $request->input('first_name');
     $user->last_name = $request->input('last_name');
     $user->username = $request->input('username');
-    $user->email = $request->input('email'); // Update email if provided
-    $user->save(); // Save updated user data
 
-    // Redirect back to the counselors index with a success message
+    // Save the counselor's updated information
+    $counselorSaved = $counselor->save();
+
+    // Save the updated user information
+    $userSaved = $user->save();
+
+    // Log save results
+    \Log::info('Counselor Save Result:', ['result' => $counselorSaved]);
+    \Log::info('User Save Result:', ['result' => $userSaved]);
+
+    // Redirect with success message
     return redirect()->route('admin.counselors.index')->with('success', 'Counselor updated successfully.');
 }
+
 public function showdean()
 {
     $deans = Dean::with('School')->get();

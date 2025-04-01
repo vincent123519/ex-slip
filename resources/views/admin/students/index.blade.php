@@ -12,7 +12,6 @@
                     <th>Student ID | UserAccount</th>
                     <th>Name</th>
                     <th>Degree Year Level</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,9 +20,6 @@
                         <td>{{ $student->student_id }} | {{$student->user->username}} </td>
                         <td>{{ $student->last_name }}, {{ $student->first_name }}</td>
                         <td>{{ $student->degree->degree_name }}-{{ $student->year_level }}</td>
-                        <td>
-                            <a href="{{ route('admin.import.index')}}" class="btn btn-primary btn-sm">Add Study Load</a>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -168,11 +164,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const actionCell = document.createElement('td');
       const actionLink = document.createElement('a');
-      actionLink.href = "{{ route('admin.import.index') }}";
-      actionLink.className = "btn btn-primary btn-sm";
-      actionLink.textContent = "Add Study Load";
-      actionCell.appendChild(actionLink);
-      row.appendChild(actionCell);
 
       tableBody.appendChild(row);
     });

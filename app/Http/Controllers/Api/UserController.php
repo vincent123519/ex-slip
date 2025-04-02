@@ -142,43 +142,72 @@ public function login(Request $request)
         'password' => 'required',
     ]);
 
-    $user = User::with('role')->where('username', $validatedData['username'])->first();
+    $user = User::where('username', $validatedData['username'])->get(); // Get all users with this username
 
-    if (!$user || !Hash::check($validatedData['password'], $user->password)) {
+    if ($user->isEmpty() || !Hash::check($validatedData['password'], $user->first()->password)) {
         throw ValidationException::withMessages([
             'message' => 'Invalid username or password',
         ])->status(401);
     }
 
+    // Check if there are multiple accounts with the same username
+    if ($user->count() > 1) {
+        return view('auth.select_role', ['users' => $user]); // Show role selection modal
+    }
+
+    $user = $user->first(); // Get the single user
+
     Auth::login($user);
 
-    // Log the user information for debugging purposes
-    \Illuminate\Support\Facades\Log::info('User Information: ' . json_encode($user->toArray()));
-
-    // Check if the user is logging in for the first time, but exclude admins (role_id = 6)
+    // ✅ First-time login check (excluding admins)
     if ($user->first_time_login && $user->role_id !== 6) {
-        // Redirect to change password page for non-admin users
         return redirect()->route('change-password')->with('warning', 'Please change your password for the first time.');
     }
 
-    // Redirect based on the user's role
-    switch ($user->role_id) {
-        case 1:
-            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-        case 2:
-            return redirect()->route('teacher.dashboard')->with('success', 'Teacher logged in successfully');
-        case 3:
-            return redirect()->route('student.dashboard')->with('success', 'Student logged in successfully');
-        case 4:
-            return redirect()->route('counselor.dashboard')->with('success', 'Counselor logged in successfully');
-        case 5:
-            return redirect()->route('dean.dashboard')->with('success', 'Dean logged in successfully');
-        case 6:
-            return redirect()->route('admin.dashboard')->with('success', 'Admin logged in successfully');
-        default:
-            return redirect()->route('default.dashboard')->with('success', 'Logged in successfully');
+    // ✅ Redirect user based on their role
+    return redirect()->route($this->getRoleDashboard($user->role_id))->with('success', 'Logged in successfully');
+}
+
+
+private function getRoleDashboard($roleId)
+{
+    switch ($roleId) {
+        case 1: return 'admin.dashboard';
+        case 2: return 'teacher.dashboard';
+        case 3: return 'student.dashboard';
+        case 4: return 'counselor.dashboard';
+        case 5: return 'dean.dashboard';
+        default: return 'admin.dashboard'; // Default route
     }
 }
+
+
+public function selectRoleLogin(Request $request)
+{
+    // Get the user by ID
+    $user = User::find($request->user_id);
+
+    // Check if the user exists
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    // Log the user in
+    Auth::login($user);
+
+    // Get the route name
+    $routeName = $this->getRoleDashboard($request->role_id);
+
+    // Return the route URL using route()
+    return response()->json([
+        'redirect_url' => route($routeName),
+    ]);
+}
+
+
+
+
+
 
 
 

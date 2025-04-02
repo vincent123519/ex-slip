@@ -1,21 +1,23 @@
 <?php
 
+use App\Models\Teacher;
 use App\Models\Counselor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DeanController;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\CounselorController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\DeanController;
-use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExcuseSlipController;
 use App\Http\Controllers\HeadCounselorController;
-use App\Models\Teacher;
-use Illuminate\Support\Facades\Log;
 
 Route::get('/reports', [ReportController::class, 'viewReports'])
     ->name('reports.view');
@@ -115,8 +117,35 @@ Route::post('/register', [UserController::class, 'register'])->name('register');
 
 // User Login
 
+// Show login form
 Route::get('/', [UserController::class, 'showLoginForm'])->name('login');
+
+// Handle login submission (POST)
 Route::post('/', [UserController::class, 'login']);
+
+// Handle role selection (POST)
+Route::post('/redirect-role', function (Request $request) {
+    $userId = $request->input('user_id');
+    $roleId = $request->input('role_id');
+    $username = $request->input('username');
+
+    // Retrieve the correct user instance
+    $user = User::where('user_id', $userId)->where('username', $username)->first();
+
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
+
+    // Log in the selected user (to ensure correct role-based session)
+    Auth::login($user);
+
+    // Redirect to the correct dashboard based on role
+    return response()->json([
+        'redirect_url' => route($this->getRoleDashboard($roleId)) // Use the method here
+    ]);
+})->name('redirectRole');
+
+Route::post('/select-role-login', [UserController::class, 'selectRoleLogin'])->name('selectRoleLogin');
 
 
 // User Logout

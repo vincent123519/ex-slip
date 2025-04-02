@@ -61,9 +61,9 @@
 <div class="school-container">
     <h2>School Information</h2>
     <div class="school-icon"></div> 
-    <p>Total Schools: {{ $total_schools }}</p>
-    <p>Total Departments:{{ $total_departments }} </p>
-    <p>Phone: 555-1234</p>
+    <p>Total Schools: <a href="{{ route('admin.schools') }}">{{ $total_schools }}</a></p>
+<p>Total Departments: <a href="{{ route('admin.departments') }}">{{ $total_departments }}</a></p>
+
 </div>
 
 

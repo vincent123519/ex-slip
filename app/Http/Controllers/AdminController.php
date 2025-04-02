@@ -204,6 +204,21 @@ public function dashboard()
     return view('admin.dashboard', $data);
 }
 
+public function schools()
+    {
+        return view('admin.schools.index', [
+            'schools' => School::all(),
+        ]);
+    }
+
+    public function departments()
+    {
+        return view('admin.departments.index', [
+            'departments' => Department::all(),
+        ]);
+    }
+
+
             
 // for the teacher ni
 public function showTeacher()

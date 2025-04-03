@@ -194,6 +194,8 @@ Route::put('/admin/dean/update/{dean}', [AdminController::class, 'updateDean'])-
 Route::put('/admin/dean/{deanId}/promote', [AdminController::class, 'promote'])->name('admin.dean.promote');
 
 Route::get('/admin/schools', [AdminController::class, 'schools'])->name('admin.schools');
+Route::post('/admin/schools/store', [AdminController::class, 'storeSchool'])->name('admin.schools.store');
+
 Route::get('/admin/departments', [AdminController::class, 'departments'])->name('admin.departments');
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use Exception;
 use App\Models\Dean;
 use App\Models\User;
@@ -18,8 +19,8 @@ use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use App\Models\CourseOffering;
 use App\Models\DepartmentDegree;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -205,10 +206,89 @@ public function dashboard()
 }
 
 public function schools()
+{
+    // Fetch all schools and teachers
+    $schools = School::all();
+    $teachers = Teacher::all();  // Fetch all teachers
+
+    // Return the view with schools and teachers data
+    return view('admin.schools.index', [
+        'schools' => $schools,
+        'teachers' => $teachers,  // Pass teachers to the view
+    ]);
+}
+
+    
+public function storeSchool(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'school_code' => 'required|integer|unique:schools,school_code',
+        'school_name' => 'required|string|max:255',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    // Create the school
+    $school = School::create([
+        'school_code' => $request->school_code,
+        'school_name' => $request->school_name,
+    ]);
+
+    // Create the default dean details
+    $defaultDeanFirstName = 'Default';
+    $defaultDeanLastName = 'Dean';
+    $defaultDeanUsername = strtolower($request->school_name . '.dean');
+
+    // Create a new User for the Dean role
+    $user = User::create([
+        'first_name' => $defaultDeanFirstName,
+        'last_name' => $defaultDeanLastName,
+        'username' => $defaultDeanUsername,
+        'password' => Hash::make('12345'), // Default password
+        'role_id' => 5, // Dean role
+    ]);
+
+    // Create and associate the Dean
+    $dean = new Dean([
+        'first_name' => $defaultDeanFirstName,
+        'last_name' => $defaultDeanLastName,
+    ]);
+
+    $dean->user()->associate($user);
+    $dean->school()->associate($school);
+    $dean->save();
+
+    return view('admin.schools.index', [
+        'schools' => School::all(),
+    ])->with('success', 'School added and default dean assigned successfully!');
+    
+}
+
+
+
+
+
+
+    public function editSchool($school_code)
     {
-        return view('admin.schools.index', [
-            'schools' => School::all(),
+        $school = School::where('school_code', $school_code)->firstOrFail();
+        return view('admin.schools.edit', compact('school'));
+    }
+    
+    public function updateSchool(Request $request, $school_code)
+    {
+        $request->validate([
+            'school_name' => 'required|string|max:255',
         ]);
+    
+        $school = School::where('school_code', $school_code)->firstOrFail();
+        $school->update([
+            'school_name' => $request->school_name,
+        ]);
+    
+        return redirect()->route('admin.schools')->with('success', 'School updated successfully.');
     }
 
     public function departments()

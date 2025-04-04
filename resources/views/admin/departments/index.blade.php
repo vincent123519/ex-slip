@@ -4,6 +4,9 @@
     <div class="container">
         <h1>All Departments</h1>
 
+        <!-- Add Department Button -->
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">Add Department</button>
+
         <!-- Search Form -->
         <div class="input-group mb-3" style="max-width: 500px; margin: 20px auto;">
             <input 
@@ -34,31 +37,58 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Add Department Modal -->
+ <!-- Add Department Modal -->
+<div class="modal fade" id="addDepartmentModal" tabindex="-1" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('admin.departments.store') }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDepartmentModalLabel">Add Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="department_name" class="form-label">Department Name</label>
+                        <input type="text" class="form-control" name="department_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="school_code" class="form-label">School</label>
+                        <select class="form-control" name="school_code" required>
+                            <option value="">Select School</option>
+                            @foreach ($schools as $school)
+                                <option value="{{ $school->school_code }}">{{ $school->school_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Department</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script>
-    // Ensure the script runs after the DOM is fully loaded
     document.addEventListener('DOMContentLoaded', function() {
-        // Add the input event listener for real-time search
         document.getElementById('searchInput').addEventListener('input', function() {
-            var searchValue = this.value.toLowerCase(); // Get the search value and convert it to lowercase
-            var rows = document.querySelectorAll('#department tbody tr'); // Get all rows in the table body
+            var searchValue = this.value.toLowerCase();
+            var rows = document.querySelectorAll('#department tbody tr');
 
             rows.forEach(function(row) {
-                var departmentName = row.querySelector('.department-name'); // Get the department name cell
-                var schoolName = row.querySelector('.school-name'); // Get the school name cell
+                var departmentName = row.querySelector('.department-name');
+                var schoolName = row.querySelector('.school-name');
 
                 if (departmentName && schoolName) {
-                    var departmentText = departmentName.textContent.toLowerCase(); // Get the text of the department name
-                    var schoolText = schoolName.textContent.toLowerCase(); // Get the text of the school name
-                    
-                    // Check if either department name or school name contains the search term
-                    if (departmentText.includes(searchValue) || schoolText.includes(searchValue)) {
-                        row.style.display = ''; // Show the row if it matches the search
-                    } else {
-                        row.style.display = 'none'; // Hide the row if it doesn't match
-                    }
+                    var departmentText = departmentName.textContent.toLowerCase();
+                    var schoolText = schoolName.textContent.toLowerCase();
+
+                    row.style.display = (departmentText.includes(searchValue) || schoolText.includes(searchValue)) ? '' : 'none';
                 }
             });
         });
@@ -70,7 +100,7 @@
     #department {
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
-        width: 60%; /* Adjusted width to make sure the table does not overlap */
+        width: 60%;
         margin-left: auto;
         margin-right: auto;
     }
@@ -100,7 +130,6 @@
         max-width: 500px;
         margin-bottom: 26px;
         margin-left: auto;
-        margin-right: 1030px;
-
-            }
+        margin-right: auto;
+    }
 </style>

@@ -292,13 +292,36 @@ public function storeSchool(Request $request)
     }
 
     public function departments()
-    {
-        return view('admin.departments.index', [
-            'departments' => Department::all(),
-        ]);
+{
+    return view('admin.departments.index', [
+        'departments' => Department::with('school')->get(),
+        'schools' => School::all(), // This fixes the undefined variable error
+    ]);
+}
+
+
+public function storeDepartment(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'department_name' => 'required|string|max:255',
+        'school_code' => 'required|exists:schools,school_code',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
 
+    Department::create([
+        'department_name' => $request->department_name,
+        'school_code' => $request->school_code,
+    ]);
 
+    return view('admin.departments.index', [
+        'departments' => Department::with('school')->get(),
+        'schools' => School::all(), // This fixes the undefined variable error
+    ]);
+}
+    
             
 // for the teacher ni
 public function showTeacher()

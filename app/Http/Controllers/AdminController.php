@@ -11,6 +11,7 @@ use App\Models\School;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Semester;
+use App\Enums\DegreeEnum;
 use App\Models\Counselor;
 use App\Models\StudyLoad;
 use App\Models\Department;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+
 
 class AdminController extends Controller
 {
@@ -326,15 +328,28 @@ public function storeDepartment(Request $request)
 
 //for degress
 
+
 public function departmentDegrees()
 {
+    $departmentDegrees = DepartmentDegree::with('department')->get();
+
+    // Create a case-insensitive mapping: lowercase degree name => enum key (like "bsit")
+    $enumLabels = collect(DegreeEnum::cases())->mapWithKeys(function ($case) {
+        return [strtolower($case->value) => $case->name]; // "bachelor..." => "BSIT"
+    });
+
+    // Build labels for degrees based on their enum match (if found)
+    $degreeLabels = $departmentDegrees->mapWithKeys(function ($degree) use ($enumLabels) {
+        $key = strtolower($degree->degree_name);
+        return [$degree->degree_id => $enumLabels[$key] ?? 'N/A'];
+    });
+
     return view('admin.department_degrees.index', [
-        'departmentDegrees' => DepartmentDegree::with('department')->get(),
+        'departmentDegrees' => $departmentDegrees,
         'departments' => Department::all(),
-        'total_degree' => DepartmentDegree::count(),
+        'degreeLabels' => $degreeLabels,
     ]);
 }
-
 public function storeDepartmentDegree(Request $request)
 {
     $validated = $request->validate([

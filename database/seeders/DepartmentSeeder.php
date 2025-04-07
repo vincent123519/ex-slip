@@ -56,6 +56,22 @@ class DepartmentSeeder extends Seeder
                     ['department_name' => 'Department of Mathematics and Sciences'],
                     ];
             }
+            elseif ($school->school_code == 1005) {
+                $departments = [
+            ['department_name' => 'Medical Technology Department'],
+            ['department_name' => 'Nursing Department'],
+            ];}
+            elseif ($school->school_code == 1006) {
+                $departments = [
+            ['department_name' => 'Medical Technology Department'],
+            ['department_name' => 'Nursing Department'],
+            ];}
+            elseif ($school->school_code == 1007) {
+                $departments = [
+            ['department_name' => 'Law Regular Program'],
+            ];}
+            
+
 
             // Assign school code to each department
             foreach ($departments as &$department) {

@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th>Degree ID</th>
+                <th>Degree Code</th>
                 <th>Degree Name</th>
                 <th>Department</th>
             </tr>
@@ -20,6 +21,8 @@
             @foreach ($departmentDegrees as $degree)
                 <tr>
                     <td>D{{ $degree->degree_id }}</td>
+                    <td>{{ $degreeLabels[$degree->degree_id] ?? 'N/A' }}</td>
+
                     <td>{{ $degree->degree_name }}</td>
                     <td>{{ $degree->department->department_name ?? 'N/A' }}</td>
                 </tr>
@@ -64,7 +67,7 @@
     #degree {
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
-        width: 60%;
+        width: 80%;
         margin-left: auto;
         margin-right: auto;
     }

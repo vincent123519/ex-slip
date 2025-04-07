@@ -127,8 +127,15 @@
     <div class="divider"></div>
     <div class="navmenu">
     <ul>
+    @if (auth()->user()->role_id !== 6) <!-- Admin role -->
+    <li><span>DASHBOARD</span><a class="links" href=""></a></li>
+    @endif
+
+
+    @if (auth()->user()->role_id == 6) <!-- Admin role -->
     <li><span>DASHBOARD</span><a class="links" href="{{ route('admin.dashboard') }}"></a></li>
-   
+    @endif
+
     @if (auth()->user()->role_id == 6) <!-- Admin role -->
             <li><a class="links" href="{{ route('admin.school_years.index') }}">SCHOOL YEAR</a></li>
             <li><a class="links" href="{{ route('admin.course_offerings_and_courses') }}">COURSE</a></li>
@@ -136,6 +143,19 @@
             <li><a class="links" href="{{ route('manage-users') }}">MANAGE USER ACCOUNTS</a></li>
             <li><a class="links" href="{{ route('admin.excuseslip.index') }}">EXCUSE SLIPS</a></li>
         @endif
+
+        @if (auth()->user()->role_id == 3) <!-- student role -->
+            <li><a class="links" href="{{ route('student.dashboard') }}">Home</a></li>
+        @endif
+
+        @if (auth()->user()->role_id == 2) <!-- teacher role -->
+            <li><a class="links" href="{{ route('teacher.dashboard') }}">Home</a></li>
+        @endif
+
+        @if (auth()->user()->role_id == 5) <!-- dean role -->
+            <li><a class="links" href="{{ route('dean.dashboard') }}">Home</a></li>
+        @endif
+        
 
 </ul>
         </div>

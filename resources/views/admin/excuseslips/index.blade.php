@@ -38,9 +38,7 @@
                 <th>Student Name</th>
                 <th>Degree year level</th>
                 <th>Department - School</th>
-                <th>Offer Code</th>
                 <th>Date Absent</th>
-                <th>Teacher</th>
                 <th>Dean</th>
                 <th>Counselor</th>
                 <th>View</th>
@@ -53,9 +51,7 @@
                     <td>{{ $excuseslip->student->first_name }}, {{ $excuseslip->student->last_name }}</td>
                     <td>{{ $excuseslip->student->year_level }} -{{ $excuseslip->student->degree->degree_name }}</td>
                     <td>{{ $excuseslip->student->degree->department->department_name }} -{{ $excuseslip->student->degree->department->school->school_code }}</td>
-                    <td>temp name offercode</td>
-                    <td>{{ $excuseslip->created_at}}</td>
-                    <td>tempname teacher</td>
+                    <td>{{ $excuseslip->start_date}} to {{ $excuseslip->end_date}}</td>
                     <td>{{ $excuseslip->dean->first_name }} {{ $excuseslip->dean->last_name }}</td>
                     <td>{{ $excuseslip->counselor->first_name }} {{ $excuseslip->counselor->last_name }}</td>
                     <td><a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseslip->excuse_slip_id]) }}" class="view-button">

@@ -63,6 +63,7 @@
     <div class="school-icon"></div> 
     <p>Total Schools: <a href="{{ route('admin.schools') }}">{{ $total_schools }}</a></p>
 <p>Total Departments: <a href="{{ route('admin.departments') }}">{{ $total_departments }}</a></p>
+<p>Total Degrees: <a href="{{ route('admin.department_degrees') }}">{{ $total_degree }}</a></p>
 
 </div>
 

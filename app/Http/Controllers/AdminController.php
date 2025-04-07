@@ -198,6 +198,8 @@ public function dashboard()
         'rejected_excuses' => ExcuseSlip::where('status_id', 3)->count(),
         'total_schools' => School::count(),
         'total_departments' => Department::count(),
+        'total_degree' => DepartmentDegree::count(),
+
 
         // Add more data as needed
     ];
@@ -318,7 +320,34 @@ public function storeDepartment(Request $request)
 
     return view('admin.departments.index', [
         'departments' => Department::with('school')->get(),
-        'schools' => School::all(), // This fixes the undefined variable error
+        'schools' => School::all(), 
+    ]);
+}
+
+//for degress
+
+public function departmentDegrees()
+{
+    return view('admin.department_degrees.index', [
+        'departmentDegrees' => DepartmentDegree::with('department')->get(),
+        'departments' => Department::all(),
+        'total_degree' => DepartmentDegree::count(),
+    ]);
+}
+
+public function storeDepartmentDegree(Request $request)
+{
+    $validated = $request->validate([
+        'degree_name' => 'required|string|max:255',
+        'department_id' => 'required|exists:departments,department_id',
+    ]);
+
+    DepartmentDegree::create($validated);
+
+    return view('admin.department_degrees.index', [
+        'departmentDegrees' => DepartmentDegree::with('department')->get(),
+        'departments' => Department::all(),
+        'total_degree' => DepartmentDegree::count(),
     ]);
 }
     

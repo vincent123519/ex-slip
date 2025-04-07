@@ -14,7 +14,10 @@
                                 <th>Course Code</th>
                                 <th>Course Name</th>
                                 <th>Offer Code</th>
-                                <th>Offer Name</th>
+                                <th>Teacher name - ID</th>
+                                <th>Department</th>
+                                <th>School</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -23,7 +26,10 @@
                                 <td>{{ $courseOffering->course->course_code }}</td>
                                 <td>{{ $courseOffering->course->course_name }}</td>
                                 <td>{{ $courseOffering->offer_code }}</td>
+                                <td>{{ $courseOffering->teacher->first_name}} {{ $courseOffering->teacher->last_name}}  {{ $courseOffering->teacher->user->username}}</td>
                                 <td>{{ $courseOffering->course->department->department_name}}</td>
+                                <td>{{ $courseOffering->course->department->school->school_name }}</td>
+
                             </tr>
                             @endforeach
                         </tbody>

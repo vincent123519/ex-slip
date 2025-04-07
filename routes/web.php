@@ -199,6 +199,11 @@ Route::post('/admin/schools/store', [AdminController::class, 'storeSchool'])->na
 Route::get('/admin/departments', [AdminController::class, 'departments'])->name('admin.departments');
 Route::post('/departments/store', [AdminController::class, 'storeDepartment'])->name('admin.departments.store');
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/department-degrees', [AdminController::class, 'departmentDegrees'])->name('department_degrees');
+    Route::post('/department-degrees', [AdminController::class, 'storeDepartmentDegree'])->name('department_degrees.store');
+});
+
 
 
 

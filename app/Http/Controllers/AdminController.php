@@ -537,8 +537,8 @@ public function importStudents(Request $request)
         foreach ($data as $row) {
             $username = $row[3];
 
-            // Check if the username already exists
-            if (User::where('username', $username)->exists()) {
+            // Check if the username already exists, case-insensitive comparison
+            if (User::whereRaw('LOWER(username) = ?', [strtolower($username)])->exists()) {
                 return redirect()->back()->with('error', "User account '{$username}' already exists.");
             }
 
@@ -552,8 +552,8 @@ public function importStudents(Request $request)
                 'role_id' => 3,
             ]);
 
-            // Find the department degree
-            $degree = DepartmentDegree::where('degree_name', $row[2])->first();
+            // Find the department degree, case-insensitive comparison
+            $degree = DepartmentDegree::whereRaw('LOWER(degree_name) = ?', [strtolower($row[2])])->first();
 
             if ($degree) {
                 $student = new Student([
@@ -573,9 +573,10 @@ public function importStudents(Request $request)
 
         return redirect()->back()->with('success', 'Students imported successfully.');
     } catch (Exception $e) {
-        return redirect()->back()->with('error', 'Error occurred while importing students: ');
+        return redirect()->back()->with('error', 'Error occurred while importing students: ' . $e->getMessage());
     }
 }
+
 
     public function showImportForm()
     {
@@ -663,13 +664,22 @@ public function importStudents(Request $request)
             // Extract data from the row
             $courseCode = $row[0];
             $courseName = $row[1];
-            $departmentId = (int) $row[2]; // Ensure department ID is an integer
+            $departmentName = $row[2]; // department name instead of department ID
+
+            // Find the department by name (case-insensitive)
+            $department = Department::whereRaw('LOWER(department_name) = ?', [strtolower($departmentName)])->first();
+
+            // If no department is found, log the error and skip the row
+            if (!$department) {
+                Log::error("Department not found for course: {$courseName}. Skipping.");
+                continue;
+            }
 
             // Create the course
             $course = new Course();
             $course->course_code = $courseCode;
             $course->course_name = $courseName;
-            $course->department_id = $departmentId;
+            $course->department_id = $department->department_id; // Use the department_id from the department found
 
             // Save the course
             $course->save();

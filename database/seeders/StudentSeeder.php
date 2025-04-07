@@ -45,7 +45,7 @@ class StudentSeeder extends Seeder
                 'first_name' => 'Jeriel',
                 'last_name' => 'Orias',
                 'email' => 'jerjer@gmail.com',
-                'degree' => 'Bachelor of civil engineering',
+                'degree' => 'Bachelor of Science in Information Technology',
                 'username' => '2023012',
                 'year_level' => 1,
             ],

@@ -33,7 +33,7 @@
         margin-top: 166px;
         border-top-width: 0px;
         margin-bottom: 0px;
-            }
+    }
 
     .modal h3 {
         margin-bottom: 20px;
@@ -92,32 +92,48 @@
             opacity: 1;
         }
     }
+
+    .profile-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-name {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .profile-container img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #fec039;
+        margin-bottom: 10px;
+        background-size: cover;
+        background-position: center;
+    }
 </style>
 
 <div id="roleSelectionModal" class="modal">
     <!-- Profile Section -->
     <div class="sidebar">
         <div class="profile-container">
-            @php
-                $imagePath = Auth::user()->image ? 'storage/user_image/' . Auth::user()->image : 'storage/user_image/user.png';
-            @endphp
-            <img src="{{ asset($imagePath) }}"
-                alt="image"
-                style="width: 100px;
-                       height: 100px;
-                       border-radius: 50%;
-                       background-color: #fec039;
-                       margin-bottom: 10px;
-                       background-size: cover;
-                       background-position: center;">
-            <div class="profile-name" style="font-weight: bold; margin-bottom: 10px;">
-                {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
-            </div>
+            @if(Auth::check())
+                @php
+                    $imagePath = Auth::user()->image ? 'storage/user_image/' . Auth::user()->image : 'storage/user_image/user.png';
+                @endphp
+                <img src="{{ asset($imagePath) }}" alt="User Image">
+                <div class="profile-name">
+                    {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
+                </div>
+            @else
+                <p>Please log in to see your profile.</p>
+            @endif
         </div>
     </div>
 
     <!-- Role Selection -->
-    <h3>Login As</h3>
+    <h3>Select Your Role</h3>
     <ul id="role-list">
         @foreach($users as $user)
             <li>
@@ -130,9 +146,11 @@
     <button onclick="closeModal()" class="cancel-btn">Cancel</button>
 </div>
 
-
 <script>
     function selectRole(userId, roleId, username) {
+        console.log("Selected userId: " + userId);
+        console.log("Selected roleId: " + roleId);
+
         fetch("{{ route('selectRoleLogin') }}", {
             method: "POST",
             headers: {
@@ -140,18 +158,19 @@
                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
             },
             body: JSON.stringify({
-                user_id: userId,
-                role_id: roleId,
-                username: username,
-                redirect_url: getRedirectUrl(roleId)
+                user_id: userId, // Send the selected user ID
+                role_id: roleId, // Send the selected role ID
+                username: username, // Send the selected username
+                redirect_url: getRedirectUrl(roleId)  // Generate the correct dashboard URL
             })
         })
         .then(response => response.json())
         .then(data => {
+            console.log("Response data:", data);  // Check if the response contains the correct redirect_url
             if (data.redirect_url) {
-                window.location.href = data.redirect_url;
+                window.location.href = data.redirect_url; // Redirect to the correct dashboard
             } else {
-                alert('Error: ' + data.error);
+                alert('Error: ' + data.error);  // Show error message if no URL is provided
             }
         })
         .catch(error => {
@@ -161,13 +180,13 @@
     }
 
     function getRedirectUrl(roleId) {
-        switch (parseInt(roleId)) {
+        switch (roleId) {
             case 1: return "{{ route('admin.dashboard') }}";
             case 2: return "{{ route('teacher.dashboard') }}";
             case 3: return "{{ route('student.dashboard') }}";
             case 4: return "{{ route('counselor.dashboard') }}";
             case 5: return "{{ route('dean.dashboard') }}";
-            default: return "{{ route('admin.dashboard') }}";
+            default: return "{{ route('admin.dashboard') }}"; // Default case
         }
     }
 
@@ -175,4 +194,5 @@
         document.getElementById('roleSelectionModal').style.display = 'none';
     }
 </script>
+
 @endsection

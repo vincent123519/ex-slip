@@ -22,7 +22,6 @@
                 <tr>
                     <td>D{{ $degree->degree_id }}</td>
                     <td>{{ $degreeLabels[$degree->degree_id] ?? 'N/A' }}</td>
-
                     <td>{{ $degree->degree_name }}</td>
                     <td>{{ $degree->department->department_name ?? 'N/A' }}</td>
                 </tr>

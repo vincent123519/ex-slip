@@ -9,9 +9,8 @@ class CreateDepartmentDegreesTable extends Migration
     public function up()
     {
         Schema::create('department_degrees', function (Blueprint $table) {
-            $table->id('degree_id'); // Use 'id' with auto-increment
-            $table->unsignedBigInteger('department_id'); // Change 'unsignedInteger' to 'unsignedBigInteger'
-            $table->string('email', 100)->nullable(); // Add the email column
+            $table->id('degree_id');
+            $table->unsignedBigInteger('department_id');
             $table->string('degree_name', 100);
             $table->timestamps();
 

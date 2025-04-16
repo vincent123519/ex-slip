@@ -1,133 +1,180 @@
 @extends('components.admin')
 @section('content')
+
 <body>
     <div class="container">
-    @php
-$imagePath = Auth::user()->image ? 'storage/user_image/' . Auth::user()->image : 'storage/user_image/user.png';
-@endphp
+        @php
+            $imagePath = Auth::user()->image ? 'storage/user_image/' . Auth::user()->image : 'storage/user_image/user.png';
+        @endphp
 
-<div class="user-details-container">
-<img src="{{ asset($imagePath) }}"
-            alt="User Image"
-            style="width: 100px;
-                    height: 100px;
-                    border-radius: 50%;
-                    background-color: #fff;
-                    margin-bottom: 10px;
-                    background-size: cover;
-                    background-position: center;"
-        />
-    <h1>Change Password</h1>
-    <hr>
-    <div class="user-details">
+        <div class="card">
+            <div class="profile-header">
+                <img src="{{ asset($imagePath) }}" alt="User Image" class="profile-img" />
+                <div class="profile-info">
+                    <h2>{{ $user->first_name }} {{ $user->last_name }}</h2>
+                    <p class="role">Role: {{ $user->role->role_name }}</p>
+                </div>
+            </div>
 
-   
-        <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-        <p><strong>Role:</strong> {{ $user->role->role_name }}</p>
-    </div>
+            <hr class="divider">
 
+            <h3 class="section-title">Change Password</h3>
 
             <form action="{{ route('update-user', $user) }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="form-group">
-                    <label for="username">UserAccount</label>
+                    <label for="username">User Account</label>
                     <input type="text" id="username" name="username" value="{{ $user->username }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">New Password</label>
                     <input type="password" id="password" name="password">
                 </div>
 
-                <button type="submit" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
-                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
-                    </svg>
-                    Update User
-                </button>
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-square-fill"></i> Update User
+                    </button>
+                    <a href="{{ route('manage-users') }}" class="btn btn-secondary">
+                        Back to Manage Users
+                    </a>
+                </div>
             </form>
-
-            <a href="{{ route('manage-users') }}" class="btn btn-secondary">
-                Back to Manage Users
-            </a>
         </div>
     </div>
 </body>
+
 @endsection
 
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        background-color: #f4f6f9;
+    }
 
-<style> body {
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+    .container {
+        display: flex;
+        justify-content: center;
+        margin-top: 80px;
+        padding: 20px;
+    }
 
-        .container {
-            
-            position: relative;
-            border: 1px solid #fff;
-            border-radius: 10px;
-            width: 50%;
-            margin: 20px auto;
-            padding: 50px;
-            box-sizing: border-box;
-            /* background-color: #f9f9f9; */
-            margin-top: 100px;
-        
-        }
+    .card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 40px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
 
-        .container h1 {
-            font-size: 24px;
-            margin: 0 0 20px;
-        }
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
 
-        .user-details {
-            margin-bottom: 20px;
-        }
+    .profile-img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+        border: 3px solid #fec039;
+        background-color: #fff;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .profile-info h2 {
+        margin: 0;
+        font-size: 22px;
+        color: #333;
+    }
 
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+    .profile-info .role {
+        color: #777;
+        font-size: 14px;
+        margin-top: 4px;
+    }
 
-        .form-group input[type="text"],
-        .form-group input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-        }
+    .divider {
+        border: none;
+        height: 1px;
+        background-color: #ddd;
+        margin: 20px 0;
+    }
 
-        .btn-primary,
-        .btn-secondary {
-            display: inline-block;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            text-decoration: none;
-            color: #fff;
-            cursor: pointer;
-        }
+    .section-title {
+        font-size: 20px;
+        color: #041f05;
+        margin-bottom: 25px;
+        text-align: center;
+    }
 
-        .btn-primary {
-            background-color: #007bff;
-        }
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-        .btn-secondary {
-            background-color: #6c757d;
-            margin-left: 0;
-        }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
+    }
 
-        
-    </style></style>
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        transition: border 0.3s ease;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: #fec039;
+        box-shadow: 0 0 5px rgba(254, 192, 57, 0.3);
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: background 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #fec039;
+        color: #041f05;
+    }
+
+    .btn-primary:hover {
+        background-color: #e3aa32;
+    }
+
+    .btn-secondary {
+        background-color: #ddd;
+        color: #333;
+    }
+
+    .btn-secondary:hover {
+        background-color: #ccc;
+    }
+</style>

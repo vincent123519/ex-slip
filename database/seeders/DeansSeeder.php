@@ -64,6 +64,14 @@ class DeansSeeder extends Seeder
                 'username' => 'Jonathan.Capanas',
 
             ],
+            [
+                'first_name' => 'Dr. Vinchita',
+                'last_name' => 'Quinto',
+                'school' => 'School of Education', // Update the school name
+                'email' => 'Vinchita@gmail.com',
+                'username' => 'Vinchita.Quinto',
+
+            ],
         ];
 
         foreach ($deansData as $deanData) {

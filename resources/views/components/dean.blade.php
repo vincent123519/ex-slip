@@ -68,7 +68,43 @@
             background-size: cover;
             background-position: center;">
         <div class="profile-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-        <div class="role-names">Dean</div>
+        <div class="role-names">
+        <p>
+    @php
+        $schoolCode = Auth::user()?->dean?->school_code;
+        $schoolInitial = '';  // Default value
+    @endphp
+
+    @switch($schoolCode)
+        @case(1001)
+            @php $schoolInitial = 'SCS'; @endphp
+            @break
+        @case(1002)
+            @php $schoolInitial = 'SOE'; @endphp
+            @break
+        @case(1003)
+            @php $schoolInitial = 'SBM'; @endphp
+            @break
+        @case(1004)
+            @php $schoolInitial = 'SAS'; @endphp
+            @break
+        @case(1005)
+            @php $schoolInitial = 'SOED'; @endphp
+            @break
+        @case(1006)
+            @php $schoolInitial = 'SAMS'; @endphp
+            @break
+        @case(1007)
+            @php $schoolInitial = 'SOL'; @endphp
+            @break
+        @default
+            @php $schoolInitial = 'Unknown'; @endphp
+    @endswitch
+
+    {{ 'Dean - ' . strtoupper($schoolInitial) }}
+</p>
+
+        </div>
     </div>
     <!-- <div class="divider"></div>
     <div class="divider"></div> -->

@@ -695,70 +695,71 @@ public function importStudents(Request $request)
 
     //
     public function importCourseOfferings(Request $request)
-{
-    $request->validate([
-        'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
-    ]);
-
-    try {
-        $file = $request->file('file');
-        $data = array_map('str_getcsv', file($file));
-
-        foreach ($data as $row) {
-            // Ensure that the row has the correct number of columns
-            if (count($row) < 7) {
-                Log::error('Invalid row format: ' . implode(',', $row));
-                continue; // Skip invalid rows
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,txt|max:2048'
+        ]);
+    
+        try {
+            $file = $request->file('file');
+            $data = array_map('str_getcsv', file($file));
+    
+            foreach ($data as $row) {
+                if (count($row) < 7) {
+                    Log::error('Invalid row format: ' . implode(',', $row));
+                    continue;
+                }
+    
+                $offerCode = $row[0];
+                $courseCode = $row[1];
+                $semesterId = $row[2];
+                $teacherUsername = $row[3];
+                $startTime = $row[4];
+                $endTime = $row[5];
+                $daysOfWeek = $row[6];
+    
+                $course = Course::where('course_code', $courseCode)->first();
+                if (!$course) {
+                    Log::error("Course '{$courseCode}' not found.");
+                    continue;
+                }
+    
+                $semester = Semester::find($semesterId);
+                if (!$semester) {
+                    Log::error("Semester ID '{$semesterId}' not found.");
+                    continue;
+                }
+    
+                $user = User::where('username', $teacherUsername)->where('role_id', 2)->first();
+                if (!$user) {
+                    Log::error("User '{$teacherUsername}' with role 'Teacher' not found.");
+                    continue;
+                }
+    
+                $teacher = Teacher::where('user_id', $user->user_id)->first();
+                if (!$teacher) {
+                    Log::error("Teacher linked to user '{$teacherUsername}' not found.");
+                    continue;
+                }
+    
+                CourseOffering::create([
+                    'offer_code' => $offerCode,
+                    'course_code' => $courseCode,
+                    'semester_id' => $semesterId,
+                    'teacher_id' => $teacher->teacher_id,
+                    'start_time' => $startTime,
+                    'end_time' => $endTime,
+                    'days_of_week' => $daysOfWeek,
+                ]);
             }
-
-            // Extract data from the row
-            $offerCode = $row[0];
-            $courseCode = $row[1];
-            $semesterId = $row[2];
-            $teacherId = $row[3];
-            $startTime = $row[4];
-            $endTime = $row[5];
-            $daysOfWeek = $row[6];
-
-            // Check if the course exists
-            $course = Course::where('course_code', $courseCode)->first();
-            if (!$course) {
-                Log::error("Course with code '{$courseCode}' not found for offering with offer code '{$offerCode}'");
-                continue; 
-            }
-
-            // Check if the semester exists
-            $semester = Semester::find($semesterId);
-            if (!$semester) {
-                Log::error("Semester with ID '{$semesterId}' not found for offering with offer code '{$offerCode}'");
-                continue; // Skip this row
-            }
-
-            // Check if the teacher exists
-            $teacher = Teacher::find($teacherId);
-            if (!$teacher) {
-                Log::error("Teacher with ID '{$teacherId}' not found for offering with offer code '{$offerCode}'");
-                continue; 
-            }
-
-            // Create the course offering
-            CourseOffering::create([
-                'offer_code' => $offerCode,
-                'course_code' => $courseCode,
-                'semester_id' => $semesterId,
-                'teacher_id' => $teacherId,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'days_of_week' => $daysOfWeek,
-            ]);
+    
+            return redirect()->back()->with('success', 'Course offerings imported successfully.');
+        } catch (\Exception $e) {
+            Log::error('Import error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error during course offerings import.');
         }
-
-        return redirect()->back()->with('success', 'Course offerings imported successfully.');
-    } catch (\Exception $e) {
-        Log::error('Error occurred while importing course offerings: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'Error occurred while importing course offerings.');
     }
-}
+    
 
 public function uploadUserImages(Request $request)
 {
@@ -936,11 +937,31 @@ public function addSchoolYear(Request $request)
     return $this->activateSchoolYear($schoolYear->sy_id);
 }
 
-public function showCourseOfferingsAndCourses()
-    {
-        $allCourseOfferings = CourseOffering::all();
-        $allCourses = Course::all();
+public function showCourseOfferingsAndCourses(Request $request)
+{
+    $courseSearch = $request->input('course_search');
+    $offeringSearch = $request->input('offering_search');
 
-        return view('admin.course.index', compact('allCourseOfferings', 'allCourses'));
-    }
+    // Search and paginate Courses
+    $allCourses = Course::query()
+        ->when($courseSearch, function ($query, $courseSearch) {
+            $query->where('course_code', 'like', "%{$courseSearch}%")
+                  ->orWhere('course_name', 'like', "%{$courseSearch}%");
+        })
+        ->paginate(10, ['*'], 'courses_page'); // separate pagination name
+
+    // Search and paginate Course Offerings
+    $allCourseOfferings = CourseOffering::with(['course.department.school', 'teacher.user'])
+        ->when($offeringSearch, function ($query, $offeringSearch) {
+            $query->where('offer_code', 'like', "%{$offeringSearch}%")
+                  ->orWhereHas('course', function ($q) use ($offeringSearch) {
+                      $q->where('course_code', 'like', "%{$offeringSearch}%")
+                        ->orWhere('course_name', 'like', "%{$offeringSearch}%");
+                  });
+        })
+        ->paginate(10, ['*'], 'offerings_page'); // separate pagination name
+
+    return view('admin.course.index', compact('allCourseOfferings', 'allCourses'));
+}
+
 }

@@ -802,7 +802,7 @@ public function uploadUserImages(Request $request)
 public function importStudyLoad(Request $request)
 {
     $request->validate([
-        'file' => 'required|mimes:csv,txt|max:2048' // Adjust allowed file types and size as needed
+        'file' => 'required|mimes:csv,txt|max:2048'
     ]);
 
     try {
@@ -812,32 +812,38 @@ public function importStudyLoad(Request $request)
         // Remove the header row
         array_shift($data);
 
-        // Process the remaining rows
         foreach ($data as $row) {
-            // Validate the data format
+            // Expecting: username, semester_id, offer_code
             if (count($row) !== 3) {
-                throw new \Exception("Invalid row format. Each row must contain student ID, semester ID, and offer code.");
+                throw new \Exception("Invalid row format. Each row must contain username, semester ID, and offer code.");
             }
 
-            // Extract data from the row
-            $studentId = $row[0];
+            $username = $row[0];
             $semesterId = $row[1];
             $offerCode = $row[2];
 
-            // Validate the extracted data if needed
+            // Get the user by username with student role
+            $user = User::where('username', $username)->where('role_id', 3)->first();
+            if (!$user) {
+                \Log::error("User with username '{$username}' and role 'Student' not found.");
+                continue;
+            }
 
-            // Create or update the study load record
-            $studyLoad = StudyLoad::firstOrNew([
-                'student_id' => $studentId,
+            // Get the associated student record
+            $student = Student::where('user_id', $user->user_id)->first();
+            if (!$student) {
+                \Log::error("Student record not found for user '{$username}'.");
+                continue;
+            }
+
+            // Create or retrieve the study load
+            $studyLoad = StudyLoad::firstOrCreate([
+                'student_id' => $student->student_id,
                 'semester_id' => $semesterId,
             ]);
 
-            if (!$studyLoad->exists) {
-                $studyLoad->save();
-            }
-
-            // Attach the offer code to the study load
-            $studyLoad->courseOfferings()->attach($offerCode);
+            // Attach course offering
+            $studyLoad->courseOfferings()->syncWithoutDetaching([$offerCode]);
         }
 
         return redirect()->back()->with('success', 'Study load imported successfully.');
@@ -845,8 +851,6 @@ public function importStudyLoad(Request $request)
         return redirect()->back()->with('error', 'Error occurred while importing study load: ' . $e->getMessage());
     }
 }
-
-
 public function editStudentDetails($id)
 {
     $student = Student::findOrFail($id);

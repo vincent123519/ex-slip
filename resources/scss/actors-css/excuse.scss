@@ -115,6 +115,7 @@ body {
 
 .slip-view-container .form-group {
     margin-bottom: 20px;
+    padding: 5%;
 }
 
 .slip-view-container label {
@@ -136,16 +137,21 @@ body {
 }
 
 .slip-view-container button[type=submit] {
-    padding: 0px 20px;
+    padding: 6px 16px;
     background-color: #fec039;
     color: rgba(13, 62, 32, 0.98);
-    border: none;
-    border-radius: 4px;
+    border: 1px solid #fec039;
+    border-radius: 6px;
     cursor: pointer;
-    border: 1px solid violet;
-    width: 9%;
-    font-weight: bold;
-    margin-top: 84px;
+    width: auto;
+    font-weight: 600;
+    margin-top: 12px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.slip-view-container button[type=submit]:hover {
+    background-color: #e0a800;
+    color: #fff;
 }
 
 .slip-view-container button[type="submit"]:hover {

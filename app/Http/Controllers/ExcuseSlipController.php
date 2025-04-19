@@ -87,21 +87,22 @@ class ExcuseSlipController extends Controller
     
         // Loop through each study load to collect course offerings
         foreach ($studyLoads as $studyLoad) {
-            // Collect all course offerings for this study load
-            $courseOfferings = $studyLoad->courseOfferings;
-    
-            // Add course offerings to the selected course offerings array
+            $courseOfferings = $studyLoad->courseOfferings()->with(['course', 'teacher', 'semester'])->get();
+        
             foreach ($courseOfferings as $courseOffering) {
-                // Create an array containing course offering and teacher details
                 $selectedCourseOfferings[] = [
                     'course_offering_id' => $courseOffering->id,
                     'offer_code' => $courseOffering->offer_code,
                     'course_name' => $courseOffering->course->course_name,
-                    'teacher_id' => $courseOffering->teacher->id,
+                    'teacher_id' => $courseOffering->teacher->teacher_id,
                     'teacher_name' => $courseOffering->teacher->first_name,
+                    'teacher_lname' => $courseOffering->teacher->last_name,
+
+                    'semester_name' => $courseOffering->semester->semester_name,
                 ];
             }
         }
+        
     
         // Fetch other necessary data
         $degree = $student->degree;

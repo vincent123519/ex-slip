@@ -91,21 +91,73 @@
             </div>
 
             <div class="form-group">
-                <label for="offer_codes">Select Courses:</label>
-                <div class="form-group-course">
-
-                    <ul>
-                        @foreach($selectedCourseOfferings as $courseOffering)
-                            <li>
-                                <input type="checkbox" name="offer_codes[]" id="offer_code_{{ $courseOffering['offer_code'] }}" value="{{ $courseOffering['offer_code'] }}" data-teacher-id="{{ $courseOffering['teacher_id'] }}">
-                                <label for="offer_code_{{ $courseOffering['offer_code'] }}">
-                                    {{ $courseOffering['course_name'] }} - {{ $courseOffering['teacher_name'] }} (ID: {{ $courseOffering['teacher_id'] }})
-                                </label>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+    <!-- Semester Filter -->
+    <label for="semester_filter">Filter by Semester:</label>
+    <select id="semester_filter" class="form-control mb-3">
+        <option value="">-- All Semesters --</option>
+        @php
+            $semesters = collect($selectedCourseOfferings)->pluck('semester_name')->unique();
+        @endphp
+        @foreach($semesters as $semester)
+            <option value="{{ $semester }}">{{ $semester }}</option>
+        @endforeach
+    </select>
             </div>
+
+            <div class="form-group">
+ 
+    <!-- Course Offering Table -->
+    <label for="offer_codes">Select Courses:</label>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Course Name</th>
+                <th>Teacher</th>
+                <th>Semester</th>
+            </tr>
+        </thead>
+        <tbody id="course_offering_list">
+            @foreach($selectedCourseOfferings as $courseOffering)
+                <tr>
+                    <td>
+                        <input type="checkbox"
+                               name="offer_codes[]"
+                               id="offer_code_{{ $courseOffering['offer_code'] }}"
+                               value="{{ $courseOffering['offer_code'] }}"
+                               data-teacher-id="{{ $courseOffering['teacher_id'] }}">
+                    </td>
+                    <td>{{ $courseOffering['course_name'] }}</td>
+                    <td>{{ $courseOffering['teacher_name'] }} {{ $courseOffering['teacher_lname'] }}</td>
+                    <td>{{ $courseOffering['semester_name'] }}</td> <!-- Semester is now directly in the <td> -->
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const semesterFilter = document.getElementById('semester_filter');
+        const courseRows = document.querySelectorAll('#course_offering_list tr'); // All the rows of the course table
+
+        // Event listener for when the semester filter is changed
+        semesterFilter.addEventListener('change', function () {
+            const selectedSemester = this.value.trim(); // Get the selected semester
+
+            // Loop through all course rows and hide or show based on the selected semester
+            courseRows.forEach(row => {
+                // Get the semester value from the <td> in the "Semester" column (index 3, 0-based index)
+                const rowSemester = row.cells[3].textContent.trim();
+
+                // If the selected semester matches the row semester or no semester is selected, show the row
+                row.style.display = (selectedSemester === "" || rowSemester === selectedSemester) ? "table-row" : "none";
+            });
+        });
+    });
+</script>
+
 
             <div class="form-group-files">
     <label for="supporting_documents">Supporting Document/s: </label>
@@ -208,6 +260,41 @@
                 event.preventDefault();
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const semesterFilter = document.getElementById('semester_filter');
+        const courseItems = document.querySelectorAll('#course_offering_list li');
+      const selected = this.value.trim();
+
+            courseItems.forEach(item => {
+                const itemSemester = item.getAttribute('data-semester').trim();
+        
+        semesterFilter.addEventListener('change', function () {
+              if (selected === "" || itemSemester === selected) {
+                    item.style.display = "list-item";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+    const semesterFilter = document.getElementById('semester_filter');
+    const courseRows = document.querySelectorAll('#course_offering_list tr'); // All the rows of the course table
+
+    // Event listener for when the semester filter is changed
+    semesterFilter.addEventListener('change', function () {
+        const selectedSemester = this.value.trim(); // Get the selected semester
+
+        // Loop through all course rows and hide or show based on the selected semester
+        courseRows.forEach(row => {
+            const rowSemester = row.getAttribute('data-semester').trim(); // Get the semester for each row
+            // If the selected semester matches the row semester or no semester is selected, show the row
+            row.style.display = (selectedSemester === "" || rowSemester === selectedSemester) ? "table-row" : "none";
+        });
+    });
+});
+
 </script>
 
 <style>

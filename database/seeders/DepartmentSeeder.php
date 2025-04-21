@@ -70,6 +70,10 @@ class DepartmentSeeder extends Seeder
                 $departments = [
             ['department_name' => 'Law Regular Program'],
             ];}
+            elseif ($school->school_code == 1008) {
+                $departments = [
+            ['department_name' => 'SDPC department'],
+            ];}
             
 
 

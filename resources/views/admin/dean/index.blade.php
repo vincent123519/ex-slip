@@ -17,13 +17,13 @@
             <tbody>
                 @foreach ($deans as $dean)
                     <tr>
-                        <td>{{ $dean->dean_id }} | {{ $dean->user->username }}</td>
+                        <td>{{ $dean->user->username }}</td>
                         <td>{{ $dean->first_name }}</td>
                         <td>{{ $dean->last_name }}</td>
                         <td>{{ $dean->school->school_name }}</td>
                         <td>{{ $dean->email }}</td>
                         <td>
-                            <a href="{{ route('admin.dean.edit', $dean->dean_id) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ route('admin.dean.edit', $dean->dean_id) }}" class="btn btn-warning btn-sm">Edit</a>
                         </td> <!-- Edit button -->
                     </tr>
                 @endforeach
@@ -63,7 +63,7 @@
 
     .btn {
         padding: 6px 12px;
-        background-color: #007bff;
+        background-color:rgb(200, 255, 0);
         color: white;
         border: none;
         border-radius: 4px;

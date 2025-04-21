@@ -376,14 +376,19 @@ public function showTeacher()
 }
 public function showCounselor()
 {
-    $counselors = Counselor::all();
+    $counselors = Counselor::with('user', 'department.school')->paginate(5); // Use paginate()
 
     return view('admin.counselors.index', compact('counselors'));
 }
+
 public function editCounselor($counselorId)
 {
-    $counselor = Counselor::with('department', 'User')->findOrFail($counselorId); // Load the user and school relationships
-    $teachers = Teacher::all(); // Fetch all teachers
+    $counselor = Counselor::with('department', 'User')->findOrFail($counselorId);
+
+    // Fetch teachers whose department name is "SDPC department"
+    $teachers = Teacher::whereHas('department', function ($query) {
+        $query->where('department_name', 'SDPC department');
+    })->get();
 
     return view('admin.counselors.edit', compact('counselor', 'teachers'));
 }

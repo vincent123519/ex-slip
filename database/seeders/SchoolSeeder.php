@@ -17,6 +17,9 @@ class SchoolSeeder extends Seeder
             ['school_code' => 1005, 'school_name' => 'School of Education'],
             ['school_code' => 1006, 'school_name' => 'School of Allied Medical Science'],
             ['school_code' => 1007, 'school_name' => 'School of Law'],
+            ['school_code' => 1008, 'school_name' => 'SDPC'],
+
+
 
 
 

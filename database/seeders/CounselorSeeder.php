@@ -23,51 +23,112 @@ class CounselorSeeder extends Seeder
                 'username' => 'jocelyn.martinez',
                 'email' => 'jocelyn@gmail.com',
                 'department' => 'School of Computer Studies',
-
             ],
             [
                 'first_name' => 'Counselor',
-                'last_name' => 'Enginering',
-                'username' => 'counselor.enginering',
-                'email' => 'eng@gmail.com',
+                'last_name' => 'Engineering',
+                'username' => 'counselor.engineering',
+                'email' => 'engineering@gmail.com',
+                'department' => 'Computer Engineering Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Electrical',
+                'username' => 'counselor.electrical',
+                'email' => 'electrical@gmail.com',
+                'department' => 'Electrical Engineering Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Civil',
+                'username' => 'counselor.civil',
+                'email' => 'civil@gmail.com',
                 'department' => 'Civil Engineering Department',
-                
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Electronics',
+                'username' => 'counselor.electronics',
+                'email' => 'electronics@gmail.com',
+                'department' => 'Electronics Engineering Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Industrial',
+                'username' => 'counselor.industrial',
+                'email' => 'industrial@gmail.com',
+                'department' => 'Industrial Engineering Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Mechanical',
+                'username' => 'counselor.mechanical',
+                'email' => 'mechanical@gmail.com',
+                'department' => 'Mechanical Engineering Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Accountancy',
+                'username' => 'counselor.accountancy',
+                'email' => 'accountancy@gmail.com',
+                'department' => 'Accountancy and Finance Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Entrepreneurship',
+                'username' => 'counselor.entrepreneurship',
+                'email' => 'entrepreneurship@gmail.com',
+                'department' => 'Business and Entrepreneurship Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Marketing',
+                'username' => 'counselor.marketing',
+                'email' => 'marketing@gmail.com',
+                'department' => 'Marketing And Human Resource Management Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Tourism',
+                'username' => 'counselor.tourism',
+                'email' => 'tourism@gmail.com',
+                'department' => 'Tourism and Hospitality Management Department',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Psychology',
+                'username' => 'counselor.psychology',
+                'email' => 'psychology@gmail.com',
+                'department' => 'Department of Psychology and Library Information Science',
+            ],
+            [
+                'first_name' => 'Counselor',
+                'last_name' => 'Communication',
+                'username' => 'counselor.communication',
+                'email' => 'communication@gmail.com',
+                'department' => 'Department of  Communication, Languages, and Literature',
             ],
             [
                 'first_name' => 'Counselor',
                 'last_name' => 'Education',
                 'username' => 'counselor.education',
-                'email' => 'edu@gmail.com',
+                'email' => 'education@gmail.com',
                 'department' => 'Department of Mathematics and Sciences',
-                
             ],
-            [
-                'first_name' => 'Counselor',
-                'last_name' => 'accountancy',
-                'username' => 'counselor.accountancy',
-                'email' => 'counselor@gmail.com',
-                'department' => 'Accountancy and Finance Department',
-                
-            ],
-            
-            // Add more sample counselors
         ];
 
         foreach ($counselorsData as $counselorData) {
-            // Find the user and department based on the provided IDs
             $user = User::create([
                 'first_name' => $counselorData['first_name'],
                 'last_name' => $counselorData['last_name'],
                 'username' => $counselorData['username'],
                 'email' => $counselorData['email'],
-                'password' => Hash::make('12345'), // You can set a default password
+                'password' => Hash::make('12345'),
                 'role_id' => 4,
             ]);
 
-            // Find the department
             $department = Department::where('department_name', $counselorData['department'])->first();
 
-            // Create and save the counselor
             $counselor = new Counselor([
                 'first_name' => $counselorData['first_name'],
                 'last_name' => $counselorData['last_name'],

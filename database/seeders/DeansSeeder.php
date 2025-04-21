@@ -41,11 +41,11 @@ class DeansSeeder extends Seeder
 
             ],
             [
-                'first_name' => 'Dr. Marietta',
-                'last_name' => 'Bongcales',
+                'first_name' => 'Dr. Leonardo',
+                'last_name' => 'Monolim',
                 'school' => 'School of Arts and Science', // Update the school name
                 'email' => 'BongcalesM@gmail.com',
-                'username' => 'Marietta.Bongcales',
+                'username' => 'Leonardo.Monolim',
 
             ],
             [

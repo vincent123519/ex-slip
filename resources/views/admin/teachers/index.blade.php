@@ -19,7 +19,7 @@
             <tbody>
                 @foreach ($teachers as $teacher)
                     <tr>
-                        <td>{{ $teacher->teacher_id }} | {{ $teacher->user->username }}</td>
+                        <td>{{ $teacher->user->username }}</td>
                         <td>{{ $teacher->first_name }}</td>
                         <td>{{ $teacher->last_name }}</td>
                         <td>{{ $teacher->department->department_name }}</td>

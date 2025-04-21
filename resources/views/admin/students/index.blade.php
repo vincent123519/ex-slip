@@ -17,7 +17,7 @@
             <tbody>
                 @foreach ($students as $student)
                     <tr>
-                        <td>{{ $student->student_id }} | {{$student->user->username}} </td>
+                        <td> {{$student->user->username}} </td>
                         <td>{{ $student->last_name }}, {{ $student->first_name }}</td>
                         <td>{{ $student->degree->degree_name }}-{{ $student->year_level }}</td>
                     </tr>
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
     filteredStudents.forEach(student => {
       const row = document.createElement('tr');
       const studentIdCell = document.createElement('td');
-      studentIdCell.textContent = `${student.student_id} | ${student.user.username}`;
+      studentIdCell.textContent = ` ${student.user.username}`;
       row.appendChild(studentIdCell);
 
       const nameCell = document.createElement('td');

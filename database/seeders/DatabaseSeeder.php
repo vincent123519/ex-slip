@@ -20,7 +20,7 @@ use Database\Seeders\UserRolesSeeder;
 use Database\Seeders\ExcuseSlipSeeder;
 use Database\Seeders\ExcuseStatusSeeder;
 // use Database\Seeders\HeadCounselorSeeder;
-use Database\Seeders\CourseOfferingSeeder;
+// use Database\Seeders\CourseOfferingSeeder;
 use Database\Seeders\DepartmentDegreeSeeder;
 use Database\Seeders\SupportingDocumentSeeder;
 
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             DeansSeeder::class,
             StudentSeeder::class,
             CourseSeeder::class,
-            CourseOfferingSeeder::class,
+            // CourseOfferingSeeder::class,
             ExcuseStatusSeeder::class,
             // ExcuseSlipSeeder::class,
             // FeedbackSeeder::class,

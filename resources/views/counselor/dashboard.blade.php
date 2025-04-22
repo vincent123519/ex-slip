@@ -13,26 +13,42 @@
                     <span></span>
                     <div class="notification-content">
                     @foreach ($latestExcuseSlips as $latestExcuseSlip)
-                            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}" class="view-button">
+                    <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" class="notification-form">
+            @csrf
+            @method('PUT')
 
-                            <h4>{{ $latestExcuseSlip->student->first_name }} created an excuse slip {{ $latestExcuseSlip->created_at }}
-                            @if ($latestExcuseSlip->read_by_counselor == 1)
-                                <span style="color: green;">(Seen)</span>
-                            @else
-                                <span style="color: red;">(Not Seen)</span>
-                            @endif
-                            </h4>
-                            <!-- Additional details or actions related to the excuse slip -->
-                            <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" style="display: inline;">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="view-button">
-                                
-                            </button>
+                    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
+               onclick="submitMarkAsRead(event, this)"
+               class="notification-link">
+                <h4 style="display: inline;">
+                    {{ $latestExcuseSlip->student->first_name }} created an excuse slip {{ $latestExcuseSlip->created_at }}
+                    @if ($latestExcuseSlip->read_by_counselor == 1)
+                        <span style="color: green;">(Seen)</span>
+                    @else
+                        <span style="color: red;">(Not Seen)</span>
+                    @endif
+                </h4>
+            </a>
 
-                            </form>
+            <!-- Eye Icon -->
+            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
+               onclick="submitMarkAsRead(event, this)"
+               class="view-button" style="margin-left: 8px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-eye" viewBox="0 0 16 16">
+                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 
+                    1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 
+                    5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 
+                    1.12-1.465 1.755C11.879 11.332 10.119 12.5 
+                    8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 
+                    2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 
+                    7 0 3.5 3.5 0 0 1-7 0"/>
+                </svg>
+            </a>
 
-                            <hr style="color: #55825f;">
+            <hr style="color: #55825f;">
+                    </form>
                         @endforeach
                     </div>
                 </div>
@@ -143,19 +159,23 @@
                     <td>{{ $excuseSlip->status->status_name}}</td>
                     
                     <td>
-                        <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('PUT')
-                           
-                        </form>
+    @if ($excuseSlip->status->status_id == 1 || $excuseSlip->status->status_id == 3)
+        <form action="{{ route('excuse.approve', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('PUT')
+            <button type="submit" class="btn-approve">Send to Dean</button>
+        </form>
+    @endif
 
-                        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                                </svg>
+    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseSlip->excuse_slip_id]) }}" class="view-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                            </svg>
                         </a>
-                    </td>
+</td>
+
+
 
                 </tr>
             @endforeach
@@ -188,24 +208,31 @@
   </script>
 
 <script>
-function markAsRead(excuseSlipId) {
-  fetch('/excuse_slips/' + excuseSlipId + '/mark-as-read', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': '{{ csrf_token() }}' 
-    },
-    body: JSON.stringify({ excuse_slip_id: excuseSlipId })
-  })
-  .then(response => {
-    if (response.ok) {
-    } else {
-      // Error: Handle the error case
+    function submitMarkAsRead(event, link) {
+        event.preventDefault(); // Stop the link from navigating immediately
+        const form = link.closest('form');
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': form.querySelector('[name=_token]').value,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                _method: 'PUT'
+            })
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = link.href; // Now go to the show page
+            } else {
+                alert('Failed to mark as read.');
+            }
+        }).catch(error => {
+            console.error(error);
+            alert('Something went wrong.');
+        });
     }
-  })
-  .catch(error => {
-e  });
-}
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -268,3 +295,32 @@ document.addEventListener('DOMContentLoaded', function() {
   searchInput.addEventListener('input', filterRows);
 });
 </script>
+
+<style>.btn-approve {
+    padding: 6px 10px;
+    background-color: #155724;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-approve:hover {
+    background-color: darkgreen;
+}
+
+.btn-view {
+    padding: 6px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.btn-view:hover {
+    background-color: #0056b3;
+}
+</style>

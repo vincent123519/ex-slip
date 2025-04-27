@@ -59,18 +59,35 @@
     
         <h2>Total Excuse Slips: <span id="total-count">{{ count($excuseSlips) }}</span></h2>
         @if(count($excuseSlips) > 0)
-        <div class="filter-container">
-                    <label for="filter" style="font-weight: bold;">Filter by:</label>
-                    <select id="filter" name="filter">
-                        <option value="pending">Pending</option>
-                        <option value="approved_by_counselor">Approved by Counselor</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="approved_by_dean">Approved by Dean</option>
-                        <option value="approved_by_teacher">Approved by Teacher</option>
-                        <option value="all">All</option>
+        <div class="filter-container mb-4">
+    <label for="filter" class="filter-label">Filter by:</label>
+    <select id="filter" name="filter" class="filter-select">
+        <option value="pending">Pending</option>
+        <option value="approved_by_counselor">Approved by Counselor</option>
+        <option value="rejected">Rejected</option>
+        <option value="approved_by_dean">Approved by Dean</option>
+        <option value="approved_by_teacher">Approved by Teacher</option>
+        <option value="all">All</option>
+    </select>
+</div>
 
-                    </select>
-                </div>
+<div class="filters mb-4">
+    <select id="semesterFilter" class="filter-dropdown">
+        <option value="">Filter by Semester</option>
+        @foreach($semesters as $semester)
+            <option value="{{ $semester->semester_name }}">{{ $semester->semester_name }}</option>
+        @endforeach
+    </select>
+
+    <select id="schoolYearFilter" class="filter-dropdown">
+        <option value="">Filter by School Year</option>
+        @foreach($schoolYears as $schoolYear)
+            <option value="{{ $schoolYear->sy_name }}">{{ $schoolYear->sy_name }}</option>
+        @endforeach
+    </select>
+</div>
+
+
 
 
             
@@ -87,6 +104,9 @@
                     <th>Date</th>
                     <th>Duration day</th>
                     <th>Action</th>
+                    <th>Semester</th>
+                    <th>School Year</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -142,6 +162,18 @@
         </svg>
     </a>
 </td>
+    <td>
+            @foreach($excuseSlip->courseOfferings as $courseOffering)
+                {{ $courseOffering->semester->semester_name }}
+                @if (!$loop->last)<br>@endif
+            @endforeach
+        </td>
+    <td>
+            @foreach($excuseSlip->courseOfferings as $courseOffering)
+                {{ $courseOffering->semester->schoolyear->sy_name}}
+                @if (!$loop->last)<br>@endif
+            @endforeach
+    </td>
 
     </tr>
     @endforeach
@@ -211,7 +243,47 @@ $(document).ready(function() {
     filterExcuseSlips('all');
 });
 </script>
+<script>$(document).ready(function() {
+    function filterExcuseSlips() {
+        var rows = $('.excuse-slip-table tbody tr');
+        var semesterValue = $('#semesterFilter').val().toLowerCase();
+        var schoolYearValue = $('#schoolYearFilter').val().toLowerCase();
+        var visibleCount = 0; 
 
+        rows.each(function() {
+            var semesterText = $(this).find('td:nth-child(8)').text().trim().toLowerCase(); // 8th <td> (Semester)
+            var schoolYearText = $(this).find('td:nth-child(9)').text().trim().toLowerCase(); // 9th <td> (School Year)
+            var isVisible = false;
+
+            // Check if the row matches both Semester and School Year filters
+            if (
+                (semesterValue === "" || semesterText.includes(semesterValue)) &&
+                (schoolYearValue === "" || schoolYearText.includes(schoolYearValue))
+            ) {
+                isVisible = true;
+            }
+
+            if (isVisible) {
+                $(this).show();
+                visibleCount++;
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // Update the total count in the HTML
+        $('#total-count').text(visibleCount);
+    }
+
+    // Event listeners for filter dropdown changes
+    $('#semesterFilter, #schoolYearFilter').change(function() {
+        filterExcuseSlips();
+    });
+
+    // Initial filter on page load
+    filterExcuseSlips();
+});
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const searchInput = document.getElementById('searchInput');
@@ -295,4 +367,71 @@ document.addEventListener('DOMContentLoaded', function() {
 .btn-view:hover {
     background-color: #0056b3;
 }
+
+    .excuse-slip-table td:nth-child(8),
+    .excuse-slip-table td:nth-child(9),
+    .excuse-slip-table th:nth-child(8),
+    .excuse-slip-table th:nth-child(9) {
+        display: none;
+    }
+
+    /* Container for the filters */
+    .filter-container, .filters {
+        display: flex;
+        justify-content: flex-start;
+        gap: 1rem; /* Adds space between the elements */
+        align-items: center;
+    }
+
+    /* Label styling */
+    .filter-label {
+        font-weight: bold;
+        font-size: 1rem;
+        color: #333;
+        margin-right: 10px;
+    }
+
+    /* Main dropdown styles */
+    .filter-select, .filter-dropdown {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #f9f9f9;
+    }
+
+    .filter-select:focus, .filter-dropdown:focus {
+        outline: none;
+        border-color: #06260b;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+    }
+
+    /* Add hover effects */
+    .filter-select:hover, .filter-dropdown:hover {
+        border-color: #06260b;
+        background-color: #e1f5e1;
+    }
+
+    /* Styling for individual filters */
+    .filters select {
+        width: 200px;
+    }
+
+    /* Spacing between filters */
+    .filters {
+        margin-top: 10px;
+    }
+
+    /* Optional: Add some spacing below the container */
+    .filter-container, .filters {
+        margin-bottom: 20px;
+    }
+
+    /* If you want to center align the filters */
+    .filter-container, .filters {
+        justify-content: center;
+    }
 </style>
+
+

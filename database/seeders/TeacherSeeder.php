@@ -15,8 +15,8 @@ class TeacherSeeder extends Seeder
         $this->call(DepartmentSeeder::class);
 
         $teachers = [
-            ['first_name' => 'John Leeroy', 'last_name' => 'Gadiane', 'username' => 'John.Leeroy', 'email' => 'john.leeroy@example.com', 'department' => 'School of Computer Studies'],
-            ['first_name' => 'Gene', 'last_name' => 'Abello', 'username' => 'Gene.Abello', 'email' => 'gene.abello@example.com', 'department' => 'School of Computer Studies'],
+            ['first_name' => 'John Leeroy', 'last_name' => 'Gadiane', 'username' => '2001234', 'email' => 'john.leeroy@example.com', 'department' => 'School of Computer Studies'],
+            ['first_name' => 'Gene', 'last_name' => 'Abello', 'username' => '2000001', 'email' => 'gene.abello@example.com', 'department' => 'School of Computer Studies'],
             // Add more teachers as needed
         ];
 

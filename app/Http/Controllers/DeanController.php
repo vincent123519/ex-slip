@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Dean;
 use App\Models\Feedback;
+use App\Models\Semester;
 use App\Models\ExcuseSlip;
+use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Notification;
@@ -112,28 +114,57 @@ class DeanController extends Controller
         return response()->json(['message' => 'Feedback added successfully']);
     }
     
-    public function dashboard()
-{
-    $deanId = auth()->user()->dean->dean_id;
-
-    $excuseSlips = ExcuseSlip::with('student', 'counselor', 'dean', 'courses', 'status')
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'read_by_dean','updated_at')
-        ->where('dean_id', $deanId)
-        ->whereHas('status', function ($query) {
-            $query->whereIn('status_id', [2, 4, 3]);
-        })
-        ->orderByDesc('created_at')
-        ->get();
-
-    foreach ($excuseSlips as $excuseSlip) {
-        $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
-        $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
+    public function dashboard(Request $request)
+    {
+        $deanId = auth()->user()->dean->dean_id;
+    
+        // Initialize the query for fetching excuse slips
+        $excuseSlips = ExcuseSlip::with('student', 'counselor', 'dean', 'courses.courseOffering.semester', 'status', 'courses')
+            ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'read_by_dean', 'updated_at')
+            ->where('dean_id', $deanId)
+            ->whereHas('status', function ($query) {
+                $query->whereIn('status_id', [2, 4, 3]);
+            });
+    
+        // Apply semester filter
+        if ($request->has('semester_id') && $request->input('semester_id') !== null) {
+            $semesterId = $request->input('semester_id');
+            $excuseSlips->whereHas('courses.courseOffering.semester', function ($query) use ($semesterId) {
+                $query->where('semester_id', $semesterId);
+            });
+        }
+    
+        // Apply school year filter
+        if ($request->has('school_year_id') && $request->input('school_year_id') !== null) {
+            $schoolYearId = $request->input('school_year_id');
+            $excuseSlips->whereHas('courses.courseOffering.semester', function ($query) use ($schoolYearId) {
+                $query->where('sy_id', $schoolYearId);
+            });
+        }
+    
+        // Order by created_at and fetch the results
+        $excuseSlips = $excuseSlips->orderByDesc('created_at')->get();
+    
+        // Parse dates for each excuse slip
+        foreach ($excuseSlips as $excuseSlip) {
+            $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
+            $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
+        }
+    
+        $unreadExcuseSlips = $excuseSlips;
+    
+        // Fetch all semesters and school years for dropdowns
+        $semesters = Semester::all(); // Assuming you have Semester model
+        $schoolYears = SchoolYear::all(); // Assuming you have SchoolYear model
+    
+        return view('dean.dashboard', [
+            'excuseSlips' => $excuseSlips,
+            'unreadExcuseSlips' => $unreadExcuseSlips,
+            'semesters' => $semesters,
+            'schoolYears' => $schoolYears,
+        ]);
     }
-
-    $unreadExcuseSlips = $excuseSlips; 
-
-    return view('dean.dashboard', ['excuseSlips' => $excuseSlips, 'unreadExcuseSlips' => $unreadExcuseSlips]);
-}
+    
 
     public function sendToTeacher($excuseSlipId, $teacherId)
     {

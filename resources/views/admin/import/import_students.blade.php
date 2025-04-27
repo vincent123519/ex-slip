@@ -243,7 +243,6 @@
 {
     padding: 20px;
     position: relative;
-    border: 5px solid #ccc;
     width: 80%;
     margin: 20px auto;
     margin-right: auto;

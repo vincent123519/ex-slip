@@ -9,7 +9,7 @@
         <table id="teachers" class="table">
             <thead>
                 <tr>
-                    <th>ID | Username</th>
+                    <th>ID | UserAccount</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Department</th>

@@ -1,40 +1,76 @@
 @extends('components.admin')
+
 @section('content')
 
     <h1 class="page-title">Excuse Slips</h1>
 
+    {{-- First Line: School and Department Filters --}}
     <div class="filter-container">
-        <form action="{{ route('admin.excuseslip.index') }}" method="GET" id="forms">
+        {{-- School Filter --}}
+        <form action="{{ route('admin.excuseslip.index') }}" method="GET" id="schoolForm">
             <div class="filter">
                 <label for="school">School:</label>
-                <select name="school_code" id="school" class="custom-select">
+                <select name="school_code" id="school" class="custom-select" onchange="document.getElementById('schoolForm').submit();">
                     <option value="">All</option>
                     @foreach ($schools as $school)
-                        <option value="{{ $school->school_code }}" {{ Request::input('school_code') == $school->school_code ? 'selected' : '' }}>
+                        <option value="{{ $school->school_code }}" {{ request('school_code') == $school->school_code ? 'selected' : '' }}>
                             {{ $school->school_name }}
                         </option>
                     @endforeach
                 </select>
-                <button type="submit" class="btn-primary">Filter</button>
             </div>
         </form>
 
-        <form action="{{ route('admin.excuseslip.index') }}" method="GET" id="forms">
+        {{-- Department Filter --}}
+        <form action="{{ route('admin.excuseslip.index') }}" method="GET" id="departmentForm">
             <div class="filter">
                 <label for="department">Department:</label>
-                <select name="department_id" id="department" class="custom-select">
+                <select name="department_id" id="department" class="custom-select" onchange="document.getElementById('departmentForm').submit();">
                     <option value="">All</option>
                     @foreach ($departments as $department)
-                        <option value="{{ $department->department_id }}" {{ Request::input('department_id') == $department->id ? 'selected' : '' }}>
+                        <option value="{{ $department->department_id }}" {{ request('department_id') == $department->department_id ? 'selected' : '' }}>
                             {{ $department->department_name }}
                         </option>
                     @endforeach
                 </select>
-                <button type="submit" class="btn-primary">Filter</button>
             </div>
         </form>
     </div>
 
+    {{-- Second Line: Semester and School Year Filters --}}
+    <div class="filter-container">
+        {{-- Semester Filter --}}
+        <form action="{{ route('admin.excuseslip.index') }}" method="GET" id="semesterForm">
+            <div class="filter">
+                <label for="semester">Semester:</label>
+                <select name="semester_id" id="semester" class="custom-select" onchange="document.getElementById('semesterForm').submit();">
+                    <option value="">All</option>
+                    @foreach ($semesters as $semester)
+                        <option value="{{ $semester->semester_id }}" {{ request('semester_id') == $semester->semester_id ? 'selected' : '' }}>
+                            {{ $semester->semester_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
+
+        {{-- School Year Filter --}}
+        <form action="{{ route('admin.excuseslip.index') }}" method="GET" id="schoolYearForm">
+            <div class="filter">
+                <label for="school_year">School Year:</label>
+                <select name="school_year_id" id="school_year" class="custom-select" onchange="document.getElementById('schoolYearForm').submit();">
+                    <option value="">All</option>
+                    @foreach ($schoolYears as $schoolYear)
+                        <option value="{{ $schoolYear->sy_id }}" {{ request('school_year_id') == $schoolYear->sy_id ? 'selected' : '' }}>
+                            {{ $schoolYear->sy_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </form>
+    </div>
+
+    {{-- Excuse Slips Table --}}
     <div class="table-container">
         <table id="excuseSlip">
             <thead>
@@ -57,12 +93,14 @@
                         <td>{{ $excuseslip->start_date }} to {{ $excuseslip->end_date }}</td>
                         <td>{{ $excuseslip->dean->first_name }} {{ $excuseslip->dean->last_name }}</td>
                         <td>{{ $excuseslip->counselor->first_name }} {{ $excuseslip->counselor->last_name }}</td>
-                        <td><a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseslip->excuse_slip_id]) }}" class="view-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                            </svg>
-                        </a></td>
+                        <td>
+                            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $excuseslip->excuse_slip_id]) }}" class="view-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                </svg>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -80,9 +118,10 @@
 
     .filter-container {
         display: flex;
-        justify-content: space-around;
-        margin-bottom: 30px;
+        justify-content: center;
+        margin-bottom: 20px;
         gap: 15px;
+        flex-wrap: wrap;
     }
 
     .filter {
@@ -113,16 +152,15 @@
     }
 
     .table-container {
-        margin-top: 30px;
+        margin-top: 20px;
         display: flex;
-        justify-content: space-around;
-        margin-left: 5%;
+        justify-content: center;
     }
 
     #excuseSlip {
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
-        width: 80%;
+        width: 69%;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
@@ -160,5 +198,4 @@
     .view-button:hover {
         background-color: #028B59;
     }
-
 </style>

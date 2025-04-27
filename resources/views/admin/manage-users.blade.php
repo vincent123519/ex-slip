@@ -32,8 +32,9 @@
         <label for="searchInput">Search by Name or Username:</label>
         <input type="text" id="searchInput" class="styled-input" placeholder="Enter name or username..." onkeyup="filterUsers()">
     </div>
-
     <div class="table-wrapper">
+    <div class="pagination-links">
+    {{ $users->links() }}
         <table class="user-table">
             <thead>
                 <tr>
@@ -61,6 +62,7 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
     </div>
 </div>
 
@@ -221,6 +223,42 @@
     .btn-danger:hover {
         background-color: #bd2130;
     }
+    .pagination-links {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination-links nav {
+    display: inline-block;
+}
+
+.pagination-links .flex {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding-left: 0;
+}
+
+.pagination-links .flex li {
+    margin: 0 5px;
+}
+
+.pagination-links .flex li a,
+.pagination-links .flex li span {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.pagination-links .flex li a:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
 
     @media screen and (max-width: 768px) {
         .filter-form {

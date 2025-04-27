@@ -8,9 +8,11 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Counselor;
+use App\Models\StudyLoad;
 use App\Models\ExcuseSlip;
 use App\Models\ExcuseStatus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -186,6 +188,8 @@ public function dashboard(Request $request)
     }
 
     // Paginate the results
+    $feedbackexcuseSlips = $this->getExcuseSlipsWithTeacherFeedback($studentId);
+
     $excuseSlips = $query->paginate(10); // Adjust the number of items per page as needed
 
     // Format the created_at field in each ExcuseSlip to exclude hours, minutes, and seconds
@@ -198,7 +202,41 @@ public function dashboard(Request $request)
         return !$excuseSlip->is_read; // Assuming there is an 'is_read' field to check
     });
 
-    return view('student.dashboard', compact('excuseSlips', 'unreadExcuseSlips'));
+    return view('student.dashboard', compact('excuseSlips', 'unreadExcuseSlips', 'feedbackexcuseSlips'));
 }
+
+public function getExcuseSlipsWithTeacherFeedback($studentId)
+{
+    // Get all the study loads for a student and eager load the course offerings
+    $studyLoads = StudyLoad::with('courseOfferings') // Eager load courseOfferings
+        ->where('student_id', $studentId) // Filter by student ID
+        ->get();
+
+    // Collect all the excuse slips with teacher feedback
+    $excuseSlips = collect();
+
+    // Loop through study loads and course offerings
+    foreach ($studyLoads as $studyLoad) {
+        foreach ($studyLoad->courseOfferings as $courseOffering) {
+            // Query the course_excuse_slip table to check if there is teacher feedback for the course offering
+            $courseExcuseSlip = DB::table('course_excuse_slip')
+                ->where('excuse_slip_id', $courseOffering->excuse_slip_id)
+                ->where('offer_code', $courseOffering->offer_code)
+                ->where('is_remark_by_teacher', 1) // Check if the teacher made a remark
+                ->whereNotNull('teacher_feedback') // Ensure there's actual feedback
+                ->first(); // Retrieve the first matching record
+
+            // If there is teacher feedback, add this excuse slip to the collection
+            if ($courseExcuseSlip) {
+                $excuseSlips->push($courseOffering->courseExcuseSlips); // Add the related excuse slips to the collection
+            }
+        }
+    }
+
+    // Return unique excuse slips to avoid duplicates
+    return $excuseSlips->unique('excuse_slip_id');
+}
+
+
 
 }

@@ -48,5 +48,6 @@ class CourseOffering extends Model
     {
         return $this->hasMany(TeacherFeedback::class, 'offer_code', 'offer_code');
     }
+    
 
 }

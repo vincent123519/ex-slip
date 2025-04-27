@@ -133,7 +133,7 @@
     </div>
 
     <!-- Role Selection -->
-    <h3>Select Your Role</h3>
+    <h3>ExSisSlip</h3>
     <ul id="role-list">
         @foreach($users as $user)
             <li>

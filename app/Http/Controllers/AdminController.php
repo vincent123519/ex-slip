@@ -33,25 +33,24 @@ class AdminController extends Controller
 
 
     public function manageUsers(Request $request)
-    {
-        // Get all users
-        $query = User::query();
-    
-        // Filter users by role if a role filter is provided
-        if ($request->has('role_filter')) {
-            $roleFilter = $request->input('role_filter');
-    
-            if ($roleFilter !== 'reset' && $roleFilter !== 'All') {
-                $query->whereHas('role', function ($q) use ($roleFilter) {
-                    $q->where('role_name', $roleFilter);
-                });
-            }
+{
+    $query = User::query();
+
+    if ($request->has('role_filter')) {
+        $roleFilter = $request->input('role_filter');
+
+        if ($roleFilter !== 'reset' && $roleFilter !== 'All') {
+            $query->whereHas('role', function ($q) use ($roleFilter) {
+                $q->where('role_name', $roleFilter);
+            });
         }
-    
-        $users = $query->get();
-    
-        return view('admin.manage-users', compact('users'));
     }
+
+    $users = $query->paginate(20); // <-- Here: paginate by 20
+
+    return view('admin.manage-users', compact('users'));
+}
+
     
 
     public function editUser(User $user)
@@ -111,30 +110,51 @@ public function promote(Request $request, $deanId)
 
 public function showExcuseSlip(Request $request)
 {
-    $excuseslips = ExcuseSlip::query();
+    $excuseslips = ExcuseSlip::with('student.degree.department.school', 'courseOfferings.semester') // load relationships
+                    ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at');
 
-    // Apply filters
-    if ($request->has('school_code')) {
+    // Apply school filter
+    if ($request->has('school_code') && $request->input('school_code') !== null) {
         $schoolId = $request->input('school_code');
         $excuseslips->whereHas('student.degree.department.school', function ($query) use ($schoolId) {
             $query->where('school_code', $schoolId);
         });
     }
 
-    if ($request->has('department_id')) {
+    // Apply department filter
+    if ($request->has('department_id') && $request->input('department_id') !== null) {
         $departmentId = $request->input('department_id');
         $excuseslips->whereHas('student.degree.department', function ($query) use ($departmentId) {
             $query->where('department_id', $departmentId);
         });
     }
 
+    // Apply semester filter
+    if ($request->has('semester_id') && $request->input('semester_id') !== null) {
+        $semesterId = $request->input('semester_id');
+        $excuseslips->whereHas('courseOfferings', function ($query) use ($semesterId) {
+            $query->where('semester_id', $semesterId);
+        });
+    }
+
+    // Apply school year filter
+    if ($request->has('school_year_id') && $request->input('school_year_id') !== null) {
+        $schoolYearId = $request->input('school_year_id');
+        $excuseslips->whereHas('courseOfferings.semester', function ($query) use ($schoolYearId) {
+            $query->where('sy_id', $schoolYearId);
+        });
+    }
+
+    // Finally fetch the results (you can paginate if you want also)
     $excuseslips = $excuseslips->get();
 
-    // Fetch all schools and departments for the dropdowns
+    // Fetch all schools, departments, semesters, and school years for dropdowns
     $schools = School::all();
     $departments = Department::all();
+    $semesters = Semester::all(); // Assuming you have Semester model
+    $schoolYears = SchoolYear::all(); // Assuming you have SchoolYear model
 
-    return view('admin.excuseslips.index', compact('excuseslips', 'schools', 'departments'));
+    return view('admin.excuseslips.index', compact('excuseslips', 'schools', 'departments', 'semesters', 'schoolYears'));
 }
 
 public function createStudyLoad($studentId)

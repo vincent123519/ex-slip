@@ -78,40 +78,78 @@
         <hr>
         <div class="filterSection">
             <div class="filter-container">
-                <form action="{{ route('student.dashboard') }}" method="GET">
-                    <label for="sort_by" style="font-weight: bold;">Sort By:</label>
-                        <select name="sort_by" id="sort_by">
-                            <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>All</option>
-                            <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
-                            <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
-                            <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
-                        </select>
+            <form action="{{ route('student.dashboard') }}" method="GET">
+    <label for="sort_by" style="font-weight: bold;">Sort By:</label>
+    <select name="sort_by" id="sort_by">
+        <option value="day" {{ request()->input('sort_by') == 'day' ? 'selected' : '' }}>All</option>
+        <option value="today" {{ request()->input('sort_by') == 'today' ? 'selected' : '' }}>Today</option>
+        <option value="month" {{ request()->input('sort_by') == 'month' ? 'selected' : '' }}>Month</option>
+        <option value="year" {{ request()->input('sort_by') == 'year' ? 'selected' : '' }}>Year</option>
+        <option value="semester" {{ request()->input('sort_by') == 'semester' ? 'selected' : '' }}>Semester</option>
+        <option value="school_year" {{ request()->input('sort_by') == 'school_year' ? 'selected' : '' }}>School Year</option>
+    </select>
 
-                        @if (request()->input('sort_by') == 'month')
-                            <label for="month">Select Month:</label>
-                            <select name="month" id="month">
-                                @foreach (range(1, 12) as $month)
-                                    <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>{{ date('F', mktime(0, 0, 0, $month, 1)) }}</option>
-                                @endforeach
-                            </select>
-                            <label for="year">Select Year:</label>
-                            <select name="year" id="year">
-                                @for ($year = date('Y'); $year >= 2000; $year--)
-                                    <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                                @endfor
-                            </select>
-                        @endif
+    @if (request()->input('sort_by') == 'month')
+        <label for="month">Select Month:</label>
+        <select name="month" id="month">
+            @foreach (range(1, 12) as $month)
+                <option value="{{ $month }}" {{ request()->input('month') == $month ? 'selected' : '' }}>
+                    {{ date('F', mktime(0, 0, 0, $month, 1)) }}
+                </option>
+            @endforeach
+        </select>
+        <label for="year">Select Year:</label>
+        <select name="year" id="year">
+            @for ($year = date('Y'); $year >= 2000; $year--)
+                <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>
+                    {{ $year }}
+                </option>
+            @endfor
+        </select>
+    @endif
 
-                        @if (request()->input('sort_by') == 'year')
-                            <select name="year">
-                                @for ($year = date('Y'); $year >= 2000; $year--)
-                                    <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                                @endfor
-                            </select>
-                        @endif
+    @if (request()->input('sort_by') == 'year')
+        <label for="year">Select Year:</label>
+        <select name="year">
+            @for ($year = date('Y'); $year >= 2000; $year--)
+                <option value="{{ $year }}" {{ request()->input('year') == $year ? 'selected' : '' }}>
+                    {{ $year }}
+                </option>
+            @endfor
+        </select>
+    @endif
 
-                        <button type="submit" class="sortButton">Sort</button>
-                </form>
+    @php
+    $semesters = App\Models\Semester::all();
+    $schoolYears = App\Models\SchoolYear::all();
+@endphp
+
+
+    @if (request()->input('sort_by') == 'semester')
+        <label for="semester_id">Select Semester:</label>
+        <select name="semester_id" id="semester_id">
+            @foreach ($semesters as $semester)
+                <option value="{{ $semester->semester_id }}" {{ request()->input('semester_id') == $semester->semester_id ? 'selected' : '' }}>
+                    {{ $semester->semester_name }}
+                </option>
+            @endforeach
+        </select>
+    @endif
+
+    @if (request()->input('sort_by') == 'school_year')
+        <label for="school_year_id">Select School Year:</label>
+        <select name="school_year_id" id="school_year_id">
+            @foreach ($schoolYears as $sy)
+                <option value="{{ $sy->sy_id }}" {{ request()->input('school_year_id') == $sy->sy_id ? 'selected' : '' }}>
+                {{ $sy->sy_name }}
+                </option>
+            @endforeach
+        </select>
+    @endif
+
+    <button type="submit" class="sortButton">Sort</button>
+</form>
+
             </div>
 
             <div class="filter-container">
@@ -146,8 +184,8 @@
                     <tbody>
                     @foreach($excuseSlips as $excuseSlip)
                         <tr>
-                            <td>{{ $excuseSlip->formatted_created_at }}</td>
-                            <!-- <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td> -->
+                        <td>{{ $excuseSlip->created_at->format('Y-m-d') }}</td>
+                        <!-- <td>{{ $excuseSlip->student->first_name }} {{ $excuseSlip->student->last_name }}</td> -->
                             <td>        @foreach($excuseSlip->courseOfferings as $courseOffering)
                             @if ($courseOffering->teacher)
                                 {{ $courseOffering->teacher->first_name }} {{ $courseOffering->teacher->last_name }}

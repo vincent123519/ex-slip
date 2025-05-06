@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Semester;
 use App\Models\ExcuseSlip;
+use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -56,107 +58,141 @@ class TeacherController extends Controller
     return redirect()->back()->with('error', 'Failed to sign the course offerings.');
 }
 public function dashboard(Request $request)
-    {
-        // Get the teacher's ID from the authenticated user
-        $teacherId = auth()->user()->teacher->teacher_id;
+{
+    $teacherId = auth()->user()->teacher->teacher_id;
 
-        // Query for excuse slips associated with the teacher via the course_offerings table
-        $excuseSlips = ExcuseSlip::with('student', 'counselor', 'dean', 'status', 'courseOfferings')
-            ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'read_by_teacher')
-            ->whereHas('courseOfferings', function ($query) use ($teacherId) {
-                $query->where('teacher_id', $teacherId);
-            })
-            ->whereHas('status', function ($query) {
-                $query->whereIn('status_name', ['Approved by Dean', 'Rejected']);
-            })
-            ->get();
+    // Query for excuse slips associated with the teacher via the course_offerings table
+    $excuseSlipsQuery = ExcuseSlip::with('student', 'counselor', 'dean', 'status', 'courseOfferings.semester')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'read_by_teacher')
+        ->whereHas('courseOfferings', function ($query) use ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        })
+        ->whereHas('status', function ($query) {
+            $query->whereIn('status_name', ['Approved by Dean', 'Rejected']);
+        });
 
-        // Parse date fields for the fetched excuse slips
-        foreach ($excuseSlips as $excuseSlip) {
-            $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
-            $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
-
-            // Retrieve course offerings details with remarks
-            $excuseSlip->offerCodesWithDetails = $excuseSlip->courseOfferings->map(function ($courseOffering) use ($excuseSlip) {
-                // Retrieve the is_remark_by_teacher status
-                $isRemarkByTeacher = DB::table('course_excuse_slip')
-                    ->where('excuse_slip_id', $excuseSlip->excuse_slip_id)
-                    ->where('offer_code', $courseOffering->offer_code)
-                    ->value('is_remark_by_teacher');
-
-                return [
-                    'offer_code' => $courseOffering->offer_code,
-                    'course_code' => $courseOffering->course->course_code, // Retrieve the course code
-                    'teacher_name' => $courseOffering->teacher->first_name . ' ' . $courseOffering->teacher->last_name, // Concatenate first and last name
-                    'is_remark_by_teacher' => $isRemarkByTeacher // Include the remark status
-                ];
-            });
-        }
-
-        // Get sorting preference from request, default to 'status'
-        $sort = $request->input('sort', 'status');
-
-        // Query for all excuse slips with additional statuses related to the teacher
-        $allExcuseSlips = ExcuseSlip::with('student', 'counselor', 'dean', 'status', 'courseOfferings')
-            ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'read_by_teacher')
-            ->whereHas('courseOfferings', function ($query) use ($teacherId) {
-                $query->where('teacher_id', $teacherId);
-            })
-            ->whereHas('status', function ($query) {
-                $query->whereIn('status_name', ['Pending', 'Approved by Teacher', 'Rejected', 'Approved by Dean']);
-            });
-
-        // Apply sorting based on the specified criteria
-        if ($sort === 'date') {
-            $allExcuseSlips->orderBy('start_date', 'asc');
-        } else {
-            $allExcuseSlips->orderBy('status_id', 'asc');
-        }
-
-        // Execute the query to get all excuse slips
-        $allExcuseSlips = $allExcuseSlips->get();
-
-        // Parse date fields for all excuse slips
-        foreach ($allExcuseSlips as $excuseSlip) {
-            $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
-            $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
-        }
-
-        // Check for remarks and update status_id
-        foreach ($allExcuseSlips as $excuseSlip) {
-            $isApprovedByTeacher = true; // Assume approval unless we find a lack of remarks
-
-            foreach ($excuseSlip->courseOfferings as $courseOffering) {
-                // Retrieve the is_remark_by_teacher status for each course offering
-                $isRemarkByTeacher = DB::table('course_excuse_slip')
-                    ->where('excuse_slip_id', $excuseSlip->excuse_slip_id)
-                    ->where('offer_code', $courseOffering->offer_code)
-                    ->value('is_remark_by_teacher');
-
-                if (!$isRemarkByTeacher) {
-                    $isApprovedByTeacher = false; // Set to false if any related offering lacks remarks
-                    break; // Exit the loop early
-                }
-            }
-
-            // Update status_id to 5 if all course offerings have remarks
-            if ($isApprovedByTeacher) {
-                $excuseSlip->status_id = 5; // Update to "Approved by Teacher"
-                $excuseSlip->save(); // Save the updated status to the database
-            }
-        }
-
-        // Assign unread excuse slips
-        $unreadExcuseSlips = $excuseSlips->where('read_by_teacher', false);
-
-        // Return the view with the data
-        return view('teacher.dashboard', [
-            'excuseSlips' => $excuseSlips,
-            'allExcuseSlips' => $allExcuseSlips,
-            'unreadExcuseSlips' => $unreadExcuseSlips,
-            'sort' => $sort // Pass the sort variable to the view
-        ]);
+    // Apply semester filter if provided
+    if ($request->has('semester_id') && $request->input('semester_id') !== null) {
+        $semesterId = $request->input('semester_id');
+        $excuseSlipsQuery->whereHas('courseOfferings.semester', function ($query) use ($semesterId) {
+            $query->where('semester_id', $semesterId);
+        });
     }
+
+    // Apply school year filter if provided
+    if ($request->has('school_year_id') && $request->input('school_year_id') !== null) {
+        $schoolYearId = $request->input('school_year_id');
+        $excuseSlipsQuery->whereHas('courseOfferings.semester', function ($query) use ($schoolYearId) {
+            $query->where('sy_id', $schoolYearId);
+        });
+    }
+
+    // Get the filtered list
+    $excuseSlips = $excuseSlipsQuery->get();
+
+    // Parse date fields
+    foreach ($excuseSlips as $excuseSlip) {
+        $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
+        $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
+
+        // Retrieve course offerings details with remarks
+        $excuseSlip->offerCodesWithDetails = $excuseSlip->courseOfferings->map(function ($courseOffering) use ($excuseSlip) {
+            $isRemarkByTeacher = DB::table('course_excuse_slip')
+                ->where('excuse_slip_id', $excuseSlip->excuse_slip_id)
+                ->where('offer_code', $courseOffering->offer_code)
+                ->value('is_remark_by_teacher');
+
+            return [
+                'offer_code' => $courseOffering->offer_code,
+                'course_code' => $courseOffering->course->course_code,
+                'teacher_name' => $courseOffering->teacher->first_name . ' ' . $courseOffering->teacher->last_name,
+                'is_remark_by_teacher' => $isRemarkByTeacher
+            ];
+        });
+    }
+
+    // Sorting preference
+    $sort = $request->input('sort', 'status');
+
+    // Query for all excuse slips with additional statuses
+    $allExcuseSlipsQuery = ExcuseSlip::with('student', 'counselor', 'dean', 'status', 'courseOfferings.semester')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'read_by_teacher')
+        ->whereHas('courseOfferings', function ($query) use ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        })
+        ->whereHas('status', function ($query) {
+            $query->whereIn('status_name', ['Pending', 'Approved by Teacher', 'Rejected', 'Approved by Dean']);
+        });
+
+    // Apply semester filter to allExcuseSlips if provided
+    if ($request->has('semester_id') && $request->input('semester_id') !== null) {
+        $semesterId = $request->input('semester_id');
+        $allExcuseSlipsQuery->whereHas('courseOfferings.semester', function ($query) use ($semesterId) {
+            $query->where('semester_id', $semesterId);
+        });
+    }
+
+    // Apply school year filter to allExcuseSlips if provided
+    if ($request->has('school_year_id') && $request->input('school_year_id') !== null) {
+        $schoolYearId = $request->input('school_year_id');
+        $allExcuseSlipsQuery->whereHas('courseOfferings.semester', function ($query) use ($schoolYearId) {
+            $query->where('sy_id', $schoolYearId);
+        });
+    }
+
+    // Apply sorting
+    if ($sort === 'date') {
+        $allExcuseSlipsQuery->orderBy('start_date', 'asc');
+    } else {
+        $allExcuseSlipsQuery->orderBy('status_id', 'asc');
+    }
+
+    $allExcuseSlips = $allExcuseSlipsQuery->get();
+
+    // Parse date fields
+    foreach ($allExcuseSlips as $excuseSlip) {
+        $excuseSlip->start_date = Carbon::parse($excuseSlip->start_date);
+        $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
+    }
+
+    // Check for remarks and update status if needed
+    foreach ($allExcuseSlips as $excuseSlip) {
+        $isApprovedByTeacher = true;
+
+        foreach ($excuseSlip->courseOfferings as $courseOffering) {
+            $isRemarkByTeacher = DB::table('course_excuse_slip')
+                ->where('excuse_slip_id', $excuseSlip->excuse_slip_id)
+                ->where('offer_code', $courseOffering->offer_code)
+                ->value('is_remark_by_teacher');
+
+            if (!$isRemarkByTeacher) {
+                $isApprovedByTeacher = false;
+                break;
+            }
+        }
+
+        if ($isApprovedByTeacher) {
+            $excuseSlip->status_id = 5; // Approved by Teacher
+            $excuseSlip->save();
+        }
+    }
+
+    $unreadExcuseSlips = $excuseSlips->where('read_by_teacher', false);
+
+    // Fetch all semesters and school years for dropdowns
+    $semesters = Semester::all();
+    $schoolYears = SchoolYear::all();
+
+    return view('teacher.dashboard', [
+        'excuseSlips' => $excuseSlips,
+        'allExcuseSlips' => $allExcuseSlips,
+        'unreadExcuseSlips' => $unreadExcuseSlips,
+        'sort' => $sort,
+        'semesters' => $semesters,
+        'schoolYears' => $schoolYears
+    ]);
+}
+
 
 
     public function teacherStoreFeedback(Request $request, $id)

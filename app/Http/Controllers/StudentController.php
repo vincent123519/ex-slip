@@ -156,54 +156,65 @@ class StudentController extends Controller
 
 public function dashboard(Request $request)
 {
-    // Retrieve the student ID of the currently authenticated user
     $studentId = auth()->user()->student->student_id;
 
-    // Query for fetching excuse slips through the pivot table
-    $query = ExcuseSlip::with(['student', 'counselor', 'dean', 'status', 'courseOfferings'])
-        ->where('student_id', $studentId)
-        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at');
+    // Base query with relationships
+    $query = ExcuseSlip::with('student', 'counselor', 'dean', 'courseOfferings.semester', 'status')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at')
+        ->where('student_id', $studentId);
 
-    // Sorting logic based on the request parameter
-    $sort_by = $request->input('sort_by', 'day');
+    // Get filter inputs
+    $sortBy = $request->input('sort_by', 'day');
+    $month = $request->input('month', date('m'));
+    $year = $request->input('year', date('Y'));
+    $semesterId = $request->input('semester_id');
+    $schoolYearId = $request->input('school_year_id');
 
-    switch ($sort_by) {
+    // Apply sorting filters
+    switch ($sortBy) {
         case 'today':
-            $query->whereDate('created_at', today());
+            $query->whereDate('excuse_slips.created_at', today());
             break;
+
         case 'month':
-            // Filter by the selected year and month
-            $year = $request->input('year', date('Y'));
-            $month = $request->input('month', date('m'));
-            $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
+            $query->whereYear('excuse_slips.created_at', $year)
+                  ->whereMonth('excuse_slips.created_at', $month);
             break;
+
         case 'year':
-            // Filter by the selected year
-            $year = $request->input('year', date('Y')); // Default to the current year
-            $query->whereYear('created_at', $year);
+            $query->whereYear('excuse_slips.created_at', $year);
             break;
-        default:
-            // For 'day' or invalid inputs, no additional filtering needed
+
+        case 'semester':
+            if ($semesterId) {
+                $query->whereHas('courseOfferings', function ($subquery) use ($semesterId) {
+                    $subquery->where('semester_id', $semesterId);
+                });
+            }
+            break;
+
+        case 'school_year':
+            if ($schoolYearId) {
+                $query->whereHas('courseOfferings.semester', function ($subquery) use ($schoolYearId) {
+                    $subquery->where('sy_id', $schoolYearId);
+                });
+            }
             break;
     }
 
-    // Paginate the results
+    // Execute the query
+    $excuseSlips = $query->paginate(10);
+
+    // Unread slips (filtered from the paginated set)
+    $unreadExcuseSlips = $excuseSlips->filter(fn($slip) => !$slip->is_read);
+
+    // Teacher feedback slips (if you have this method)
     $feedbackexcuseSlips = $this->getExcuseSlipsWithTeacherFeedback($studentId);
-
-    $excuseSlips = $query->paginate(10); // Adjust the number of items per page as needed
-
-    // Format the created_at field in each ExcuseSlip to exclude hours, minutes, and seconds
-    $excuseSlips->each(function ($excuseSlip) {
-        $excuseSlip->formatted_created_at = $excuseSlip->created_at->format('Y-m-d'); // Exclude hours, minutes, and seconds
-    });
-
-    // Get unread excuse slips (you may need to adjust this logic based on your criteria for "unread")
-    $unreadExcuseSlips = $excuseSlips->filter(function ($excuseSlip) {
-        return !$excuseSlip->is_read; // Assuming there is an 'is_read' field to check
-    });
 
     return view('student.dashboard', compact('excuseSlips', 'unreadExcuseSlips', 'feedbackexcuseSlips'));
 }
+
+
 
 public function getExcuseSlipsWithTeacherFeedback($studentId)
 {

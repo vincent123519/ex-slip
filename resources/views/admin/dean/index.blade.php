@@ -2,16 +2,16 @@
 
 @section('content')
     <div class="container">
-        <h1>All Deans</h1>
-        <table id="dean" class="table">
-            <thead>
+        <h2 class="text-center mb-4">Deans List</h2>
+        <table id="dean" class="table table-bordered table-hover">
+            <thead class="thead-light">
                 <tr>
                     <th>Dean ID - User Account</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>School</th>
                     <th>Email</th>
-                    <th>Actions</th> <!-- New column for actions -->
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +24,7 @@
                         <td>{{ $dean->email }}</td>
                         <td>
                             <a href="{{ route('admin.dean.edit', $dean->dean_id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        </td> <!-- Edit button -->
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -33,44 +33,60 @@
 @endsection
 
 <style>
+    /* Center the table and add some space around it */
+    .container {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    /* Style the table */
     #dean {
-        font-family: Arial, Helvetica, sans-serif;
+        width: 100%;
+        margin: 0 auto;
         border-collapse: collapse;
-        width: 60%;
-        margin-left: 350px;
     }
 
-    #dean td, #dean th {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-
-    #dean tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    #dean tr:hover {
-        background-color: #ddd;
-    }
-
+    /* Table header styles */
     #dean th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
         background-color: #04AA6D;
         color: white;
+        text-align: left;
+        padding: 12px;
     }
 
+    /* Table row styles */
+    #dean td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    /* Hover effects on rows */
+    #dean tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Style for the edit button */
     .btn {
-        padding: 6px 12px;
-        background-color:rgb(200, 255, 0);
+        padding: 8px 16px;
+        background-color: #ff9800;
         color: white;
-        border: none;
         border-radius: 4px;
         text-decoration: none;
+        transition: background-color 0.3s ease;
     }
 
     .btn:hover {
-        background-color: #0056b3;
+        background-color: #e68900;
+    }
+
+    /* Adding some spacing around the table and title */
+    .mb-4 {
+        margin-bottom: 30px;
+    }
+
+    /* Light table row background color */
+    #dean tr:nth-child(even) {
+        background-color: #f9f9f9;
     }
 </style>

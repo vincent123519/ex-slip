@@ -44,10 +44,17 @@
                 <div class="modal-body">
                     <form action="{{ route('admin.schools.store') }}" method="POST">
                         @csrf
+
+                        @php
+                            $lastSchool = \App\Models\School::orderBy('school_code', 'desc')->first();
+                            $nextSchoolCode = $lastSchool ? $lastSchool->school_code + 1 : 1001;
+                        @endphp
+
                         <div class="mb-3">
-                            <label for="school_code" class="form-label">School Code</label>
-                            <input type="number" class="form-control" id="school_code" name="school_code" required>
+                            <label for="school_code_preview" class="form-label">Next School Code (Auto-generated)</label>
+                            <input type="text" class="form-control" id="school_code_preview" value="{{ $nextSchoolCode }}" disabled>
                         </div>
+
                         <div class="mb-3">
                             <label for="school_name" class="form-label">School Name</label>
                             <input type="text" class="form-control" id="school_name" name="school_name" required>
@@ -59,51 +66,69 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 <style>
     #school {
         font-family: Arial, Helvetica, sans-serif;
         border-collapse: collapse;
-        width: 50%;
-        margin-left: auto;
-        margin-right: auto;
+        width: 60%;
+        margin: 30px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     #school td, #school th {
         border: 1px solid #ddd;
-        padding: 22px;
+        padding: 16px;
         text-align: left;
     }
 
     #school tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: #f9f9f9;
     }
 
     #school tr:hover {
-        background-color: #ddd;
+        background-color: #e6f7ff;
     }
 
     #school th {
-        padding-top: 12px;
-        padding-bottom: 12px;
+        background-color: #04AA6D;
+        color: white;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #04AA6D;
+    }
+
+    .btn-success {
+        display: block;
+        margin: 0 auto 20px auto;
+    }
+
+    .modal-content {
+        border-radius: 10px;
+    }
+
+    .modal-header {
         background-color: #04AA6D;
         color: white;
     }
 
-    .btn {
-        margin: 0 5px;
+    .modal-title {
+        font-weight: bold;
     }
 
-    .btn-warning {
-        background-color: #ffc107;
-        border-color: #ffc107;
-        color: white;
+    .btn-primary {
+        background-color: #04AA6D;
+        border-color: #04AA6D;
     }
 
-    .btn-warning:hover {
-        background-color: #e0a800;
-        border-color: #d39e00;
+    .btn-primary:hover {
+        background-color: #038d5a;
+        border-color: #037f51;
     }
 </style>

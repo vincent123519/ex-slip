@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="container">
-        <h1>Counselors</h1>
-        <table id="counselor" class="table">
-            <thead>
+        <h2 class="text-center mb-4">Counselors List</h2>
+        <table id="counselor" class="table table-bordered table-hover">
+            <thead class="thead-light">
                 <tr>
                     <th>ID | UserAccount</th>
                     <th>First Name</th>
@@ -60,45 +60,65 @@
 @endsection
 
 <style>
-    #counselor {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 90%;
-        margin: 30px auto;
+    /* Center the table and provide spacing */
+    .container {
+        max-width: 90%;
+        margin: 0 auto;
     }
 
-    #counselor td, #counselor th {
+    /* Table styling */
+    #counselor {
+        width: 100%;
+        margin-bottom: 30px;
+        border-collapse: collapse;
+    }
+
+    /* Table header styling */
+    #counselor th {
+        background-color: #04AA6D;
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+
+    /* Table rows styling */
+    #counselor td {
         border: 1px solid #ddd;
         padding: 10px;
+        text-align: left;
     }
 
+    /* Hover effect on rows */
+    #counselor tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Alternate row colors */
     #counselor tr:nth-child(even) {
         background-color: #f9f9f9;
     }
 
-    #counselor tr:hover {
-        background-color: #eee;
-    }
-
-    #counselor th {
-        background-color: #04AA6D;
-        color: white;
-        text-align: left;
-        padding: 12px;
-    }
-
+    /* Style for Edit button */
     .btn {
-        margin: 0 5px;
+        padding: 8px 16px;
+        background-color: #ff9800;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
     }
 
+    .btn:hover {
+        background-color: #e68900;
+    }
+
+    /* Pagination styling */
     .pagination-wrapper {
-        width: 90%;
-        margin: 20px auto;
         text-align: center;
+        margin-top: 20px;
     }
 
     .pagination {
-        justify-content: center;
         display: inline-flex;
         list-style: none;
         padding-left: 0;
@@ -115,8 +135,8 @@
     }
 
     .page-link {
-        color: #04AA6D;
         padding: 8px 12px;
+        color: #04AA6D;
         text-decoration: none;
         border: 1px solid #ddd;
     }

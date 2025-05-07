@@ -46,7 +46,7 @@ class AdminController extends Controller
         }
     }
 
-    $users = $query->paginate(20); // <-- Here: paginate by 20
+    $users = $query->paginate(10); // <-- Here: paginate by 20
 
     return view('admin.manage-users', compact('users'));
 }
@@ -78,12 +78,24 @@ class AdminController extends Controller
 
     return redirect()->route('manage-users')->with('success', 'User deleted successfully');
 }
-    public function showStudents()
+public function showStudents(Request $request)
 {
-    $students = Student::all();
+    $query = Student::with(['degree.department.school', 'user']);
 
-    return view('admin.students.index', compact('students'));
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->whereHas('user', function ($q) use ($search) {
+            $q->where('username', 'like', "%{$search}%");
+        })->orWhere('first_name', 'like', "%{$search}%")
+          ->orWhere('last_name', 'like', "%{$search}%");
+    }
+
+    $students = $query->paginate(10);
+    $schools = School::with('departments')->get();
+
+    return view('admin.students.index', compact('students', 'schools'));
 }
+
 
 //promote teacher to dean
 public function promote(Request $request, $deanId)
@@ -110,52 +122,54 @@ public function promote(Request $request, $deanId)
 
 public function showExcuseSlip(Request $request)
 {
-    $excuseslips = ExcuseSlip::with('student.degree.department.school', 'courseOfferings.semester') // load relationships
-                    ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at');
+    $excuseslips = ExcuseSlip::with('student.degree.department.school', 'courseOfferings.semester')
+        ->select('excuse_slip_id', 'counselor_id', 'student_id', 'reason', 'dean_id', 'start_date', 'end_date', 'status_id', 'created_at');
 
-    // Apply school filter
-    if ($request->has('school_code') && $request->input('school_code') !== null) {
+    // Apply filters
+    if ($request->filled('school_code')) {
         $schoolId = $request->input('school_code');
         $excuseslips->whereHas('student.degree.department.school', function ($query) use ($schoolId) {
             $query->where('school_code', $schoolId);
         });
     }
 
-    // Apply department filter
-    if ($request->has('department_id') && $request->input('department_id') !== null) {
-        $departmentId = $request->input('department_id');
-        $excuseslips->whereHas('student.degree.department', function ($query) use ($departmentId) {
-            $query->where('department_id', $departmentId);
+    if ($request->filled('department_id')) {
+        $excuseslips->whereHas('student.degree.department', function ($query) use ($request) {
+            $query->where('department_id', $request->department_id);
         });
     }
 
-    // Apply semester filter
-    if ($request->has('semester_id') && $request->input('semester_id') !== null) {
-        $semesterId = $request->input('semester_id');
-        $excuseslips->whereHas('courseOfferings', function ($query) use ($semesterId) {
-            $query->where('semester_id', $semesterId);
+    if ($request->filled('semester_id')) {
+        $excuseslips->whereHas('courseOfferings', function ($query) use ($request) {
+            $query->where('semester_id', $request->semester_id);
         });
     }
 
-    // Apply school year filter
-    if ($request->has('school_year_id') && $request->input('school_year_id') !== null) {
-        $schoolYearId = $request->input('school_year_id');
-        $excuseslips->whereHas('courseOfferings.semester', function ($query) use ($schoolYearId) {
-            $query->where('sy_id', $schoolYearId);
+    if ($request->filled('school_year_id')) {
+        $excuseslips->whereHas('courseOfferings.semester', function ($query) use ($request) {
+            $query->where('sy_id', $request->school_year_id);
         });
     }
 
-    // Finally fetch the results (you can paginate if you want also)
     $excuseslips = $excuseslips->get();
 
-    // Fetch all schools, departments, semesters, and school years for dropdowns
+    // Fetch dropdown data with filters
     $schools = School::all();
-    $departments = Department::all();
-    $semesters = Semester::all(); // Assuming you have Semester model
-    $schoolYears = SchoolYear::all(); // Assuming you have SchoolYear model
+
+    $departments = Department::when($request->filled('school_code'), function ($query) use ($request) {
+        $query->where('school_code', $request->school_code);
+    })->get();
+
+    $schoolYears = SchoolYear::all();
+
+    $semesters = Semester::when($request->filled('school_year_id'), function ($query) use ($request) {
+        $query->where('sy_id', $request->school_year_id);
+    })->get();
 
     return view('admin.excuseslips.index', compact('excuseslips', 'schools', 'departments', 'semesters', 'schoolYears'));
 }
+
+
 
 public function createStudyLoad($studentId)
 {
@@ -209,6 +223,11 @@ public function storeStudyLoad(Request $request)
 
 public function dashboard()
 {
+    // Check if the logged-in user has role_id 6
+    if (auth()->user()->role_id !== 6) {
+        abort(403, 'Unauthorized access.');
+    }
+
     $data = [
         'total_students' => Student::count(),
         'total_teachers' => Teacher::count(),
@@ -221,13 +240,11 @@ public function dashboard()
         'total_schools' => School::count(),
         'total_departments' => Department::count(),
         'total_degree' => DepartmentDegree::count(),
-
-
-        // Add more data as needed
     ];
 
     return view('admin.dashboard', $data);
 }
+
 
 public function schools()
 {
@@ -246,7 +263,6 @@ public function schools()
 public function storeSchool(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'school_code' => 'required|integer|unique:schools,school_code',
         'school_name' => 'required|string|max:255',
     ]);
 
@@ -254,16 +270,20 @@ public function storeSchool(Request $request)
         return redirect()->back()->withErrors($validator)->withInput();
     }
 
+    // Get the last school_code and increment by 1
+    $lastSchool = School::orderBy('school_code', 'desc')->first();
+    $newSchoolCode = $lastSchool ? $lastSchool->school_code + 1 : 1001; // start at 1001 if no schools exist
+
     // Create the school
     $school = School::create([
-        'school_code' => $request->school_code,
+        'school_code' => $newSchoolCode,
         'school_name' => $request->school_name,
     ]);
 
     // Create the default dean details
     $defaultDeanFirstName = 'Default';
     $defaultDeanLastName = 'Dean';
-    $defaultDeanUsername = strtolower($request->school_name . '.dean');
+    $defaultDeanUsername = strtolower(str_replace(' ', '', $request->school_name) . '.dean');
 
     // Create a new User for the Dean role
     $user = User::create([
@@ -287,8 +307,7 @@ public function storeSchool(Request $request)
     return view('admin.schools.index', [
         'schools' => School::all(),
     ])->with('success', 'School added and default dean assigned successfully!');
-    
-}
+    }
 
 
 
@@ -388,12 +407,25 @@ public function storeDepartmentDegree(Request $request)
     
             
 // for the teacher ni
-public function showTeacher()
+public function showTeacher(Request $request)
 {
-    $teachers = Teacher::with('department')->get();
+    $searchQuery = $request->input('search');
 
-    return view('admin.teachers.index', compact('teachers'));
+    $teachers = Teacher::with('department.school')
+        ->where('first_name', 'like', '%' . $searchQuery . '%')
+        ->orWhere('last_name', 'like', '%' . $searchQuery . '%')
+        ->orWhereHas('user', function ($query) use ($searchQuery) {
+            $query->where('username', 'like', '%' . $searchQuery . '%');
+        })
+        ->paginate(10); // Adding pagination here
+
+    $schools = School::with('departments')->get();
+
+    return view('admin.teachers.index', compact('teachers', 'schools'));
 }
+
+
+
 public function showCounselor()
 {
     $counselors = Counselor::with('user', 'department.school')->paginate(5); // Use paginate()

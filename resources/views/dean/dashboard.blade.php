@@ -100,7 +100,7 @@
                     <th>Student Name</th>
                     <th>Course Name</th>
                     <th>Teacher's Name</th>
-                    <th>Status</th>
+                    <th>Status | Reason</th>
                     <th>Date</th>
                     <th>Duration day</th>
                     <th>Action</th>
@@ -132,7 +132,7 @@
             @endforeach
         </td>
 
-        <td>{{ $excuseSlip->status->status_name }}</td>
+        <td>{{ $excuseSlip->status->status_name }} - {{ $excuseSlip->reason}}</td>
         <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
         <td>{{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
             ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)

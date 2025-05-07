@@ -132,7 +132,7 @@ class ExcuseSlipController extends Controller
         'offer_codes' => 'required|array',
         'offer_codes.*' => 'required|string|exists:course_offerings,offer_code',
         'reason' => 'required|string',
-        'start_date' => 'required|date',
+       'start_date' => 'required|date|before_or_equal:today',
         'end_date' => 'required|date|after_or_equal:start_date',
         'supporting_documents.*' => 'required|mimetypes:application/pdf,application/pdfx',
     ]);

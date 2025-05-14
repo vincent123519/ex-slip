@@ -9,78 +9,77 @@
         <h1 class="sh1">Absence Request</h1>
         <a href="{{ route('excuse_slips.create') }}" class="create-slip-button">Request Excuse Slip</a>
         <div>
-            <div class="notification">
-                <!-- <span>notification</span> -->
-                <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
-                <div class="notification-content">
-    @if ($unreadExcuseSlips->count() > 0)
-        @foreach ($unreadExcuseSlips->sortByDesc('created_at') as $unreadExcuseSlip)
-            <div>
-                <form id="markAsReadForm{{ $unreadExcuseSlip->excuse_slip_id }}" method="POST"
-                      action="{{ route('excuse_slips.markAsReadByStudent', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}"
-                      style="display:none;">
-                    @csrf
-                    @method('PUT')
-                </form>
+        <div class="notification">
+    <i id="bell" class="fas fa-solid fa-bell fa-2x {{ $unreadExcuseSlips->count() > 0 ? 'text-danger' : '' }}"></i>
+    
+    <div class="notification-content">
+        @if ($unreadExcuseSlips->count() > 0)
+            @foreach ($unreadExcuseSlips->sortByDesc('created_at') as $unreadExcuseSlip)
+                <div>
+                    <form id="markAsReadForm{{ $unreadExcuseSlip->excuse_slip_id }}" method="POST"
+                          action="{{ route('excuse_slips.markAsReadByStudent', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}"
+                          style="display:none;">
+                        @csrf
+                        @method('PUT')
+                    </form>
 
-                <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}"
-                   onclick="submitMarkAsRead(event, '{{ $unreadExcuseSlip->excuse_slip_id }}')"
-                   class="view-button">
-                    @php
-                        $approver = '';
-                        if ($unreadExcuseSlip->status_id == 2) {
-                            $approver = $unreadExcuseSlip->counselor->first_name . ' ' . $unreadExcuseSlip->counselor->last_name;
-                        } elseif ($unreadExcuseSlip->status_id == 4) {
-                            $approver = $unreadExcuseSlip->dean->first_name . ' ' . $unreadExcuseSlip->dean->last_name;
-                        }
-                    @endphp
-
-                    <p>
-                        @if ($unreadExcuseSlip->status_id == 1)
-                            An excuse slip is sent to <b>{{ $unreadExcuseSlip->counselor->first_name }}, {{ $unreadExcuseSlip->counselor->last_name }}</b>
-                        @elseif ($unreadExcuseSlip->status_id == 2)
-                            <b>{{ $approver }}</b> approved your excuse slip
-                        @elseif ($unreadExcuseSlip->status_id == 3)
-                            <b>Dean</b> rejected your excuse slip
-                        @elseif ($unreadExcuseSlip->status_id == 4)
-                            <b>{{ $approver }}</b> approved your excuse slip
-                        @elseif ($unreadExcuseSlip->status_id == 5)
-                            All <b>teachers</b> have approved your excuse slip
-                        @endif
-                    </p>
-
-                    {{-- Loop through the course offerings to show teacher feedback --}}
-                    @foreach ($unreadExcuseSlip->courseOfferings as $courseOffering)
+                    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}"
+                       onclick="submitMarkAsRead(event, '{{ $unreadExcuseSlip->excuse_slip_id }}')"
+                       class="view-button">
                         @php
-                            $teacherFeedbackExcuseSlip = DB::table('course_excuse_slip')
-                                ->where('excuse_slip_id', $unreadExcuseSlip->excuse_slip_id)
-                                ->where('offer_code', $courseOffering->offer_code)
-                                ->where('is_remark_by_teacher', 1)
-                                ->whereNotNull('teacher_feedback')
-                                ->first();
-
-                            $teacherFeedback = $teacherFeedbackExcuseSlip ? $teacherFeedbackExcuseSlip->teacher_feedback : null;
-                            $teacher = $courseOffering->teacher;
-                            $teacherName = $teacher ? $teacher->first_name . ' ' . $teacher->last_name : 'N/A';
+                            $approver = '';
+                            if ($unreadExcuseSlip->status_id == 2) {
+                                $approver = $unreadExcuseSlip->counselor->first_name . ' ' . $unreadExcuseSlip->counselor->last_name;
+                            } elseif ($unreadExcuseSlip->status_id == 4) {
+                                $approver = $unreadExcuseSlip->dean->first_name . ' ' . $unreadExcuseSlip->dean->last_name;
+                            }
                         @endphp
 
-                        @if ($teacherFeedback)
-                            <p>Teacher: <strong>{{ $teacherName }}</strong>: "{{ $teacherFeedback }}"</p>
-                        @endif
-                    @endforeach
+                        <p>
+                            @if ($unreadExcuseSlip->status_id == 1)
+                                An excuse slip is sent to <b>{{ $unreadExcuseSlip->counselor->first_name }}, {{ $unreadExcuseSlip->counselor->last_name }}</b>
+                            @elseif ($unreadExcuseSlip->status_id == 2)
+                                <b>{{ $approver }}</b> approved your excuse slip
+                            @elseif ($unreadExcuseSlip->status_id == 3)
+                                <b>Dean</b> rejected your excuse slip
+                            @elseif ($unreadExcuseSlip->status_id == 4)
+                                <b>{{ $approver }}</b> approved your excuse slip
+                            @elseif ($unreadExcuseSlip->status_id == 5)
+                                All <b>teachers</b> have approved your excuse slip
+                            @endif
+                        </p>
 
-                    <p>View excuse slip...</p>
-                </a>
+                        {{-- Loop through the course offerings to show teacher feedback --}}
+                        @foreach ($unreadExcuseSlip->courseOfferings as $courseOffering)
+                            @php
+                                $teacherFeedbackExcuseSlip = DB::table('course_excuse_slip')
+                                    ->where('excuse_slip_id', $unreadExcuseSlip->excuse_slip_id)
+                                    ->where('offer_code', $courseOffering->offer_code)
+                                    ->where('is_remark_by_teacher', 1)
+                                    ->whereNotNull('teacher_feedback')
+                                    ->first();
 
-                <hr>
-            </div>
-        @endforeach
-    @else
-        <p>No unread excuse slips.</p>
-    @endif
+                                $teacherFeedback = $teacherFeedbackExcuseSlip ? $teacherFeedbackExcuseSlip->teacher_feedback : null;
+                                $teacher = $courseOffering->teacher;
+                                $teacherName = $teacher ? $teacher->first_name . ' ' . $teacher->last_name : 'N/A';
+                            @endphp
+
+                            @if ($teacherFeedback)
+                                <p>Teacher: <strong>{{ $teacherName }}</strong>: "{{ $teacherFeedback }}"</p>
+                            @endif
+                        @endforeach
+
+                        <p>View excuse slip...</p>
+                    </a>
+
+                    <hr>
+                </div>
+            @endforeach
+        @else
+            <p>No unread excuse slips.</p>
+        @endif
+    </div>
 </div>
-
-            </div>
         </div>
         <hr>
         <div class="filterSection">
@@ -317,3 +316,6 @@ function submitMarkAsRead(event, excuseSlipId) {
     });
 }
 </script>
+<style>.text-danger {
+    color: red; /* Adjust as needed */
+}</style>

@@ -206,8 +206,7 @@ public function dashboard(Request $request)
     $excuseSlips = $query->paginate(10);
 
     // Unread slips (filtered from the paginated set)
-    $unreadExcuseSlips = $excuseSlips->filter(fn($slip) => !$slip->is_read);
-
+    $unreadExcuseSlips = $query->where('read_by_student', false)->get()->sortByDesc('created_at');
     // Teacher feedback slips (if you have this method)
     $feedbackexcuseSlips = $this->getExcuseSlipsWithTeacherFeedback($studentId);
 
@@ -248,6 +247,16 @@ public function getExcuseSlipsWithTeacherFeedback($studentId)
     return $excuseSlips->unique('excuse_slip_id');
 }
 
+public function markAsReadByStudent($excuseSlipId)
+{
+    $excuseSlip = ExcuseSlip::find($excuseSlipId);
+    if ($excuseSlip) {
+        $excuseSlip->read_by_student = true; // Mark as read
+        $excuseSlip->save();
 
+        return redirect()->back()->with('success', 'Excuse slip marked as read.');
+    }
 
+    return redirect()->back()->with('error', 'Excuse slip not found.');
+}
 }

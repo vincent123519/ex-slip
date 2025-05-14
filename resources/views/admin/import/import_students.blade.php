@@ -7,9 +7,9 @@
                 <div class="card-header">{{ __('Import Students') }}</div>
 
                 <div class="card-body">
-                    @if (session('success'))
+                    @if (session('success_students'))
                         <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
+                            {{ session('success_students') }}
                         </div>
                     @endif
 
@@ -36,9 +36,9 @@
                     <div class="card-header">{{ __('Import Teachers') }}</div>
 
                     <div class="card-body">
-                        @if (session('success'))
+                        @if (session('success_teachers'))
                             <div class="alert alert-success" role="alert">
-                                {{ session('success') }}
+                                {{ session('success_teachers') }}
                             </div>
                         @endif
 
@@ -66,9 +66,9 @@
                     <div class="card-header">{{ __('Import Courses') }}</div>
 
                     <div class="card-body">
-                        @if (session('success'))
+                        @if (session('success_courses'))
                             <div class="alert alert-success" role="alert">
-                                {{ session('success') }}
+                                {{ session('success_courses') }}
                             </div>
                         @endif
 
@@ -95,9 +95,9 @@
                 <div class="card-header">{{ __('Import Course Offerings') }}</div>
 
                 <div class="card-body">
-                    @if (session('success'))
+                    @if (session('success_offercode'))
                         <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
+                            {{ session('success_offercode') }}
                         </div>
                     @endif
 
@@ -124,9 +124,9 @@
                     <div class="card-header">{{ __('Import Studyload') }}</div>
 
                     <div class="card-body">
-                        @if (session('success'))
+                        @if (session('success_studyload'))
                             <div class="alert alert-success" role="alert">
-                                {{ session('success') }}
+                                {{ session('success_studyload') }}
                             </div>
                         @endif
 
@@ -246,7 +246,7 @@
     width: 80%;
     margin: 20px auto;
     margin-right: auto;
-    margin-right: 30px;
+    margin-right: 300px;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     line-height: 1.5;
@@ -255,7 +255,6 @@
 
 }
 
-//
 body {
     font-family: Arial, sans-serif;
 }

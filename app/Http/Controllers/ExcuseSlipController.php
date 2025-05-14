@@ -1,15 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Notifications\ExcuseSlipCreatedNotification;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Log;
 use App\Models\Dean;
 use App\Models\User; 
 use App\Models\Course;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Semester;
 use App\Models\Counselor; 
 use App\Models\ExcuseSlip;
 use App\Models\Department; 
@@ -19,9 +17,12 @@ use App\Models\CourseOffering;
 use App\Models\DepartmentDegree;
 use App\Models\SupportingDocument;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Notification;
 use App\Models\Notification as AppNotification;
+use App\Notifications\ExcuseSlipCreatedNotification;
 
 
 class ExcuseSlipController extends Controller
@@ -97,8 +98,10 @@ class ExcuseSlipController extends Controller
                     'teacher_id' => $courseOffering->teacher->teacher_id,
                     'teacher_name' => $courseOffering->teacher->first_name,
                     'teacher_lname' => $courseOffering->teacher->last_name,
-
+                    'schedule_' => $courseOffering->start_time,
                     'semester_name' => $courseOffering->semester->semester_name,
+                    'schedule' => "{$courseOffering['start_time']} - {$courseOffering['end_time']} ({$courseOffering['days_of_week']})"
+
                 ];
             }
         }
@@ -117,8 +120,10 @@ class ExcuseSlipController extends Controller
         $deanData = Dean::select('dean_id', DB::raw("CONCAT(first_name, ' ', last_name) as name"))->get();
         $counselorData = Counselor::select('counselor_id', 'first_name', 'last_name')->get();
         $excuseSlip = new ExcuseSlip();
+        $activeSemester = Semester::where('is_active', true)->first();
+
     
-        return view('excuseslip.create', compact('selectedCourseOfferings', 'student', 'degree', 'department', 'school', 'dean', 'counselor', 'excuseStatuses', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData', 'excuseSlip'));
+        return view('excuseslip.create', compact('selectedCourseOfferings', 'student', 'degree', 'department', 'school', 'dean', 'counselor', 'excuseStatuses', 'yearLevel', 'coursesData', 'teacherData', 'deanData', 'counselorData', 'excuseSlip', 'activeSemester'));
     }
 
 

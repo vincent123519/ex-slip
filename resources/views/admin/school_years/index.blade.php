@@ -7,8 +7,8 @@
                 <div class="card-header">
                 </div>
                 <div class="card-manage-sy">
-                        <h4>Add School Year</h4>
-                        <form action="{{ route('school-year.add') }}" method="POST">
+                    <h4>Add School Year</h4>
+                    <form action="{{ route('school-year.add') }}" method="POST">
                         @csrf
                         <div>
                             <input type="number" name="sy_id" id="school-year-input" min="1900" max="2099" value="" placeholder="Enter a 4-digit year" required>
@@ -28,42 +28,53 @@
                         <tr>
                             <td>{{ $schoolYear->sy_id }}</td>
                             <td>{{ $schoolYear->sy_name }}</td>
-                           
                         </tr>
-                    @endforeach
+                        @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
-
 
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header">
                 </div>
                 <div class="card-manage-sy">
-                    
-                <table class="semester-table">
-                    <thead>
-                        <tr>
-                            <th>Semester ID</th>
-                            <th>Semester Name</th>
-                            <th>School Year ID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($semesters as $semester)
+                    <table class="semester-table">
+                        <thead>
                             <tr>
-                                <td>{{ $semester->semester_id }}</td>
-                                <td>{{ $semester->semester_name }}</td>
-                                <td>{{ $semester->sy_id }}</td>
+                                <th>Semester ID</th>
+                                <th>Semester Name</th>
+                                <th>School Year ID</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($semesters as $semester)
+                                <tr>
+                                    <td>{{ $semester->semester_id }}</td>
+                                    <td>{{ $semester->semester_name }}</td>
+                                    <td>{{ $semester->sy_id }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
+                    <h4>Activate Semester</h4>
+                    <form action="" method="POST" id="activate-semester-form">
+                        @csrf
+                        <div>
+                            <select name="semester_id" id="semester-select" required onchange="updateAction()">
+                                <option value="">Select a semester</option>
+                                @foreach ($semesters as $semester)
+                                    <option value="{{ $semester->semester_id }}" {{ $semester->is_active ? 'selected' : '' }}>
+                                        {{ $semester->semester_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="button school">Activate</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -72,45 +83,43 @@
 @endsection
 
 <style>
-
     h4 {
-    display: block;
-    font-size: 1.00em;
-    font-weight: bold;
-    margin-block: 1.33em;
-    text-align: center; 
-    }
-    
-    .card-manage-sy  {
-    position: relative;
-    border: 10px solid #55825f;
-    width: 80%;
-    margin: 20px auto;
-    margin-right: 30px;
-    font-family: 'Montserrat', sans-serif;
+        display: block;
+        font-size: 1.00em;
+        font-weight: bold;
+        margin-block: 1.33em;
+        text-align: center; 
     }
 
+    .card-manage-sy {
+        position: relative;
+        border: 0.1px solid #55825f;
+        width: 90%;
+        margin: 20px auto;
+        font-family: 'Montserrat', sans-serif;
+    }
 
-    #manage-school-years {
+    #manage-school-years, .semester-table {
         font-family: 'Montserrat', sans-serif;
         border-collapse: collapse;
         width: 100%;
     }
 
-    #manage-school-years td, #manage-school-years th {
+    #manage-school-years td, #manage-school-years th,
+    .semester-table td, .semester-table th {
         border: 1px solid #ddd;
         padding: 8px;
     }
 
-    #manage-school-years tr:nth-child(even) {
+    #manage-school-years tr:nth-child(even), .semester-table tr:nth-child(even) {
         background-color: #f2f2f2;
     }
 
-    #manage-school-years tr:hover {
+    #manage-school-years tr:hover, .semester-table tr:hover {
         background-color: #ddd;
     }
 
-    #manage-school-years th {
+    #manage-school-years th, .semester-table th {
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
@@ -126,7 +135,6 @@
         padding: 8px 16px;
         cursor: pointer;
         font-size: 14px;
-        position: center;
     }
 
     .button:hover {
@@ -140,34 +148,13 @@
     .school:hover {
         background-color: #038c5a;
     }
-   
-
-    .semester-table {
-        font-family: 'Montserrat', sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    .semester-table td, .semester-table th {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-
-    .semester-table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    .semester-table tr:hover {
-        background-color: #ddd;
-    }
-
-    .semester-table th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #04AA6D;
-        color: white;
-    }
-
-    
 </style>
+
+<script>
+    function updateAction() {
+        const select = document.getElementById('semester-select');
+        const form = document.getElementById('activate-semester-form');
+        const semesterId = select.value;
+        form.action = `{{ url('/semesters') }}/${semesterId}/activate`;
+    }
+</script>

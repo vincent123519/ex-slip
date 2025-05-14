@@ -12,6 +12,7 @@ class Semester extends Model
     protected $fillable = [
         'semester_name',
         'sy_id',
+        'is_active',
     ];
 
     public function schoolYear()

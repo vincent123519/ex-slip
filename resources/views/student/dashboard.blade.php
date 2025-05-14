@@ -15,62 +15,63 @@
                 <div class="notification-content">
     @if ($unreadExcuseSlips->count() > 0)
         @foreach ($unreadExcuseSlips->sortByDesc('created_at') as $unreadExcuseSlip)
-            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-button">
-                @php
-                    $approver = '';
-                    if ($unreadExcuseSlip->status_id == 2) {
-                        $approver = $unreadExcuseSlip->counselor->first_name . ' ' . $unreadExcuseSlip->counselor->last_name;
-                    } elseif ($unreadExcuseSlip->status_id == 4) {
-                        $approver = $unreadExcuseSlip->dean->first_name . ' ' . $unreadExcuseSlip->dean->last_name;
-                    }
-                @endphp
-
-                <p>
-                    @if ($unreadExcuseSlip->status_id == 1)
-                        An excuse slip is sent to <b>{{ $unreadExcuseSlip->counselor->first_name }}, {{ $unreadExcuseSlip->counselor->last_name }}</b>
-                    @elseif ($unreadExcuseSlip->status_id == 2)
-                        <b>{{ $approver }}</b> approved your excuse slip
-                    @elseif ($unreadExcuseSlip->status_id == 3)
-                        <b>Dean</b> rejected your excuse slip
-                    @elseif ($unreadExcuseSlip->status_id == 4)
-                        <b>{{ $approver }}</b> approved your excuse slip
-                    @elseif ($unreadExcuseSlip->status_id == 5)
-                        All <b>teachers</b> have approved your excuse slip
-                    @endif
-                </p>
-
-                {{-- Loop through the course offerings to show teacher feedback --}}
-                @foreach ($unreadExcuseSlip->courseOfferings as $courseOffering)
+            <div>
+                <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}"
+                   onclick="submitMarkAsRead(event, '{{ $unreadExcuseSlip->excuse_slip_id }}')"
+                   class="view-button">
                     @php
-                        // Query teacher feedback from course_excuse_slip
-                        $teacherFeedbackExcuseSlip = DB::table('course_excuse_slip')
-                            ->where('excuse_slip_id', $unreadExcuseSlip->excuse_slip_id)
-                            ->where('offer_code', $courseOffering->offer_code)
-                            ->where('is_remark_by_teacher', 1)
-                            ->whereNotNull('teacher_feedback')
-                            ->first();
-
-                        $teacherFeedback = $teacherFeedbackExcuseSlip ? $teacherFeedbackExcuseSlip->teacher_feedback : null;
-
-                        // Get teacher name from course offering
-                        $teacher = $courseOffering->teacher;
-                        $teacherName = $teacher ? $teacher->first_name . ' ' . $teacher->last_name : 'N/A';
+                        $approver = '';
+                        if ($unreadExcuseSlip->status_id == 2) {
+                            $approver = $unreadExcuseSlip->counselor->first_name . ' ' . $unreadExcuseSlip->counselor->last_name;
+                        } elseif ($unreadExcuseSlip->status_id == 4) {
+                            $approver = $unreadExcuseSlip->dean->first_name . ' ' . $unreadExcuseSlip->dean->last_name;
+                        }
                     @endphp
 
-                    @if ($teacherFeedback)
-                        <p>Teacher: <strong>{{ $teacherName }}</strong>: "{{ $teacherFeedback }}"</p>
-                    @endif
-                @endforeach
+                    <p>
+                        @if ($unreadExcuseSlip->status_id == 1)
+                            An excuse slip is sent to <b>{{ $unreadExcuseSlip->counselor->first_name }}, {{ $unreadExcuseSlip->counselor->last_name }}</b>
+                        @elseif ($unreadExcuseSlip->status_id == 2)
+                            <b>{{ $approver }}</b> approved your excuse slip
+                        @elseif ($unreadExcuseSlip->status_id == 3)
+                            <b>Dean</b> rejected your excuse slip
+                        @elseif ($unreadExcuseSlip->status_id == 4)
+                            <b>{{ $approver }}</b> approved your excuse slip
+                        @elseif ($unreadExcuseSlip->status_id == 5)
+                            All <b>teachers</b> have approved your excuse slip
+                        @endif
+                    </p>
 
-                <p>View excuse slip...</p>
-            </a>
-            <hr>
+                    {{-- Loop through the course offerings to show teacher feedback --}}
+                    @foreach ($unreadExcuseSlip->courseOfferings as $courseOffering)
+                        @php
+                            $teacherFeedbackExcuseSlip = DB::table('course_excuse_slip')
+                                ->where('excuse_slip_id', $unreadExcuseSlip->excuse_slip_id)
+                                ->where('offer_code', $courseOffering->offer_code)
+                                ->where('is_remark_by_teacher', 1)
+                                ->whereNotNull('teacher_feedback')
+                                ->first();
+
+                            $teacherFeedback = $teacherFeedbackExcuseSlip ? $teacherFeedbackExcuseSlip->teacher_feedback : null;
+                            $teacher = $courseOffering->teacher;
+                            $teacherName = $teacher ? $teacher->first_name . ' ' . $teacher->last_name : 'N/A';
+                        @endphp
+
+                        @if ($teacherFeedback)
+                            <p>Teacher: <strong>{{ $teacherName }}</strong>: "{{ $teacherFeedback }}"</p>
+                        @endif
+                    @endforeach
+
+                    <p>View excuse slip...</p>
+                </a>
+
+                <hr>
+            </div>
         @endforeach
     @else
         <p>No unread excuse slips.</p>
     @endif
 </div>
-
 
 
             </div>
@@ -282,3 +283,41 @@ $(document).ready(function() {
     });
 });</script>
 
+<script>
+function submitMarkAsRead(event, excuseSlipId) {
+    event.preventDefault(); // Prevent the default link behavior
+
+    // Create a form to submit the mark as read request
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ url("excuse_slips/mark_as_read") }}'; // Update this to your route
+
+    // CSRF token
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = '_token';
+    csrfInput.value = '{{ csrf_token() }}';
+    form.appendChild(csrfInput);
+
+    // Method spoofing
+    const methodInput = document.createElement('input');
+    methodInput.type = 'hidden';
+    methodInput.name = '_method';
+    methodInput.value = 'PUT';
+    form.appendChild(methodInput);
+
+    // Excuse slip ID
+    const excuseSlipInput = document.createElement('input');
+    excuseSlipInput.type = 'hidden';
+    excuseSlipInput.name = 'excuseSlipId';
+    excuseSlipInput.value = excuseSlipId;
+    form.appendChild(excuseSlipInput);
+
+    // Append the form to the body and submit
+    document.body.appendChild(form);
+    form.submit();
+
+    // After marking as read, redirect to the view slip page
+    window.location.href = "{{ url('excuse_slips/show') }}/" + excuseSlipId;
+}
+</script>

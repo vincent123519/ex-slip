@@ -12,17 +12,22 @@
                     <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
                     <span></span>
                     <div class="notification-content">
-                    @foreach ($latestExcuseSlips as $latestExcuseSlip)
-                    <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" class="notification-form">
+    @php
+        // Filter to exclude excuse slips that have been read by the counselor
+        $unreadExcuseSlips = $latestExcuseSlips->where('read_by_counselor', false);
+    @endphp
+
+    @foreach ($unreadExcuseSlips as $latestExcuseSlip)
+        <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" class="notification-form">
             @csrf
             @method('PUT')
 
-                    <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
+            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
                onclick="submitMarkAsRead(event, this)"
                class="notification-link">
                 <h4 style="display: inline;">
                     {{ $latestExcuseSlip->student->first_name }} created an excuse slip {{ $latestExcuseSlip->created_at }}
-                    @if ($latestExcuseSlip->read_by_counselor == 1)
+                    @if ($latestExcuseSlip->read_by_counselor)
                         <span style="color: green;">(Seen)</span>
                     @else
                         <span style="color: red;">(Not Seen)</span>
@@ -48,9 +53,13 @@
             </a>
 
             <hr style="color: #55825f;">
-                    </form>
-                        @endforeach
-                    </div>
+        </form>
+    @endforeach
+
+    @if ($unreadExcuseSlips->isEmpty())
+        <p>No unread excuse slips.</p>
+    @endif
+</div>
                 </div>
             </div>
             <a class="expo"href="{{ $exportUrl }}">Download Records</a>

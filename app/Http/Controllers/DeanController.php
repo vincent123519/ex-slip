@@ -151,7 +151,8 @@ class DeanController extends Controller
             $excuseSlip->end_date = Carbon::parse($excuseSlip->end_date);
         }
     
-        $unreadExcuseSlips = $excuseSlips;
+            $unreadExcuseSlips = $excuseSlips->where('read_by_dean', false);
+
     
         // Fetch all semesters and school years for dropdowns
         $semesters = Semester::all(); // Assuming you have Semester model

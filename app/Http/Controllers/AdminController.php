@@ -628,7 +628,7 @@ public function importStudents(Request $request)
             }
         }
 
-        return redirect()->back()->with('success', 'Students imported successfully.');
+        return redirect()->back()->with('success_students', 'Students imported successfully.');
     } catch (Exception $e) {
         return redirect()->back()->with('error', 'Error occurred while importing students: ' . $e->getMessage());
     }
@@ -695,7 +695,7 @@ public function importStudents(Request $request)
                 return redirect()->back()->with('error', implode(', ', $errors));
             }
     
-            return redirect()->back()->with('success', 'Teachers imported successfully.');
+            return redirect()->back()->with('success_teachers', 'Teachers imported successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error occurred while importing teachers: '  );
         }
@@ -742,7 +742,7 @@ public function importStudents(Request $request)
             $course->save();
         }
 
-        return redirect()->back()->with('success', 'Courses imported successfully.');
+        return redirect()->back()->with('success_courses', 'Courses imported successfully.');
     } catch (Exception $e) {
         Log::error('Error occurred while importing courses: ' . $e->getMessage());
         return redirect()->back()->with('error', 'Error occurred while importing courses.');
@@ -810,7 +810,7 @@ public function importStudents(Request $request)
                 ]);
             }
     
-            return redirect()->back()->with('success', 'Course offerings imported successfully.');
+            return redirect()->back()->with('success_offercode', 'Course offerings imported successfully.');
         } catch (\Exception $e) {
             Log::error('Import error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Error during course offerings import.');
@@ -903,7 +903,7 @@ public function importStudyLoad(Request $request)
             $studyLoad->courseOfferings()->syncWithoutDetaching([$offerCode]);
         }
 
-        return redirect()->back()->with('success', 'Study load imported successfully.');
+        return redirect()->back()->with('success_studyload', 'Study load imported successfully.');
     } catch (\Exception $e) {
         return redirect()->back()->with('error', 'Error occurred while importing study load: ' . $e->getMessage());
     }
@@ -1023,6 +1023,20 @@ public function showCourseOfferingsAndCourses(Request $request)
         ->paginate(10, ['*'], 'offerings_page'); // separate pagination name
 
     return view('admin.course.index', compact('allCourseOfferings', 'allCourses'));
+}
+
+public function activateSemester($semesterId)
+{
+    $semester = Semester::findOrFail($semesterId);
+    if ($semester->is_active) {
+        return redirect()->back()->with('info', 'Semester is already active.');
+    }
+
+    Semester::query()->update(['is_active' => false]); // Deactivate all
+    $semester->is_active = true;
+    $semester->save();
+
+    return redirect()->back()->with('success', 'Semester activated successfully!');
 }
 
 }

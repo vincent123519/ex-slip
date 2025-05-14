@@ -89,20 +89,10 @@
                     @endif
                 </div>
             </div>
-
-            <div class="form-group">
-    <!-- Semester Filter -->
-    <label for="semester_filter">Filter by Semester:</label>
-    <select id="semester_filter" class="form-control mb-3">
-        <option value="">-- All Semesters --</option>
-        @php
-            $semesters = collect($selectedCourseOfferings)->pluck('semester_name')->unique();
-        @endphp
-        @foreach($semesters as $semester)
-            <option value="{{ $semester }}">{{ $semester }}</option>
-        @endforeach
-    </select>
-            </div>
+            <label for="current_semester">Current Semester:</label>
+        <span id="current_semester" class="form-control mb-3">
+            {{ $activeSemester ? $activeSemester->semester_name : 'No active semester' }}
+        </span>
 
             <div class="form-group">
  
@@ -114,25 +104,44 @@
                 <th>Select</th>
                 <th>Course Name</th>
                 <th>Teacher</th>
+                <th>Schedule</th>
                 <th>Semester</th>
             </tr>
         </thead>
         <tbody id="course_offering_list">
-            @foreach($selectedCourseOfferings as $courseOffering)
-                <tr>
-                    <td>
-                        <input type="checkbox"
-                               name="offer_codes[]"
-                               id="offer_code_{{ $courseOffering['offer_code'] }}"
-                               value="{{ $courseOffering['offer_code'] }}"
-                               data-teacher-id="{{ $courseOffering['teacher_id'] }}">
-                    </td>
-                    <td>{{ $courseOffering['course_name'] }}</td>
-                    <td>{{ $courseOffering['teacher_name'] }} {{ $courseOffering['teacher_lname'] }}</td>
-                    <td>{{ $courseOffering['semester_name'] }}</td> <!-- Semester is now directly in the <td> -->
-                </tr>
-            @endforeach
-        </tbody>
+    @php
+        $hasOfferings = false; // Flag to check if there are any offerings
+    @endphp
+
+    @foreach($selectedCourseOfferings as $courseOffering)
+        @if ($courseOffering['semester_name'] === $activeSemester->semester_name)
+            @php
+                $hasOfferings = true; // Set flag if at least one match is found
+            @endphp
+            <tr>
+                <td>
+                    <input type="checkbox"
+                           name="offer_codes[]"
+                           id="offer_code_{{ $courseOffering['offer_code'] }}"
+                           value="{{ $courseOffering['offer_code'] }}"
+                           data-teacher-id="{{ $courseOffering['teacher_id'] }}">
+                </td>
+                <td>{{ $courseOffering['course_name'] }}</td>
+                <td>{{ $courseOffering['teacher_name'] }} {{ $courseOffering['teacher_lname'] }}</td>
+                <td>{{ $courseOffering['schedule'] }}</td>
+
+                <td>{{ $courseOffering['semester_name'] }}</td>
+
+            </tr>
+        @endif
+    @endforeach
+
+    @if (!$hasOfferings)
+        <tr>
+            <td colspan="4" class="text-center">No enrolled subjects for the current semester.</td>
+        </tr>
+    @endif
+</tbody>
     </table>
 </div>
 

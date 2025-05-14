@@ -4,43 +4,45 @@
     <!-- <div class="logosc"></div> -->
     <h1 style="margin-left: 31vw;">Absence Request</h1>
     <div class="notifContainer">
-        <div class="notification">
-            <i id="bell" class="fas fa-solid fa-bell fa-2x"></i>
-            <div class="notification-content">
-                @php
-                $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
-                @endphp
-                @if ($unreadExcuseSlips->count() > 0)
-                
+    <div class="notification">
+        <i id="bell" class="fas fa-solid fa-bell fa-2x"></i>
+        <div class="notification-content">
+            @php
+            $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
+            @endphp
+            @if ($unreadExcuseSlips->count() > 0)
                 @foreach ($unreadExcuseSlips as $unreadExcuseSlip)
                 <div>
                     <p>
-                        <b>{{ $unreadExcuseSlip->dean->first_name }} {{ $unreadExcuseSlip->created_at }},{{ $unreadExcuseSlip->dean->last_name }}</b>
+                        <b>{{ $unreadExcuseSlip->dean->first_name }} {{ $unreadExcuseSlip->created_at }}, {{ $unreadExcuseSlip->dean->last_name }}</b>
                         approved <b>{{ $unreadExcuseSlip->student->first_name }} {{ $unreadExcuseSlip->student->last_name }}</b>
                         excuse slip
                     </p>
-                    <p>pending for Teacher's approval.. 
+                    <p>Pending for Teacher's approval..
                         @if ($unreadExcuseSlip->read_by_teacher == 1)
-                        <span style="color: green;">(Seen)</span>
+                            <span style="color: green;">(Seen)</span>
                         @elseif($unreadExcuseSlip->read_by_teacher == 0)
-                        <span style="color: red;">(Not Seen)</span>
-                        <form action="{{ route('excuse_slips.markAsReadByTeacher', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit">Mark as Read</button>
-                        </form>
+                            <span style="color: red;">(Not Seen)</span>
+                            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}" class="view-icon" title="View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <form action="{{ route('excuse_slips.markAsReadByTeacher', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="mark-as-read-button">Mark as Read</button>
+                            </form>
                         @endif
                     </p>
                     <hr>
                 </div>
                 @endforeach
-                @else
+            @else
                 <p>No unread excuse slips.</p>
-                @endif       
-            </div>
+            @endif       
         </div>
-        <hr>
     </div>
+    <hr>
+</div>
     <div>
         <h2>Excuse Slips</h2>
         <input type="text" id="searchInput" placeholder="Search by student name, status, or course name">
@@ -353,6 +355,24 @@ document.addEventListener('DOMContentLoaded', function() {
     .filter-container, .filters {
         justify-content: center;
     }
+    .mark-as-read-button {
+    background-color: #28a745; /* Green background */
+    border: none; /* No borders */
+    color: white; /* White text */
+    padding: 2px 3px;
+    text-align: center; /* Centered text */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Inline display */
+    font-size: 10px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Transition effect */
+}
+
+.mark-as-read-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
 </style>
 
 

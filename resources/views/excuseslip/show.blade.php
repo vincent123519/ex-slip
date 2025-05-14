@@ -119,7 +119,7 @@
             ->value('teacher_feedback');
     @endphp
 
-    <p>Feedback: {{ $feedback ? $feedback : 'No feedback provided' }}</p>
+    <p> {{ $feedback ? $feedback : 'No feedback provided' }}</p>
 
     @if(auth()->user()->role_id == 2) <!-- Teacher View -->
         @if(!$feedback) <!-- Only show the feedback form if there is no feedback -->

@@ -231,6 +231,8 @@ Route::post('/upload-user-images', [AdminController::class, 'uploadUserImages'])
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read', [CounselorController::class, 'markAsRead'])->name('excuse_slips.mark_as_read');
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-dean', [DeanController::class, 'markAsReadByDean'])->name('excuse_slips.markAsReadByDean');
 Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-teacher', [TeacherController::class, 'markAsReadByTeacher'])->name('excuse_slips.markAsReadByTeacher');
+Route::put('/excuse_slips/{excuseSlipId}/mark-as-read-by-student', [StudentController::class, 'markAsReadByStudent'])->name('excuse_slips.markAsReadByStudent');
+
 
 
 //edit detailes
@@ -245,7 +247,7 @@ Route::get('/admin/school_years', [AdminController::class, 'indexSchoolYear'])->
 
 Route::post('/school_years/{syId}/activate', [AdminController::class, 'activateSchoolYear'])->name('school-year.activate');
 Route::post('/school_years', [AdminController::class, 'addSchoolYear'])->name('school-year.add');
-
+Route::post('/semesters/{semesterId}/activate', [AdminController::class, 'activateSemester'])->name('semesters.activate');
 //
 
 Route::get('/admin/course_offerings_and_courses', [AdminController::class, 'showCourseOfferingsAndCourses'])

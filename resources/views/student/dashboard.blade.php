@@ -16,6 +16,13 @@
     @if ($unreadExcuseSlips->count() > 0)
         @foreach ($unreadExcuseSlips->sortByDesc('created_at') as $unreadExcuseSlip)
             <div>
+                <form id="markAsReadForm{{ $unreadExcuseSlip->excuse_slip_id }}" method="POST"
+                      action="{{ route('excuse_slips.markAsReadByStudent', ['excuseSlipId' => $unreadExcuseSlip->excuse_slip_id]) }}"
+                      style="display:none;">
+                    @csrf
+                    @method('PUT')
+                </form>
+
                 <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $unreadExcuseSlip->excuse_slip_id]) }}"
                    onclick="submitMarkAsRead(event, '{{ $unreadExcuseSlip->excuse_slip_id }}')"
                    class="view-button">
@@ -72,7 +79,6 @@
         <p>No unread excuse slips.</p>
     @endif
 </div>
-
 
             </div>
         </div>
@@ -286,38 +292,28 @@ $(document).ready(function() {
 <script>
 function submitMarkAsRead(event, excuseSlipId) {
     event.preventDefault(); // Prevent the default link behavior
+    const form = document.getElementById(`markAsReadForm${excuseSlipId}`);
 
-    // Create a form to submit the mark as read request
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '{{ url("excuse_slips/mark_as_read") }}'; // Update this to your route
-
-    // CSRF token
-    const csrfInput = document.createElement('input');
-    csrfInput.type = 'hidden';
-    csrfInput.name = '_token';
-    csrfInput.value = '{{ csrf_token() }}';
-    form.appendChild(csrfInput);
-
-    // Method spoofing
-    const methodInput = document.createElement('input');
-    methodInput.type = 'hidden';
-    methodInput.name = '_method';
-    methodInput.value = 'PUT';
-    form.appendChild(methodInput);
-
-    // Excuse slip ID
-    const excuseSlipInput = document.createElement('input');
-    excuseSlipInput.type = 'hidden';
-    excuseSlipInput.name = 'excuseSlipId';
-    excuseSlipInput.value = excuseSlipId;
-    form.appendChild(excuseSlipInput);
-
-    // Append the form to the body and submit
-    document.body.appendChild(form);
-    form.submit();
-
-    // After marking as read, redirect to the view slip page
-    window.location.href = "{{ url('excuse_slips/show') }}/" + excuseSlipId;
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': form.querySelector('[name=_token]').value,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            _method: 'PUT'
+        })
+    }).then(response => {
+        if (response.ok) {
+            // Redirect to the correct show page URL
+            window.location.href = `{{ url('excuse_slips') }}/${excuseSlipId}`; // Correct URL format
+        } else {
+            alert('Failed to mark as read.');
+        }
+    }).catch(error => {
+        console.error(error);
+        alert('Something went wrong.');
+    });
 }
 </script>

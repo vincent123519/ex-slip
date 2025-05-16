@@ -6,7 +6,7 @@
         <table id="dean" class="table table-bordered table-hover">
             <thead class="thead-light">
                 <tr>
-                    <th>Dean ID - User Account</th>
+                    <th>Username</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>School</th>

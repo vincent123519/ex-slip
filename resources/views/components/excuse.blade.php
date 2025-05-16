@@ -309,6 +309,41 @@
         .dropdown a:hover {
             background-color: #f5f5f5; /* Hover background color for options */
         }
+        .course-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.course-table th,
+.course-table td {
+    padding: 12px 16px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.course-table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+}
+
+.course-table tr:nth-child(even) {
+    background-color: #fdfdfd;
+}
+
+.course-table tr:hover {
+    background-color: #f1f7ff;
+}
+
+.course-table input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
 </style>
 
 

@@ -94,11 +94,9 @@
             {{ $activeSemester ? $activeSemester->semester_name : 'No active semester' }}
         </span>
 
-            <div class="form-group">
- 
-    <!-- Course Offering Table -->
-    <label for="offer_codes">Select Courses:</label>
-    <table class="table table-bordered">
+<div class="form-group">
+    <!-- <label for="offer_codes">Select Courses:</label> -->
+    <table class="table table-bordered course-table">
         <thead>
             <tr>
                 <th>Select</th>
@@ -109,39 +107,33 @@
             </tr>
         </thead>
         <tbody id="course_offering_list">
-    @php
-        $hasOfferings = false; // Flag to check if there are any offerings
-    @endphp
+            @php $hasOfferings = false; @endphp
 
-    @foreach($selectedCourseOfferings as $courseOffering)
-        @if ($courseOffering['semester_name'] === $activeSemester->semester_name)
-            @php
-                $hasOfferings = true; // Set flag if at least one match is found
-            @endphp
-            <tr>
-                <td>
-                    <input type="checkbox"
-                           name="offer_codes[]"
-                           id="offer_code_{{ $courseOffering['offer_code'] }}"
-                           value="{{ $courseOffering['offer_code'] }}"
-                           data-teacher-id="{{ $courseOffering['teacher_id'] }}">
-                </td>
-                <td>{{ $courseOffering['course_name'] }}</td>
-                <td>{{ $courseOffering['teacher_name'] }} {{ $courseOffering['teacher_lname'] }}</td>
-                <td>{{ $courseOffering['schedule'] }}</td>
+            @foreach($selectedCourseOfferings as $courseOffering)
+                @if ($courseOffering['semester_name'] === $activeSemester->semester_name)
+                    @php $hasOfferings = true; @endphp
+                    <tr data-semester="{{ $courseOffering['semester_name'] }}">
+                        <td class="text-center align-middle">
+                            <input type="checkbox"
+                                   name="offer_codes[]"
+                                   id="offer_code_{{ $courseOffering['offer_code'] }}"
+                                   value="{{ $courseOffering['offer_code'] }}"
+                                   data-teacher-id="{{ $courseOffering['teacher_id'] }}">
+                        </td>
+                        <td class="align-middle">{{ $courseOffering['course_name'] }}</td>
+                        <td class="align-middle">{{ $courseOffering['teacher_name'] }} {{ $courseOffering['teacher_lname'] }}</td>
+                        <td class="align-middle">{{ $courseOffering['schedule'] }}</td>
+                        <td class="align-middle">{{ $courseOffering['semester_name'] }}</td>
+                    </tr>
+                @endif
+            @endforeach
 
-                <td>{{ $courseOffering['semester_name'] }}</td>
-
-            </tr>
-        @endif
-    @endforeach
-
-    @if (!$hasOfferings)
-        <tr>
-            <td colspan="4" class="text-center">No enrolled subjects for the current semester.</td>
-        </tr>
-    @endif
-</tbody>
+            @if (!$hasOfferings)
+                <tr>
+                    <td colspan="5" class="text-center">No enrolled subjects for the current semester.</td>
+                </tr>
+            @endif
+        </tbody>
     </table>
 </div>
 
@@ -172,7 +164,7 @@
     <label for="supporting_documents">Supporting Document/s: </label>
     <div class="custom-file">
         <input type="file" class="custom-file-input" id="supporting_documents" name="supporting_documents[]" accept=".pdf" multiple required>
-        <label class="custom-file-label" for="supporting_documents">Choose file(s)</label>
+        <!-- <label class="custom-file-label" for="supporting_documents">Choose file(s)</label> -->
     </div>
 </div>
 

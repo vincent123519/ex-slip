@@ -1,11 +1,14 @@
 @extends('components.teacher')
+
 @section('content')
+
+
 <div class="teacher-details-container">
     <!-- <div class="logosc"></div> -->
     <h1 style="margin-left: 31vw;">Absence Request</h1>
     <div class="notifContainer">
     <div class="notification">
-        <i id="bell" class="fas fa-solid fa-bell fa-2x"></i>
+    <i id="bell" class="fas fa-solid fa-bell fa-2x {{ $unreadExcuseSlips->count() > 0 ? 'text-danger' : '' }}"></i>
         <div class="notification-content">
             @php
             $unreadExcuseSlips = $unreadExcuseSlips->sortByDesc('updated_at');
@@ -374,6 +377,10 @@ document.addEventListener('DOMContentLoaded', function() {
     background-color: #218838; /* Darker green on hover */
 }
 </style>
-
+<style>
+    .text-danger {
+        color: red;
+    }
+</style>
 
 

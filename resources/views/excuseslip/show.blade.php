@@ -225,18 +225,18 @@
                 <form action="{{ route('excuse.approvedean', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn-approved" style="margin-left: 50vw; margin-top: 0vw; background-color: green; color: yellow;">Approve</button>                              </form>
+                                    <button type="submit" class="btn-approved" style=" margin-top: 0vw; background-color: green; color: yellow;margin-left: 45vw;">APPROVE</button>                              </form>
 
                 <form action="{{ route('excuse.reject', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn-reject" style="background: red;border: green;border-style: solid;">Reject</button>                                </form>
+                                        <button type="submit" class="btn-reject" style="background: red;border: green;border-style: solid;">REJECT</button>                                </form>
 
                 <form action="{{ route('dean.feedback.store', ['id' => $excuseSlip->excuse_slip_id]) }}" method="POST">
                     @csrf
-                    <label for="feedback_remarks" style="margin-top: -6.4vw;">Feedback Remarks:</label>
+                    <label for="feedback_remarks" style="margin-top: -0.4vw;">Feedback Remarks:</label>
                     <textarea name="feedback_remarks" id="feedback_remarks" rows="1" cols="50"></textarea>
-                    <button type="submit" style="margin-top: -1vw;">Submit Feedback</button>
+                    <button type="submit" style="margin-top: -0.4vw;">Submit Feedback</button>
                 </form>
                 @endif
                 @endif

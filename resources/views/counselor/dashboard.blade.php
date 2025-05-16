@@ -2,68 +2,72 @@
 
 @section('content')
 
-    <div class="excuse-container">
-        <!-- <div class="logosc"></div> -->
+@php
+    $unreadExcuseSlips = $latestExcuseSlips->where('read_by_counselor', false);
+@endphp
 
-            <h1>Absence Request</h1>
-            <p style="font-weight: bold; float:left; font-size: 1vw;">Total Excuse Slips: {{ $excuseSlips->count() }}</p>
-            <div class="notifContainer">
-                <div class="notification">
-                    <i id="bell" class=" fas fa-solid fa-bell fa-2x"></i>
-                    <span></span>
-                    <div class="notification-content">
-    @php
-        // Filter to exclude excuse slips that have been read by the counselor
-        $unreadExcuseSlips = $latestExcuseSlips->where('read_by_counselor', false);
-    @endphp
+<div class="excuse-container">
 
-    @foreach ($unreadExcuseSlips as $latestExcuseSlip)
-        <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" class="notification-form">
-            @csrf
-            @method('PUT')
+    <h1>Absence Request</h1>
+    <p style="font-weight: bold; float:left; font-size: 1vw;">Total Excuse Slips: {{ $excuseSlips->count() }}</p>
 
-            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
-               onclick="submitMarkAsRead(event, this)"
-               class="notification-link">
-                <h4 style="display: inline;">
-                    {{ $latestExcuseSlip->student->first_name }} created an excuse slip {{ $latestExcuseSlip->created_at }}
-                    @if ($latestExcuseSlip->read_by_counselor)
-                        <span style="color: green;">(Seen)</span>
-                    @else
-                        <span style="color: red;">(Not Seen)</span>
-                    @endif
-                </h4>
-            </a>
+    <div class="notifContainer">
+        <div class="notification">
+            <!-- ✅ Bell Icon with red indicator -->
+            <i id="bell" class="fas fa-solid fa-bell fa-2x {{ $unreadExcuseSlips->count() > 0 ? 'text-danger' : '' }}"></i>
+            <span></span>
+            <div class="notification-content">
+                @php
+                    $unreadExcuseSlips = $latestExcuseSlips->where('read_by_counselor', false);
+                @endphp
 
-            <!-- Eye Icon -->
-            <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
-               onclick="submitMarkAsRead(event, this)"
-               class="view-button" style="margin-left: 8px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 
-                    1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 
-                    5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 
-                    1.12-1.465 1.755C11.879 11.332 10.119 12.5 
-                    8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 
-                    2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 
-                    7 0 3.5 3.5 0 0 1-7 0"/>
-                </svg>
-            </a>
+                @foreach ($unreadExcuseSlips as $latestExcuseSlip)
+                    <form method="POST" action="{{ route('excuse_slips.mark_as_read', ['excuseSlipId' => $latestExcuseSlip->excuse_slip_id]) }}" class="notification-form">
+                        @csrf
+                        @method('PUT')
 
-            <hr style="color: #55825f;">
-        </form>
-    @endforeach
+                        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
+                           onclick="submitMarkAsRead(event, this)"
+                           class="notification-link">
+                            <h4 style="display: inline;">
+                                {{ $latestExcuseSlip->student->first_name }} created an excuse slip {{ $latestExcuseSlip->created_at }}
+                                @if ($latestExcuseSlip->read_by_counselor)
+                                    <span style="color: green;">(Seen)</span>
+                                @else
+                                    <span style="color: red;">(Not Seen)</span>
+                                @endif
+                            </h4>
+                        </a>
 
-    @if ($unreadExcuseSlips->isEmpty())
-        <p>No unread excuse slips.</p>
-    @endif
-</div>
-                </div>
+                        <a href="{{ route('excuse_slips.show', ['excuse_slip_id' => $latestExcuseSlip->excuse_slip_id]) }}"
+                           onclick="submitMarkAsRead(event, this)"
+                           class="view-button" style="margin-left: 8px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-eye" viewBox="0 0 16 16">
+                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 
+                                1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 
+                                5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 
+                                1.12-1.465 1.755C11.879 11.332 10.119 12.5 
+                                8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 
+                                2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 
+                                7 0 3.5 3.5 0 0 1-7 0"/>
+                            </svg>
+                        </a>
+
+                        <hr style="color: #55825f;">
+                    </form>
+                @endforeach
+
+                @if ($unreadExcuseSlips->isEmpty())
+                    <p>No unread excuse slips.</p>
+                @endif
             </div>
-            <a class="expo"href="{{ $exportUrl }}">Download Records</a>
-            <hr>
+        </div>
+    </div>
+
+    <a class="expo" href="{{ $exportUrl }}">Download Records</a>
+    <hr>
 
             <div class="filterSection">
 
@@ -218,7 +222,7 @@
 
 <script>
     function submitMarkAsRead(event, link) {
-        event.preventDefault(); // Stop the link from navigating immediately
+        event.preventDefault();
         const form = link.closest('form');
 
         fetch(form.action, {
@@ -233,7 +237,7 @@
             })
         }).then(response => {
             if (response.ok) {
-                window.location.href = link.href; // Now go to the show page
+                window.location.href = link.href;
             } else {
                 alert('Failed to mark as read.');
             }
@@ -332,4 +336,9 @@ document.addEventListener('DOMContentLoaded', function() {
 .btn-view:hover {
     background-color: #0056b3;
 }
+</style>
+<style>
+    .text-danger {
+        color: red;
+    }
 </style>

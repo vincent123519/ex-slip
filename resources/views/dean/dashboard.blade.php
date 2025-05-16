@@ -4,7 +4,7 @@
         <h1 style="margin-left: 605px;">Absence Request</h1>
         <div class="notifContainer">
     <div class="notification" id="notification">
-        <i id="bell" class="fas fa-solid fa-bell fa-2x"></i>
+    <i id="bell" class="fas fa-solid fa-bell fa-2x {{ $unreadExcuseSlips->count() > 0 ? 'text-danger' : '' }}"></i>
         <div class="notification-content">
     @php
         // Filter unread excuse slips
@@ -104,7 +104,7 @@
                     <th>Student Name</th>
                     <th>Course Name</th>
                     <th>Teacher's Name</th>
-                    <th>Status | Reason</th>
+                    <th>Status</th>
                     <th>Date</th>
                     <th>Duration day</th>
                     <th>Action</th>
@@ -136,7 +136,8 @@
             @endforeach
         </td>
 
-        <td>{{ $excuseSlip->status->status_name }} - {{ $excuseSlip->reason}}</td>
+        <!-- <td>{{ $excuseSlip->status->status_name }} - {{ $excuseSlip->reason}}</td> -->
+        <td>{{ $excuseSlip->status->status_name }}</td>
         <td>{{ $excuseSlip->start_date->format('m-d-Y') }} - {{ $excuseSlip->end_date->format('m-d-Y') }}</td>
         <td>{{ $excuseSlip->start_date->format('l') }} - {{ $excuseSlip->end_date->format('l') }}
             ({{ $excuseSlip->start_date->diffInDays($excuseSlip->end_date) }} days)
@@ -437,5 +438,9 @@ document.addEventListener('DOMContentLoaded', function() {
         justify-content: center;
     }
 </style>
-
+<style>
+    .text-danger {
+        color: red;
+    }
+</style>
 

@@ -6,11 +6,10 @@
         <table id="dean" class="table table-bordered table-hover">
             <thead class="thead-light">
                 <tr>
-                    <th>Username</th>
+                    <th>Useraccount</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>School</th>
-                    <th>Email</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -21,7 +20,6 @@
                         <td>{{ $dean->first_name }}</td>
                         <td>{{ $dean->last_name }}</td>
                         <td>{{ $dean->school->school_name }}</td>
-                        <td>{{ $dean->email }}</td>
                         <td>
                             <a href="{{ route('admin.dean.edit', $dean->dean_id) }}" class="btn btn-warning btn-sm">Edit</a>
                         </td>

@@ -146,15 +146,17 @@ public function counselorNotification()
 }
 
 public function markAsRead($excuseSlipId)
-    {
-        $excuseSlip = ExcuseSlip::find($excuseSlipId);
-        if ($excuseSlip) {
-            $excuseSlip->read_by_counselor = true;
-            $excuseSlip->save();
-        }
+{
+    $excuseSlip = ExcuseSlip::find($excuseSlipId);
 
-        return redirect()->back();
+    if ($excuseSlip) {
+        $excuseSlip->read_by_counselor = true;
+        $excuseSlip->read_by_student = false; // Also mark as unread by student
+        $excuseSlip->save();
     }
+
+    return redirect()->back();
+}
 
 
 public function approve($id)

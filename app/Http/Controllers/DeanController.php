@@ -243,6 +243,7 @@ public function markAsReadbyDean($excuseSlipId)
     $excuseSlip = ExcuseSlip::find($excuseSlipId);
     if ($excuseSlip) {
         $excuseSlip->read_by_dean = true;
+        $excuseSlip->read_by_student = false; // Also mark as unread by student
         $excuseSlip->save();
     }
 

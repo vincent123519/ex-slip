@@ -22,27 +22,25 @@
             <span class="Whites">Slip</span>
             <span class="Whitess">System</span>
 
-        <div class="nav-right">
-        <form action="{{ route('student.dashboard') }}" method="get" style="display: inline;">
+            <div class="nav-right">
+    @php
+        $dashboardRoutes = [
+            2 => 'teacher.dashboard',
+            3 => 'student.dashboard',
+            4 => 'counselor.dashboard',
+            5 => 'dean.dashboard',
+        ];
+        $userRole = auth()->user()->role_id;
+    @endphp
+
+    @if(isset($dashboardRoutes[$userRole]))
+        <form action="{{ route($dashboardRoutes[$userRole]) }}" method="get" style="display: inline;">
             @csrf
             <button type="submit" class="home-btn">
-           <div class="home-icon"></div>
+                <div class="home-icon"></div>
             </button>
         </form>
-       
-
-        @if(auth()->user()->role_id == 4)
-
-        <form action="{{ route('counselor.dashboard') }}" method="get" style="display: inline;">
-        @csrf
-        <button type="submit" class="home-btn">
-        <div class="home-icon"><i style="
-            color: beige;
-            font-weight: bold;
-        "> </i></div>
-        </button>
-        </form>
-@endif
+    @endif
 
 
             <form action="{{ route('user.logout') }}" method="post" style="display: inline;">

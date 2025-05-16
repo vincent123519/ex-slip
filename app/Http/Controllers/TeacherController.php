@@ -228,7 +228,6 @@ public function dashboard(Request $request)
                     'offer_code' => $submittedOfferCode, // Use the specific offer_code from the form
                 ],
                 [
-                    'is_remark_by_teacher' => 1, // Mark as feedback given (if needed)
                     'teacher_feedback' => $request->input('feedback_remarks'), // Store feedback
                 ]
             );
@@ -250,6 +249,8 @@ public function markAsReadbyTeacher($excuseSlipId)
     $excuseSlip = ExcuseSlip::find($excuseSlipId);
     if ($excuseSlip) {
         $excuseSlip->read_by_teacher = true;
+        $excuseSlip->read_by_student = false;
+
         $excuseSlip->save();
     }
 

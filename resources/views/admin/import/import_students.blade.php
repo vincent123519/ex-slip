@@ -145,7 +145,7 @@
 </div>
 
 
-<div class="import-data-stud">
+<!-- <div class="import-data-stud">
 
     <div class="row justify-content-center">
             <div class="col-md-8">
@@ -171,7 +171,7 @@
                 </div>
             </div>
         </div>
-</div>  
+</div>   -->
 
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

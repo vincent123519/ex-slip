@@ -206,7 +206,10 @@ public function dashboard(Request $request)
     $excuseSlips = $query->paginate(10);
 
     // Unread slips (filtered from the paginated set)
-    $unreadExcuseSlips = $query->where('read_by_student', false)->get()->sortByDesc('created_at');
+    $unreadExcuseSlips = ExcuseSlip::where('read_by_student', false)
+    ->where('status_id', '!=', 1)
+    ->orderByDesc('created_at')
+    ->get();
     // Teacher feedback slips (if you have this method)
     $feedbackexcuseSlips = $this->getExcuseSlipsWithTeacherFeedback($studentId);
 
